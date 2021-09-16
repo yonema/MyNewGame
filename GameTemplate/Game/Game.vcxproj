@@ -149,7 +149,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MY_DEBUG;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
@@ -225,7 +225,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>MY_DEBUG;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -288,6 +288,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
@@ -367,10 +368,12 @@
     <ClInclude Include="FontRender.h" />
     <ClInclude Include="FontRenderConstData.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameTime.h" />
     <ClInclude Include="ModelRender.h" />
     <ClInclude Include="ModelRenderConstData.h" />
     <ClInclude Include="PriorityData.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="StopWatch.h" />
     <ClInclude Include="system\system.h" />
     <ClInclude Include="TestMap.h" />
   </ItemGroup>

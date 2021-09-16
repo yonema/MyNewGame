@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "Game.h"
+#include "GameTime.h"
+#include "StopWatch.h"
 
 using namespace nsMyGame;
 
@@ -19,6 +21,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームオブジェクトマネージャーのインスタンスを作成する。
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
+
+	//ストップウォッチを生成する
+	nsTimer::CStopWatch stopWatch;
 	
 	//////////////////////////////////////
 	// 初期化を行うコードを書くのはここまで！！！
@@ -31,6 +36,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
+		//ストップウォッチ計測開始
+		stopWatch.Start();
+
 		//レンダリング開始。
 		g_engine->BeginFrame();
 		
@@ -41,11 +49,22 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+
+#ifdef MY_DEBUG
+		//FPSを描画する
+		nsTimer::GameTime().DrawFPS(renderContext, (float)stopWatch.GetElapsed());
+#endif
 		
 		//////////////////////////////////////
 		//絵を描くコードを書くのはここまで！！！
 		//////////////////////////////////////
 		g_engine->EndFrame();
+
+		//ストップウォッチ計測終了
+		stopWatch.Stop();
+
+		//デルタタイムをストップウォッチの計測時間から、計算する
+		nsTimer::GameTime().PushFrameDeltaTime((float)stopWatch.GetElapsed());
 	}
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();
