@@ -18,7 +18,7 @@ namespace nsMyGame
 			*/
 			class CModelRender : public IGameObject
 			{
-			public:		//コンストラクタとデストラクタ
+			public:		// コンストラクタとデストラクタ
 				/**
 				 * @brief コンストラクタ
 				*/
@@ -29,7 +29,7 @@ namespace nsMyGame
 				*/
 				~CModelRender() = default;
 
-			public:		//オーバーライドしたメンバ関数
+			public:		// オーバーライドしたメンバ関数
 				/**
 				 * @brief スタート関数
 				 * @return アップデートを行うか？
@@ -52,7 +52,7 @@ namespace nsMyGame
 				*/
 				void Render(RenderContext& rc) override final;
 
-			public:		//メンバ関数
+			public:		// メンバ関数
 
 				/**
 				 * @brief 初期化関数
@@ -132,7 +132,7 @@ namespace nsMyGame
 				}
 
 
-			private:	//privateなメンバ関数
+			private:	// privateなメンバ関数
 
 				/**
 				 * @brief 初期化処理のメインコア
@@ -178,7 +178,7 @@ namespace nsMyGame
 					const char* psEntryPointFunc = nsModelConstData::kPsEntryPointFunc
 				);
 
-			private:	//データメンバ
+			private:	// データメンバ
 				Model m_model;								//!< モデルクラス
 				const char* m_tkmFilePath = nullptr;		//!< tkmファイルのファイルパス
 				std::unique_ptr<Skeleton> m_skeletonPtr;	//!< スケルトンクラス

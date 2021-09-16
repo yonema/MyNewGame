@@ -2,10 +2,11 @@
 
 namespace nsMyGame
 {
-	//前方宣言
+	// 前方宣言
 	namespace nsGraphic { 
-		namespace nsModel { class CModelRender; }	//モデルレンダラークラス
-		namespace nsFont { class CFontRender; }		//フォントレンダラークラス
+		namespace nsModel { class CModelRender; }	// モデルレンダラークラス
+		namespace nsFont { class CFontRender; }		// フォントレンダラークラス
+		namespace nsSprite { class CSpriteRender; }	// スプライトレンダラークラス
 	}
 
 	/**
@@ -18,7 +19,7 @@ namespace nsMyGame
 		*/
 		class CTestMap : public IGameObject
 		{
-		public:		//コンストラクタとデストラクタ
+		public:		// コンストラクタとデストラクタ
 			/**
 			 * @brief コンストラクタ
 			*/
@@ -29,7 +30,7 @@ namespace nsMyGame
 			*/
 			~CTestMap() = default;
 
-		public:		//オーバーライドしたメンバ関数
+		public:		// オーバーライドしたメンバ関数
 			/**
 			 * @brief スタート関数
 			 * @return アップデートを行うか？
@@ -46,7 +47,7 @@ namespace nsMyGame
 			*/
 			void Update() override final;
 
-		private:	//列挙型
+		private:	// 列挙型
 			enum EnAnimationClips
 			{
 				enAnim_idle,
@@ -54,11 +55,12 @@ namespace nsMyGame
 				enAnim_num
 			};
 
-		private:	//データメンバ
+		private:	// データメンバ
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
 			AnimationClip m_animationClip[enAnim_num];
 			EnAnimationClips m_animState = enAnim_idle;
 			nsGraphic::nsFont::CFontRender* m_fontRender = nullptr;		//!< フォントレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_spriteRender = nullptr;	//!< スプライトレンダラー
 		};
 
 	}

@@ -72,6 +72,15 @@
     <Filter Include="MyCode\Timer">
       <UniqueIdentifier>{d59eabf4-bf6a-4f11-8a09-1e92e663a605}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Graphic\Sprite">
+      <UniqueIdentifier>{26726dc8-095b-4e8a-b640-d19b78fc3e08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Assets">
+      <UniqueIdentifier>{86dc07b0-ba1e-4c31-a945-41870fd7e38c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Assets\shader">
+      <UniqueIdentifier>{44b82129-4236-4448-9d80-d528da90fe16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -247,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="GameTime.cpp">
       <Filter>MyCode\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteRender.cpp">
+      <Filter>MyCode\Graphic\Sprite</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -463,5 +475,19 @@
     <ClInclude Include="GameTime.h">
       <Filter>MyCode\Timer</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteRender.h">
+      <Filter>MyCode\Graphic\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteRenderConstData.h">
+      <Filter>MyCode\Graphic\Sprite</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\shader\model.fx">
+      <Filter>MyCode\Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\sprite.fx">
+      <Filter>MyCode\Assets\shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

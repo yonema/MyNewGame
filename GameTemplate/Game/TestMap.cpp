@@ -2,6 +2,7 @@
 #include "TestMap.h"
 #include "ModelRender.h"
 #include "FontRender.h"
+#include "SpriteRender.h"
 
 namespace nsMyGame
 {
@@ -16,19 +17,28 @@ namespace nsMyGame
 		*/
 		bool CTestMap::Start()
 		{
+			// アニメーションの初期化
 			m_animationClip[enAnim_idle].Load("Assets/animData/idle.tka");
 			m_animationClip[enAnim_idle].SetLoopFlag(true);
 			m_animationClip[enAnim_walk].Load("Assets/animData/walk.tka");
 			m_animationClip[enAnim_walk].SetLoopFlag(true);
+			// モデルの初期化
 			m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 			m_modelRender->Init("Assets/modelData/unityChan.tkm",enModelUpAxisY, m_animationClip,enAnim_num);
 			Quaternion qRot;
 			qRot.SetRotationDegY(180.0f);
 			m_modelRender->SetRotatioin(qRot);
 
+			// フォントの初期化
 			m_fontRender = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityThird);
 			m_fontRender->SetParam(L"バンドリ");
 			m_fontRender->SetShadowParam(true, 1.0f, Vector4::Black);
+			m_fontRender->SetPosition({ 300.0f, 350.0f });
+
+			// スプライトの初期化
+			m_spriteRender = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_spriteRender->Init("Assets/Image/sample.dds", 256, 256, {0.0f,1.0f});
+			m_spriteRender->SetPosition({ 300.0f,300.0f,0.0f });
 
 			return true;
 		}
@@ -39,6 +49,8 @@ namespace nsMyGame
 		void CTestMap::OnDestroy()
 		{
 			DeleteGO(m_modelRender);
+			DeleteGO(m_fontRender);
+			DeleteGO(m_spriteRender);
 			return;
 		}
 
