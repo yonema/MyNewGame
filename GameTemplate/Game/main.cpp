@@ -25,7 +25,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto& renderContext = g_graphicsEngine->GetRenderContext();
 
 	//ゲームの生成
-	nsMyGame::nsGame::CGame game;
+	NewGO<nsMyGame::nsGame::CGame>(0);
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())

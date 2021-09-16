@@ -54,6 +54,12 @@
     <Filter Include="MyCode\Game">
       <UniqueIdentifier>{e9e30b1b-0fe5-4372-8f24-d2e46fc38250}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Graphic">
+      <UniqueIdentifier>{87de25e4-4c20-4f89-b335-312b52a8dab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Graphic\Model">
+      <UniqueIdentifier>{5cab71c6-f7ee-4e1e-981c-746555563a3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -217,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="Game.cpp">
       <Filter>MyCode\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelRender.cpp">
+      <Filter>MyCode\Graphic\Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -405,6 +414,9 @@
     </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>MyCode\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelRender.h">
+      <Filter>MyCode\Graphic\Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

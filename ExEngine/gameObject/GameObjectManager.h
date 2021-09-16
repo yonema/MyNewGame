@@ -84,6 +84,7 @@ public:
 	{
 		if (gameObject != nullptr) {
 			gameObject->Dead();
+			gameObject->OnDestroyWrapper();
 		}
 	}
 	/*!

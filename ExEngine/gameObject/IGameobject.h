@@ -161,6 +161,13 @@ public:		//オーバーライドしてほしいメンバ関数
 	*/
 	virtual void AlwaysUpdate() {};
 
+	/**
+	 * @brief 消去される時に呼ばれる処理
+	 * @details CGameManager::DeleteGameObjectを呼んだときに実行される。
+	 * デストラクタより前に実行される
+	*/
+	virtual void OnDestroy() {};
+
 public:		//メンバ関数
 
 	/**
@@ -181,6 +188,14 @@ public:		//メンバ関数
 		if (m_isActive && m_isStart && !m_isDead) {
 			AlwaysUpdate();
 		}
+	}
+
+	/**
+	 * @brief 消去された時に呼ばれる関数のラッパー
+	*/
+	void OnDestroyWrapper()
+	{
+		OnDestroy();
 	}
 	
 };
