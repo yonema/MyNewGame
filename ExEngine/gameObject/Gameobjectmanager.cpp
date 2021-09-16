@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "ExEngine.h"
 #include "GameObjectManager.h"
+#include "../../GameTemplate/Game/GameTime.h"
 
 GameObjectManager* GameObjectManager::m_instance = nullptr;
 
@@ -73,7 +74,7 @@ void GameObjectManager::ExecuteUpdate()
 	}
 
 	//物理エンジンのアップデートを呼び出す。
-	PhysicsWorld::GetInstance()->Update(1.0f/60.0f);
+	PhysicsWorld::GetInstance()->Update(nsMyGame::nsTimer::GameTime().GetFrameDeltaTime());
 }
 void GameObjectManager::ExecuteRender(RenderContext& rc)
 {

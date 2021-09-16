@@ -60,6 +60,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//////////////////////////////////////
 		g_engine->EndFrame();
 
+		//FPS固定の処理
+		//スピンロックを行う。
+		int restTime = 0;
+		do {
+			stopWatch.Stop();
+			restTime = nsTimer::STOP_WATCH_CONST_DATA::MILLISECOND_FOR_LOCK_60FPS -
+				static_cast<int>(stopWatch.GetElapsedMillisecond());
+		} while (restTime > 0);
+
 		//ストップウォッチ計測終了
 		stopWatch.Stop();
 

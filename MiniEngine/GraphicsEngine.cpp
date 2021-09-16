@@ -472,13 +472,17 @@ void GraphicsEngine::EndRender()
 	//コマンドを実行。
 	ID3D12CommandList* ppCommandLists[] = { m_commandList };
 	m_commandQueue->ExecuteCommandLists(_countof(ppCommandLists), ppCommandLists);
-#ifdef SAMPE_16_04
-	// Present the frame.
+//#ifdef SAMPE_16_04
+//	// Present the frame.
+//	m_swapChain->Present(0, 0);
+//#else
+//	// Present the frame.
+//	m_swapChain->Present(1, 0);
+//#endif
+
+	//追加
+	//スピンロックを導入したため、垂直同期を待たないようにする
 	m_swapChain->Present(0, 0);
-#else
-	// Present the frame.
-	m_swapChain->Present(1, 0);
-#endif
 	m_directXTKGfxMemroy->GarbageCollect();
 	//描画完了待ち。
 	WaitDraw();

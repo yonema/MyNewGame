@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "ModelRender.h"
+#include "GameTime.h"
 
 namespace nsMyGame
 {
@@ -39,7 +40,7 @@ namespace nsMyGame
 					m_skeletonPtr->Update(m_model.GetWorldMatrix());
 				// アニメーションが初期化されているか？
 				if (m_animationPtr)	// アニメーションが初期化されていたら、アニメーションを進める。
-					m_animationPtr->Progress(1.0f / 60.0f);
+					m_animationPtr->Progress(nsTimer::GameTime().GetFrameDeltaTime());
 
 				// モデルの座標更新
 				m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
