@@ -26,6 +26,8 @@ namespace nsMyGame
 				constexpr const char* const kPsEntryPointFunc = "PSMain";					//!< ピクセルシェーダのエントリーポイント
 				constexpr const char* const kDefaultFxFilePath = "Assets/shader/model.fx";	//!< デフォルトのシェーダーファイルパス
 
+				constexpr float kAnimationInterpolateTime = 0.2f;	//!< アニメーション保管時間
+
 			}
 		}
 	}

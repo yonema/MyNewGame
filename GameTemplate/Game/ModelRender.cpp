@@ -82,7 +82,7 @@ namespace nsMyGame
 				ModelInitData modelInitData;
 
 				// モデルの初期化データの共通部分の設定
-				SetCommonModelInitData(&modelInitData, filePath);
+				SetCommonModelInitData(&modelInitData, filePath, modelUpAxis);
 
 				// 初期化処理のメインコア
 				InitMainCore(modelInitData, animationClips, numAnimationClip);
@@ -188,8 +188,8 @@ namespace nsMyGame
 			void CModelRender::SetCommonModelInitData(
 				ModelInitData* modelInitData,
 				const char* tkmFilePath,
-				const char* fxFilePath,
 				const EnModelUpAxis modelUpAxis,
+				const char* fxFilePath,
 				const char* vsEntryPointFunc,
 				const char* vsSkinEntryPointFunc,
 				const char* psEntryPointFunc

@@ -45,8 +45,18 @@ namespace nsMyGame
 			*/
 			void Update() override final;
 
+		private:	//列挙型
+			enum EnAnimationClips
+			{
+				enAnim_idle,
+				enAnim_walk,
+				enAnim_num
+			};
+
 		private:	//データメンバ
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
+			AnimationClip m_animationClip[enAnim_num];
+			EnAnimationClips m_animState = enAnim_idle;
 		};
 
 	}

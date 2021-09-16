@@ -68,6 +68,69 @@ namespace nsMyGame
 					int numAnimationClip = 0
 					);
 
+				/**
+				 * @brief ç¿ïWÇê›íËÇ∑ÇÈ
+				 * @param[in] position ç¿ïW
+				*/
+				void SetPosition(const Vector3& pos)
+				{
+					m_position = pos;
+				}
+
+				/**
+				 * @brief ç¿ïWÇìæÇÈ
+				 * @return[in] ç¿ïW
+				*/
+				const Vector3& GetPosition() const
+				{
+					return m_position;
+				}
+
+				/**
+				 * @brief âÒì]Çê›íËÇ∑ÇÈ
+				 * @param[in] rot âÒì]ÇìæÇÈ
+				*/
+				void SetRotatioin(const Quaternion& rot)
+				{
+					m_rotation = rot;
+				}
+
+				/**
+				 * @brief âÒì]ÇìæÇÈ
+				 * @return âÒì]
+				*/
+				const Quaternion& GetRotation() const
+				{
+					return m_rotation;
+				}
+
+				/**
+				 * @brief ägëÂó¶Çê›íËÇ∑ÇÈ
+				 * @param[in] scale ägëÂó¶
+				*/
+				void SetScale(const Vector3 scale)
+				{
+					m_scale = scale;
+				}
+
+				/**
+				 * @brief ägëÂó¶ÇìæÇÈ
+				 * @return ägëÂó¶
+				*/
+				const Vector3& GetScale() const
+				{
+					return m_scale;
+				}
+
+				void PlayAnimation(
+					int animNo,
+					float interpolateTime = nsModelConstData::kAnimationInterpolateTime
+				)
+				{
+					m_animationPtr->Play(animNo, interpolateTime);
+					return;
+				}
+
 
 			private:	//privateÇ»ÉÅÉìÉoä÷êî
 
@@ -108,8 +171,8 @@ namespace nsMyGame
 				void SetCommonModelInitData(
 					ModelInitData* modelInitData,
 					const char* tkmFilePath,
-					const char* fxFilePath = nsModelConstData::kDefaultFxFilePath,
 					const EnModelUpAxis modelUpAxis = enModelUpAxisZ,
+					const char* fxFilePath = nsModelConstData::kDefaultFxFilePath,
 					const char* vsEntryPointFunc = nsModelConstData::kVsEntryPointFunc,
 					const char* vsSkinEntryPointFunc = nsModelConstData::kVsSkinEntryPointFunc,
 					const char* psEntryPointFunc = nsModelConstData::kPsEntryPointFunc
