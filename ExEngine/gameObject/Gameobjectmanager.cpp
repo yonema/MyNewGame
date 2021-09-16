@@ -7,6 +7,10 @@
 
 GameObjectManager* GameObjectManager::m_instance = nullptr;
 
+//追加
+//ゲームがポーズ中か？　初期値はポーズ中ではない
+bool GameObjectManager::m_isGamePaused = false;
+
 GameObjectManager::GameObjectManager()
 {
 	if (m_instance != nullptr) {
@@ -38,12 +42,36 @@ void GameObjectManager::ExecuteUpdate()
 		}
 	}
 
+	//追加
 
-	for (auto& goList : m_gameObjectListArray) {
-		for (auto& go : goList) {
-			go->UpdateWrapper();
+	//ポーズ中ではないか？
+	if (m_isGamePaused == false)
+	{
+		//ポーズ中ではない
+		for (auto& goList : m_gameObjectListArray) {
+			for (auto& go : goList) {
+				go->UpdateWrapper();
+			}
 		}
 	}
+	else
+	{
+		//ポーズ中
+		for (auto& goList : m_gameObjectListArray) {
+			for (auto& go : goList) {
+				//ポーズ中に呼ばれるアップデート処理
+				go->UpdateOnlyPausedWrapper();
+			}
+		}
+	}
+
+	//ポーズ中でもポーズ中でなくても関係なく常に呼ばれるアップデート処理
+	for (auto& goList : m_gameObjectListArray) {
+		for (auto& go : goList) {
+			go->AlwaysUpdateWrapper();
+		}
+	}
+
 	//物理エンジンのアップデートを呼び出す。
 	PhysicsWorld::GetInstance()->Update(1.0f/60.0f);
 }

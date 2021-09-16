@@ -131,6 +131,22 @@ private:
 	typedef std::list<IGameObject*>	 GameObjectList;
 	std::array<GameObjectList, GAME_OBJECT_PRIO_MAX>	m_gameObjectListArray;							//!<ゲームオブジェクトの優先度付きリスト。
 	static GameObjectManager* m_instance;		//唯一のインスタンスのアドレスを記録する変数。
+
+//追加
+public:		//メンバ関数
+
+	/**
+	 * @brief ゲームのポーズの切り替え。trueでポーズ中、falseでポーズ中ではない
+	 * @param[in] gamePaused ポーズ中か？
+	*/
+	void SetGamePausedSource(const bool gamePaused)
+	{
+		m_isGamePaused = gamePaused;
+	}
+
+//追加
+private:	//データメンバ
+	static bool m_isGamePaused;		//ゲームがポーズ中か？
 };
 
 
@@ -180,7 +196,16 @@ static inline void DeleteGO(IGameObject* go)
 }
 
 
+//追加
 
+/**
+ * @brief ゲームのポーズの切り替え。trueでポーズ中、falseでポーズ中ではない
+ * @param[in] gamePaused ポーズ中か？
+*/
+static inline void SetGamePaused(const bool gamePaused)
+{
+	GameObjectManager::GetInstance()->SetGamePausedSource(gamePaused);
+}
 	
 
  

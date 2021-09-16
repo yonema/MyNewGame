@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "system/system.h"
+#include "Game.h"
 
 
 ///////////////////////////////////////////////////////////////////
@@ -22,6 +23,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// 初期化を行うコードを書くのはここまで！！！
 	//////////////////////////////////////
 	auto& renderContext = g_graphicsEngine->GetRenderContext();
+
+	//ゲームの生成
+	nsMyGame::nsGame::CGame game;
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())

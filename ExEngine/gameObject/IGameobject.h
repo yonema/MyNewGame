@@ -146,5 +146,41 @@ protected:
 	bool m_isNewFromGameObjectManager;	//GameObjectManagerでnewされた。
 	bool m_isRegist = false;							//GameObjectManagerに登録されている？
 	bool m_isActive = true;							//Activeフラグ。
+
+
+//追加
+public:		//オーバーライドしてほしいメンバ関数
+
+	/**
+	 * @brief ポーズ中のみ呼ばれるアップデート関数
+	*/
+	virtual void UpdateOnlyPaused() {};
+
+	/**
+	 * @brief ポーズ中でもポーズ中でなくても関係なく常に呼ばれるアップデート関数
+	*/
+	virtual void AlwaysUpdate() {};
+
+public:		//メンバ関数
+
+	/**
+	 * @brief ポーズ中アップデートのラッパー
+	*/
+	void UpdateOnlyPausedWrapper()
+	{
+		if (m_isActive && m_isStart && !m_isDead) {
+			UpdateOnlyPaused();
+		}
+	}
+
+	/**
+	 * @brief 常に呼ばれるアップデートのラッパー
+	*/
+	void AlwaysUpdateWrapper()
+	{
+		if (m_isActive && m_isStart && !m_isDead) {
+			AlwaysUpdate();
+		}
+	}
 	
 };

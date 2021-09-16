@@ -9,12 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="ソース ファイル\system">
-      <UniqueIdentifier>{a9bb9230-eaa9-4c07-a610-f43e5384bb9c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\system">
-      <UniqueIdentifier>{dbc0c16e-80e1-4c7c-8b01-c720c0baa9a8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MiniEngine">
       <UniqueIdentifier>{cc7395d8-c038-48b6-8449-ccd23e842334}</UniqueIdentifier>
     </Filter>
@@ -48,16 +42,22 @@
     <Filter Include="ExEngine\level2D">
       <UniqueIdentifier>{80abc458-e4b9-4836-89c7-3eb842072871}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode">
+      <UniqueIdentifier>{19aee4d1-35a5-4c9f-824a-6abf358eff1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\system">
+      <UniqueIdentifier>{a9bb9230-eaa9-4c07-a610-f43e5384bb9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\stadfx">
+      <UniqueIdentifier>{02c06515-415a-464c-8d25-eed6aea88f11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Game">
+      <UniqueIdentifier>{e9e30b1b-0fe5-4372-8f24-d2e46fc38250}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="system\system.cpp">
-      <Filter>ソース ファイル\system</Filter>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\MiniEngine\GraphicsEngine.cpp">
       <Filter>MiniEngine</Filter>
@@ -209,14 +209,17 @@
     <ClCompile Include="..\..\ExEngine\level2D\MapChip2D.cpp">
       <Filter>ExEngine\level2D</Filter>
     </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>MyCode\stadfx</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>MyCode\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>MyCode\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="system\system.h">
-      <Filter>ヘッダー ファイル\system</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
       <Filter>MiniEngine</Filter>
     </ClInclude>
@@ -393,6 +396,15 @@
     </ClInclude>
     <ClInclude Include="..\..\ExEngine\level2D\MapChip2D.h">
       <Filter>ExEngine\level2D</Filter>
+    </ClInclude>
+    <ClInclude Include="system\system.h">
+      <Filter>MyCode\system</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>MyCode\stadfx</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>MyCode\Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
