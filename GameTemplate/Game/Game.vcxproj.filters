@@ -66,6 +66,9 @@
     <Filter Include="MyCode\Maps">
       <UniqueIdentifier>{1edfb51e-7487-4bb9-88fa-a4d8604fa64c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Graphic\Font">
+      <UniqueIdentifier>{886acbe9-661a-4bbe-b85e-6b09ccbea395}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -235,6 +238,9 @@
     </ClCompile>
     <ClCompile Include="TestMap.cpp">
       <Filter>MyCode\Maps</Filter>
+    </ClCompile>
+    <ClCompile Include="FontRender.cpp">
+      <Filter>MyCode\Graphic\Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -438,6 +444,12 @@
     </ClInclude>
     <ClInclude Include="ModelRenderConstData.h">
       <Filter>MyCode\Graphic\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="FontRender.h">
+      <Filter>MyCode\Graphic\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="FontRenderConstData.h">
+      <Filter>MyCode\Graphic\Font</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

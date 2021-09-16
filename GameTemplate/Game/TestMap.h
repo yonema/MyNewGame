@@ -5,6 +5,7 @@ namespace nsMyGame
 	//前方宣言
 	namespace nsGraphic { 
 		namespace nsModel { class CModelRender; }	//モデルレンダラークラス
+		namespace nsFont { class CFontRender; }		//フォントレンダラークラス
 	}
 
 	/**
@@ -57,6 +58,7 @@ namespace nsMyGame
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
 			AnimationClip m_animationClip[enAnim_num];
 			EnAnimationClips m_animState = enAnim_idle;
+			nsGraphic::nsFont::CFontRender* m_fontRender = nullptr;		//!< フォントレンダラー
 		};
 
 	}

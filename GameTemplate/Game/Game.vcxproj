@@ -288,6 +288,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="FontRender.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ModelRender.cpp" />
@@ -363,6 +364,8 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="CommonData.h" />
+    <ClInclude Include="FontRender.h" />
+    <ClInclude Include="FontRenderConstData.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="ModelRender.h" />
     <ClInclude Include="ModelRenderConstData.h" />

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "TestMap.h"
 #include "ModelRender.h"
+#include "FontRender.h"
 
 namespace nsMyGame
 {
@@ -24,6 +25,10 @@ namespace nsMyGame
 			Quaternion qRot;
 			qRot.SetRotationDegY(180.0f);
 			m_modelRender->SetRotatioin(qRot);
+
+			m_fontRender = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityThird);
+			m_fontRender->SetParam(L"ƒoƒ“ƒhƒŠ");
+			m_fontRender->SetShadowParam(true, 1.0f, Vector4::Black);
 
 			return true;
 		}
