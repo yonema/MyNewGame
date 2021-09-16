@@ -17,12 +17,21 @@ namespace nsMyGame
 		class CGame : public IGameObject
 		{
 		public:		//コンストラクタとデストラクタ
-			CGame() = default;	//コンストラクタ
-			~CGame() = default;	//デストラクタ
+			/**
+			 * @brief コンストラクタ
+			*/
+			CGame() = default;
+			/**
+			 * @brief デストラクタ
+			*/
+			~CGame() = default;
 
 		public:		//オーバーライドしたメンバ関数
-			bool Start() override final;		//スタート関数
-			//void Update() override final;		//アップデート関数
+			/**
+			 * @brief スタート関数
+			 * @return アップデートを行うか？
+			*/
+			bool Start() override final;
 
 
 		private:

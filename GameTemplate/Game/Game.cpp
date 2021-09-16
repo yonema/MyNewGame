@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "TestMap.h"
 
 /**
  * @brief このゲームのネームスペース
@@ -14,6 +15,8 @@ namespace nsMyGame
 	{
 		bool CGame::Start()
 		{
+			NewGO<nsMaps::CTestMap>(nsCommonData::enPriorityFirst);
+
 			return true;
 		}
 	}
