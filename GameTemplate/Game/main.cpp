@@ -2,6 +2,7 @@
 #include "system/system.h"
 #include "Game.h"
 
+using namespace nsMyGame;
 
 ///////////////////////////////////////////////////////////////////
 // ウィンドウプログラムのメイン関数。
@@ -25,7 +26,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	auto& renderContext = g_graphicsEngine->GetRenderContext();
 
 	//ゲームの生成
-	NewGO<nsMyGame::nsGame::CGame>(0);
+	NewGO<nsGame::CGame>(nsCommonData::enPriorityFirst);
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())

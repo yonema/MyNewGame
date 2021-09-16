@@ -60,6 +60,9 @@
     <Filter Include="MyCode\Graphic\Model">
       <UniqueIdentifier>{5cab71c6-f7ee-4e1e-981c-746555563a3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\CommonData">
+      <UniqueIdentifier>{76d8c93d-4b24-4eaf-825e-1a6179166cb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -417,6 +420,12 @@
     </ClInclude>
     <ClInclude Include="ModelRender.h">
       <Filter>MyCode\Graphic\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="PriorityData.h">
+      <Filter>MyCode\CommonData</Filter>
+    </ClInclude>
+    <ClInclude Include="CommonData.h">
+      <Filter>MyCode\CommonData</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
