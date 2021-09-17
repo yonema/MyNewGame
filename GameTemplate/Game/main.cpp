@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "GameTime.h"
 #include "StopWatch.h"
+#include "SoundEngine.h"
 
 using namespace nsMyGame;
 
@@ -21,6 +22,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームオブジェクトマネージャーのインスタンスを作成する。
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
+	nsSound::CSoundEngine::CreateInstance();
 
 	//ストップウォッチを生成する
 	nsTimer::CStopWatch stopWatch;
@@ -75,6 +77,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//デルタタイムをストップウォッチの計測時間から、計算する
 		nsTimer::GameTime().PushFrameDeltaTime((float)stopWatch.GetElapsed());
 	}
+
+	nsSound::CSoundEngine::DeleteInstance();
+	PhysicsWorld::DeleteInstance();
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();
 	return 0;

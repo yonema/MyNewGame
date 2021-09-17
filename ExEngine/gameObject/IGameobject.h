@@ -6,12 +6,15 @@
 
 #include <list>
 #include <string>
+#include "../../GameTemplate/Game/Noncopyable.h"
 class RenderContext;
 
 /*!
-	*@brief	ゲームオブジェクト。
-	*/
-class IGameObject {
+*@brief	ゲームオブジェクト。
+* コピー禁止継承
+*/
+class IGameObject : private nsMyGame::nsUtil::Noncopyable
+{
 public:
 	/*!
 		*@brief	デストラクタ

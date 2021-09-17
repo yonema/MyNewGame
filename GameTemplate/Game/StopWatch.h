@@ -1,4 +1,5 @@
 #pragma once
+#include "Noncopyable.h"
 
 namespace nsMyGame
 {
@@ -29,7 +30,8 @@ namespace nsMyGame
 		 *@endcode
 		 *
 		 */
-		class CStopWatch {
+		class CStopWatch : private nsUtil::Noncopyable
+		{
 		public:
 			/*!
 			 *@brief	コンストラクタ。

@@ -6,6 +6,7 @@
 
 #include "StopWatch.h"
 #include <queue>
+#include "Noncopyable.h"
 
 namespace nsMyGame
 {
@@ -18,13 +19,11 @@ namespace nsMyGame
 		/*!
 		 *@brief	ƒQ[ƒ€ŠÔB
 		 */
-		class CGameTime {
-			CGameTime()
-			{
-			}
-			~CGameTime()
-			{
-			}
+		class CGameTime : private nsUtil::Noncopyable
+		{
+		public:
+			CGameTime() = default;
+			~CGameTime() = default;
 		public:  //ƒƒ“ƒoŠÖ”
 
 			/// <summary>

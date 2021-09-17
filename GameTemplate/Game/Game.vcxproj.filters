@@ -48,9 +48,6 @@
     <Filter Include="MyCode\system">
       <UniqueIdentifier>{a9bb9230-eaa9-4c07-a610-f43e5384bb9c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\stadfx">
-      <UniqueIdentifier>{02c06515-415a-464c-8d25-eed6aea88f11}</UniqueIdentifier>
-    </Filter>
     <Filter Include="MyCode\Game">
       <UniqueIdentifier>{e9e30b1b-0fe5-4372-8f24-d2e46fc38250}</UniqueIdentifier>
     </Filter>
@@ -75,10 +72,16 @@
     <Filter Include="MyCode\Graphic\Sprite">
       <UniqueIdentifier>{26726dc8-095b-4e8a-b640-d19b78fc3e08}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\Assets">
+    <Filter Include="MyCode\Sound">
+      <UniqueIdentifier>{15f226ff-ed59-45d2-ae61-d42f8a35327d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Util">
+      <UniqueIdentifier>{61b4bcd1-3ffe-4f2b-a446-0c58f9999ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets">
       <UniqueIdentifier>{86dc07b0-ba1e-4c31-a945-41870fd7e38c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MyCode\Assets\shader">
+    <Filter Include="Assets\shader">
       <UniqueIdentifier>{44b82129-4236-4448-9d80-d528da90fe16}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -236,9 +239,6 @@
     <ClCompile Include="..\..\ExEngine\level2D\MapChip2D.cpp">
       <Filter>ExEngine\level2D</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>MyCode\stadfx</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>MyCode\Game</Filter>
     </ClCompile>
@@ -259,6 +259,21 @@
     </ClCompile>
     <ClCompile Include="SpriteRender.cpp">
       <Filter>MyCode\Graphic\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveFile.cpp">
+      <Filter>MyCode\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>MyCode\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="WaveFileBank.cpp">
+      <Filter>MyCode\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundEngine.cpp">
+      <Filter>MyCode\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSource.cpp">
+      <Filter>MyCode\Sound</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -442,9 +457,6 @@
     <ClInclude Include="system\system.h">
       <Filter>MyCode\system</Filter>
     </ClInclude>
-    <ClInclude Include="stdafx.h">
-      <Filter>MyCode\stadfx</Filter>
-    </ClInclude>
     <ClInclude Include="Game.h">
       <Filter>MyCode\Game</Filter>
     </ClInclude>
@@ -481,13 +493,34 @@
     <ClInclude Include="SpriteRenderConstData.h">
       <Filter>MyCode\Graphic\Sprite</Filter>
     </ClInclude>
+    <ClInclude Include="WaveFile.h">
+      <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="Noncopyable.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="WaveFileBank.h">
+      <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundEngine.h">
+      <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSource.h">
+      <Filter>MyCode\Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\model.fx">
-      <Filter>MyCode\Assets\shader</Filter>
+      <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\sprite.fx">
-      <Filter>MyCode\Assets\shader</Filter>
+      <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

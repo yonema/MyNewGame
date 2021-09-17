@@ -3,6 +3,7 @@
 #include "ModelRender.h"
 #include "FontRender.h"
 #include "SpriteRender.h"
+#include "SoundSource.h"
 
 namespace nsMyGame
 {
@@ -39,6 +40,9 @@ namespace nsMyGame
 			m_spriteRender = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
 			m_spriteRender->Init("Assets/Image/sample.dds", 256, 256, {0.0f,1.0f});
 			m_spriteRender->SetPosition({ 300.0f,300.0f,0.0f });
+
+			m_soundSource = NewGO<nsSound::CSoundSource>(nsCommonData::enPriorityFirst);
+			m_soundSource->Init(L"Assets/sound/V0032.wav");
 
 			return true;
 		}
@@ -82,6 +86,7 @@ namespace nsMyGame
 
 			if (g_pad[0]->IsTrigger(enButtonA))
 			{
+				m_soundSource->Play(false);
 				if (m_animState == enAnim_idle)
 				{
 					m_animState = enAnim_walk;
