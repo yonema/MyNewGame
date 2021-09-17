@@ -288,6 +288,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="WaveFile.cpp" />
@@ -378,6 +379,7 @@
     <ClInclude Include="ModelRenderConstData.h" />
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="PriorityData.h" />
+    <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundSource.h" />
     <ClInclude Include="SpriteRender.h" />

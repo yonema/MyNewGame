@@ -275,6 +275,9 @@
     <ClCompile Include="SoundSource.cpp">
       <Filter>MyCode\Sound</Filter>
     </ClCompile>
+    <ClCompile Include="SoundCue.cpp">
+      <Filter>MyCode\Sound</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -512,6 +515,9 @@
       <Filter>MyCode\Sound</Filter>
     </ClInclude>
     <ClInclude Include="SoundSource.h">
+      <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundCue.h">
       <Filter>MyCode\Sound</Filter>
     </ClInclude>
   </ItemGroup>

@@ -8,7 +8,7 @@ namespace nsMyGame
 		namespace nsFont { class CFontRender; }		// フォントレンダラークラス
 		namespace nsSprite { class CSpriteRender; }	// スプライトレンダラークラス
 	}
-	namespace nsSound { class CSoundSource; }	//サウンドソース
+	namespace nsSound { class CSoundCue; }	//サウンドキュークラス
 
 
 	/**
@@ -63,7 +63,7 @@ namespace nsMyGame
 			EnAnimationClips m_animState = enAnim_idle;
 			nsGraphic::nsFont::CFontRender* m_fontRender = nullptr;		//!< フォントレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_spriteRender = nullptr;	//!< スプライトレンダラー
-			nsSound::CSoundSource* m_soundSource = nullptr;
+			nsSound::CSoundCue* m_soundCue = nullptr;					//!< サウンドキュー
 		};
 
 	}
