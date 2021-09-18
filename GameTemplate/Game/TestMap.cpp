@@ -4,6 +4,8 @@
 #include "FontRender.h"
 #include "SpriteRender.h"
 #include "SoundCue.h"
+#include "EffectPlayer.h"
+
 
 namespace nsMyGame
 {
@@ -41,9 +43,17 @@ namespace nsMyGame
 			m_spriteRender->Init("Assets/Image/sample.dds", 256, 256, {0.0f,1.0f});
 			m_spriteRender->SetPosition({ 300.0f,300.0f,0.0f });
 
-			//サウンドキューの初期化
+			// サウンドキューの初期化
 			m_soundCue = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_soundCue->Init(L"Assets/sound/V0032.wav", nsSound::CSoundCue::enSE);
+
+			// エフェクトプレイヤーの初期化
+			m_effectPlayer = NewGO<nsEffect::CEffectPlayer>(nsCommonData::enPriorityFirst);
+			m_effectPlayer->Init(u"Assets/effect/laser.efk");
+			m_effectPlayer->SetScale(3.0f);
+			qRot.SetRotationDegX(-90.0f);
+			m_effectPlayer->SetRotation(qRot);
+
 
 			return true;
 		}
@@ -88,6 +98,8 @@ namespace nsMyGame
 			if (g_pad[0]->IsTrigger(enButtonA))
 			{
 				m_soundCue->Play(false);
+				m_effectPlayer->SetPosition(m_modelRender->GetPosition());
+				m_effectPlayer->Play();
 				if (m_animState == enAnim_idle)
 				{
 					m_animState = enAnim_walk;

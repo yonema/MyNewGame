@@ -8,8 +8,8 @@ namespace nsMyGame
 		namespace nsFont { class CFontRender; }		// フォントレンダラークラス
 		namespace nsSprite { class CSpriteRender; }	// スプライトレンダラークラス
 	}
-	namespace nsSound { class CSoundCue; }	//サウンドキュークラス
-
+	namespace nsSound { class CSoundCue; }			//サウンドキュークラス
+	namespace nsEffect { class CEffectPlayer; }		//エフェクトプレイヤークラス
 
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -64,6 +64,7 @@ namespace nsMyGame
 			nsGraphic::nsFont::CFontRender* m_fontRender = nullptr;		//!< フォントレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_spriteRender = nullptr;	//!< スプライトレンダラー
 			nsSound::CSoundCue* m_soundCue = nullptr;					//!< サウンドキュー
+			nsEffect::CEffectPlayer* m_effectPlayer = nullptr;			//!< エフェクトプレイヤー
 		};
 
 	}

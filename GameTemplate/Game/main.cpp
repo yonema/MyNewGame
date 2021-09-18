@@ -22,6 +22,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	//ゲームオブジェクトマネージャーのインスタンスを作成する。
 	GameObjectManager::CreateInstance();
 	PhysicsWorld::CreateInstance();
+	EffectEngine::CreateInstance();
 	nsSound::CSoundEngine::CreateInstance();
 
 	//ストップウォッチを生成する
@@ -50,7 +51,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//////////////////////////////////////
 		
 		GameObjectManager::GetInstance()->ExecuteUpdate();
+		EffectEngine::GetInstance()->Update(nsTimer::GameTime().GetFrameDeltaTime());
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
+		EffectEngine::GetInstance()->Draw();
 
 #ifdef MY_DEBUG
 		//FPSを描画する
@@ -79,6 +82,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	}
 
 	nsSound::CSoundEngine::DeleteInstance();
+	EffectEngine::DeleteInstance();
 	PhysicsWorld::DeleteInstance();
 	//ゲームオブジェクトマネージャーを削除。
 	GameObjectManager::DeleteInstance();

@@ -84,6 +84,12 @@
     <Filter Include="Assets\shader">
       <UniqueIdentifier>{44b82129-4236-4448-9d80-d528da90fe16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ExEngine\effect">
+      <UniqueIdentifier>{888260c0-b0d5-4f70-89c9-63825d37cf4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Effect">
+      <UniqueIdentifier>{6f3b30e2-9803-42d2-a99a-cf8aaca42f28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -277,6 +283,15 @@
     </ClCompile>
     <ClCompile Include="SoundCue.cpp">
       <Filter>MyCode\Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\EffectEngine.cpp">
+      <Filter>ExEngine\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\effect\Effect.cpp">
+      <Filter>ExEngine\effect</Filter>
+    </ClCompile>
+    <ClCompile Include="CEffectPlayer.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -519,6 +534,15 @@
     </ClInclude>
     <ClInclude Include="SoundCue.h">
       <Filter>MyCode\Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\EffectEngine.h">
+      <Filter>ExEngine\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\effect\Effect.h">
+      <Filter>ExEngine\effect</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectPlayer.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

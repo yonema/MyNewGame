@@ -64,6 +64,17 @@ public:
 	{
 		m_scale = scale;
 	}
+
+	/**
+	 * @brief 拡大率を設定（float）
+	 * @param[in] scale 拡大率
+	*/
+	void SetScale(const float scale)
+	{
+		m_scale.x = scale;
+		m_scale.y = scale;
+		m_scale.z = scale;
+	}
 	/// <summary>
 	/// 拡大率を取得。
 	/// </summary>
@@ -83,6 +94,14 @@ public:
 	 *@brief	更新。
 	 */
 	void Update() ;
+
+	/**
+	 * @brief エフェクトを停止する
+	*/
+	void Stop()
+	{
+		EffectEngine::GetInstance()->Stop(m_handle);
+	}
 private:
 	Effekseer::EffectRef m_effect;	//エフェクト
 	int	m_handle = -1;				//再生中のエフェクトのハンドル。

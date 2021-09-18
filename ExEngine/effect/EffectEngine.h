@@ -110,5 +110,5 @@ public:
 	void Draw();
 private:
 	EffectEngine();
-	~EffectEngine();
+	~EffectEngine() = default;
 };
