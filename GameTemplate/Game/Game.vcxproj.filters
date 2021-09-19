@@ -90,6 +90,9 @@
     <Filter Include="MyCode\Effect">
       <UniqueIdentifier>{6f3b30e2-9803-42d2-a99a-cf8aaca42f28}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Light">
+      <UniqueIdentifier>{cdb2f1a3-40f4-4d27-af09-af5ff3667427}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -291,7 +294,19 @@
       <Filter>ExEngine\effect</Filter>
     </ClCompile>
     <ClCompile Include="CEffectPlayer.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>MyCode\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="LightManager.cpp">
+      <Filter>MyCode\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>MyCode\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>MyCode\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>MyCode\Light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -542,7 +557,25 @@
       <Filter>ExEngine\effect</Filter>
     </ClInclude>
     <ClInclude Include="EffectPlayer.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>MyCode\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="LightData.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="LightManager.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="LightConstData.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>MyCode\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>MyCode\Light</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

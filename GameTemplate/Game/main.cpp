@@ -4,6 +4,7 @@
 #include "GameTime.h"
 #include "StopWatch.h"
 #include "SoundEngine.h"
+#include "LightManager.h"
 
 using namespace nsMyGame;
 
@@ -24,6 +25,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	PhysicsWorld::CreateInstance();
 	EffectEngine::CreateInstance();
 	nsSound::CSoundEngine::CreateInstance();
+	nsLight::CLightManager::CreateInstance();
 
 	//ストップウォッチを生成する
 	nsTimer::CStopWatch stopWatch;
@@ -45,13 +47,14 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		//レンダリング開始。
 		g_engine->BeginFrame();
 		
+		GameObjectManager::GetInstance()->ExecuteUpdate();
+		EffectEngine::GetInstance()->Update(nsTimer::GameTime().GetFrameDeltaTime());
+		nsLight::CLightManager::GetInstance()->Update();
 
 		//////////////////////////////////////
 		//ここから絵を描くコードを記述する。
 		//////////////////////////////////////
 		
-		GameObjectManager::GetInstance()->ExecuteUpdate();
-		EffectEngine::GetInstance()->Update(nsTimer::GameTime().GetFrameDeltaTime());
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 		EffectEngine::GetInstance()->Draw();
 
@@ -81,6 +84,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 		nsTimer::GameTime().PushFrameDeltaTime((float)stopWatch.GetElapsed());
 	}
 
+	nsLight::CLightManager::DeleteInstance();
 	nsSound::CSoundEngine::DeleteInstance();
 	EffectEngine::DeleteInstance();
 	PhysicsWorld::DeleteInstance();

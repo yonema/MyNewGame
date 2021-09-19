@@ -8,8 +8,9 @@ namespace nsMyGame
 		namespace nsFont { class CFontRender; }		// フォントレンダラークラス
 		namespace nsSprite { class CSpriteRender; }	// スプライトレンダラークラス
 	}
-	namespace nsSound { class CSoundCue; }			//サウンドキュークラス
-	namespace nsEffect { class CEffectPlayer; }		//エフェクトプレイヤークラス
+	namespace nsSound { class CSoundCue; }			// サウンドキュークラス
+	namespace nsEffect { class CEffectPlayer; }		// エフェクトプレイヤークラス
+	namespace nsLight { class CDirectionalLight; }	// ディレクションライト
 
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -65,6 +66,10 @@ namespace nsMyGame
 			nsGraphic::nsSprite::CSpriteRender* m_spriteRender = nullptr;	//!< スプライトレンダラー
 			nsSound::CSoundCue* m_soundCue = nullptr;					//!< サウンドキュー
 			nsEffect::CEffectPlayer* m_effectPlayer = nullptr;			//!< エフェクトプレイヤー
+			nsGraphic::nsFont::CFontRender* m_lightDataFont = nullptr;
+			nsGraphic::nsFont::CFontRender* m_targetNumFont = nullptr;
+			nsLight::CDirectionalLight* m_directionalLights[4] = {};
+			int targetNum = 0;
 		};
 
 	}

@@ -5,6 +5,8 @@
 #include "SpriteRender.h"
 #include "SoundCue.h"
 #include "EffectPlayer.h"
+#include "LightManager.h"
+#include "DirectionalLight.h"
 
 
 namespace nsMyGame
@@ -54,6 +56,11 @@ namespace nsMyGame
 			qRot.SetRotationDegX(-90.0f);
 			m_effectPlayer->SetRotation(qRot);
 
+			m_lightDataFont = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityThird);
+			m_lightDataFont->SetPosition({ -600.0f, 300.0f });
+
+			m_targetNumFont = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityThird);
+			m_targetNumFont->SetPosition({ 0.0f, 350.0f });
 
 			return true;
 		}
@@ -95,11 +102,32 @@ namespace nsMyGame
 				moveVec.z -= moveSpeed;
 			}
 
+			if (g_pad[0]->IsTrigger(enButtonUp))
+			{
+				targetNum++;
+			}
+			else if(g_pad[0]->IsTrigger(enButtonDown))
+			{
+				targetNum--;
+			}
+
 			if (g_pad[0]->IsTrigger(enButtonA))
 			{
 				m_soundCue->Play(false);
 				m_effectPlayer->SetPosition(m_modelRender->GetPosition());
 				m_effectPlayer->Play();
+				
+				const int ligNum = nsLight::CLightManager::GetInstance()->GetLightData().directionalLightNum;
+				m_directionalLights[ligNum] = NewGO<nsLight::CDirectionalLight>(nsCommonData::enPriorityFirst);
+				m_directionalLights[ligNum]->SetColor(
+					{ 
+						static_cast<float>(ligNum) ,
+						static_cast<float>(ligNum) ,
+						static_cast<float>(ligNum) ,
+						1.0f 
+					}
+				);
+
 				if (m_animState == enAnim_idle)
 				{
 					m_animState = enAnim_walk;
@@ -111,6 +139,48 @@ namespace nsMyGame
 					m_modelRender->PlayAnimation(enAnim_idle);
 				}
 			}
+			else if (g_pad[0]->IsTrigger(enButtonB))
+			{
+				const int ligNum = nsLight::CLightManager::GetInstance()->GetLightData().directionalLightNum;
+
+				if (targetNum < ligNum)
+				{
+					DeleteGO(m_directionalLights[targetNum]);
+					m_directionalLights[targetNum] = nullptr;
+					for (int i = targetNum; i < ligNum - 1; i++)
+					{
+						std::swap<nsLight::CDirectionalLight*>(
+							m_directionalLights[i],
+							m_directionalLights[i + 1]
+							);
+					}
+				}
+			}
+			wchar_t text[256];
+			const nsLight::nsLightData::SLightData& lightData = nsLight::CLightManager::GetInstance()->GetLightData();
+
+			swprintf_s(
+				text,
+				L"0：%6.2f,%6.2f,%6.2f\n1：%6.2f,%6.2f,%6.2f\n2：%6.2f,%6.2f,%6.2f\n3：%6.2f,%6.2f,%6.2f\nlightNum：%d",
+				lightData.directionalLightData[0].color.x,
+				lightData.directionalLightData[0].color.y,
+				lightData.directionalLightData[0].color.z,
+				lightData.directionalLightData[1].color.x,
+				lightData.directionalLightData[1].color.y,
+				lightData.directionalLightData[1].color.z,
+				lightData.directionalLightData[2].color.x,
+				lightData.directionalLightData[2].color.y,
+				lightData.directionalLightData[2].color.z,
+				lightData.directionalLightData[3].color.x,
+				lightData.directionalLightData[3].color.y,
+				lightData.directionalLightData[3].color.z,
+				lightData.directionalLightNum
+			);
+			m_lightDataFont->SetText(text);
+
+
+			swprintf_s(text, L"%d", targetNum);
+			m_targetNumFont->SetText(text);
 
 			m_modelRender->SetPosition(m_modelRender->GetPosition() + moveVec);
 
