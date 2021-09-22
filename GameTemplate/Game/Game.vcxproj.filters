@@ -93,6 +93,9 @@
     <Filter Include="MyCode\Light">
       <UniqueIdentifier>{cdb2f1a3-40f4-4d27-af09-af5ff3667427}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Maps\TestMaps">
+      <UniqueIdentifier>{cebf3a9f-8613-4c4c-8ebb-f72d88253708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -257,9 +260,6 @@
     <ClCompile Include="ModelRender.cpp">
       <Filter>MyCode\Graphic\Model</Filter>
     </ClCompile>
-    <ClCompile Include="TestMap.cpp">
-      <Filter>MyCode\Maps</Filter>
-    </ClCompile>
     <ClCompile Include="FontRender.cpp">
       <Filter>MyCode\Graphic\Font</Filter>
     </ClCompile>
@@ -307,6 +307,12 @@
     </ClCompile>
     <ClCompile Include="SpotLight.cpp">
       <Filter>MyCode\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMap.cpp">
+      <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMapForSpotLight.cpp">
+      <Filter>MyCode\Maps\TestMaps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -502,9 +508,6 @@
     <ClInclude Include="CommonData.h">
       <Filter>MyCode\CommonData</Filter>
     </ClInclude>
-    <ClInclude Include="TestMap.h">
-      <Filter>MyCode\Maps</Filter>
-    </ClInclude>
     <ClInclude Include="ModelRenderConstData.h">
       <Filter>MyCode\Graphic\Model</Filter>
     </ClInclude>
@@ -577,12 +580,18 @@
     <ClInclude Include="PointLight.h">
       <Filter>MyCode\Light</Filter>
     </ClInclude>
+    <ClInclude Include="TestMap.h">
+      <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMapForSpotLight.h">
+      <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Assets\shader\model.fx">
+    <FxCompile Include="Assets\shader\sprite.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
-    <FxCompile Include="Assets\shader\sprite.fx">
+    <FxCompile Include="Assets\shader\model.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

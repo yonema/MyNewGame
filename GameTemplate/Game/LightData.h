@@ -21,9 +21,9 @@ namespace nsMyGame
 			*/
 			struct SDirectionalLightData
 			{
-				Vector3 direction = GetDefaultDirection();	//!< ライトの方向
-				int castShadow = 1;							//!< 影を生成するか？0:生成しない、1:生成する
-				Vector4 color = kDefaultLightColor;			//!< ライトのカラー
+				Vector3 direction = GetDefaultDirection();		//!< ライトの方向
+				int castShadow = 1;								//!< 影を生成するか？0:生成しない、1:生成する
+				Vector4 color = kDefaultDirectionalLightColor;	//!< ライトのカラー
 			};
 
 			/**
@@ -31,9 +31,9 @@ namespace nsMyGame
 			*/
 			struct SPointLightData
 			{
-				Vector3 position = Vector3::Zero;		//!< ライトの座標
-				float range = kDefaultPointLightRange;	//!< ライトの影響範囲
-				Vector4 color = kDefaultLightColor;		//!< ライトのカラー
+				Vector3 position = Vector3::Zero;			//!< ライトの座標
+				float range = kDefaultPointLightRange;		//!< ライトの影響範囲
+				Vector4 color = kDefaultPointLightColor;	//!< ライトのカラー
 			};
 
 			/**
@@ -43,7 +43,7 @@ namespace nsMyGame
 			{
 				SPointLightData pointLightData;				//!< ポイントライトのデータ
 				Vector3 direction = GetDefaultDirection();	//!< ライトの射出方向
-				float angle = kDefaultSpotLightAngle;		//!< ライトの射出角度
+				float angle = kDefaultSpotLightAngle;		//!< ライトの射出角度（radian単位）
 			};
 
 			/**

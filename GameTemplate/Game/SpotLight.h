@@ -98,12 +98,21 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief ライトの射出角度を設定する
-			 * @param angle ライトの射出角度
+			 * @brief ライトの射出角度を設定する（radian単位）
+			 * @param angle ライトの射出角度（radian単位）
 			*/
 			void SetAngle(const float angle)
 			{
 				m_lightDataPtr->angle = angle;
+			}
+
+			/**
+			 * @brief ライトの射出角度を設定する（Degree単位）
+			 * @param angleDeg ライトの射出角度（Degree単位
+			*/
+			void SetAngleDeg(const float angleDeg)
+			{
+				m_lightDataPtr->angle = Math::DegToRad(angleDeg);
 			}
 
 		private:	//データメンバ

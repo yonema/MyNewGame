@@ -178,6 +178,12 @@ namespace nsMyGame
 					const char* psEntryPointFunc = nsModelConstData::kPsEntryPointFunc
 				);
 
+				/**
+				 * @brief デフォルトの定数バッファをセット
+				 * @param modelInitData モデルの初期化データ
+				*/
+				void SetDefaultConstantBuffer(ModelInitData* modelInitData);
+
 			private:	// データメンバ
 				Model m_model;								//!< モデルクラス
 				const char* m_tkmFilePath = nullptr;		//!< tkmファイルのファイルパス

@@ -10,7 +10,7 @@ namespace nsMyGame
 	}
 	namespace nsSound { class CSoundCue; }			// サウンドキュークラス
 	namespace nsEffect { class CEffectPlayer; }		// エフェクトプレイヤークラス
-	namespace nsLight { class CDirectionalLight; }	// ディレクションライト
+	namespace nsLight { class CPointLight; }		// ポイントライトクラス
 
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -18,59 +18,66 @@ namespace nsMyGame
 	namespace nsMaps
 	{
 		/**
-		 * @brief テスト用のマップ
+		 * @brief テストマップ（レベル）用のネームスペース
 		*/
-		class CTestMap : public IGameObject
+		namespace nsTestMaps
 		{
-		public:		// コンストラクタとデストラクタ
 			/**
-			 * @brief コンストラクタ
+			 * @brief テスト用のマップ
 			*/
-			CTestMap() = default;
-
-			/**
-			 * @brief デストラクタ
-			*/
-			~CTestMap() = default;
-
-		public:		// オーバーライドしたメンバ関数
-			/**
-			 * @brief スタート関数
-			 * @return アップデートを行うか？
-			*/
-			bool Start() override final;
-
-			/**
-			 * @brief 破棄した時に呼ばれる
-			*/
-			void OnDestroy() override final;
-
-			/**
-			 * @brief アップデート関数
-			*/
-			void Update() override final;
-
-		private:	// 列挙型
-			enum EnAnimationClips
+			class CTestMap : public IGameObject
 			{
-				enAnim_idle,
-				enAnim_walk,
-				enAnim_num
+			public:		// コンストラクタとデストラクタ
+				/**
+				 * @brief コンストラクタ
+				*/
+				CTestMap() = default;
+
+				/**
+				 * @brief デストラクタ
+				*/
+				~CTestMap() = default;
+
+			public:		// オーバーライドしたメンバ関数
+				/**
+				 * @brief スタート関数
+				 * @return アップデートを行うか？
+				*/
+				bool Start() override final;
+
+				/**
+				 * @brief 破棄した時に呼ばれる
+				*/
+				void OnDestroy() override final;
+
+				/**
+				 * @brief アップデート関数
+				*/
+				void Update() override final;
+
+			private:	// 列挙型
+				enum EnAnimationClips
+				{
+					enAnim_idle,
+					enAnim_walk,
+					enAnim_num
+				};
+
+			private:	// データメンバ
+				nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
+				AnimationClip m_animationClip[enAnim_num];
+				EnAnimationClips m_animState = enAnim_idle;
+				nsGraphic::nsFont::CFontRender* m_fontRender = nullptr;		//!< フォントレンダラー
+				nsGraphic::nsSprite::CSpriteRender* m_spriteRender = nullptr;	//!< スプライトレンダラー
+				nsSound::CSoundCue* m_soundCue = nullptr;					//!< サウンドキュー
+				nsEffect::CEffectPlayer* m_effectPlayer = nullptr;			//!< エフェクトプレイヤー
+
+				nsGraphic::nsModel::CModelRender* m_lightModel = nullptr;
+				nsLight::CPointLight* m_pointLight = nullptr;
+				const char* m_pointLigName = "PointLight";
+				const char* m_pointLigModelName = "PointLightModel";
+				const Vector4 m_pointLigColor = { 10.0f,0.0f,0.0f,1.0f };
 			};
-
-		private:	// データメンバ
-			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
-			AnimationClip m_animationClip[enAnim_num];
-			EnAnimationClips m_animState = enAnim_idle;
-			nsGraphic::nsFont::CFontRender* m_fontRender = nullptr;		//!< フォントレンダラー
-			nsGraphic::nsSprite::CSpriteRender* m_spriteRender = nullptr;	//!< スプライトレンダラー
-			nsSound::CSoundCue* m_soundCue = nullptr;					//!< サウンドキュー
-			nsEffect::CEffectPlayer* m_effectPlayer = nullptr;			//!< エフェクトプレイヤー
-			nsGraphic::nsFont::CFontRender* m_lightDataFont = nullptr;
-			nsGraphic::nsFont::CFontRender* m_targetNumFont = nullptr;
-			nsLight::CDirectionalLight* m_directionalLights[4] = {};
-			int targetNum = 0;
-		};
-
+		}
 	}
 }

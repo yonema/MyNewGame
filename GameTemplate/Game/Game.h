@@ -6,6 +6,7 @@
 */
 namespace nsMyGame
 {
+	namespace nsLight { class CDirectionalLight; }
 	/**
 	 * @brief ゲームファイルのネームスペース
 	*/
@@ -33,9 +34,14 @@ namespace nsMyGame
 			*/
 			bool Start() override final;
 
+			/**
+			 * @brief 破棄されるときに呼ばれる関数
+			*/
+			void OnDestroy() override final;
+
 
 		private:
-
+			nsLight::CDirectionalLight* m_gameDirectionalLight = nullptr;	//!< ゲーム全体のディレクションライト
 
 		};
 	}

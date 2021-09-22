@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ModelRender.h"
 #include "GameTime.h"
+#include "LightManager.h"
 
 namespace nsMyGame
 {
@@ -84,6 +85,9 @@ namespace nsMyGame
 
 				// モデルの初期化データの共通部分の設定
 				SetCommonModelInitData(&modelInitData, filePath, modelUpAxis);
+
+				// デフォルトのコンスタントバッファを設定
+				SetDefaultConstantBuffer(&modelInitData);
 
 				// 初期化処理のメインコア
 				InitMainCore(modelInitData, animationClips, numAnimationClip);
@@ -213,6 +217,20 @@ namespace nsMyGame
 
 				return;
 
+			}
+
+			/**
+			 * @brief デフォルトの定数バッファをセット
+			 * @param modelInitData モデルの初期化データ
+			*/
+			void CModelRender::SetDefaultConstantBuffer(ModelInitData* modelInitData)
+			{
+				modelInitData->m_expandConstantBuffer = 
+					&nsLight::CLightManager::GetInstance()->GetLightData();
+				modelInitData->m_expandConstantBufferSize =
+					sizeof(nsLight::CLightManager::GetInstance()->GetLightData());
+
+				return;
 			}
 
 

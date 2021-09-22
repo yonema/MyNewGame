@@ -27,11 +27,13 @@ namespace nsMyGame
 				return defaultDirection;
 			}
 
-			const Vector4 kDefaultLightColor = { 1.0f,1.0f,1.0f,1.0f };	//!< デフォルトのライトカラー
+			const Vector4 kDefaultDirectionalLightColor = { 1.0f,1.0f,1.0f,1.0f };	//!< デフォルトのディレクションライトのカラー
 
-			constexpr float kDefaultPointLightRange = 10.0f;	//!< デフォルトのポイントライトの影響範囲
+			const Vector4 kDefaultPointLightColor = { 10.0f,10.0f,10.0f,1.0f };	//!< デフォルトのポイントライトカラー
 
-			constexpr float kDefaultSpotLightAngle = 45.0f;		//!< デフォルトのスポットライトの射出角度
+			constexpr float kDefaultPointLightRange = 100.0f;	//!< デフォルトのポイントライトの影響範囲
+
+			constexpr float kDefaultSpotLightAngle = Math::PI * 0.5f;	//!< デフォルトのスポットライトの射出角度（radian単位）
 
 			/**
 			 * @brief アンビエントライトのデフォルトの値を得る
