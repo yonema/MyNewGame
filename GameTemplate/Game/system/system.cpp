@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "../stdafx.h"
 #include "system.h"
 #include "GraphicsEngine.h"
 
@@ -17,7 +18,10 @@ LRESULT CALLBACK MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_DESTROY:
 		//スエンジンの破棄。
-		delete g_engine;
+		//delete g_engine;
+
+		// 追加
+		nsMyGame::nsMyEngine::CMyEngine::DeleteInstance();
 		PostQuitMessage(0);
 		break;	
 	default:
@@ -80,8 +84,14 @@ void InitGame(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, in
 	//ウィンドウを初期化。
 	InitWindow(hInstance, hPrevInstance, lpCmdLine, nCmdShow, appName);
 	//TKエンジンの初期化。
-	g_engine = new TkEngine;
-	g_engine->Init(g_hWnd, FRAME_BUFFER_W, FRAME_BUFFER_H);
+	//g_engine = new TkEngine;
+	//g_engine->Init(g_hWnd, FRAME_BUFFER_W, FRAME_BUFFER_H);
+
+	// 追加
+	// Tkエンジンをラップした自分のエンジンを生成
+	nsMyGame::nsMyEngine::CMyEngine::CreateInstance();
+
+	return;
 }
 //ウィンドウメッセージをディスパッチ。falseが返ってきたら、ゲーム終了。
 bool DispatchWindowMessage()

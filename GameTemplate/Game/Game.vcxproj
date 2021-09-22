@@ -293,7 +293,9 @@
     <ClCompile Include="CEffectPlayer.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="LightManager.cpp" />
+    <ClCompile Include="MyEngine.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="RenderingEngine.cpp" />
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundSource.cpp" />
@@ -392,9 +394,11 @@
     <ClInclude Include="LightManager.h" />
     <ClInclude Include="ModelRender.h" />
     <ClInclude Include="ModelRenderConstData.h" />
+    <ClInclude Include="MyEngine.h" />
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PriorityData.h" />
+    <ClInclude Include="RenderingEngine.h" />
     <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SoundSource.h" />

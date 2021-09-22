@@ -281,21 +281,6 @@ namespace nsMyGame
 			X3DAUDIO_DSP_SETTINGS m_dspSettings;
 			bool m_isSetPositionFirst = true;					//!<一番最初のsetPosition?
 			bool m_isAvailable = false;							//!<インスタンスが利用可能？
-
-
-
-		//////////
-		// kbc23: 追加
-		//////////
-		public:
-			bool GetLoopStart() const
-			{
-				return m_loopStart;
-			}
-		private:
-			//曲のループの始まりが曲の途中のため曲が終わりに来た際の判定を作成
-			bool m_loopStart = false;
-
 		};
 	}
 }

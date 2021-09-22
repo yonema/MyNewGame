@@ -96,6 +96,9 @@
     <Filter Include="MyCode\Maps\TestMaps">
       <UniqueIdentifier>{cebf3a9f-8613-4c4c-8ebb-f72d88253708}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Engine">
+      <UniqueIdentifier>{7ac4f6f7-6f36-4f05-8a80-d1d3fe13d556}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -313,6 +316,12 @@
     </ClCompile>
     <ClCompile Include="TestMapForSpotLight.cpp">
       <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClCompile>
+    <ClCompile Include="MyEngine.cpp">
+      <Filter>MyCode\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderingEngine.cpp">
+      <Filter>MyCode\Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -585,6 +594,12 @@
     </ClInclude>
     <ClInclude Include="TestMapForSpotLight.h">
       <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine.h">
+      <Filter>MyCode\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderingEngine.h">
+      <Filter>MyCode\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
