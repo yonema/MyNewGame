@@ -58,12 +58,29 @@ public:
 		m_commandList = commandList;
 	}
 	/// <summary>
-	/// ビューポートを設定
+	/// ビューポートとシザリング矩形をセットで設定
 	/// </summary>
 	/// <param name="viewport">ビューポート</param>
-	void SetViewport(D3D12_VIEWPORT& viewport)
+	void SetViewportAndScissor(D3D12_VIEWPORT& viewport)
 	{
+		//シザリング矩形も設定する。
+		D3D12_RECT scissorRect;
+		scissorRect.bottom = static_cast<LONG>(viewport.Height);
+		scissorRect.top = 0;
+		scissorRect.left = 0;
+		scissorRect.right = static_cast<LONG>(viewport.Width);
+		SetScissorRect(scissorRect);
+
 		m_commandList->RSSetViewports(1, &viewport);
+		m_currentViewport = viewport;
+	}
+	/// <summary>
+	/// ビューポートを取得。
+	/// </summary>
+	/// <returns></returns>
+	D3D12_VIEWPORT GetViewport() const
+	{
+		return m_currentViewport;
 	}
 	/// <summary>
 	/// シザリング矩形を設定
@@ -172,11 +189,32 @@ public:
 		m_commandList->OMSetRenderTargets(1, &rtvHandle, FALSE, &dsvHandle);
 	}
 	/// <summary>
+	/// レンダリングターゲットをスロット0に設定する。
+	/// </summary>
+	/// <remarks>
+	/// 本関数はビューポートの設定を行いません。
+	/// ユーザー側で適切なビューポートを指定する必要があります。
+	/// </remarks>
+	/// <param name="renderTarget">レンダリングターゲット</param>
+	void SetRenderTarget(RenderTarget& renderTarget)
+	{
+		RenderTarget* rtArray[] = { &renderTarget };
+		SetRenderTargets(1, rtArray);
+	}
+	/// <summary>
 	/// レンダリングターゲットとビューポートを同時に設定する。
 	/// </summary>
 	/// <param name="numRT"></param>
 	/// <param name="renderTarget"></param>
 	void SetRenderTargets(UINT numRT, RenderTarget* renderTargets[]);
+	/// <summary>
+	/// レンダリングターゲットとビューポートを同時に設定する。
+	/// </summary>
+	/// <remarks>
+	/// この関数を利用するとレンダリングターゲットと同じ幅と高さのビューポートが設定されます。
+	/// </remarks>
+	/// <param name="renderTarget">レンダリングターゲット</param>
+	void SetRenderTargetAndViewport(RenderTarget& renderTarget);
 	/// <summary>
 	/// レンダリングターゲットビューのクリア。
 	/// </summary>
@@ -353,6 +391,7 @@ private:
 	enum { MAX_CONSTANT_BUFFER = 8 };	//定数バッファの最大数。足りなくなったら増やしてね。
 	enum { MAX_SHADER_RESOURCE = 16 };	//シェーダーリソースの最大数。足りなくなったら増やしてね。
 
+	D3D12_VIEWPORT m_currentViewport;				//現在のビューポート。
 	ID3D12GraphicsCommandList4* m_commandList;	//コマンドリスト。
 	ID3D12DescriptorHeap* m_descriptorHeaps[MAX_DESCRIPTOR_HEAP];			//ディスクリプタヒープの配列。
 	ConstantBuffer* m_constantBuffers[MAX_CONSTANT_BUFFER] = { nullptr };	//定数バッファの配列。

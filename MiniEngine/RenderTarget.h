@@ -10,6 +10,7 @@ class GraphicsEngine;
 /// </summary>
 class RenderTarget {
 public:
+	~RenderTarget();
 	/// <summary>
 	/// レンダリングターゲットの作成。
 	/// </summary>
@@ -76,6 +77,10 @@ public:
 	int GetHeight() const
 	{
 		return m_height;
+	}
+	DXGI_FORMAT GetColorBufferFormat() const
+	{
+		return m_renderTargetTexture.GetFormat();
 	}
 	const float* GetRTVClearColor() const
 	{

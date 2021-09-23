@@ -1,6 +1,5 @@
 #pragma once
-
-
+#include "RenderingEngineConstData.h"
 
 namespace nsMyGame
 {
@@ -34,10 +33,19 @@ namespace nsMyGame
 			void AddRenderObject(nsGraphic::CRender* renderObject)
 			{
 #ifdef MY_DEBUG
-				if (m_renderObjects.size() >= m_kRenderObjectsCapacityNum)
+				if (m_renderObjects.size() >= nsRenderingEngineConstData::m_kRenderObjectsCapacityNum)
 					MessageBoxA(nullptr, "レンダリングオブジェトが予想より多く作られてる", "警告", MB_OK);
 #endif
 				m_renderObjects.emplace_back(renderObject);
+			}
+
+			/**
+			 * @brief メインレンダリングターゲットのカラーバッファーフォーマットを取得
+			 * @return メインレンダリングターゲットのカラーバッファーフォーマット
+			*/
+			DXGI_FORMAT GetMainRenderTargetFormat() const
+			{
+				return m_mainRenderTarget.GetColorBufferFormat();
 			}
 
 			/**
@@ -77,10 +85,36 @@ namespace nsMyGame
 		private:	// privateなメンバ関数
 
 			/**
+			 * @brief メインレンダリングターゲットの初期化
+			*/
+			void InitMainRenderTarget();
+
+			/**
+			 * @brief GBufferを初期化
+			*/
+			void InitGBuffer();
+
+			/**
+			 * @brief メインレンダリングターゲットをフレームバッファにコピーするためのスプライトの初期化
+			*/
+			void InitCopyMainRenderTargetToFrameBufferSprite();
+
+			/**
+			 * @brief ディファ―ドライティングを行うためのスプライトの初期化
+			*/
+			void InitDefferdLightingSprite();
+
+			/**
 			 * @brief GBufferに描画する
 			 * @param rc レンダリングコンテキスト
 			*/
 			void RenderToGBuffer(RenderContext& rc);
+
+			/**
+			 * @brief ディファ―ドライティング
+			 * @param rc レンダリングコンテキスト
+			*/
+			void DefferdLighting(RenderContext& rc);
 
 			/**
 			 * @brief 2Dを描画する
@@ -88,12 +122,24 @@ namespace nsMyGame
 			*/
 			void Render2D(RenderContext& rc);
 
+			/**
+			 * @brief メインレンダリングターゲットの内容をフレームバッファにコピーする
+			 * @param rc レンダリングコンテキスト
+			*/
+			void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
+
 		private:	// データメンバ
 			std::vector<nsGraphic::CRender*> m_renderObjects;	//!< 描画するオブジェクト
 
+			RenderTarget m_mainRenderTarget;	//!< メインレンダリングターゲット
+			RenderTarget m_GBuffer[nsRenderingEngineConstData::enGBufferNum];	//!< GBuffer
+
+			Sprite m_copyMainRtToFrameBufferSprite;	//!< メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
+			Sprite m_diferredLightingSprite;	//!< ディファードライティングを行うためのスプライト
+
+
 		private:	// staticなデータメンバ
 			static CRenderingEngine* m_instance;		//!< 唯一のインスタンス
-			static const int m_kRenderObjectsCapacityNum = 255;
 		};
 	}
 }

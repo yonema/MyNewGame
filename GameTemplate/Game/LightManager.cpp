@@ -45,6 +45,8 @@ namespace nsMyGame
 		{
 			// 視点更新
 			m_lightData.eyePos = g_camera3D->GetPosition();
+			// ビュープロジェクション行列の逆行列更新
+			m_lightData.mViewProjInv.Inverse(g_camera3D->GetViewProjectionMatrix());
 		}
 
 		/**

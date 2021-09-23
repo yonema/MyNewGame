@@ -140,6 +140,33 @@ namespace nsMyGame
 					return m_rotation;
 				}
 
+				/**
+				 * @brief 乗算カラーを設定する
+				 * @param[in] mulColor 乗算カラー
+				*/
+				void SetMulColor(const Vector4& mulColor)
+				{
+					m_sprite.SetMulColor(mulColor);
+				}
+
+				/**
+				 * @brief 乗算カラーを得る
+				 * @return 乗算カラー
+				*/
+				const Vector4& GetMulColor() const
+				{
+					return m_sprite.GetMulColor();
+				}
+
+				/**
+				 * @brief スプライトのアルファ値を設定する
+				 * @param[in] alphaValue アルファ値
+				*/
+				void SetAlphaValue(const float alphaValue)
+				{
+					m_sprite.SetAlphaValue(alphaValue);
+				}
+
 			private:	// privateなメンバ関数
 
 				/**

@@ -57,12 +57,39 @@ inline void RenderContext::SetRenderTargets(UINT numRT, RenderTarget* renderTarg
 	//d
 	D3D12_CPU_DESCRIPTOR_HANDLE rtDSHandleTbl[32];
 	int rtNo = 0;
-	for( UINT rtNo = 0; rtNo < numRT; rtNo++){
+	for (UINT rtNo = 0; rtNo < numRT; rtNo++) {
 		rtDSHandleTbl[rtNo] = renderTargets[rtNo]->GetRTVCpuDescriptorHandle();
 	}
-	D3D12_CPU_DESCRIPTOR_HANDLE dsDS = renderTargets[0]->GetDSVCpuDescriptorHandle();
-	m_commandList->OMSetRenderTargets(numRT, rtDSHandleTbl, FALSE, &dsDS);
+	if (renderTargets[0]->IsExsitDepthStencilBuffer()) {
+		//深度バッファがある。
+		D3D12_CPU_DESCRIPTOR_HANDLE dsDS = renderTargets[0]->GetDSVCpuDescriptorHandle();
+		m_commandList->OMSetRenderTargets(numRT, rtDSHandleTbl, FALSE, &dsDS);
+	}
+	else {
+		//深度バッファがない。
+		m_commandList->OMSetRenderTargets(numRT, rtDSHandleTbl, FALSE, nullptr);
+	}
 
+}
+inline void RenderContext::SetRenderTargetAndViewport(RenderTarget& renderTarget)
+{
+	D3D12_VIEWPORT viewport;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.Width = static_cast<float>(renderTarget.GetWidth());
+	viewport.Height = static_cast<float>(renderTarget.GetHeight());
+	viewport.MinDepth = D3D12_MIN_DEPTH;
+	viewport.MaxDepth = D3D12_MAX_DEPTH;
+	SetViewportAndScissor(viewport);
+
+	SetRenderTarget(renderTarget);
+
+	D3D12_RECT srect;
+	srect.top = 0;
+	srect.left = 0;
+	srect.right = renderTarget.GetWidth();
+	srect.bottom = renderTarget.GetHeight();
+	SetScissorRect(srect);
 }
 inline void RenderContext::ClearRenderTargetViews(int numRt, RenderTarget* renderTargets[])
 {

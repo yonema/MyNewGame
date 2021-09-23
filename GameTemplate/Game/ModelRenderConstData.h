@@ -21,10 +21,16 @@ namespace nsMyGame
 				constexpr const char* const kTksFileExtensinon = ".tks";	//!< tksファイルの拡張子
 				constexpr size_t kFileExtensionLength = 4;					//!< 拡張子の長さ
 
-				constexpr const char* const kVsEntryPointFunc = "VSMain";					//!< 頂点シェーダのエントリーポイント
-				constexpr const char* const kVsSkinEntryPointFunc = "VSSkinMain";			//!< スキンありの頂点シェーダーのエントリーポイント
-				constexpr const char* const kPsEntryPointFunc = "PSMain";					//!< ピクセルシェーダのエントリーポイント
-				constexpr const char* const kDefaultFxFilePath = "Assets/shader/model.fx";	//!< デフォルトのシェーダーファイルパス
+				//!< 頂点シェーダのエントリーポイント
+				constexpr const char* const kVsEntryPointFunc = "VSMain";
+				//!< スキンありの頂点シェーダーのエントリーポイント
+				constexpr const char* const kVsSkinEntryPointFunc = "VSSkinMain";
+				//!< ピクセルシェーダのエントリーポイント
+				constexpr const char* const kPsEntryPointFunc = "PSMain";
+				//!< GBufferに描画するモデルのシェーダーファイルパス
+				constexpr const char* const kRenderToGBufferFxFilePath = "Assets/shader/RenderToGBufferFor3DModel.fx";
+				//!< デフォルトのシェーダーファイルパス
+				constexpr const char* const kDefaultFxFilePath = kRenderToGBufferFxFilePath;
 
 				constexpr float kAnimationInterpolateTime = 0.2f;	//!< アニメーション保管時間
 

@@ -86,8 +86,9 @@ namespace nsMyGame
 				// モデルの初期化データの共通部分の設定
 				SetCommonModelInitData(&modelInitData, filePath, modelUpAxis);
 
+				// ディファードレンダリングにはモデルに拡張定数バッファはいらない。
 				// デフォルトのコンスタントバッファを設定
-				SetDefaultConstantBuffer(&modelInitData);
+				//SetDefaultConstantBuffer(&modelInitData);
 
 				// 初期化処理のメインコア
 				InitMainCore(modelInitData, animationClips, numAnimationClip);

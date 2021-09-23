@@ -36,6 +36,19 @@ struct SpriteInitData {
 	int m_expandConstantBufferSize = 0;						//ユーザー拡張の定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//ユーザー拡張のシェーダーリソース。
 	AlphaBlendMode m_alphaBlendMode = AlphaBlendMode_None;	//アルファブレンディングモード。
+	// 変更
+	// <カラーバッファーフォーマット, レンダリングターゲットの最大数>
+	std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT> m_colorBufferFormat = {
+	DXGI_FORMAT_R8G8B8A8_UNORM,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	};	//レンダリングするカラーバッファのフォーマット。
+	D3D12_TEXTURE_ADDRESS_MODE textureAddressMode = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;	// テクスチャアドレッシングモード。
 };
 /// <summary>
 /// スプライトクラス。
@@ -132,4 +145,35 @@ private:
 	Shader				m_vs;					//頂点シェーダー。
 	Shader				m_ps;					//ピクセルシェーダー。
 	bool				m_isInited = false;		//初期化済み？
+
+	// 追加
+public:
+	Sprite();
+
+	/**
+	 * @brief 乗算カラーを設定する
+	 * @param [in] mulColor 乗算カラー
+	*/
+	void SetMulColor(const Vector4& mulColor)
+	{
+		m_constantBufferCPU.mulColor = mulColor;
+	}
+
+	/**
+	 * @brief 乗算カラーを得る
+	 * @return 乗算カラー
+	*/
+	const Vector4& GetMulColor() const
+	{
+		return m_constantBufferCPU.mulColor;
+	}
+
+	/**
+	 * @brief スプライトのアルファ値を設定する
+	 * @param [in] alphaValue アルファ値
+	*/
+	void SetAlphaValue(const float alphaValue)
+	{
+		m_constantBufferCPU.mulColor.w = alphaValue;
+	}
 };

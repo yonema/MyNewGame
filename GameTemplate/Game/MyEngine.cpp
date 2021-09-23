@@ -53,10 +53,10 @@ namespace nsMyGame
 		{
 			GameObjectManager::CreateInstance();		// ゲームオブジェクトマネージャーを生成
 			PhysicsWorld::CreateInstance();				// 物理ワールドを生成
+			nsLight::CLightManager::CreateInstance();	// ライトマネージャーを生成
 			CRenderingEngine::CreateInstance();			// レンダリングエンジンの生成
 			EffectEngine::CreateInstance();				// エフェクトエンジンを生成
 			nsSound::CSoundEngine::CreateInstance();	// サウンドエンジンを生成
-			nsLight::CLightManager::CreateInstance();	// ライトマネージャーを生成
 
 			return;
 		}
@@ -66,10 +66,10 @@ namespace nsMyGame
 		*/
 		void CMyEngine::DeleteInstances()
 		{
-			nsLight::CLightManager::DeleteInstance();	// ライトマネージャーを破棄
 			nsSound::CSoundEngine::DeleteInstance();	// サウンドエンジンを破棄
 			EffectEngine::DeleteInstance();				// エフェクトエンジンを破棄
 			CRenderingEngine::DeleteInstance();			// レンダリングエンジンの破棄
+			nsLight::CLightManager::DeleteInstance();	// ライトマネージャーを破棄
 			PhysicsWorld::DeleteInstance();				// 物理ワールドを破棄
 			GameObjectManager::DeleteInstance();		// ゲームオブジェクトマネージャーを破棄
 

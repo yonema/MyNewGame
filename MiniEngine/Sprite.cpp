@@ -154,11 +154,19 @@
 		psoDesc.DepthStencilState.StencilEnable = FALSE;
 		psoDesc.SampleMask = UINT_MAX;
 		psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-		psoDesc.NumRenderTargets = 1;
-		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+		// 変更
+		for (auto& format : initData.m_colorBufferFormat) {
+			if (format == DXGI_FORMAT_UNKNOWN) {
+				break;
+			}
+			psoDesc.RTVFormats[psoDesc.NumRenderTargets] = format;
+			psoDesc.NumRenderTargets++;
+		}
+
 		psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 		psoDesc.SampleDesc.Count = 1;
-		psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+
 		m_pipelineState.Init(psoDesc);
 	}
 	void Sprite::InitConstantBuffer(const SpriteInitData& initData)
@@ -189,9 +197,10 @@
 		//ルートシグネチャの初期化。
 		m_rootSignature.Init(
 			D3D12_FILTER_MIN_MAG_MIP_LINEAR,
-			D3D12_TEXTURE_ADDRESS_MODE_WRAP,
-			D3D12_TEXTURE_ADDRESS_MODE_WRAP,
-			D3D12_TEXTURE_ADDRESS_MODE_WRAP);
+			initData.textureAddressMode,	// 変更
+			initData.textureAddressMode,	// 変更
+			initData.textureAddressMode		// 変更
+		);
 
 		//シェーダーを初期化。
 		InitShader(initData);
@@ -238,14 +247,19 @@
 			//未初期化。
 			return;
 		}
+		//現在のビューポートから平行投影行列を計算する。
+		D3D12_VIEWPORT viewport = renderContext.GetViewport();
+
 		Matrix viewMatrix = g_camera2D->GetViewMatrix();
-		Matrix projMatrix = g_camera2D->GetProjectionMatrix();
+		//Matrix projMatrix = g_camera2D->GetProjectionMatrix();
+		Matrix projMatrix;
+		projMatrix.MakeOrthoProjectionMatrix(viewport.Width, viewport.Height, 0.1f, 1.0f);
 
 		m_constantBufferCPU.mvp = m_world * viewMatrix * projMatrix;
-		m_constantBufferCPU.mulColor.x = 1.0f;
-		m_constantBufferCPU.mulColor.y = 1.0f;
-		m_constantBufferCPU.mulColor.z = 1.0f;
-		m_constantBufferCPU.mulColor.w = 1.0f;
+		//m_constantBufferCPU.mulColor.x = 1.0f;
+		//m_constantBufferCPU.mulColor.y = 1.0f;
+		//m_constantBufferCPU.mulColor.z = 1.0f;
+		//m_constantBufferCPU.mulColor.w = 1.0f;
 		m_constantBufferCPU.screenParam.x = g_camera3D->GetNear();
 		m_constantBufferCPU.screenParam.y = g_camera3D->GetFar();
 		m_constantBufferCPU.screenParam.z = FRAME_BUFFER_W;
@@ -272,3 +286,14 @@
 		renderContext.DrawIndexed(m_indexBuffer.GetCount());
 	}
 
+
+	// 追加
+	Sprite::Sprite()
+	{
+		m_constantBufferCPU.mulColor.x = 1.0f;
+		m_constantBufferCPU.mulColor.y = 1.0f;
+		m_constantBufferCPU.mulColor.z = 1.0f;
+		m_constantBufferCPU.mulColor.w = 1.0f;
+
+		return;
+	}

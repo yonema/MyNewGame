@@ -138,6 +138,8 @@ namespace nsMyGame
 				initData.m_psEntryPoinFunc = kPsEntryPointFunc;
 				initData.m_vsEntryPointFunc = kVsEntryPointFunc;
 				initData.m_alphaBlendMode = alphaBlendMode;
+				// メインレンダリングターゲットのカラーバッファーフォーマットと合わせる
+				initData.m_colorBufferFormat[0] = nsMyEngine::CRenderingEngine::GetInstance()->GetMainRenderTargetFormat();
 
 				m_pivot = pivot;
 
