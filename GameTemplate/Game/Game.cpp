@@ -24,8 +24,8 @@ namespace nsMyGame
 			m_gameDirectionalLight = NewGO<nsLight::CDirectionalLight>(nsCommonData::enPriorityFirst);
 			//m_gameDirectionalLight->SetDirection({ 1.0f,0.0f,0.0f });
 			//m_gameDirectionalLight->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-			//NewGO<nsMaps::nsTestMaps::CTestMap>(nsCommonData::enPriorityFirst, "testMap");
-			NewGO<nsMaps::nsTestMaps::CTestMapForSpotLight>(nsCommonData::enPriorityFirst, "testMap");
+			NewGO<nsMaps::nsTestMaps::CTestMap>(nsCommonData::enPriorityFirst, "testMap");
+			//NewGO<nsMaps::nsTestMaps::CTestMapForSpotLight>(nsCommonData::enPriorityFirst, "testMap");
 
 			return true;
 		}

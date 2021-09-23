@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "FontRender.h"
+#include "RenderingEngine.h"
 
 namespace nsMyGame
 {
@@ -14,6 +15,16 @@ namespace nsMyGame
 		namespace nsFont
 		{
 			/**
+			 * @brief コンストラクタ
+			*/
+			CFontRender::CFontRender()
+			{
+				m_render.SetOnRender2DFunc([&](RenderContext& rc) { this->Render2D(rc); });
+
+				return;
+			}
+
+			/**
 			 * @brief 破棄されたときの処理
 			*/
 			void CFontRender::OnDestroy()
@@ -22,10 +33,19 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief 描画処理関数
-			 * @param[in] rc レンダーコンテキスト
+			 * @brief 描画オブジェクト登録の入口
 			*/
-			void CFontRender::Render(RenderContext& rc)
+			void CFontRender::AddRenderEntrance()
+			{
+				// 描画オブジェクトに登録する
+				nsMyEngine::CRenderingEngine::GetInstance()->AddRenderObject(&m_render);
+			}
+
+			/**
+			 * @brief 2D描画関数
+			 * @param rc レンダリングコンテキスト
+			*/
+			void CFontRender::Render2D(RenderContext& rc)
 			{
 				//描画開始
 				m_font.Begin(rc);

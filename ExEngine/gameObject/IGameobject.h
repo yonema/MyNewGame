@@ -39,13 +39,13 @@ public:
 		*@brief	更新
 		*/
 	virtual void Update() {}
-	/*!
-	 *@brief	描画
-	*/
-	virtual void Render(RenderContext& renderContext)
-	{
-		(void)renderContext;
-	}
+	///*!
+	// *@brief	描画
+	//*/
+	//virtual void Render(RenderContext& renderContext)
+	//{
+	//	(void)renderContext;
+	//}
 	
 public:
 	/*!
@@ -116,12 +116,12 @@ public:
 	}
 public:
 
-	void RenderWrapper(RenderContext& renderContext)
-	{
-		if (m_isActive && m_isStart && !m_isDead ) {
-			Render(renderContext);
-		}
-	}
+	//void RenderWrapper(RenderContext& renderContext)
+	//{
+	//	if (m_isActive && m_isStart && !m_isDead ) {
+	//		Render(renderContext);
+	//	}
+	//}
 	
 	void UpdateWrapper()
 	{
@@ -171,6 +171,14 @@ public:		//オーバーライドしてほしいメンバ関数
 	*/
 	virtual void OnDestroy() {};
 
+	/**
+	 * @brief 描画オブジェクトを登録する入口となる関数。
+	 * この関数をオーバーライドして、その中で、
+	 * nsMyEngine::CRenderingEngine::GetInstance()->AddRenderObject()で
+	 * 描画オブジェクトとして登録する。
+	*/
+	virtual void AddRenderEntrance() {};
+
 public:		//メンバ関数
 
 	/**
@@ -199,6 +207,16 @@ public:		//メンバ関数
 	void OnDestroyWrapper()
 	{
 		OnDestroy();
+	}
+
+	/**
+	 * @brief 描画オブジェクト登録の入口
+	*/
+	void AddRenderEntranceWrapper()
+	{
+		if (m_isActive && m_isStart && !m_isDead) {
+			AddRenderEntrance();
+		}
 	}
 	
 };

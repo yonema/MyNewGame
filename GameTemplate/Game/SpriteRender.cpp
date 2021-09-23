@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SpriteRender.h"
+#include "RenderingEngine.h"
 
 namespace nsMyGame
 {
@@ -13,6 +14,16 @@ namespace nsMyGame
 		*/
 		namespace nsSprite
 		{
+
+			/**
+			 * @brief コンストラクタ
+			*/
+			CSpriteRender::CSpriteRender()
+			{
+				m_render.SetOnRender2DFunc([&](RenderContext& rc) {this->Render2D(rc); });
+
+				return;
+			}
 
 			/**
 			 * @brief 破棄されたときの処理
@@ -33,10 +44,21 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief 描画処理関数
-			 * @param[in] rc レンダーコンテキスト
+			 * @brief 描画オブジェクト登録の入口
 			*/
-			void CSpriteRender::Render(RenderContext& rc)
+			void CSpriteRender::AddRenderEntrance()
+			{
+				// 描画オブジェクトに登録する
+				nsMyEngine::CRenderingEngine::GetInstance()->AddRenderObject(&m_render);
+
+				return;
+			}
+
+			/**
+			 * @brief 2D描画関数
+			 * @param rc レンダリングコンテキスト
+			*/
+			void CSpriteRender::Render2D(RenderContext& rc)
 			{
 				//スプライトの描画
 				m_sprite.Draw(rc);

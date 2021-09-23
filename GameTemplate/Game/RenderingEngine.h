@@ -1,10 +1,11 @@
 #pragma once
 
-// 前方宣言
-//class GraphicEngine;
+
 
 namespace nsMyGame
 {
+	// 前方宣言
+	namespace nsGraphic { class CRender; };
 
 	/**
 	 * @brief このゲーム用のゲームエンジンネームスペース
@@ -29,6 +30,15 @@ namespace nsMyGame
 			~CRenderingEngine();
 
 		public:		// メンバ関数
+
+			void AddRenderObject(nsGraphic::CRender* renderObject)
+			{
+#ifdef MY_DEBUG
+				if (m_renderObjects.size() >= m_kRenderObjectsCapacityNum)
+					MessageBoxA(nullptr, "レンダリングオブジェトが予想より多く作られてる", "警告", MB_OK);
+#endif
+				m_renderObjects.emplace_back(renderObject);
+			}
 
 			/**
 			 * @brief レンダリングエンジンを実行
@@ -66,10 +76,24 @@ namespace nsMyGame
 			}
 		private:	// privateなメンバ関数
 
+			/**
+			 * @brief GBufferに描画する
+			 * @param rc レンダリングコンテキスト
+			*/
+			void RenderToGBuffer(RenderContext& rc);
+
+			/**
+			 * @brief 2Dを描画する
+			 * @param rc レンダリングコンテキスト
+			*/
+			void Render2D(RenderContext& rc);
+
 		private:	// データメンバ
+			std::vector<nsGraphic::CRender*> m_renderObjects;	//!< 描画するオブジェクト
 
 		private:	// staticなデータメンバ
 			static CRenderingEngine* m_instance;		//!< 唯一のインスタンス
+			static const int m_kRenderObjectsCapacityNum = 255;
 		};
 	}
 }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "RenderingEngine.h"
 #include "system/system.h"
+#include "Render.h"
 
 namespace nsMyGame
 {
@@ -17,6 +18,7 @@ namespace nsMyGame
 		*/
 		CRenderingEngine::CRenderingEngine()
 		{
+			m_renderObjects.reserve(m_kRenderObjectsCapacityNum);
 
 			return;
 		}
@@ -36,11 +38,46 @@ namespace nsMyGame
 			// レンダリングコンテキスト
 			RenderContext& rc = g_graphicsEngine->GetRenderContext();
 
-			// ゲームオブジェクトの描画
-			GameObjectManager::GetInstance()->ExecuteRender(rc);
+			// 描画オブジェクトの登録
+			GameObjectManager::GetInstance()->ExecuteAddRender();
+
+			// GBufferに描画する
+			RenderToGBuffer(rc);
+
 			// エフェクトの描画
 			EffectEngine::GetInstance()->Draw();
 
+			// 2Dを描画する
+			Render2D(rc);
+
+			m_renderObjects.clear();
+
+			return;
+		}
+
+		/**
+		 * @brief GBufferに描画する
+		 * @param rc レンダリングコンテキスト
+		*/
+		void CRenderingEngine::RenderToGBuffer(RenderContext& rc)
+		{
+			for (nsGraphic::CRender* renderObject : m_renderObjects)
+			{
+				renderObject->OnRenderToGBuffer(rc);
+			}
+			return;
+		}
+
+		/**
+		 * @brief 2Dを描画する
+		 * @param rc レンダリングコンテキスト
+		*/
+		void CRenderingEngine::Render2D(RenderContext& rc)
+		{
+			for (nsGraphic::CRender* renderObject : m_renderObjects)
+			{
+				renderObject->OnRender2D(rc);
+			}
 			return;
 		}
 	}

@@ -1,5 +1,6 @@
 #pragma once
 #include "ModelRenderConstData.h"
+#include "Render.h"
 
 namespace nsMyGame
 {
@@ -18,6 +19,11 @@ namespace nsMyGame
 			*/
 			class CModelRender : public IGameObject
 			{
+			private:	// エイリアス宣言
+				using ModelPtr = std::unique_ptr<Model>;		//!< モデルクラスのユニークポインタ
+				using SkeletonPtr = std::unique_ptr<Skeleton>;	//!< スケルトンクラスのユニークポインタ
+				using AnimPtr = std::unique_ptr<Animation>;		//!< アニメーションクラスにユニークポインタ
+
 			public:		// コンストラクタとデストラクタ
 				/**
 				 * @brief コンストラクタ
@@ -47,10 +53,9 @@ namespace nsMyGame
 				void AlwaysUpdate() override final;
 
 				/**
-				 * @brief 描画処理関数
-				 * @param[in] rc レンダーコンテキスト
+				 * @brief 描画オブジェクト登録の入口
 				*/
-				void Render(RenderContext& rc) override final;
+				void AddRenderEntrance() override final;
 
 			public:		// メンバ関数
 
@@ -184,11 +189,23 @@ namespace nsMyGame
 				*/
 				void SetDefaultConstantBuffer(ModelInitData* modelInitData);
 
+				/**
+				 * @brief レンダラーを初期化する
+				*/
+				void InitRender();
+
+				/**
+				 * @brief GBufferに書き込む関数を実行
+				 * @param rc 
+				*/
+				void OnRenderToGBuffer(RenderContext& rc);
+
 			private:	// データメンバ
-				Model m_model;								//!< モデルクラス
+				ModelPtr m_model;							//!< モデルクラス
+				CRender m_render;							//!< レンダラークラス
+				SkeletonPtr m_skeletonPtr;					//!< スケルトンクラス
+				AnimPtr m_animationPtr;						//!< アニメーションクラス
 				const char* m_tkmFilePath = nullptr;		//!< tkmファイルのファイルパス
-				std::unique_ptr<Skeleton> m_skeletonPtr;	//!< スケルトンクラス
-				std::unique_ptr<Animation> m_animationPtr;	//!< アニメーションクラス
 
 				Vector3 m_position = Vector3::Zero;				//!< 座標
 				Quaternion m_rotation = Quaternion::Identity;	//!< 回転

@@ -59,7 +59,7 @@ public:
 	/// 描画処理を実行。
 	/// </summary>
 	/// <param name="rc"></param>
-	void ExecuteRender(RenderContext& rc);
+	//void ExecuteRender(RenderContext& rc);
 	
 	
 	/*!
@@ -144,6 +144,11 @@ public:		//メンバ関数
 	{
 		m_isGamePaused = gamePaused;
 	}
+
+	/**
+	 * @brief 描画オブジェクトの登録を実行する。
+	*/
+	void ExecuteAddRender();
 
 //追加
 private:	//データメンバ

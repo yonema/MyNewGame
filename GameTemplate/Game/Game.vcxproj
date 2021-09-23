@@ -295,6 +295,7 @@
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="MyEngine.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="Render.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
@@ -398,6 +399,7 @@
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PriorityData.h" />
+    <ClInclude Include="Render.h" />
     <ClInclude Include="RenderingEngine.h" />
     <ClInclude Include="SoundCue.h" />
     <ClInclude Include="SoundEngine.h" />

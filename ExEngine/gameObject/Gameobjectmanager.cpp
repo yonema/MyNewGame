@@ -76,12 +76,27 @@ void GameObjectManager::ExecuteUpdate()
 	//物理エンジンのアップデートを呼び出す。
 	PhysicsWorld::GetInstance()->Update(nsMyGame::nsTimer::GameTime().GetFrameDeltaTime());
 }
-void GameObjectManager::ExecuteRender(RenderContext& rc)
+//void GameObjectManager::ExecuteRender(RenderContext& rc)
+//{
+//	//レンダラーを変更するならここを改造していくと良い。
+//	for (auto& goList : m_gameObjectListArray) {
+//		for (auto& go : goList) {
+//			go->RenderWrapper(rc);
+//		}
+//	}
+//}
+
+
+// 追加
+
+/**
+ * @brief 描画オブジェクトの登録を実行する。
+*/
+void GameObjectManager::ExecuteAddRender()
 {
-	//レンダラーを変更するならここを改造していくと良い。
 	for (auto& goList : m_gameObjectListArray) {
 		for (auto& go : goList) {
-			go->RenderWrapper(rc);
+			go->AddRenderEntranceWrapper();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include "FontRenderConstData.h"
+#include "Render.h"
 
 namespace nsMyGame
 {
@@ -22,7 +23,7 @@ namespace nsMyGame
 				/**
 				 * @brief コンストラクタ
 				*/
-				CFontRender() = default;
+				CFontRender();
 
 				/**
 				 * @brief デストラクタ
@@ -42,10 +43,9 @@ namespace nsMyGame
 				void OnDestroy() override final;
 
 				/**
-				 * @brief 描画処理関数
-				 * @param[in] rc レンダーコンテキスト
+				 * @brief 描画オブジェクト登録の入口
 				*/
-				void Render(RenderContext & rc) override final;
+				void AddRenderEntrance() override final;
 
 			public:		// メンバ関数
 
@@ -110,8 +110,16 @@ namespace nsMyGame
 					m_font.SetShadowParam(isDrawShadow, shadowOffset, shadowColor);
 				}
 
+			private:	// privateなメンバ関数
+				/**
+				 * @brief 2D描画関数
+				 * @param rc レンダリングコンテキスト
+				*/
+				void Render2D(RenderContext & rc);
+
 			private:	// データメンバ
-				Font m_font;	//!< フォントクラス
+				Font m_font;											//!< フォントクラス
+				CRender m_render;										//!< レンダラークラス
 				wchar_t m_text[nsFontConstData::kTextMaxSize] = {};		//!< 表示するテキスト
 				Vector2 m_position = Vector2::Zero;						//!< 座標
 				Vector4 m_color = nsFontConstData::kDefaltTextColor;	//!< カラー

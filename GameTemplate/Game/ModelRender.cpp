@@ -2,6 +2,7 @@
 #include "ModelRender.h"
 #include "GameTime.h"
 #include "LightManager.h"
+#include "RenderingEngine.h"
 
 namespace nsMyGame
 {
@@ -38,29 +39,28 @@ namespace nsMyGame
 				// スケルトンが初期化されているか？
 				if (m_skeletonPtr)
 					// スケルトンが初期化されていたら、スケルトンを更新。
-					m_skeletonPtr->Update(m_model.GetWorldMatrix());
+					m_skeletonPtr->Update(m_model->GetWorldMatrix());
 				// アニメーションが初期化されているか？
 				if (m_animationPtr)	// アニメーションが初期化されていたら、アニメーションを進める。
 					m_animationPtr->Progress(nsTimer::GameTime().GetFrameDeltaTime());
 
 				// モデルの座標更新
-				m_model.UpdateWorldMatrix(m_position, m_rotation, m_scale);
+				m_model->UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
 				return;
 			}
 
 			/**
-			 * @brief 描画処理関数
-			 * @param rc レンダーコンテキスト
+			 * @brief 描画オブジェクト登録の入口
 			*/
-			void CModelRender::Render(RenderContext& rc)
+			void CModelRender::AddRenderEntrance()
 			{
 				// 初期化済みか？
 				if (m_isInited != true)
 					return;	// 初期化していない、早期リターン
 
-				// モデルを描画
-				m_model.Draw(rc);
+				// 描画オブジェクトに登録する
+				nsMyEngine::CRenderingEngine::GetInstance()->AddRenderObject(&m_render);
 
 				return;
 			}
@@ -118,10 +118,14 @@ namespace nsMyGame
 					modelInitData.m_skeleton = m_skeletonPtr.get();
 
 				// モデルの初期化
-				m_model.Init(modelInitData);
+				m_model.reset(new Model);
+				m_model->Init(modelInitData);
 
 				// アニメーションの初期化
 				InitAnimation(animationClips, numAnimationClips);
+
+				// レンダラーの初期化
+				InitRender();
 
 				// 初期化完了
 				m_isInited = true;
@@ -231,6 +235,24 @@ namespace nsMyGame
 					sizeof(nsLight::CLightManager::GetInstance()->GetLightData());
 
 				return;
+			}
+
+			/**
+			 * @brief レンダラーを初期化する
+			*/
+			void CModelRender::InitRender()
+			{
+				m_render.SetOnRenderToBGuuferFunc([&](RenderContext rc) { this->OnRenderToGBuffer(rc); });
+			}
+
+			/**
+			 * @brief GBufferに書き込む関数を実行
+			 * @param rc
+			*/
+			void CModelRender::OnRenderToGBuffer(RenderContext& rc)
+			{
+				// モデルを描画
+				m_model->Draw(rc);
 			}
 
 

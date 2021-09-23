@@ -1,5 +1,6 @@
 #pragma once
 #include "SpriteRenderConstData.h"
+#include "Render.h"
 
 namespace nsMyGame
 {
@@ -22,7 +23,7 @@ namespace nsMyGame
 				/**
 				 * @brief コンストラクタ
 				*/
-				CSpriteRender() = default;
+				CSpriteRender();
 
 				/**
 				 * @brief デストラクタ
@@ -47,10 +48,9 @@ namespace nsMyGame
 				void AlwaysUpdate() override final;
 
 				/**
-				 * @brief 描画処理関数
-				 * @param[in] rc レンダーコンテキスト
+				 * @brief 描画オブジェクト登録の入口
 				*/
-				void Render(RenderContext & rc) override final;
+				void AddRenderEntrance() override final;
 
 			public:		// メンバ関数
 				/**
@@ -158,12 +158,19 @@ namespace nsMyGame
 					const AlphaBlendMode alphaBlendMode
 				);
 
+				/**
+				 * @brief 2D描画関数
+				 * @param rc レンダリングコンテキスト
+				*/
+				void Render2D(RenderContext& rc);
+
 			private:	// データメンバ
 				Sprite m_sprite;		//!< スプライトクラス
-				Vector3 m_position = Vector3::Zero;
-				Quaternion m_rotation = Quaternion::Identity;
-				Vector3 m_scale = Vector3::One;
-				Vector2 m_pivot = nsSpriteConstData::kDefaultPivot;
+				CRender m_render;		//!< レンダラークラス
+				Vector3 m_position = Vector3::Zero;						//!< 座標
+				Quaternion m_rotation = Quaternion::Identity;			//!< 回転
+				Vector3 m_scale = Vector3::One;							//!< 拡大率
+				Vector2 m_pivot = nsSpriteConstData::kDefaultPivot;		//!< ピボット
 
 
 			};
