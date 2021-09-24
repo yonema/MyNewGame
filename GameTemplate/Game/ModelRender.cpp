@@ -243,7 +243,7 @@ namespace nsMyGame
 			*/
 			void CModelRender::InitRender()
 			{
-				m_render.SetOnRenderToBGuuferFunc([&](RenderContext rc) { this->OnRenderToGBuffer(rc); });
+				m_render.SetOnRenderToBGuuferFunc([&](RenderContext& rc) { this->OnRenderToGBuffer(rc); });
 			}
 
 			/**
