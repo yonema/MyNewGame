@@ -99,6 +99,9 @@
     <Filter Include="MyCode\Engine">
       <UniqueIdentifier>{7ac4f6f7-6f36-4f05-8a80-d1d3fe13d556}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Graphic\PostEffect">
+      <UniqueIdentifier>{edd75389-e6a4-4dfb-b4b3-c62fc0ed84c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -328,6 +331,15 @@
     </ClCompile>
     <ClCompile Include="..\..\MiniEngine\RenderTarget.cpp">
       <Filter>MiniEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="PostEffect.cpp">
+      <Filter>MyCode\Graphic\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="Bloom.cpp">
+      <Filter>MyCode\Graphic\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="GaussianBlur.cpp">
+      <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -616,6 +628,18 @@
     <ClInclude Include="..\..\MiniEngine\RenderTarget.h">
       <Filter>MiniEngine</Filter>
     </ClInclude>
+    <ClInclude Include="PostEffect.h">
+      <Filter>MyCode\Graphic\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="Bloom.h">
+      <Filter>MyCode\Graphic\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBlur.h">
+      <Filter>MyCode\Graphic\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="PostEffectConstData.h">
+      <Filter>MyCode\Graphic\PostEffect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">
@@ -628,6 +652,12 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\RenderToGBufferFor3DModel.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\gaussianBlur.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\bloom.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

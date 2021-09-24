@@ -29,7 +29,9 @@ namespace nsMyGame
 			InitGBuffer();	// GBufferを初期化
 			// メインレンダリングターゲットをフレームバッファにコピーするためのスプライトの初期化
 			InitCopyMainRenderTargetToFrameBufferSprite();
-			InitDefferdLightingSprite();	//ディファ―ドライティングを行うためのスプライトの初期化
+			InitDefferdLightingSprite();	// ディファ―ドライティングを行うためのスプライトの初期化
+
+			m_postEffect.Init(m_mainRenderTarget);	// ポストエフェクトの初期化
 
 			return;
 		}
@@ -181,6 +183,9 @@ namespace nsMyGame
 
 			// エフェクトの描画
 			EffectEngine::GetInstance()->Draw();
+
+			// ポストエフェクトを実行
+			m_postEffect.Render(rc, m_mainRenderTarget);
 
 			// 2Dを描画する
 			Render2D(rc);

@@ -291,7 +291,10 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="GaussianBlur.cpp" />
+    <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="LightManager.cpp" />
     <ClCompile Include="MyEngine.cpp" />
@@ -385,7 +388,10 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="Bloom.h" />
     <ClInclude Include="CommonData.h" />
+    <ClInclude Include="GaussianBlur.h" />
+    <ClInclude Include="PostEffect.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EffectPlayer.h" />
     <ClInclude Include="FontRender.h" />
@@ -400,6 +406,7 @@
     <ClInclude Include="MyEngine.h" />
     <ClInclude Include="Noncopyable.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="PostEffectConstData.h" />
     <ClInclude Include="PriorityData.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="RenderingEngine.h" />
@@ -420,7 +427,17 @@
     <ClInclude Include="WaveFileBank.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Assets\shader\bloom.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Assets\shader\DeferredLighting.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\gaussianBlur.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>

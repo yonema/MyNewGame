@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderingEngineConstData.h"
+#include "PostEffect.h"
 
 namespace nsMyGame
 {
@@ -136,6 +137,8 @@ namespace nsMyGame
 
 			Sprite m_copyMainRtToFrameBufferSprite;	//!< メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
 			Sprite m_diferredLightingSprite;	//!< ディファードライティングを行うためのスプライト
+
+			nsGraphic::nsPostEffect::CPostEffect m_postEffect;	//!< ポストエフェクトクラス
 
 
 		private:	// staticなデータメンバ

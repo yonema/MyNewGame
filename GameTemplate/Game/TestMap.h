@@ -76,7 +76,7 @@ namespace nsMyGame
 				nsLight::CPointLight* m_pointLight = nullptr;
 				const char* m_pointLigName = "PointLight";
 				const char* m_pointLigModelName = "PointLightModel";
-				const Vector4 m_pointLigColor = { 10.0f,0.0f,0.0f,1.0f };
+				const Vector4 m_pointLigColor = { 100.0f,0.0f,0.0f,1.0f };
 			};
 		}
 	}
