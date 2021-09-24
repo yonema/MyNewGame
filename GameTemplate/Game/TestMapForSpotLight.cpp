@@ -35,7 +35,7 @@ namespace nsMyGame
 
 				// スポットライトモデルの初期化
 				m_spotLightModel = NewGO <nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-				m_spotLightModel->Init("Assets/modelData/debug/light.tkm");
+				m_spotLightModel->Init("Assets/modelData/debugModel/light.tkm");
 				m_spotLightModel->SetPosition({ 100.0f,100.0f,0.0f });
 
 				// スポットライトの初期化

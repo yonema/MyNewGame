@@ -7,6 +7,7 @@
 #include "EffectPlayer.h"
 #include "LightManager.h"
 #include "PointLight.h"
+#include "SkyCube.h"
 
 
 namespace nsMyGame
@@ -61,8 +62,13 @@ namespace nsMyGame
 				qRot.SetRotationDegX(-90.0f);
 				m_effectPlayer->SetRotation(qRot);
 
+				// スカイキューブの初期化
+				m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
+				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_snow);
+				g_camera3D->SetFar(40000.0f);
+
 				m_lightModel = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-				m_lightModel->IniTranslucent("Assets/modelData/debug/light.tkm");
+				m_lightModel->IniTranslucent("Assets/modelData/debugModel/light.tkm");
 				m_lightModel->SetPosition({ 0.0f,50.0f,0.0f });
 				m_lightModel->SetEmmisonColor({ 10.0f,0.0f,0.0f,1.0f });
 				m_lightModel->SetAlphaValue(0.5f);
@@ -81,6 +87,7 @@ namespace nsMyGame
 				DeleteGO(m_modelRender);
 				DeleteGO(m_fontRender);
 				DeleteGO(m_spriteRender);
+				DeleteGO(m_skyCube);
 				return;
 			}
 
@@ -142,7 +149,7 @@ namespace nsMyGame
 					pointLig->SetPosition(m_pointLight->GetPosition());
 					nsGraphic::nsModel::CModelRender* model =
 						NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst, m_pointLigModelName);
-					model->Init("Assets/modelData/debug/light.tkm");
+					model->Init("Assets/modelData/debugModel/light.tkm");
 					model->SetPosition(m_pointLight->GetPosition());
 
 					if (m_animState == enAnim_idle)

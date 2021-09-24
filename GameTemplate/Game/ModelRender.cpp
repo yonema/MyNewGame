@@ -297,21 +297,21 @@ namespace nsMyGame
 			{
 				if (isDefferdRender)
 				{
-					m_render.SetOnRenderToBGuuferFunc([&](RenderContext& rc) { this->OnRenderToGBuffer(rc); });
+					m_render.SetOnRenderToBGuuferFunc([&](RenderContext& rc) { this->ModelRender(rc); });
 				}
 				else
 				{
-					m_render.SetOnForwardRenderFunc([&](RenderContext& rc) { this->OnRenderToGBuffer(rc); });
+					m_render.SetOnForwardRenderFunc([&](RenderContext& rc) { this->ModelRender(rc); });
 				}
 
 				return;
 			}
 
 			/**
-			 * @brief GBufferに書き込む関数を実行
-			 * @param rc
+			 * @brief モデルを描画する
+			 * @param[in] rc レンダリングコンテキスト
 			*/
-			void CModelRender::OnRenderToGBuffer(RenderContext& rc)
+			void CModelRender::ModelRender(RenderContext& rc)
 			{
 				// モデルを描画
 				m_model->Draw(rc);

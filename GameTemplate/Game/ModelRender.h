@@ -256,10 +256,10 @@ namespace nsMyGame
 				void InitRender(const bool isDefferdRender);
 
 				/**
-				 * @brief GBufferに書き込む関数を実行
-				 * @param rc 
+				 * @brief モデルを描画する
+				 * @param[in] rc レンダリングコンテキスト
 				*/
-				void OnRenderToGBuffer(RenderContext& rc);
+				void ModelRender(RenderContext& rc);
 
 			private:	// データメンバ
 				ModelPtr m_model;							//!< モデルクラス

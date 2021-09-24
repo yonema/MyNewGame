@@ -102,6 +102,9 @@
     <Filter Include="MyCode\Graphic\PostEffect">
       <UniqueIdentifier>{edd75389-e6a4-4dfb-b4b3-c62fc0ed84c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Nature">
+      <UniqueIdentifier>{7d7d2479-5622-47e4-8f2c-f209e90bb5fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -340,6 +343,9 @@
     </ClCompile>
     <ClCompile Include="GaussianBlur.cpp">
       <Filter>MyCode\Graphic\PostEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="SkyCube.cpp">
+      <Filter>MyCode\Nature</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -640,6 +646,12 @@
     <ClInclude Include="PostEffectConstData.h">
       <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClInclude>
+    <ClInclude Include="SkyCube.h">
+      <Filter>MyCode\Nature</Filter>
+    </ClInclude>
+    <ClInclude Include="NatureConstData.h">
+      <Filter>MyCode\Nature</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">
@@ -661,6 +673,9 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\TranslucentModel.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\SkyCubeMap.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

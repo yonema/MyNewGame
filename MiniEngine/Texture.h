@@ -93,4 +93,7 @@ private:
 private:
 	ID3D12Resource*	m_texture = nullptr;	//テクスチャ。
 	D3D12_RESOURCE_DESC m_textureDesc;	//テクスチャ情報
+	
+	// 追加
+	bool m_isCubeMap = false;
 };

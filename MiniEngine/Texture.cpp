@@ -65,6 +65,8 @@ void Texture::LoadTextureFromDDSFile(const wchar_t* filePath)
 	DirectX::ResourceUploadBatch re(device);
 	re.Begin();
 	ID3D12Resource* texture;
+
+	// 変更。追加。
 	auto hr = DirectX::CreateDDSTextureFromFileEx(
 		device,
 		re,
@@ -72,7 +74,9 @@ void Texture::LoadTextureFromDDSFile(const wchar_t* filePath)
 		0,
 		D3D12_RESOURCE_FLAG_NONE,
 		0,
-		&texture
+		&texture,
+		nullptr,
+		&m_isCubeMap
 	);
 	re.End(g_graphicsEngine->GetCommandQueue());
 
@@ -92,7 +96,18 @@ void Texture::RegistShaderResourceView(D3D12_CPU_DESCRIPTOR_HANDLE descriptorHan
 		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 		srvDesc.Format = m_textureDesc.Format;
-		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		// 変更。追加。
+		// キューブマップか？
+		if (m_isCubeMap)
+		{
+			// キューブマップ
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+		}
+		else
+		{
+			// キューブマップではない
+			srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		}
 		srvDesc.Texture2D.MipLevels = m_textureDesc.MipLevels;
 		device->CreateShaderResourceView(m_texture, &srvDesc, descriptorHandle);
 	}

@@ -11,6 +11,7 @@ namespace nsMyGame
 	namespace nsSound { class CSoundCue; }			// サウンドキュークラス
 	namespace nsEffect { class CEffectPlayer; }		// エフェクトプレイヤークラス
 	namespace nsLight { class CPointLight; }		// ポイントライトクラス
+	namespace nsNature { class CSkyCube; }			// スカイキューブクラス
 
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -71,6 +72,7 @@ namespace nsMyGame
 				nsGraphic::nsSprite::CSpriteRender* m_spriteRender = nullptr;	//!< スプライトレンダラー
 				nsSound::CSoundCue* m_soundCue = nullptr;					//!< サウンドキュー
 				nsEffect::CEffectPlayer* m_effectPlayer = nullptr;			//!< エフェクトプレイヤー
+				nsNature::CSkyCube* m_skyCube = nullptr;					//!< スカイキューブ
 
 				nsGraphic::nsModel::CModelRender* m_lightModel = nullptr;
 				nsLight::CPointLight* m_pointLight = nullptr;
