@@ -74,6 +74,32 @@ namespace nsMyGame
 					);
 
 				/**
+				 * @brief 半透明描画用の初期化関数
+				 * @param[in] filePath モデルのファイルパス
+				 * @param[in] modelUpAxis モデルのUP軸
+				 * @param[in] animationClips アニメーションクリップ
+				 * @param[in] numAnimationClip アニメーションクリップの数
+				*/
+				void IniTranslucent(
+					const char* filePath,
+					const EnModelUpAxis modelUpAxis = enModelUpAxisZ,
+					AnimationClip* animationClips = nullptr,
+					int numAnimationClip = 0
+				);
+
+				/**
+				 * @brief フォワードレンダリング用の初期化関数。特殊なシェーディングを行いたいとき用。
+				 * @param[in] modelInitData モデルの初期化データ
+				 * @param[in] animationClips アニメーションクリップ
+				 * @param[in] numAnimationClip アニメーションクリップの数
+				*/
+				void InitForwardRendering(
+					ModelInitData& modelInitData,
+					AnimationClip* animationClips = nullptr,
+					int numAnimationClip = 0
+				);
+
+				/**
 				 * @brief 座標を設定する
 				 * @param[in] position 座標
 				*/
@@ -127,13 +153,45 @@ namespace nsMyGame
 					return m_scale;
 				}
 
+				/**
+				 * @brief アニメーションを再生する
+				 * @param[in] animNo アニメーションクリップの番号
+				 * @param[in] interpolateTime 補完時間（単位：秒）
+				*/
 				void PlayAnimation(
-					int animNo,
-					float interpolateTime = nsModelConstData::kAnimationInterpolateTime
+					const int animNo,
+					const float interpolateTime = nsModelConstData::kAnimationInterpolateTime
 				)
 				{
 					m_animationPtr->Play(animNo, interpolateTime);
 					return;
+				}
+
+				/**
+				 * @brief 自己発光カラーを設定
+				 * @param[in] emmisonColor 自己発光カラー
+				*/
+				void SetEmmisonColor(const Vector4& emmisonColor)
+				{
+					m_model->SetEmmisonColor(emmisonColor);
+				}
+
+				/**
+				 * @brief 乗算カラーを設定
+				 * @param[in] mulColor 乗算カラー
+				*/
+				void SetMulColor(const Vector4& mulColor)
+				{
+					m_model->SetMulColor(mulColor);
+				}
+
+				/**
+				 * @brief モデルのアルファ値を設定
+				 * @param[in] alphaValue アルファ値
+				*/
+				void SetAlphaValue(const float alphaValue)
+				{
+					m_model->SetAlphaValue(alphaValue);
 				}
 
 
@@ -144,11 +202,13 @@ namespace nsMyGame
 				 * @param[in] modelInitData モデルの初期化データ
 				 * @param[in] animationClips アニメーションクリップ
 				 * @param[in] numAnimationClips アニメーションクリップの数
+				 * @param[in] isDefferdRender ディファードレンダリングで描画するか？
 				*/
 				void InitMainCore(
 					ModelInitData& modelInitData,
 					AnimationClip* animationClips,
-					const int numAnimationClips
+					const int numAnimationClips,
+					const bool isDefferdRender = true
 				);
 
 				/**
@@ -191,8 +251,9 @@ namespace nsMyGame
 
 				/**
 				 * @brief レンダラーを初期化する
+				 * @param[in] isDefferdRender ディファードレンダリングで描画するか？
 				*/
-				void InitRender();
+				void InitRender(const bool isDefferdRender);
 
 				/**
 				 * @brief GBufferに書き込む関数を実行

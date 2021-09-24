@@ -181,6 +181,9 @@ namespace nsMyGame
 			// ディファ―ドライディング
 			DefferdLighting(rc);
 
+			// フォワードレンダリング
+			ForwardRendering(rc);
+
 			// エフェクトの描画
 			EffectEngine::GetInstance()->Draw();
 
@@ -245,6 +248,32 @@ namespace nsMyGame
 
 			// G-Bufferの内容を元にしてディファードライティング
 			m_diferredLightingSprite.Draw(rc);
+
+			// メインレンダリングターゲットへの書き込み終了待ち
+			rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+
+			return;
+		}
+
+		/**
+		 * @brief フォワードレンダリング
+		 * @param[in] rc レンダリングコンテキスト
+		*/
+		void CRenderingEngine::ForwardRendering(RenderContext& rc)
+		{
+			// レンダリング先をメインレンダリングターゲットにする
+			// 深度バッファはGBufferのものを使用する
+			rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);
+			rc.SetRenderTarget(
+				m_mainRenderTarget.GetRTVCpuDescriptorHandle(),
+				m_GBuffer[enGBufferAlbedoDepth].GetDSVCpuDescriptorHandle()
+			);
+
+			// 描画
+			for (nsGraphic::CRender* renderObject : m_renderObjects)
+			{
+				renderObject->OnForwardRender(rc);
+			}
 
 			// メインレンダリングターゲットへの書き込み終了待ち
 			rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);

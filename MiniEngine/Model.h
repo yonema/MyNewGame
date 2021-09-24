@@ -97,4 +97,39 @@ private:
 	Skeleton m_skeleton;												//スケルトン。
 	MeshParts m_meshParts;											//メッシュパーツ。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。
+
+	// 追加
+public:		// メンバ関数
+
+	/**
+	 * @brief 自己発光カラーを設定
+	 * @param[in] emmisonColor 自己発光カラー
+	*/
+	void SetEmmisonColor(const Vector4& emmisonColor)
+	{
+		m_emmisonColor = emmisonColor;
+	}
+
+	/**
+	 * @brief 乗算カラーを設定
+	 * @param[in] mulColor 乗算カラー
+	*/
+	void SetMulColor(const Vector4& mulColor)
+	{
+		m_mulColor = mulColor;
+	}
+
+	/**
+	 * @brief モデルのアルファ値を設定
+	 * @param[in] alphaValue アルファ値
+	*/
+	void SetAlphaValue(const float alphaValue)
+	{
+		m_mulColor.w = alphaValue;
+	}
+
+private:	// データメンバ
+	Vector4 m_emmisonColor = Vector4::Zero;		//!< 自己発光カラー
+	Vector4 m_mulColor = Vector4::One;			//!< 乗算カラー
+
 };

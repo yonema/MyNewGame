@@ -50,6 +50,8 @@ public:
 		int expandDataSize,
 		IShaderResource* expandShaderResourceView
 	);
+
+	// 追加。変更。
 	/// <summary>
 	/// 描画。
 	/// </summary>
@@ -58,7 +60,14 @@ public:
 	/// <param name="mView">ビュー行列</param>
 	/// <param name="mProj">プロジェクション行列</param>
 	/// <param name="light">ライト</param>
-	void Draw(RenderContext& rc, const Matrix& mWorld, const Matrix& mView, const Matrix& mProj);
+	void Draw(
+		RenderContext& rc,
+		const Matrix& mWorld,
+		const Matrix& mView,
+		const Matrix& mProj,
+		const Vector4& emmisonColor,
+		const Vector4& mulColor
+	);
 	/// <summary>
 	/// スケルトンを関連付ける。
 	/// </summary>
@@ -110,12 +119,16 @@ private:
 	/// 定数バッファ。
 	/// </summary>
 	/// <remarks>
-	/// この構造体を変更したら、SimpleModel.fxのCBも変更するように。
+	/// この構造体を変更したら、ModelVSCommonData.hのCBも変更するように。
 	/// </remarks>
 	struct SConstantBuffer {
 		Matrix mWorld;		//ワールド行列。
 		Matrix mView;		//ビュー行列。
 		Matrix mProj;		//プロジェクション行列。
+
+		// 追加
+		Vector4 emmisonColor;	// 自己発光カラー
+		Vector4 mulColor;		// 乗算カラー
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
 	ConstantBuffer m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ

@@ -62,8 +62,10 @@ namespace nsMyGame
 				m_effectPlayer->SetRotation(qRot);
 
 				m_lightModel = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-				m_lightModel->Init("Assets/modelData/debug/light.tkm");
+				m_lightModel->IniTranslucent("Assets/modelData/debug/light.tkm");
 				m_lightModel->SetPosition({ 0.0f,50.0f,0.0f });
+				m_lightModel->SetEmmisonColor({ 10.0f,0.0f,0.0f,1.0f });
+				m_lightModel->SetAlphaValue(0.5f);
 				m_pointLight = NewGO<nsLight::CPointLight>(nsCommonData::enPriorityFirst);
 				m_pointLight->SetPosition({ 0.0f,50.0f,0.0f });
 				m_pointLight->SetColor(m_pointLigColor);

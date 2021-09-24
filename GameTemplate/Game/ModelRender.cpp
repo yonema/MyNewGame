@@ -95,17 +95,68 @@ namespace nsMyGame
 
 				return;
 			}
+			/**
+			 * @brief 半透明描画用の初期化関数
+			 * @param[in] filePath モデルのファイルパス
+			 * @param[in] modelUpAxis モデルのUP軸
+			 * @param[in] animationClips アニメーションクリップ
+			 * @param[in] numAnimationClip アニメーションクリップの数
+			*/
+			void CModelRender::IniTranslucent(
+				const char* filePath,
+				const EnModelUpAxis modelUpAxis,
+				AnimationClip* animationClips,
+				int numAnimationClip
+			)
+			{
+				// モデルの初期化データ
+				ModelInitData modelInitData;
+
+				// モデルの初期化データの共通部分の設定
+				// 半透明描画用のシェーダーを指定する
+				SetCommonModelInitData(&modelInitData, filePath, modelUpAxis, kTranslucentModelFxFilePath);
+
+				// デフォルトのコンスタントバッファを設定
+				SetDefaultConstantBuffer(&modelInitData);
+
+				// 初期化処理のメインコア
+				// ディファ―ドではなく、フォワードレンダリングで描画するように指定する
+				InitMainCore(modelInitData, animationClips, numAnimationClip, false);
+
+				return;
+			}
+
+			/**
+			 * @brief フォワードレンダリング用の初期化関数。特殊なシェーディングを行いたいとき用。
+			 * @param[in] modelInitData モデルの初期化データ
+			 * @param[in] animationClips アニメーションクリップ
+			 * @param[in] numAnimationClip アニメーションクリップの数
+			*/
+			void CModelRender::InitForwardRendering(
+				ModelInitData& modelInitData,
+				AnimationClip* animationClips,
+				int numAnimationClip
+			)
+			{
+				// 初期化処理のメインコア
+				// ディファ―ドではなく、フォワードレンダリングで描画するように指定する
+				InitMainCore(modelInitData, animationClips, numAnimationClip, false);
+
+				return;
+			}
 
 			/**
 			 * @brief 初期化処理のメインコア
-			 * @param modelInitData モデルの初期化データ
-			 * @param animationClips アニメーションクリップ
-			 * @param numAnimationClips アニメーションクリップの数
+			 * @param[in] modelInitData モデルの初期化データ
+			 * @param[in] animationClips アニメーションクリップ
+			 * @param[in] numAnimationClips アニメーションクリップの数
+			 * @param[in] isDefferdRender ディファードレンダリングで描画するか？
 			*/
 			void CModelRender::InitMainCore(
 				ModelInitData& modelInitData,
 				AnimationClip* animationClips,
-				const int numAnimationClips
+				const int numAnimationClips,
+				const bool isDefferdRender
 			)
 			{
 				// tkmファイルパスを保持する
@@ -126,7 +177,7 @@ namespace nsMyGame
 				InitAnimation(animationClips, numAnimationClips);
 
 				// レンダラーの初期化
-				InitRender();
+				InitRender(isDefferdRender);
 
 				// 初期化完了
 				m_isInited = true;
@@ -240,10 +291,20 @@ namespace nsMyGame
 
 			/**
 			 * @brief レンダラーを初期化する
+			 * @param[in] isDefferdRender ディファードレンダリングで描画するか？
 			*/
-			void CModelRender::InitRender()
+			void CModelRender::InitRender(const bool isDefferdRender)
 			{
-				m_render.SetOnRenderToBGuuferFunc([&](RenderContext& rc) { this->OnRenderToGBuffer(rc); });
+				if (isDefferdRender)
+				{
+					m_render.SetOnRenderToBGuuferFunc([&](RenderContext& rc) { this->OnRenderToGBuffer(rc); });
+				}
+				else
+				{
+					m_render.SetOnForwardRenderFunc([&](RenderContext& rc) { this->OnRenderToGBuffer(rc); });
+				}
+
+				return;
 			}
 
 			/**

@@ -163,7 +163,9 @@ void MeshParts::Draw(
 	RenderContext& rc,
 	const Matrix& mWorld,
 	const Matrix& mView,
-	const Matrix& mProj
+	const Matrix& mProj,
+	const Vector4& emmisonColor,
+	const Vector4& mulColor
 )
 {
 	//メッシュごとにドロー
@@ -175,6 +177,8 @@ void MeshParts::Draw(
 	cb.mWorld = mWorld;
 	cb.mView = mView;
 	cb.mProj = mProj;
+	cb.emmisonColor = emmisonColor;
+	cb.mulColor = mulColor;
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);
 

@@ -118,6 +118,12 @@ namespace nsMyGame
 			void DefferdLighting(RenderContext& rc);
 
 			/**
+			 * @brief フォワードレンダリング
+			 * @param[in] rc レンダリングコンテキスト
+			*/
+			void ForwardRendering(RenderContext& rc);
+
+			/**
 			 * @brief 2Dを描画する
 			 * @param rc レンダリングコンテキスト
 			*/

@@ -660,5 +660,8 @@
     <FxCompile Include="Assets\shader\bloom.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
+    <FxCompile Include="Assets\shader\TranslucentModel.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

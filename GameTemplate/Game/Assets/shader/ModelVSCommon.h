@@ -6,9 +6,11 @@
 // モデル用の定数バッファー
 cbuffer ModelCb : register(b0)
 {
-    float4x4 mWorld;
-    float4x4 mView;
-    float4x4 mProj;
+    float4x4 mWorld;        // ワールド行列
+    float4x4 mView;         // ビュー行列
+    float4x4 mProj;         // プロジェクション行列
+    float4 emissionColor;   // 自己発光カラー
+    float4 mulColor;        // 乗算カラー
 };
 
 ////////////////////////////////////////////////

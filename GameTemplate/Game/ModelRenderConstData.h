@@ -29,6 +29,8 @@ namespace nsMyGame
 				constexpr const char* const kPsEntryPointFunc = "PSMain";
 				//!< GBufferに描画するモデルのシェーダーファイルパス
 				constexpr const char* const kRenderToGBufferFxFilePath = "Assets/shader/RenderToGBufferFor3DModel.fx";
+				//!< 半透明描画するモデルのシェーダーファイルパス
+				constexpr const char* const kTranslucentModelFxFilePath = "Assets/shader/TranslucentModel.fx";
 				//!< デフォルトのシェーダーファイルパス
 				constexpr const char* const kDefaultFxFilePath = kRenderToGBufferFxFilePath;
 

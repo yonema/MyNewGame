@@ -31,6 +31,15 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief フォワードレンダリングをする関数を設定する
+			 * @param[in] function フォワードレンダリングをする関数
+			*/
+			void SetOnForwardRenderFunc(const RenderFunc& function)
+			{
+				m_onForwardRenderFunc = function;
+			}
+
+			/**
 			 * @brief 2Dを描画をする関数を設定
 			 * @param[in] function 2Dを描画をする関数
 			*/
@@ -47,6 +56,12 @@ namespace nsMyGame
 			void OnRenderToGBuffer(RenderContext& rc);
 
 			/**
+			 * @brief フォワードレンダリングする関数を実行
+			 * @param[in] rc レンダリングコンテキスト
+			*/
+			void OnForwardRender(RenderContext& rc);
+
+			/**
 			 * @brief 2Dを描画をする関数を実行
 			 * @param[in] rc レンダリングコンテキスト
 			*/
@@ -54,6 +69,7 @@ namespace nsMyGame
 
 		private:
 			RenderFunc m_onRenderToGBufferFunc = [](RenderContext&) {};	// GBufferに描画する関数
+			RenderFunc m_onForwardRenderFunc = [](RenderContext&) {};	// フォワードレンダリングをする関数
 			RenderFunc m_onRender2DFunc = [](RenderContext&) {};		// 2Dを描画をする関数
 		};
 	}

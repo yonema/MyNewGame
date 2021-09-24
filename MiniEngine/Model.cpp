@@ -77,6 +77,8 @@ void Model::Draw(RenderContext& rc)
 		rc, 
 		m_world, 
 		g_camera3D->GetViewMatrix(), 
-		g_camera3D->GetProjectionMatrix()
+		g_camera3D->GetProjectionMatrix(),
+		m_emmisonColor,
+		m_mulColor
 	);
 }
