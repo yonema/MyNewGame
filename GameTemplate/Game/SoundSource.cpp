@@ -142,7 +142,9 @@ namespace nsMyGame
 				m_sourceVoice = nullptr;
 			}
 			Remove3DSound();
-			DeleteGO(this);
+			// ïœçXÅBí«â¡ÅB
+			if (!IsDead())	// éÄÇÒÇ≈Ç»Ç©Ç¡ÇΩÇÁ
+				DeleteGO(this);	// îjä¸Ç∑ÇÈ
 		}
 		void CSoundSource::Play(char* buff, unsigned int bufferSize)
 		{

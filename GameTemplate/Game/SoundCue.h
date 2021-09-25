@@ -33,7 +33,12 @@ namespace nsMyGame
 			/**
 			 * @brief デストラクタ
 			*/
-			~CSoundCue();
+			~CSoundCue() = default;
+		public:		// オーバーライドしたメンバ関数
+			/**
+			 * @brief 破棄した時に呼ばれる関数
+			*/
+			void OnDestroy() override final;
 		public:		// メンバ関数
 
 			/**
@@ -68,15 +73,17 @@ namespace nsMyGame
 			/**
 			 * @brief サウンドの再生を停止する。
 			 * @details この関数で停止すると、次に再生した時最初からの再生になる。
-			 * @attention 今の仕様だと、ループ再生は停止できるがワンショット再生は停止できない。
 			*/
 			void Stop()
 			{
-				//ループ再生用のサウンドソースが使われていたら
-				if (!m_loopSoundSource)
+				//サウンドソースの中身がなかったら
+				if (!m_soundSource)
+				{
+					// なにもしない
 					return;
+				}
 				//サウンドを停止する
-				m_loopSoundSource->Stop();
+				m_soundSource->Stop();
 				m_isPlaying = false;
 				return;
 			}
@@ -84,22 +91,23 @@ namespace nsMyGame
 			/**
 			 * @brief サウンドの再生を一時停止する
 			 * @derails この関数で一時停止すると、次に再生した時途中からの再生になる。
-			 * @attention 今の仕様だと、ループ再生は一時停止できるがワンショット再生は一時停止できない。
 			*/
 			void Pause()
 			{
-				//ループ再生用のサウンドソースが使われていたら
-				if (!m_loopSoundSource)
+				//サウンドソースの中身がなかったら
+				if (!m_soundSource)
+				{
+					// なにもしない
 					return;
+				}
 				//サウンドを一時停止する
-				m_loopSoundSource->Pause();
+				m_soundSource->Pause();
 				m_isPlaying = false;
 				return;
 			}
 
 			/**
 			 * @brief 今再生中か？
-			 * @attention 今の仕様だと、ループ再生の再生中は検知できるがワンショット再生の再生中は検知できない。
 			*/
 			bool IsPlaying() const
 			{
@@ -170,10 +178,9 @@ namespace nsMyGame
 				return volume;
 			}
 
-
 		private:	//データメンバ
-			CSoundSource* m_loopSoundSource = nullptr;	//!< ループ再生用のサウンドソース
-			wchar_t m_filePath[256];					//!< wavファイルパス
+			CSoundSource* m_soundSource = nullptr;		//!< ループ再生用のサウンドソース
+			wchar_t m_filePath[256] = {};				//!< wavファイルパス
 			float m_volume = 1.0f;						//!< ボリューム
 			bool m_isPlaying = false;					//!< 再生中か？
 			EnSoundType m_soundType = enSE;				//!< サウンドタイプ

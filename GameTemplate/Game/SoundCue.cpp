@@ -12,13 +12,14 @@ namespace nsMyGame
 		float CSoundCue::m_BGMVolume = 1.0f;
 
 		/**
-		 * @brief デストラクタ
+		 * @brief 破棄した時に呼ばれる関数
 		*/
-		CSoundCue::~CSoundCue()
+		void CSoundCue::OnDestroy()
 		{
 			//CSoundCueオブジェクトをDeleteGOした際、再生中だった場合、停止させる。
-			if (m_loopSoundSource) {
-				DeleteGO(m_loopSoundSource);
+			if (m_soundSource)
+			{
+				DeleteGO(m_soundSource);
 			}
 
 			return;
@@ -77,10 +78,10 @@ namespace nsMyGame
 		{
 			// ループ再生用のサウンドソースが
 			// すでに作れれていたら
-			if (m_loopSoundSource)
+			if (m_soundSource)
 			{
 				// 一時停止したものを再開する
-				m_loopSoundSource->Play(true);
+				m_soundSource->Play(true);
 
 			}
 			else
@@ -88,9 +89,9 @@ namespace nsMyGame
 				// ループ再生用のサウンドソースが
 				// まだ未使用の場合は
 				// 新しく作って再生する。
-				m_loopSoundSource = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
-				m_loopSoundSource->Init(m_filePath);
-				m_loopSoundSource->Play(true);
+				m_soundSource = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
+				m_soundSource->Init(m_filePath);
+				m_soundSource->Play(true);
 				float vol = m_volume * GetTypeVolume();
 				SetVolume(vol);
 			}
@@ -106,11 +107,25 @@ namespace nsMyGame
 			// 毎回、サウンドソースを作って再生させる
 			// Flyweightパターンを使用しているから
 			// 重くならないぜ！
-			CSoundSource* ss = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
-			ss->Init(m_filePath);
+
+			m_soundSource = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
+			m_soundSource->Init(m_filePath);
 			float vol = m_volume * GetTypeVolume();
-			ss->SetVolume(vol);	// OSの場合はここでボリュームを設定する
-			ss->Play(false);
+			m_soundSource->SetVolume(vol);	// OSの場合はここでボリュームを設定する
+			m_soundSource->Play(false);
+
+			// デストロイイベントを設定
+			m_soundSource->SetDestroyEvent(
+				[&]()
+				{
+					// サウンドが再生中ではなかったら
+					if (!m_soundSource->IsPlaying())
+					{
+						// nullptrを入れる
+						m_soundSource = nullptr;
+					}
+				}
+			);
 
 			return;
 		}
@@ -125,13 +140,16 @@ namespace nsMyGame
 			// ボリュームを保持
 			m_volume = volume;
 
-			// ループ再生用のサウンドソースが使われていたら
-			if (!m_loopSoundSource)
+			// サウンドソースが使用されていなかったら
+			if (!m_soundSource)
+			{
+				// 何もしない
 				return;
+			}
 
 			// ループ再生用のサウンドソースのボリュームを設定する
 			float vol = m_volume * GetTypeVolume();
-			m_loopSoundSource->SetVolume(vol);
+			m_soundSource->SetVolume(vol);
 
 			return;
 		}
