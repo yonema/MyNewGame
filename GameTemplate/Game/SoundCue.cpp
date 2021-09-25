@@ -53,8 +53,7 @@ namespace nsMyGame
 		*/
 		void CSoundCue::Play(const bool isLoop)
 		{
-			// 再生中にする
-			m_isPlaying = true;
+
 
 			// ループ再生かワンショット再生かで処理を振り分ける
 			if (isLoop)
@@ -68,6 +67,9 @@ namespace nsMyGame
 				PlayOneShot();
 			}
 
+			// 再生中にする
+			m_isPlaying = true;
+
 			return;
 		}
 
@@ -76,25 +78,23 @@ namespace nsMyGame
 		*/
 		void CSoundCue::PlayLoop()
 		{
-			// ループ再生用のサウンドソースが
-			// すでに作れれていたら
+			// サウンドソースがすでに作れれていたら
 			if (m_soundSource)
 			{
 				// 一時停止したものを再開する
 				m_soundSource->Play(true);
+				// 早期リターン
+				return;
+			}
 
-			}
-			else
-			{
-				// ループ再生用のサウンドソースが
-				// まだ未使用の場合は
-				// 新しく作って再生する。
-				m_soundSource = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
-				m_soundSource->Init(m_filePath);
-				m_soundSource->Play(true);
-				float vol = m_volume * GetTypeVolume();
-				SetVolume(vol);
-			}
+			// ループ再生用のサウンドソースが
+			// まだ未使用の場合は
+			// 新しく作って再生する。
+			m_soundSource = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
+			m_soundSource->Init(m_filePath);
+			m_soundSource->Play(true);
+			float vol = m_volume * GetTypeVolume();
+			SetVolume(vol);
 
 			return;
 		}
@@ -108,11 +108,23 @@ namespace nsMyGame
 			// Flyweightパターンを使用しているから
 			// 重くならないぜ！
 
+			// ワンショット再生が終端まで再生していない、かつ
+			// 再生中ではない
+			if (m_isOnshotEnd != true && m_isPlaying != true)
+			{
+				// 一時停止したものを再開する
+				m_soundSource->Play(false);
+
+				// 早期リターン
+				return;
+			}
+
 			m_soundSource = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
 			m_soundSource->Init(m_filePath);
 			float vol = m_volume * GetTypeVolume();
 			m_soundSource->SetVolume(vol);	// OSの場合はここでボリュームを設定する
 			m_soundSource->Play(false);
+			m_isOnshotEnd = false;
 
 			// デストロイイベントを設定
 			m_soundSource->SetDestroyEvent(
@@ -123,6 +135,8 @@ namespace nsMyGame
 					{
 						// nullptrを入れる
 						m_soundSource = nullptr;
+						m_isPlaying = false;
+						m_isOnshotEnd = true;
 					}
 				}
 			);

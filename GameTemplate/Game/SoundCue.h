@@ -183,6 +183,7 @@ namespace nsMyGame
 			wchar_t m_filePath[256] = {};				//!< wavファイルパス
 			float m_volume = 1.0f;						//!< ボリューム
 			bool m_isPlaying = false;					//!< 再生中か？
+			bool m_isOnshotEnd = true;					//!< ワンショット再生が終端まで再生したか？
 			EnSoundType m_soundType = enSE;				//!< サウンドタイプ
 
 		private:	//staticなデータメンバ

@@ -169,6 +169,8 @@ namespace nsMyGame
 					DeleteGO(FindGO<nsLight::CPointLight>(m_pointLigName));
 					DeleteGO(FindGO<nsGraphic::nsModel::CModelRender>(m_pointLigModelName));
 
+					if (m_soundCue->IsPlaying())
+						m_soundCue->Pause();
 					if (m_skyCube)
 						DeleteGO(m_skyCube);
 				}
