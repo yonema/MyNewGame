@@ -281,9 +281,9 @@ namespace nsMyGame
 			*/
 			void CModelRender::SetDefaultConstantBuffer(ModelInitData* modelInitData)
 			{
-				modelInitData->m_expandConstantBuffer = 
+				modelInitData->m_expandConstantBuffer[0] = 
 					&nsLight::CLightManager::GetInstance()->GetLightData();
-				modelInitData->m_expandConstantBufferSize =
+				modelInitData->m_expandConstantBufferSize[0] =
 					sizeof(nsLight::CLightManager::GetInstance()->GetLightData());
 
 				return;

@@ -39,6 +39,14 @@ cbuffer cb : register(b0)
     float4 screenParam;
 };
 
+// レジスタ1の定数バッファはPBRLighting.hで使用
+
+// ディファードライティング用の定数バッファ
+cbuffer defferdLightingCb : register(b2)
+{
+	float4x4 mViewProjInv;      //!< ビュープロジェクション行列の逆行列
+}
+
 ///////////////////////////////////////
 // テクスチャ
 ///////////////////////////////////////

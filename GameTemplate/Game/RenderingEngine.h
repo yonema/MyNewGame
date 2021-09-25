@@ -146,6 +146,8 @@ namespace nsMyGame
 
 			nsGraphic::nsPostEffect::CPostEffect m_postEffect;	//!< ポストエフェクトクラス
 
+			//!< ディファードライティング用の定数バッファ
+			nsRenderingEngineConstData::SDefferdLightingCB m_defferdLightingCB;
 
 		private:	// staticなデータメンバ
 			static CRenderingEngine* m_instance;		//!< 唯一のインスタンス

@@ -54,7 +54,6 @@ namespace nsMyGame
 				SDirectionalLightData directionalLightData[kMaxDirectionalLightNum];	//!< ディレクションライトのデータ
 				SPointLightData pointLightData[kMaxPointLightNum];	//!< ポイントライトのデータ
 				SSpotLightData spotLightData[kMaxSpotLightNum];		//!< スポットライトのデータ
-				Matrix mViewProjInv;								//!< ビュープロジェクション行列の逆行列
 				Vector3 eyePos = Vector3::Zero;						//!< 視点
 				int directionalLightNum = 0;						//!< ディレクションライトの数
 				Vector3 ambientLight = GetDefaultAmbientLight();	//!< アンビエントライト

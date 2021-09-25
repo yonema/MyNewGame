@@ -32,6 +32,14 @@ namespace nsMyGame
 												// メタリックがr、影パラメータがg、スムースがa。gは未使用。
 				enGBufferNum,                   // G-Bufferの数
 			};
+
+			/**
+			 * @brief ディファードライティング用の定数バッファの構造体
+			*/
+			struct SDefferdLightingCB
+			{
+				Matrix mViewProjInv;	//!< ビュープロジェクション行列の逆行列
+			};
 		}
 	}
 }

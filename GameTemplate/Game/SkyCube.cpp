@@ -75,7 +75,7 @@ namespace nsMyGame
 			modelInitData.m_tkmFilePath = kTkmFilePath;	// tkmファイルパスを設定
 			modelInitData.m_fxFilePath = kFxFilePath;	// fxファイルパスを設定
 			// SRVにスカイキューブマップのテクスチャを設定
-			modelInitData.m_expandShaderResoruceView = &m_skyTexture;
+			modelInitData.m_expandShaderResoruceView[0] = &m_skyTexture;
 
 			// スカイのモデルレンダラーをフォワードレンダリングで描画するように初期化
 			m_skyModelRender->InitForwardRendering(modelInitData);

@@ -147,10 +147,15 @@ namespace nsMyGame
 			// fxファイルパスを設定
 			spriteInitData.m_fxFilePath = m_kDefferdLightingSpriteFxFilePath;
 
-			spriteInitData.m_expandConstantBuffer = 
+			// 定数バッファの登録
+			// ライト情報を登録
+			spriteInitData.m_expandConstantBuffer[0] = 
 				&nsLight::CLightManager::GetInstance()->GetLightData();
-			spriteInitData.m_expandConstantBufferSize =
+			spriteInitData.m_expandConstantBufferSize[0] =
 				sizeof(nsLight::CLightManager::GetInstance()->GetLightData());
+			// ディファードレンダリング用の定数バッファを登録
+			spriteInitData.m_expandConstantBuffer[1] = &m_defferdLightingCB;
+			spriteInitData.m_expandConstantBufferSize[1] = sizeof(spriteInitData);
 
 			// メインレンダリングターゲットに描画するため
 			// メインレンダリングターゲットとカラーフォーマットを合わせる
@@ -241,6 +246,10 @@ namespace nsMyGame
 		*/
 		void CRenderingEngine::DefferdLighting(RenderContext& rc)
 		{
+			// ディファードライティングに必要なデータを更新する
+			// ビュープロジェクション行列の逆行列更新
+			m_defferdLightingCB.mViewProjInv.Inverse(g_camera3D->GetViewProjectionMatrix());
+
 			// レンダリング先をメインレンダリングターゲットにする
 			// メインレンダリングターゲットを設定
 			rc.WaitUntilToPossibleSetRenderTarget(m_mainRenderTarget);

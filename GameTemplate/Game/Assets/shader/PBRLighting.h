@@ -46,7 +46,6 @@ cbuffer LightCb : register(b1)
     SDirectionalLightData directionalLightData[kMaxDirectionalLightNum];	//!< ディレクションライトのデータ
     SPointLightData pointLightData[kMaxPointLightNum];	//!< ポイントライトのデータ
     SSpotLightData spotLightData[kMaxSpotLightNum];		//!< スポットライトのデータ
-    float4x4 mViewProjInv;      //!< ビュープロジェクション行列の逆行列
     float3 eyePos;				//!< 視点
     int directionalLightNum;    //!< ディレクションライトの数
     float3 ambientLight;	    //!< アンビエントライト

@@ -24,9 +24,9 @@ void MeshParts::InitFromTkmFile(
 	const char* vsEntryPointFunc,
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
-	void* expandData,
-	int expandDataSize,
-	IShaderResource* expandShaderResourceView
+	void* const* expandData,
+	const int* expandDataSize,
+	IShaderResource* const* expandShaderResourceView
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
@@ -38,12 +38,22 @@ void MeshParts::InitFromTkmFile(
 	});
 	//共通定数バッファの作成。
 	m_commonConstantBuffer.Init(sizeof(SConstantBuffer), nullptr);
+
+	// 変更。追加。
 	//ユーザー拡張用の定数バッファを作成。
-	if (expandData) {
-		m_expandConstantBuffer.Init(expandDataSize, nullptr);
-		m_expandData = expandData;
+	for (int i = 0; i < m_kMaxExCBNum; i++)
+	{
+		if (expandData[i]) {
+			m_expandConstantBuffer[i].Init(expandDataSize[i], nullptr);
+			m_expandData[i] = expandData[i];
+		}
 	}
-	m_expandShaderResourceView = expandShaderResourceView;
+	// ユーザー拡張用のシェーダーリソースビューを作成
+	for (int i = 0; i < m_kMaxExSRVNum; i++)
+	{
+		m_expandShaderResourceView[i] = expandShaderResourceView[i];
+	}
+
 	//ディスクリプタヒープを作成。
 	CreateDescriptorHeaps();
 }
@@ -68,14 +78,25 @@ void MeshParts::CreateDescriptorHeaps()
 			descriptorHeap.RegistShaderResource(0, mesh->m_materials[matNo]->GetAlbedoMap());		//アルベドマップ。
 			descriptorHeap.RegistShaderResource(1, mesh->m_materials[matNo]->GetNormalMap());		//法線マップ。
 			descriptorHeap.RegistShaderResource(2, mesh->m_materials[matNo]->GetSpecularMap());		//スペキュラマップ。
-			descriptorHeap.RegistShaderResource(3, m_boneMatricesStructureBuffer);							//ボーンのストラクチャードバッファ。
-			if (m_expandShaderResourceView){
-				descriptorHeap.RegistShaderResource(EXPAND_SRV_REG__START_NO, *m_expandShaderResourceView);
+			descriptorHeap.RegistShaderResource(3, m_boneMatricesStructureBuffer);					//ボーンのストラクチャードバッファ。
+
+			// 変更。追加。
+			for (int i = 0; i < m_kMaxExSRVNum; i++)
+			{
+				if (m_expandShaderResourceView[i]) {
+					descriptorHeap.RegistShaderResource(EXPAND_SRV_REG__START_NO + i, *m_expandShaderResourceView[i]);
+				}
 			}
 			descriptorHeap.RegistConstantBuffer(0, m_commonConstantBuffer);
-			if (m_expandConstantBuffer.IsValid()) {
-				descriptorHeap.RegistConstantBuffer(1, m_expandConstantBuffer);
+
+			// 変更。追加。
+			for (int i = 0; i < m_kMaxExCBNum; i++)
+			{
+				if (m_expandConstantBuffer[i].IsValid()) {
+					descriptorHeap.RegistConstantBuffer(i + 1, m_expandConstantBuffer[i]);
+				}
 			}
+
 			//ディスクリプタヒープへの登録を確定させる。
 			descriptorHeap.Commit();
 			descriptorHeapNo++;
@@ -182,8 +203,12 @@ void MeshParts::Draw(
 
 	m_commonConstantBuffer.CopyToVRAM(&cb);
 
-	if (m_expandData) {
-		m_expandConstantBuffer.CopyToVRAM(m_expandData);
+	// 変更。追加。
+	for (int i = 0; i < m_kMaxExCBNum; i++)
+	{
+		if (m_expandData[i]) {
+			m_expandConstantBuffer[i].CopyToVRAM(m_expandData[i]);
+		}
 	}
 	if (m_boneMatricesStructureBuffer.IsInited()) {
 		//ボーン行列を更新する。

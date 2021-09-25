@@ -2,6 +2,27 @@
 #include "Model.h"
 #include "Material.h"
 
+/**
+ * @brief コンストラクタ
+*/
+ModelInitData::ModelInitData()
+{
+	// ユーザー拡張用の定数バッファの初期化
+	for (int i = 0; i < MeshParts::m_kMaxExCBNum; i++)
+	{
+		m_expandConstantBuffer[i] = nullptr;
+		m_expandConstantBufferSize[i] = 0;
+	}
+	// ユーザー拡張用のシェーダーリソースビューを初期化
+	for (int i = 0; i < MeshParts::m_kMaxExSRVNum; i++)
+	{
+		m_expandShaderResoruceView[i] = nullptr;
+	}
+
+	return;
+}
+
+
 void Model::Init(const ModelInitData& initData)
 {
 	MY_ASSERT(

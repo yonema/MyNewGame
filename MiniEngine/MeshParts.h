@@ -32,6 +32,8 @@ public:
 	/// デストラクタ。
 	/// </summary>
 	~MeshParts();
+
+	// 変更。追加。
 	/// <summary>
 	/// tkmファイルから初期化
 	/// </summary>
@@ -46,9 +48,9 @@ public:
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
-		void* expandData,
-		int expandDataSize,
-		IShaderResource* expandShaderResourceView
+		void* const* expandData,
+		const int* expandDataSize,
+		IShaderResource* const* expandShaderResourceView
 	);
 
 	// 追加。変更。
@@ -131,11 +133,22 @@ private:
 		Vector4 mulColor;		// 乗算カラー
 	};
 	ConstantBuffer m_commonConstantBuffer;					//メッシュ共通の定数バッファ。
-	ConstantBuffer m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ
-	IShaderResource* m_expandShaderResourceView = nullptr;	//ユーザー拡張シェーダーリソースビュー。
+	//ConstantBuffer m_expandConstantBuffer;					//ユーザー拡張用の定数バッファ
+	//IShaderResource* m_expandShaderResourceView = nullptr;	//ユーザー拡張シェーダーリソースビュー。
 	StructuredBuffer m_boneMatricesStructureBuffer;	//ボーン行列の構造化バッファ。
 	std::vector< SMesh* > m_meshs;							//メッシュ。
 	std::vector< DescriptorHeap > m_descriptorHeap;		//ディスクリプタヒープ。
 	Skeleton* m_skeleton = nullptr;								//スケルトン。
-	void* m_expandData = nullptr;						//ユーザー拡張データ。
+	//void* m_expandData = nullptr;						//ユーザー拡張データ。
+
+	// 追加
+	public:		// publicなデータメンバ
+		static const int m_kMaxExCBNum = 4;		//!< ユーザー拡張用の定数バッファの最大数
+		static const int m_kMaxExSRVNum = 4;	//!< ユーザー拡張用のシェーダーリソースビューの最大数
+
+	private:	// データメンバ
+		ConstantBuffer m_expandConstantBuffer[m_kMaxExCBNum];				//ユーザー拡張用の定数バッファ
+		void* m_expandData[m_kMaxExCBNum] = {};								//ユーザー拡張データ。
+		IShaderResource* m_expandShaderResourceView[m_kMaxExSRVNum] = {};	//ユーザー拡張シェーダーリソースビュー。
+
 };

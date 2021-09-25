@@ -132,8 +132,8 @@ namespace nsMyGame
 					//描き込むレンダリングターゲットのフォーマットを指定する。
 					xBlurSpriteInitData.m_colorBufferFormat[0] = m_xBlurRenderTarget.GetColorBufferFormat();
 					//ユーザー拡張の定数バッファにブラー用のパラメーターを設定する。
-					xBlurSpriteInitData.m_expandConstantBuffer = &m_weights;
-					xBlurSpriteInitData.m_expandConstantBufferSize = sizeof(m_weights);
+					xBlurSpriteInitData.m_expandConstantBuffer[0] = &m_weights;
+					xBlurSpriteInitData.m_expandConstantBufferSize[0] = sizeof(m_weights);
 
 					//初期化情報をもとに横ブラー用のスプライトを初期化する。
 					m_xBlurSprite.Init(xBlurSpriteInitData);
@@ -153,8 +153,8 @@ namespace nsMyGame
 					//描き込むレンダリングターゲットのフォーマットを指定する。
 					yBlurSpriteInitData.m_colorBufferFormat[0] = m_yBlurRenderTarget.GetColorBufferFormat();
 					//ユーザー拡張の定数バッファにブラー用のパラメーターを設定する。
-					yBlurSpriteInitData.m_expandConstantBuffer = &m_weights;
-					yBlurSpriteInitData.m_expandConstantBufferSize = sizeof(m_weights);
+					yBlurSpriteInitData.m_expandConstantBuffer[0] = &m_weights;
+					yBlurSpriteInitData.m_expandConstantBufferSize[0] = sizeof(m_weights);
 
 					//初期化情報をもとに縦ブラー用のスプライトを初期化する。
 					m_yBlurSprite.Init(yBlurSpriteInitData);
