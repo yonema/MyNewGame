@@ -206,6 +206,9 @@ public:		//メンバ関数
 	*/
 	void OnDestroyWrapper()
 	{
+		// デストロイイベントを実行する。
+		m_destroyEvent();
+
 		OnDestroy();
 	}
 
@@ -218,5 +221,18 @@ public:		//メンバ関数
 			AddRenderEntrance();
 		}
 	}
+
+	/**
+	 * @brief デストロイイベントを設定。自身が破棄されるときに呼ばれるイベント。
+	 * @param[in] destroyEvent デストロイイベント。
+	*/
+	void SetDestroyEvent(const std::function<void(void)> destroyEvent)
+	{
+		m_destroyEvent = destroyEvent;
+	}
+
+private:	// データメンバ
+	//!< デストロイイベント。自身が破棄されるときに呼ばれるイベント。
+	std::function<void(void)> m_destroyEvent = []() {return; };
 	
 };

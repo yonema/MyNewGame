@@ -66,6 +66,7 @@ namespace nsMyGame
 				m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
 				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_snow);
 				g_camera3D->SetFar(40000.0f);
+				m_skyCube->SetDestroyEvent([&]() {m_skyCube = nullptr; });
 
 				m_lightModel = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 				m_lightModel->IniTranslucent("Assets/modelData/debugModel/light.tkm");
@@ -167,6 +168,9 @@ namespace nsMyGame
 				{
 					DeleteGO(FindGO<nsLight::CPointLight>(m_pointLigName));
 					DeleteGO(FindGO<nsGraphic::nsModel::CModelRender>(m_pointLigModelName));
+
+					if (m_skyCube)
+						DeleteGO(m_skyCube);
 				}
 
 				m_modelRender->SetPosition(m_modelRender->GetPosition() + moveVec);
