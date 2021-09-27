@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "SkyCube.h"
+#include "RenderingEngine.h"
 
 namespace nsMyGame
 {
@@ -39,11 +40,14 @@ namespace nsMyGame
 		 * @brief 初期化関数
 		 * @attention オブジェクトを生成してすぐに呼ばないと効果がありません。
 		 * @param[in] skyCubeType スカイキューブのタイプ
+		 * @param[in] isIBL IBLを行うか？
 		*/
-		void CSkyCube::Init(const nsSkyCubeConstData::EnSkyCubeType skyCubeType)
+		void CSkyCube::Init(const nsSkyCubeConstData::EnSkyCubeType skyCubeType, const bool isIBL)
 		{
 			// 指定したスカイキューブのタイプでテクスチャを初期化
 			m_skyTexture.InitFromDDSFile(GetSkyCubeTextureDDSFilePath(skyCubeType));
+
+			nsMyEngine::CRenderingEngine::GetInstance()->ReInitIBL(GetSkyCubeTextureDDSFilePath(skyCubeType), 1.0f,isIBL);
 		}
 
 		/**

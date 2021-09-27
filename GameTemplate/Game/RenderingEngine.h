@@ -50,6 +50,23 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief IBLを行うか？を設定する
+			 * @param[in] isIBL IBLを行うか？
+			*/
+			void SetIsIBL(const bool isIBL)
+			{
+				m_defferdLightingCB.isIBL = isIBL;
+			}
+
+			/**
+			 * @brief IBLを再初期化する
+			 * @param[in] ddsFilePath IBLのテクスチャのddsファイルパス
+			 * @param[in] luminance IBLの明るさ
+			 * @param[in] isIBL IBLを行うか？
+			*/
+			void ReInitIBL(const wchar_t* ddsFilePath, const float luminance,const bool isIBL);
+
+			/**
 			 * @brief レンダリングエンジンを実行
 			*/
 			void Execute();
@@ -135,6 +152,13 @@ namespace nsMyGame
 			*/
 			void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
 
+			/**
+			 * @brief IBLのデータを初期化する
+			 * @param[in] ddsFilePath IBLのテクスチャのddsファイルパス
+			 * @param[in] luminance IBLの明るさ
+			*/
+			void InitIBLData(const wchar_t* ddsFilePath, const float luminance);
+
 		private:	// データメンバ
 			std::vector<nsGraphic::CRender*> m_renderObjects;	//!< 描画するオブジェクト
 
@@ -148,6 +172,7 @@ namespace nsMyGame
 
 			//!< ディファードライティング用の定数バッファ
 			nsRenderingEngineConstData::SDefferdLightingCB m_defferdLightingCB;
+			Texture m_IBLTexture;	//!< IBLに使用するテクスチャ
 
 		private:	// staticなデータメンバ
 			static CRenderingEngine* m_instance;		//!< 唯一のインスタンス

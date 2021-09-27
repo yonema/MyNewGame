@@ -8,6 +8,7 @@
 #include "LightManager.h"
 #include "PointLight.h"
 #include "SkyCube.h"
+#include "RenderingEngine.h"
 
 
 namespace nsMyGame
@@ -64,7 +65,7 @@ namespace nsMyGame
 
 				// スカイキューブの初期化
 				m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
-				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_snow);
+				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day,true);
 				g_camera3D->SetFar(40000.0f);
 				m_skyCube->SetDestroyEvent([&]() {m_skyCube = nullptr; });
 
@@ -171,8 +172,33 @@ namespace nsMyGame
 
 					if (m_soundCue->IsPlaying())
 						m_soundCue->Pause();
+
+				}
+
+				if (g_pad[0]->IsTrigger(enButtonX))
+				{
 					if (m_skyCube)
+					{
 						DeleteGO(m_skyCube);
+						nsMyEngine::CRenderingEngine::GetInstance()->SetIsIBL(false);
+					}
+					else
+					{
+						// スカイキューブの初期化
+						m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
+						static int skyCubeType = nsNature::nsSkyCubeConstData::enSkyCubeType_day;
+						if (skyCubeType != nsNature::nsSkyCubeConstData::enSkyCubeType_snow)
+						{
+							skyCubeType++;
+						}
+						else
+						{
+							skyCubeType = nsNature::nsSkyCubeConstData::enSkyCubeType_day;
+						}
+						m_skyCube->Init(static_cast<nsNature::nsSkyCubeConstData::EnSkyCubeType>(skyCubeType), true);
+						g_camera3D->SetFar(40000.0f);
+						m_skyCube->SetDestroyEvent([&]() {m_skyCube = nullptr; });
+					}
 				}
 
 				m_modelRender->SetPosition(m_modelRender->GetPosition() + moveVec);

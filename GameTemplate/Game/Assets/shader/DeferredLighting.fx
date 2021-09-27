@@ -42,9 +42,12 @@ cbuffer cb : register(b0)
 // レジスタ1の定数バッファはPBRLighting.hで使用
 
 // ディファードライティング用の定数バッファ
+// RenderingEngineConstData.hのSDefferdLightingCBと同じ構造体にする
 cbuffer defferdLightingCb : register(b2)
 {
 	float4x4 mViewProjInv;      //!< ビュープロジェクション行列の逆行列
+	int isIBL;					//!< IBLを行うか？1：行う。0：行わない。
+	float IBLLuminance;			//!< IBLの明るさ
 }
 
 ///////////////////////////////////////
@@ -55,6 +58,7 @@ Texture2D<float4> normalTexture : register(t1);     // 法線
 Texture2D<float4> metallicShadowSmoothTexture : register(t2);   // メタリック、シャドウ、スムーステクスチャ。rに金属度、gに影パラメータ、aに滑らかさ。
 //Texture2D<float4> g_shadowMap[NUM_DIRECTIONAL_LIGHT][NUM_SHADOW_MAP] : register(t3);  //シャドウマップ。
 //TextureCube<float4> g_skyCubeMap : register(t15);
+TextureCube<float4> g_skyCubeMap : register(t3);
 // タイルごとのポイントライトのインデックスのリスト
 //StructuredBuffer<uint> pointLightListInTile : register(t20);
 
@@ -203,9 +207,22 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		) * affectOfDistance * affectOfAngle;
 	}
 
+	// IBLを行うか？
+	if (isIBL == 1)
+	{
+		// 行う
+		// 視線からの反射ベクトルを求める。
+		float3 v = reflect(toEye * -1.0f, normal);
+		int level = lerp(0, 12, 1 - smooth);
+		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * IBLLuminance;
+	}
+	else
+	{
+		// 行わない
+		// 環境光による底上げ
+		lig += ambientLight * albedoColor;
+	}
 
-	// 環境光による底上げ
-	lig += ambientLight * albedoColor;
 
 	float4 finalColor = 1.0f;
 	finalColor.xyz = lig;

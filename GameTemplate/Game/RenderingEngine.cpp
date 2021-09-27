@@ -161,9 +161,36 @@ namespace nsMyGame
 			// メインレンダリングターゲットとカラーフォーマットを合わせる
 			spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
 
+			// IBLを行うか？、かつ
+			// IBLに使用するテクスチャが有効か？
+			if (m_defferdLightingCB.isIBL == true && m_IBLTexture.IsValid())
+			{
+				// IBLに使用するテクスチャを設定設定する
+				spriteInitData.m_textures[texNo++] = &m_IBLTexture;
+			}
 
 			// 初期化データを使ってスプライトを初期化
 			m_diferredLightingSprite.Init(spriteInitData);
+
+			return;
+		}
+
+		/**
+		 * @brief IBLを再初期化する
+		 * @param[in] ddsFilePath IBLのテクスチャのddsファイルパス
+		 * @param[in] luminance IBLの明るさ
+		 * @param[in] isIBL IBLを行うか？
+		*/
+		void CRenderingEngine::ReInitIBL(const wchar_t* ddsFilePath, const float luminance, const bool isIBL)
+		{
+			// IBLのデータを初期化する
+			InitIBLData(ddsFilePath, luminance);
+
+			// IBLを行うか？を設定
+			m_defferdLightingCB.isIBL = isIBL;
+
+			// ディファードライティングを行うためのスプライトを初期化する
+			InitDefferdLightingSprite();
 
 			return;
 		}
@@ -326,6 +353,22 @@ namespace nsMyGame
 
 			rc.SetViewportAndScissor(viewport);
 			m_copyMainRtToFrameBufferSprite.Draw(rc);
+
+			return;
+		}
+
+		/**
+		 * @brief IBLのデータを初期化する
+		 * @param[in] ddsFilePath IBLのテクスチャのddsファイルパス
+		 * @param[in] luminance IBLの明るさ
+		*/
+		void CRenderingEngine::InitIBLData(const wchar_t* ddsFilePath, const float luminance)
+		{
+			// IBLに使用するテクスチャの初期化
+			m_IBLTexture.InitFromDDSFile(ddsFilePath);
+
+			// IBLの明るさを設定
+			m_defferdLightingCB.IBLLuminance = luminance;
 
 			return;
 		}

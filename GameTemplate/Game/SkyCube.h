@@ -46,8 +46,9 @@ namespace nsMyGame
 			 * @brief 初期化関数
 			 * @attention オブジェクトを生成してすぐに呼ばないと効果がありません。
 			 * @param[in] skyCubeType スカイキューブのタイプ
+			 * @param[in] isIBL IBLを行うか？
 			*/
-			void Init(const nsSkyCubeConstData::EnSkyCubeType skyCubeType);
+			void Init(const nsSkyCubeConstData::EnSkyCubeType skyCubeType, const bool isIBL = true);
 
 			/**
 			 * @brief 座標を設定する

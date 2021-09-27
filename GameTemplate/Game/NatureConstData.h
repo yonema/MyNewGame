@@ -20,6 +20,7 @@ namespace nsMyGame
 
 			//!< スカイのテクスチャのデフォルトのDDSファイルパス
 			constexpr const wchar_t* const kDefaultDDSPath = L"Assets/modelData/sky/skyCubeMap.dds";
+			constexpr float kDefaultIBLLuminance = 1.0f;	//!< IBLのデフォルトの明るさ
 
 			//!< デフォルトのスカイの拡大率
 			const Vector3 kDefaultSkySclae = Vector3::One * 1000.0f;
@@ -59,6 +60,29 @@ namespace nsMyGame
 					break;
 				default:					// デフォルト
 					return kDefaultDDSPath;
+					break;
+				}
+			}
+
+			constexpr float GetIBLLuminance(const EnSkyCubeType skyCubeType)
+			{
+				// タイプごとで処理を振り分ける
+				switch (skyCubeType)
+				{
+				case enSkyCubeType_day:		// 昼間
+					return 1.0f;
+					break;
+				case enSkyCubeType_night:	// 夜間
+					return 1.0f;
+					break;
+				case enSkyCubeType_snow:	// 雪山
+					return 1.0f;
+					break;
+				case enSkyCubeType_default:	// デフォルト
+					return kDefaultIBLLuminance;
+					break;
+				default:					// デフォルト
+					return kDefaultIBLLuminance;
 					break;
 				}
 			}

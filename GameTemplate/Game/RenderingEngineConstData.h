@@ -35,11 +35,15 @@ namespace nsMyGame
 
 			/**
 			 * @brief ディファードライティング用の定数バッファの構造体
+			 * @warning ここを変更したら、DefferdLighting.hのdefferdLightingCbも一緒に変更する
 			*/
 			struct SDefferdLightingCB
 			{
 				Matrix mViewProjInv;	//!< ビュープロジェクション行列の逆行列
+				bool isIBL = false;		//!< IBLを行うか？
+				float IBLLuminance = 1.0f;	//!< IBLの明るさ
 			};
+
 		}
 	}
 }
