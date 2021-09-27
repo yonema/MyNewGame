@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Model.h"
 #include "Material.h"
+#include "../GameTemplate/Game/RenderingEngine.h"
 
 /**
  * @brief コンストラクタ
@@ -49,9 +50,32 @@ void Model::Init(const ModelInitData& initData)
 	
 	m_modelUpAxis = initData.m_modelUpAxis;
 
-	m_tkmFile.Load(initData.m_tkmFilePath);
+	// 変更。追加。
+
+	// エイリアス宣言
+	// レンダリングエンジンクラス
+	using CRenderingEngine = nsMyGame::nsMyEngine::CRenderingEngine;
+
+	// tkmファイルバンクからリソースを探して取ってくる
+	auto tkmFile = CRenderingEngine::GetInstance()->GetTkmFileFromBank(initData.m_tkmFilePath);
+
+	// 未登録か？
+	if (tkmFile == nullptr)
+	{
+		// 未登録なら
+		// 新しくリソースを生成
+		tkmFile = new TkmFile;
+		tkmFile->Load(initData.m_tkmFilePath);
+		// リソースをリソースバンクに登録する
+		CRenderingEngine::GetInstance()->RegistTkmFileToBank(initData.m_tkmFilePath, tkmFile);
+	}
+
+	// tkmファイルのリソースを保持して
+	m_tkmFile = tkmFile;
+
+	// メッシュパーツを初期化する
 	m_meshParts.InitFromTkmFile(
-		m_tkmFile, 
+		*m_tkmFile, 
 		wfxFilePath, 
 		initData.m_vsEntryPointFunc,
 		initData.m_vsSkinEntryPointFunc,

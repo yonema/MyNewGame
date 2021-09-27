@@ -92,14 +92,15 @@ public:
 	/// TKMファイルを取得。
 	/// </summary>
 	/// <returns></returns>
-	const TkmFile& GetTkmFile() const
+	const TkmFile* GetTkmFile() const
 	{
 		return m_tkmFile;
 	}
 private:
 
 	Matrix m_world;														//ワールド行列。
-	TkmFile m_tkmFile;													//tkmファイル。
+	// 変更。追加。
+	TkmFile* m_tkmFile = nullptr;										//tkmファイル。
 	Skeleton m_skeleton;												//スケルトン。
 	MeshParts m_meshParts;											//メッシュパーツ。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisY;		//モデルの上方向。

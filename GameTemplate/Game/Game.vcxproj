@@ -425,6 +425,7 @@
     <ClInclude Include="system\system.h" />
     <ClInclude Include="TestMap.h" />
     <ClInclude Include="TestMapForSpotLight.h" />
+    <ClInclude Include="TResourceBank.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />

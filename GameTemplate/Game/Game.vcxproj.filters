@@ -652,6 +652,9 @@
     <ClInclude Include="NatureConstData.h">
       <Filter>MyCode\Nature</Filter>
     </ClInclude>
+    <ClInclude Include="TResourceBank.h">
+      <Filter>MyCode\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">

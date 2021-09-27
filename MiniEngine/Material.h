@@ -113,9 +113,11 @@ private:
 	PipelineState m_skinModelPipelineState;			//スキンありモデル用のパイプラインステート。
 	PipelineState m_transSkinModelPipelineState;	//スキンありモデル用のパイプラインステート(半透明マテリアル)。
 	PipelineState m_transNonSkinModelPipelineState;	//スキンなしモデル用のパイプラインステート(半透明マテリアル)。
-	Shader m_vsNonSkinModel;						//スキンなしモデル用の頂点シェーダー。
-	Shader m_vsSkinModel;							//スキンありモデル用の頂点シェーダー。
-	Shader m_psModel;								//モデル用のピクセルシェーダー。
+	
+	// 変更。追加。
+	Shader* m_vsNonSkinModel = nullptr;				//スキンなしモデル用の頂点シェーダー。
+	Shader* m_vsSkinModel = nullptr;				//スキンありモデル用の頂点シェーダー。
+	Shader* m_psModel = nullptr;					//モデル用のピクセルシェーダー。
 };
 
 

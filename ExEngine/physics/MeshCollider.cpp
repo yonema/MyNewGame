@@ -10,7 +10,7 @@ void MeshCollider::CreateFromModel(const Model& model, const Matrix& worldMatrix
 	m_stridingMeshInterface = std::make_unique<btTriangleIndexVertexArray>();
 	int numMesh = 0;
 	const auto& tkmFile = model.GetTkmFile();
-	const auto& meshParts = tkmFile.GetMeshParts();
+	const auto& meshParts = tkmFile->GetMeshParts();
 	//メッシュを一つづつ調べていく。
 	for (const auto& mesh : meshParts) {
 		//まずは頂点バッファを構築する。

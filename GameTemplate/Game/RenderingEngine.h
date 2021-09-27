@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderingEngineConstData.h"
+#include "TResourceBank.h"
 #include "PostEffect.h"
 
 namespace nsMyGame
@@ -56,6 +57,52 @@ namespace nsMyGame
 			void SetIsIBL(const bool isIBL)
 			{
 				m_defferdLightingCB.isIBL = isIBL;
+			}
+
+			/**
+			 * @brief tkmファイルのリソースをリソースバンクから取得。未登録の場合はnullptrを戻す。
+			 * @param[in] filePath tkmファイルパス
+			 * @return リソース
+			*/
+			TkmFile* GetTkmFileFromBank(const char* filePath)
+			{
+				return m_tkmFileBank.Get(filePath);
+			}
+
+			/**
+			 * @brief tkmファイルのリソースをリソースバンクに登録
+			 * @param[in] filePath tkmファイルパス
+			 * @param[in] tkmFile tkmファイルリソース
+			*/
+			void RegistTkmFileToBank(const char* filePath, TkmFile* tkmFile)
+			{
+				m_tkmFileBank.Regist(filePath, tkmFile);
+			}
+
+			/**
+			 * @brief シェーダーのリソースをリソースバンクから取得。未登録の場合はnullptrを戻す。
+			 * @param[in] filePath シェーダーファイルパス
+			 * @param[in] entryPointFuncName エントリーポイント
+			 * @return リソース
+			*/
+			Shader* GetShaderFromBank(const char* filePath, const char* entryPointFuncName)
+			{
+				std::string programName = filePath;
+				programName += entryPointFuncName;
+				return m_shaderBank.Get(programName.c_str());
+			}
+
+			/**
+			 * @brief シェーダーのリソースをリソースバンクに登録
+			 * @param filePath シェーダーファイルパス
+			 * @param entryPointFuncName エントリーポイント
+			 * @param shader シェーダーリソース
+			*/
+			void RegistShaderToBank(const char* filePath, const char* entryPointFuncName, Shader* shader)
+			{
+				std::string programName = filePath;
+				programName += entryPointFuncName;
+				m_shaderBank.Regist(programName.c_str(), shader);
 			}
 
 			/**
@@ -173,6 +220,9 @@ namespace nsMyGame
 			//!< ディファードライティング用の定数バッファ
 			nsRenderingEngineConstData::SDefferdLightingCB m_defferdLightingCB;
 			Texture m_IBLTexture;	//!< IBLに使用するテクスチャ
+
+			nsUtil::TResourceBank<TkmFile> m_tkmFileBank;	//!< tkmファイルバンク
+			nsUtil::TResourceBank<Shader> m_shaderBank;		//!< シェーダーバンク
 
 		private:	// staticなデータメンバ
 			static CRenderingEngine* m_instance;		//!< 唯一のインスタンス
