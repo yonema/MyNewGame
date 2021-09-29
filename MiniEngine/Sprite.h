@@ -42,7 +42,7 @@ struct SpriteInitData {
 	// 変更。追加。
 	// <カラーバッファーフォーマット, レンダリングターゲットの最大数>
 	std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT> m_colorBufferFormat = {
-	DXGI_FORMAT_R8G8B8A8_UNORM,
+	DXGI_FORMAT_R16G16B16A16_FLOAT,
 	DXGI_FORMAT_UNKNOWN,
 	DXGI_FORMAT_UNKNOWN,
 	DXGI_FORMAT_UNKNOWN,

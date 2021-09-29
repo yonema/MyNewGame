@@ -134,8 +134,15 @@ namespace nsMyGame
 				// 半透明描画用のシェーダーを指定する
 				SetCommonModelInitData(filePath, modelUpAxis, kTranslucentModelFxFilePath);
 
+				// メインレンダリングターゲットのからフォーマットに合わせる
+				m_modelInitData.m_colorBufferFormat[0] =
+					nsMyEngine::CRenderingEngine::GetInstance()->GetMainRenderTargetFormat();
+
 				// デフォルトのコンスタントバッファを設定
 				SetDefaultConstantBuffer();
+
+				// デフォルトのシェーダーリソースビューを設定
+				SetDefaultShaderResourceView();
 
 				// 初期化処理のメインコア
 				// ディファ―ドではなく、フォワードレンダリングで描画するように指定する
@@ -299,6 +306,36 @@ namespace nsMyGame
 					&nsLight::CLightManager::GetInstance()->GetLightData();
 				m_modelInitData.m_expandConstantBufferSize[0] =
 					sizeof(nsLight::CLightManager::GetInstance()->GetLightData());
+
+				// フォワードレンダリングだけど、ディファ―ド用の定数バッファを持ってくる。
+				m_modelInitData.m_expandConstantBuffer[1] =
+					&nsMyEngine::CRenderingEngine::GetInstance()->GetDefferdLightingCB();
+				m_modelInitData.m_expandConstantBufferSize[1] =
+					sizeof(nsMyEngine::CRenderingEngine::GetInstance()->GetDefferdLightingCB());
+
+				return;
+			}
+
+			/**
+			 * @brief デフォルトのシェーダーリソースビューをセット
+			*/
+			void CModelRender::SetDefaultShaderResourceView()
+			{
+				// シェーダーリソースビューの番号
+				int SRVNo = 0;
+				// シャドウマップのテクスチャを設定する
+				for (int i = 0; i < nsLight::nsLightConstData::kMaxDirectionalLightNum; i++)
+				{
+					for (int areaNo = 0; areaNo < nsGraphic::nsShadow::nsShadowConstData::enShadowMapArea_num; areaNo++)
+					{
+						m_modelInitData.m_expandShaderResoruceView[SRVNo++] =
+							&nsMyEngine::CRenderingEngine::GetInstance()->
+							GetShadowMapRenderTargetTexture(i, areaNo);
+					}
+				}
+				// シェーダーリソースビューの設定
+				m_modelInitData.m_expandShaderResoruceView[SRVNo++] =
+					&nsMyEngine::CRenderingEngine::GetInstance()->GetIBLTexture();
 
 				return;
 			}

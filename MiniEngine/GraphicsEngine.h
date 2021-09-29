@@ -199,6 +199,21 @@ public:
 	{
 		return m_fontEngine;
 	}
+	/// <summary>
+	/// ID3D12Objectの解放。
+	/// </summary>
+	/// <param name="res"></param>
+	void ReleaseD3D12Object(IUnknown* res)
+	{
+		if (res == nullptr) {
+			return;
+		}
+		// D3Dオブジェクトは解放までに1フレームの時間をかける
+		// なぜ？
+		// 描画コマンドは１フレーム遅れて実行されるように実装されているため、即座に開放すると描画中に
+		// リソースが解放されてしまう。そのため、１フレーム遅延して開放する必要がある。
+		m_reqDelayRelease3d12ObjectList.push_back({ res, 1 });
+	}
 private:
 	/// <summary>
 	/// D3Dデバイスの作成。
@@ -264,6 +279,10 @@ private:
 	/// 描画の完了待ち。
 	/// </summary>
 	void WaitDraw();
+	/// <summary>
+	/// ID3D12Objectの解放リクエストを処理する。
+	/// </summary>
+	void ExecuteRequestReleaseD3D12Object();
 	
 public:
 	enum { FRAME_BUFFER_COUNT = 2 };						//フレームバッファの数。
@@ -274,6 +293,14 @@ private:
 		GPU_VenderAMD,		//Intel
 		GPU_VenderIntel,	//AMD
 		Num_GPUVender,
+	};
+	/// <summary>
+	/// D3D12オブジェクトの遅延リリースリクエスト
+	/// </summary>
+	struct RequestDelayReleaseD3D12Object
+	{
+		IUnknown* d3dObject;	// リリースするD3Dオブジェクト
+		int delayTime;				// 遅延フレーム。この値は毎フレームデクリメントされ、0になると解放されます。
 	};
 	
 	ID3D12Device5* m_d3dDevice = nullptr;					//D3Dデバイス。
@@ -310,7 +337,28 @@ private:
 	FontEngine m_fontEngine;					//フォントエンジン。
 	public:
 	std::unique_ptr<DirectX::GraphicsMemory> m_directXTKGfxMemroy;	//DirectXTKのグラフィックメモリシステム。
+	std::list< RequestDelayReleaseD3D12Object > m_reqDelayRelease3d12ObjectList;	// D3D12オブジェクトの遅延解放リクエストのリスト。
 };
 extern GraphicsEngine* g_graphicsEngine;	//グラフィックスエンジン
 extern Camera* g_camera2D;					//2Dカメラ。
 extern Camera* g_camera3D;					//3Dカメラ。
+
+namespace nsGraphicsEngineFunc
+{
+	/// <summary>
+	/// D3D12オブジェクトを解放。
+	/// </summary>
+	/// <param name="obj">開放したいオブジェクト</param>
+	static inline void ReleaseD3D12Object(IUnknown* obj)
+	{
+		if (obj == nullptr) {
+			return;
+		}
+		if (g_graphicsEngine) {
+			g_graphicsEngine->ReleaseD3D12Object(obj);
+		}
+		else {
+			obj->Release();
+		}
+	}
+}

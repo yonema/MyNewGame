@@ -8,7 +8,8 @@
 namespace nsMyGame
 {
 	// 前方宣言
-	namespace nsGraphic { class CRender; };
+	namespace nsGraphic { class CRender; };		// レンダラークラス
+	namespace nsTimer { class CStopWatch; }		// タイマー
 
 	/**
 	 * @brief このゲーム用のゲームエンジンネームスペース
@@ -21,6 +22,9 @@ namespace nsMyGame
 		*/
 		class CRenderingEngine : private nsUtil::Noncopyable
 		{
+		private:	// エイリアス宣言
+			using SpritePtr = std::unique_ptr<Sprite>;	//!< スプライトにユニークポインタの型
+
 		private:	// コンストラクタとデストラクタ。
 					// シングルトンパターンのためprivateに隠す
 			/**
@@ -59,6 +63,15 @@ namespace nsMyGame
 			void SetIsIBL(const bool isIBL)
 			{
 				m_defferdLightingCB.isIBL = isIBL;
+			}
+
+			/**
+			 * @brief ディファードライティング用の定数バッファの参照を得る
+			 * @return ディファードライティング用の定数バッファの参照
+			*/
+			nsRenderingEngineConstData::SDefferdLightingCB& GetDefferdLightingCB()
+			{
+				return m_defferdLightingCB;
 			}
 
 			/**
@@ -118,6 +131,26 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief IBLに使用するテクスチャの参照を得る
+			 * @return IBLに使用するテクスチャの参照
+			*/
+			Texture& GetIBLTexture()
+			{
+				return m_IBLTexture;
+			}
+
+			/**
+			 * @brief シャドウマップのレンダリングターゲットのテクスチャの参照を得る
+			 * @param ligNo ライトの番号
+			 * @param shadowMapNo シャドウマップの番号
+			 * @return テクスチャの参照
+			*/
+			Texture& GetShadowMapRenderTargetTexture(const int ligNo, const int shadowMapNo)
+			{
+				return m_shadowMapRenders[ligNo].GetShadowMap(shadowMapNo);
+			};
+
+			/**
 			 * @brief IBLを再初期化する
 			 * @param[in] ddsFilePath IBLのテクスチャのddsファイルパス
 			 * @param[in] luminance IBLの明るさ
@@ -127,8 +160,9 @@ namespace nsMyGame
 
 			/**
 			 * @brief レンダリングエンジンを実行
+			 * @param[in] stopWatch ストップウォッチ
 			*/
-			void Execute();
+			void Execute(const nsTimer::CStopWatch& stopWatch);
 
 		public:		// staticなメンバ関数
 			/**
@@ -236,8 +270,8 @@ namespace nsMyGame
 			RenderTarget m_GBuffer[nsRenderingEngineConstData::enGBufferNum];	//!< GBuffer
 
 			Sprite m_copyMainRtToFrameBufferSprite;	//!< メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
-			Sprite m_diferredLightingSprite;	//!< ディファードライティングを行うためのスプライト
-
+			SpritePtr m_diferredLightingSprite;	//!< ディファードライティングを行うためのスプライト
+												//!< ReInitするときにメモリリークを防ぐためユニークポインタにする
 			//!< シャドウマップレンダラー
 			nsGraphic::nsShadow::CShadowMapRender m_shadowMapRenders[nsLight::nsLightConstData::kMaxDirectionalLightNum];
 			nsGraphic::nsPostEffect::CPostEffect m_postEffect;	//!< ポストエフェクトクラス

@@ -64,7 +64,7 @@ namespace nsMyGame
 				// 最終合成
 				m_finalSprite.Draw(rc);
 				// レンダリングターゲットへの書き込み終了待ち
-				rc.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
+				//rc.WaitUntilFinishDrawingToRenderTarget(mainRenderTarget);
 
 				return;
 			}

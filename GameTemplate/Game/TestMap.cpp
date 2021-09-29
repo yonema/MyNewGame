@@ -89,7 +89,27 @@ namespace nsMyGame
 				DeleteGO(m_modelRender);
 				DeleteGO(m_fontRender);
 				DeleteGO(m_spriteRender);
+				DeleteGO(m_effectPlayer);
+				DeleteGO(m_soundCue);
 				DeleteGO(m_skyCube);
+				DeleteGO(m_lightModel);
+				DeleteGO(m_pointLight);
+				QueryGOs<nsLight::CPointLight>(
+					m_pointLigName,
+					[&](nsLight::CPointLight* pointLig)->bool
+					{
+						DeleteGO(pointLig);
+						return true;
+					}
+				);
+				QueryGOs<nsGraphic::nsModel::CModelRender>(
+					m_pointLigModelName,
+					[&](nsGraphic::nsModel::CModelRender* pointLigModel)->bool
+					{
+						DeleteGO(pointLigModel);
+						return true;
+					}
+				);
 				return;
 			}
 

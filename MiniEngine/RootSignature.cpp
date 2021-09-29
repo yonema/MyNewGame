@@ -18,6 +18,9 @@ bool RootSignature::Init(
 	UINT maxUavDescritor
 )
 {
+	if (m_rootSignature) {
+		m_rootSignature->Release();
+	}
 	auto d3dDevice = g_graphicsEngine->GetD3DDevice();
 
 	D3D12_STATIC_SAMPLER_DESC sampler = {};

@@ -5,7 +5,16 @@
 //モデルの頂点シェーダー関係の共通ヘッダー
  #include "ModelVSCommon.h"
 
+// レジスタ1の定数バッファはPBRLighting.hで使用
 
+// ディファードライティング用の定数バッファ
+// RenderingEngineConstData.hのSDefferdLightingCBと同じ構造体にする
+cbuffer defferdLightingCb : register(b2)
+{
+	float4x4 mViewProjInv;      //!< ビュープロジェクション行列の逆行列
+	int isIBL;					//!< IBLを行うか？1：行う。0：行わない。
+	float IBLLuminance;			//!< IBLの明るさ
+}
 
  ///////////////////////////////////////
  // 定数
@@ -37,8 +46,8 @@ struct SPSIn{
 Texture2D<float4> g_albedoMap	: register(t0);		// アルベドマップ
 Texture2D<float4> g_normalMap	: register(t1);		// 法線
 Texture2D<float4> g_spacularMap : register(t2);		//スペキュラマップ
-Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t3);  //シャドウマップ。
-TextureCube<float4> g_skyCubeMap : register(t15);
+Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t10);  //シャドウマップ。
+TextureCube<float4> g_skyCubeMap : register(t22);
 
 // PBRのライティングのヘッダー
 #include "PBRLighting.h"
@@ -117,17 +126,23 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	// ディレクションライトのライティングの計算
 	for (int ligNo = 0; ligNo < directionalLightNum; ligNo++)
 	{
+		// 影の落ち具合を計算する。
+		float shadow = 0.0f;
+		if (directionalLightData[ligNo].castShadow == 1) {
+			//影を生成するなら。
+			shadow = CalcShadowRate(ligNo, worldPos) * 1.0f /*shadowParam*/;
+		}
 		// PBRのライティングを計算
-        lig += CalcLighting(
-            directionalLightData[ligNo].direction,
-            directionalLightData[ligNo].color,
-            normal,
-            toEye,
-            albedoColor,
-            metaric,
-            smooth,
-            specColor
-        );
+		lig += CalcLighting(
+			directionalLightData[ligNo].direction,
+			directionalLightData[ligNo].color,
+			normal,
+			toEye,
+			albedoColor,
+			metaric,
+			smooth,
+			specColor
+		) * (1.0f - shadow);
 	}
 
 	// ポイントライトのライティングの計算
@@ -196,12 +211,25 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	}
 
 
-    // 環境光による底上げ
-	lig += ambientLight * albedoColor;
+	// IBLを行うか？
+	if (isIBL == 1)
+	{
+		// 行う
+		// 視線からの反射ベクトルを求める。
+		float3 v = reflect(toEye * -1.0f, normal);
+		int level = lerp(0, 12, 1 - smooth);
+		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * IBLLuminance;
+	}
+	else
+	{
+		// 行わない
+		// 環境光による底上げ
+		lig += ambientLight * albedoColor;
+	}
+
 
 	float4 finalColor = 1.0f;
 	finalColor.xyz = lig;
-	finalColor.w = albedoColor.a;
 
 	// 自己発光カラーを加える
 	finalColor.xyz += emissionColor.xyz;

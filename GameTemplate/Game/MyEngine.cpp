@@ -91,15 +91,7 @@ namespace nsMyGame
 			ExecuteUpdate();
 
 			// レンダリングエンジンを実行
-			CRenderingEngine::GetInstance()->Execute();
-
-#ifdef MY_DEBUG
-			//FPSを描画する
-			nsTimer::GameTime().DrawFPS(
-				g_graphicsEngine->GetRenderContext(),
-				static_cast<float>(m_stopWatch->GetElapsed())
-			);
-#endif
+			CRenderingEngine::GetInstance()->Execute(*m_stopWatch);
 
 			// スピンロックによるFPS固定処理
 			Spinlock();

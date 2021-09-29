@@ -42,6 +42,11 @@ void DescriptorHeap::CommitSamperHeap()
 }
 void DescriptorHeap::Commit()
 {
+	for (auto& ds : m_descriptorHeap) {
+		if (ds) {
+			ds->Release();
+		}
+	}
 	const auto& d3dDevice = g_graphicsEngine->GetD3DDevice();
 	D3D12_DESCRIPTOR_HEAP_DESC srvHeapDesc = {};
 

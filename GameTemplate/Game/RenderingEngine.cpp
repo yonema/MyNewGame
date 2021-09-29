@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "RenderingEngine.h"
 #include "system/system.h"
+#include "GameTime.h"
+#include "StopWatch.h"
 #include "Render.h"
 #include "LightManager.h"
 
@@ -198,8 +200,10 @@ namespace nsMyGame
 			// メインレンダリングターゲットとカラーフォーマットを合わせる
 			spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
 
-			// 初期化データを使ってスプライトを初期化
-			m_diferredLightingSprite.Init(spriteInitData);
+			// 初期化データを使ってスプライトを生成して初期化
+			// ReInitする時用にユニークポインタを使ってリソースを開放して、新たなリソースの所有権を得る
+			m_diferredLightingSprite.reset(new Sprite);
+			m_diferredLightingSprite->Init(spriteInitData);
 
 			return;
 		}
@@ -227,8 +231,9 @@ namespace nsMyGame
 
 		/**
 		 * @brief レンダリングエンジンを実行
+		 * @param[in] stopWatch ストップウォッチ
 		*/
-		void CRenderingEngine::Execute()
+		void CRenderingEngine::Execute(const nsTimer::CStopWatch& stopWatch)
 		{
 			// レンダリングコンテキスト
 			RenderContext& rc = g_graphicsEngine->GetRenderContext();
@@ -246,16 +251,33 @@ namespace nsMyGame
 			DefferdLighting(rc);
 
 			// フォワードレンダリング
+			// フォワードレンダリングの中で
+			// rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget)を呼ばないで
+			// エフェクトも一緒にメインレンダリングターゲットに描画してから描画終了待ち処理を呼ぶ
 			ForwardRendering(rc);
-
 			// エフェクトの描画
 			EffectEngine::GetInstance()->Draw();
+			// メインレンダリングターゲットへの書き込み終了待ち
+			rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+
 
 			// ポストエフェクトを実行
+			// ポストエフェクトの中で
+			// rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget)を呼ばないで
+			// 2DとFPSも一緒にメインレンダリングターゲットに描画してから描画終了待ち処理を呼ぶ
 			m_postEffect.Render(rc, m_mainRenderTarget);
-
 			// 2Dを描画する
 			Render2D(rc);
+#ifdef MY_DEBUG
+			//FPSを描画する
+			nsTimer::GameTime().DrawFPS(
+				g_graphicsEngine->GetRenderContext(),
+				static_cast<float>(stopWatch.GetElapsed())
+			);
+#endif
+			// メインレンダリングターゲットへの書き込み終了待ち
+			rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+
 
 			// メインレンダリングターゲットの内容をフレームバッファにコピーする
 			CopyMainRenderTargetToFrameBuffer(rc);
@@ -352,7 +374,7 @@ namespace nsMyGame
 			rc.SetRenderTargetAndViewport(m_mainRenderTarget);
 
 			// G-Bufferの内容を元にしてディファードライティング
-			m_diferredLightingSprite.Draw(rc);
+			m_diferredLightingSprite->Draw(rc);
 
 			// メインレンダリングターゲットへの書き込み終了待ち
 			rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
@@ -381,7 +403,7 @@ namespace nsMyGame
 			}
 
 			// メインレンダリングターゲットへの書き込み終了待ち
-			rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
+			//rc.WaitUntilFinishDrawingToRenderTarget(m_mainRenderTarget);
 
 			return;
 		}

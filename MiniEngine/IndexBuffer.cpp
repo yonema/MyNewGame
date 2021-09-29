@@ -12,6 +12,10 @@ IndexBuffer::~IndexBuffer()
 }
 void IndexBuffer::Init(int size, int stride)
 {
+	if (m_indexBuffer) {
+		m_indexBuffer->Release();
+	}
+
 	if (stride == 2) {
 		m_sizeInBytes = size * 2;
 	}

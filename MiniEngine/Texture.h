@@ -95,5 +95,11 @@ private:
 	D3D12_RESOURCE_DESC m_textureDesc;	//テクスチャ情報
 	
 	// 追加
-	bool m_isCubeMap = false;
+public:		// メンバ関数
+	/**
+	 * @brief リソースの解放
+	*/
+	void Release();
+private:	// データメンバ
+	bool m_isCubeMap = false;	//!< キューブマップか？
 };

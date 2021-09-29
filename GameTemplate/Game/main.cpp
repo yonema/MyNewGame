@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include "system/system.h"
 #include "Game.h"
-#include "GameTime.h"
-#include "StopWatch.h"
-#include "SoundEngine.h"
-#include "LightManager.h"
 
 using namespace nsMyGame;
 
@@ -29,7 +25,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ゲームの破棄
 	DeleteGO(game);
 
-	// オブジェクトマネージャーによるアップデートの実行
+	// ゲームを破棄するために、オブジェクトマネージャーによるアップデートの実行
 	GameObjectManager::GetInstance()->ExecuteUpdate();
 
 	// エンジンのインスタンスを破棄する

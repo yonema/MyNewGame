@@ -80,6 +80,9 @@ namespace nsMyGame
 			modelInitData.m_fxFilePath = kFxFilePath;	// fxファイルパスを設定
 			// SRVにスカイキューブマップのテクスチャを設定
 			modelInitData.m_expandShaderResoruceView[0] = &m_skyTexture;
+			// メインレンダリングターゲットのからフォーマットに合わせる
+			modelInitData.m_colorBufferFormat[0] =
+				nsMyEngine::CRenderingEngine::GetInstance()->GetMainRenderTargetFormat();
 
 			// スカイのモデルレンダラーをフォワードレンダリングで描画するように初期化
 			m_skyModelRender->InitForwardRendering(modelInitData);

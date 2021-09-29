@@ -26,7 +26,8 @@ void FontEngine::Init()
 	re.Begin();
 	//SpriteBatchのパイプラインステートを作成する。
 	RenderTargetState renderTargetState;
-	renderTargetState.rtvFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+	// 変更。追加。
+	renderTargetState.rtvFormats[0] = DXGI_FORMAT_R16G16B16A16_FLOAT;
 	renderTargetState.numRenderTargets = 1;
 	renderTargetState.dsvFormat = DXGI_FORMAT_D32_FLOAT;
 	renderTargetState.sampleMask = UINT_MAX;

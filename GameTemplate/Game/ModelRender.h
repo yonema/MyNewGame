@@ -253,6 +253,11 @@ namespace nsMyGame
 				void SetDefaultConstantBuffer();
 
 				/**
+				 * @brief デフォルトのシェーダーリソースビューをセット
+				*/
+				void SetDefaultShaderResourceView();
+
+				/**
 				 * @brief レンダラーを初期化する
 				 * @param[in] isDefferdRender ディファードレンダリングで描画するか？
 				*/

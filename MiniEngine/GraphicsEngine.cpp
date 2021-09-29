@@ -458,6 +458,25 @@ void GraphicsEngine::ChangeRenderTargetToFrameBuffer(RenderContext& rc)
 {
 	rc.SetRenderTarget(m_currentFrameBufferRTVHandle, m_currentFrameBufferDSVHandle);
 }
+
+void GraphicsEngine::ExecuteRequestReleaseD3D12Object()
+{
+	auto releaseReqIt = m_reqDelayRelease3d12ObjectList.begin();
+	while (releaseReqIt != m_reqDelayRelease3d12ObjectList.end()) {
+		if (releaseReqIt->delayTime == 0) {
+			// 開放
+			if (releaseReqIt->d3dObject) {
+				releaseReqIt->d3dObject->Release();
+			}
+			releaseReqIt = m_reqDelayRelease3d12ObjectList.erase(releaseReqIt);
+		}
+		else {
+			releaseReqIt->delayTime--;
+			releaseReqIt++;
+		}
+	}
+}
+
 void GraphicsEngine::EndRender()
 {
 	// レンダリングターゲットへの描き込み完了待ち
@@ -488,4 +507,7 @@ void GraphicsEngine::EndRender()
 	WaitDraw();
 
 	m_frameIndex = m_swapChain->GetCurrentBackBufferIndex();
+
+	// D3D12オブジェクトの解放リクエストを処理する。
+	ExecuteRequestReleaseD3D12Object();
 }
