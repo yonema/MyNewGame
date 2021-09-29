@@ -280,8 +280,9 @@ namespace nsMyGame
 
 			private:	// データメンバ
 				ModelPtr m_model;							//!< モデルクラス
+				//@todoディレクションライトの数だけシャドウモデルを作ったら重かったので、インスタンス描画を入れるまではライト1個分のみ
 				//!< シャドウマップ描画用モデルクラス
-				ModelPtr m_shadowModels[nsLight::nsLightConstData::kMaxDirectionalLightNum][nsShadow::nsShadowConstData::enShadowMapArea_num];
+				ModelPtr m_shadowModels[1/*nsLight::nsLightConstData::kMaxDirectionalLightNum*/][nsShadow::nsShadowConstData::enShadowMapArea_num];
 				ModelInitData m_modelInitData;				//!< モデルの初期化データ
 				CRender m_render;							//!< レンダラークラス
 				SkeletonPtr m_skeletonPtr;					//!< スケルトンクラス

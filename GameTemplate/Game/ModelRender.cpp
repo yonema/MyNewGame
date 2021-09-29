@@ -430,6 +430,10 @@ namespace nsMyGame
 			{
 				if (m_shadowModels[0][0])
 				{
+					//@todoディレクションライトの数だけシャドウモデルを作ったら重かったので、インスタンス描画を入れるまではライト1個分のみ
+					if (ligNo != 0)
+						return;
+
 					// シャドウマップに描画するモデルを描画
 					m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix);
 				}
