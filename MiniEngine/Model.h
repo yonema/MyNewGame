@@ -25,6 +25,19 @@ struct ModelInitData {
 	IShaderResource* m_expandShaderResoruceView[MeshParts::m_kMaxExSRVNum] = {};	//ユーザー拡張のシェーダーリソース。
 	Skeleton* m_skeleton = nullptr;									//スケルトン。
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
+
+	// 変更。追加。
+	// <カラーバッファーフォーマット, レンダリングターゲットの最大数>
+	std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT> m_colorBufferFormat = {
+	DXGI_FORMAT_R8G8B8A8_UNORM,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	DXGI_FORMAT_UNKNOWN,
+	};	//レンダリングするカラーバッファのフォーマット。
 public:
 	/**
 	 * @brief コンストラクタ
@@ -107,6 +120,18 @@ private:
 
 	// 追加
 public:		// メンバ関数
+
+	/**
+	 * @brief 行列を指定して描画
+	 * @param[in] rc レンダリングコンテキスト
+	 * @param[in] viewMatrix ビュー行列
+	 * @param[in] projMatrix プロジェクション行列
+	*/
+	void Draw(
+		RenderContext& rc,
+		const Matrix& viewMatrix,
+		const Matrix& projMatrix
+	);
 
 	/**
 	 * @brief 自己発光カラーを設定

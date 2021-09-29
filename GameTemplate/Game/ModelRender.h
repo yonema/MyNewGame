@@ -1,6 +1,8 @@
 #pragma once
 #include "ModelRenderConstData.h"
 #include "Render.h"
+#include "LightConstData.h"
+#include "ShadowConstDatah.h"
 
 namespace nsMyGame
 {
@@ -194,18 +196,22 @@ namespace nsMyGame
 					m_model->SetAlphaValue(alphaValue);
 				}
 
+				/**
+				 * @brief シャドウキャスターか？を設定。trueで影を生成する、falseで影を生成しない。
+				 * @param[in] isShadowCaster シャドウキャスターか？
+				*/
+				void SetIsShadowCaster(const bool isShadowCaster);
+
 
 			private:	// privateなメンバ関数
 
 				/**
 				 * @brief 初期化処理のメインコア
-				 * @param[in] modelInitData モデルの初期化データ
 				 * @param[in] animationClips アニメーションクリップ
 				 * @param[in] numAnimationClips アニメーションクリップの数
 				 * @param[in] isDefferdRender ディファードレンダリングで描画するか？
 				*/
 				void InitMainCore(
-					ModelInitData& modelInitData,
 					AnimationClip* animationClips,
 					const int numAnimationClips,
 					const bool isDefferdRender = true
@@ -225,7 +231,6 @@ namespace nsMyGame
 
 				/**
 				 * @brief モデルの初期化データの共通部分の設定
-				 * @param[out] modelInitData モデルの初期化データ
 				 * @param[in] tkmFilePath モデルのtkmファイルパス
 				 * @param[in] fxFilePath シェーダーのfxファイルパス
 				 * @param[in] modelUpAxis モデルのUP軸
@@ -234,7 +239,6 @@ namespace nsMyGame
 				 * @param[in] psEntryPointFunc ピクセルシェーダーのエントリーポイント
 				*/
 				void SetCommonModelInitData(
-					ModelInitData* modelInitData,
 					const char* tkmFilePath,
 					const EnModelUpAxis modelUpAxis = enModelUpAxisZ,
 					const char* fxFilePath = nsModelConstData::kDefaultFxFilePath,
@@ -245,9 +249,8 @@ namespace nsMyGame
 
 				/**
 				 * @brief デフォルトの定数バッファをセット
-				 * @param modelInitData モデルの初期化データ
 				*/
-				void SetDefaultConstantBuffer(ModelInitData* modelInitData);
+				void SetDefaultConstantBuffer();
 
 				/**
 				 * @brief レンダラーを初期化する
@@ -256,17 +259,33 @@ namespace nsMyGame
 				void InitRender(const bool isDefferdRender);
 
 				/**
+				 * @brief シャドウマップに描画するモデルの初期化
+				*/
+				void InitShadowModel();
+
+				/**
 				 * @brief モデルを描画する
 				 * @param[in] rc レンダリングコンテキスト
 				*/
 				void ModelRender(RenderContext& rc);
 
+				/**
+				 * @brief シャドウマップに描画するモデルを描画する
+				 * @param[in] rc レンダリングコンテキスト
+				 * @param[in] ligNo ライト番号
+				 * @param[in] shadowMapNo シャドウマップの番号
+				 * @param[in] lvpMatrix ライトビュープロジェクション行列
+				*/
+				void ShadowModelRender(RenderContext& rc,const int ligNo, const int shadowMapNo, const Matrix& lvpMatrix);
+
 			private:	// データメンバ
 				ModelPtr m_model;							//!< モデルクラス
+				//!< シャドウマップ描画用モデルクラス
+				ModelPtr m_shadowModels[nsLight::nsLightConstData::kMaxDirectionalLightNum][nsShadow::nsShadowConstData::enShadowMapArea_num];
+				ModelInitData m_modelInitData;				//!< モデルの初期化データ
 				CRender m_render;							//!< レンダラークラス
 				SkeletonPtr m_skeletonPtr;					//!< スケルトンクラス
 				AnimPtr m_animationPtr;						//!< アニメーションクラス
-				const char* m_tkmFilePath = nullptr;		//!< tkmファイルのファイルパス
 
 				Vector3 m_position = Vector3::Zero;				//!< 座標
 				Quaternion m_rotation = Quaternion::Identity;	//!< 回転

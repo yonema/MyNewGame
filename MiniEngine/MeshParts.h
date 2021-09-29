@@ -50,7 +50,8 @@ public:
 		const char* psEntryPointFunc,
 		void* const* expandData,
 		const int* expandDataSize,
-		IShaderResource* const* expandShaderResourceView
+		IShaderResource* const* expandShaderResourceView,
+		const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
 	);
 
 	// í«â¡ÅBïœçXÅB
@@ -111,7 +112,9 @@ private:
 		const wchar_t* fxFilePath,
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
-		const char* psEntryPointFunc );
+		const char* psEntryPointFunc,
+		const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+	);
 
 	
 private:

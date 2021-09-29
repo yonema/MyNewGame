@@ -6,10 +6,11 @@
 
 class Texture;
 
+// 変更。追加。
 //スプライトに設定できる最大テクスチャ数。
-const int MAX_TEXTURE = 16;	
+const int MAX_TEXTURE = 32;	
 //拡張SRVが設定されるレジスタの開始番号。
-const int EXPAND_SRV_REG__START_NO = 10;
+const int EXPAND_SRV_REG__START_NO = 20;
 
 class IShaderResource;
 
@@ -38,7 +39,7 @@ struct SpriteInitData {
 	int m_expandConstantBufferSize[m_kMaxExCBNum] = {};	//ユーザー拡張の定数バッファのサイズ。
 	IShaderResource* m_expandShaderResoruceView = nullptr;	//ユーザー拡張のシェーダーリソース。
 	AlphaBlendMode m_alphaBlendMode = AlphaBlendMode_None;	//アルファブレンディングモード。
-	// 変更
+	// 変更。追加。
 	// <カラーバッファーフォーマット, レンダリングターゲットの最大数>
 	std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT> m_colorBufferFormat = {
 	DXGI_FORMAT_R8G8B8A8_UNORM,

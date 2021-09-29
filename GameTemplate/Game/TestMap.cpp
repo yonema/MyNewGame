@@ -42,13 +42,13 @@ namespace nsMyGame
 				m_modelRender->SetRotatioin(qRot);
 
 				// フォントの初期化
-				m_fontRender = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityThird);
+				m_fontRender = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFirst);
 				m_fontRender->SetParam(L"バンドリ");
 				m_fontRender->SetShadowParam(true, 1.0f, Vector4::Black);
 				m_fontRender->SetPosition({ 300.0f, 350.0f });
 
 				// スプライトの初期化
-				m_spriteRender = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+				m_spriteRender = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFirst);
 				m_spriteRender->Init("Assets/Image/sample.dds", 256, 256, { 0.0f,1.0f });
 				m_spriteRender->SetPosition({ 300.0f,300.0f,0.0f });
 
@@ -69,7 +69,7 @@ namespace nsMyGame
 				g_camera3D->SetFar(40000.0f);
 				m_skyCube->SetDestroyEvent([&]() {m_skyCube = nullptr; });
 
-				m_lightModel = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
+				m_lightModel = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPrioritySecond);
 				m_lightModel->IniTranslucent("Assets/modelData/debugModel/light.tkm");
 				m_lightModel->SetPosition({ 0.0f,50.0f,0.0f });
 				m_lightModel->SetEmmisonColor({ 10.0f,0.0f,0.0f,1.0f });
@@ -150,9 +150,11 @@ namespace nsMyGame
 					pointLig->SetColor(m_pointLigColor);
 					pointLig->SetPosition(m_pointLight->GetPosition());
 					nsGraphic::nsModel::CModelRender* model =
-						NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst, m_pointLigModelName);
-					model->Init("Assets/modelData/debugModel/light.tkm");
+						NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPrioritySecond, m_pointLigModelName);
+					model->IniTranslucent("Assets/modelData/debugModel/light.tkm");
 					model->SetPosition(m_pointLight->GetPosition());
+					model->SetEmmisonColor({ 10.0f,0.0f,0.0f,1.0f });
+					model->SetAlphaValue(0.5f);
 
 					if (m_animState == enAnim_idle)
 					{

@@ -2,6 +2,8 @@
 #include "RenderingEngineConstData.h"
 #include "TResourceBank.h"
 #include "PostEffect.h"
+#include "ShadowMapRender.h"
+#include "LightConstData.h"
 
 namespace nsMyGame
 {
@@ -165,9 +167,20 @@ namespace nsMyGame
 			void InitCopyMainRenderTargetToFrameBufferSprite();
 
 			/**
+			 * @brief シャドウマップレンダラーの初期化
+			*/
+			void InitShadowMapRender();
+
+			/**
 			 * @brief ディファ―ドライティングを行うためのスプライトの初期化
 			*/
 			void InitDefferdLightingSprite();
+
+			/**
+			 * @brief シャドウマップに描画する
+			 * @param[in] rc レンダリングコンテキスト
+			*/
+			void RenderToShadowMap(RenderContext& rc);
 
 			/**
 			 * @brief GBufferに描画する
@@ -215,6 +228,8 @@ namespace nsMyGame
 			Sprite m_copyMainRtToFrameBufferSprite;	//!< メインレンダリングターゲットをフレームバッファにコピーするためのスプライト
 			Sprite m_diferredLightingSprite;	//!< ディファードライティングを行うためのスプライト
 
+			//!< シャドウマップレンダラー
+			nsGraphic::nsShadow::CShadowMapRender m_shadowMapRenders[nsLight::nsLightConstData::kMaxDirectionalLightNum];
 			nsGraphic::nsPostEffect::CPostEffect m_postEffect;	//!< ポストエフェクトクラス
 
 			//!< ディファードライティング用の定数バッファ

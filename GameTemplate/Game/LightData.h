@@ -1,5 +1,6 @@
 #pragma once
 #include "LightConstData.h"
+#include "ShadowConstDatah.h"
 
 namespace nsMyGame
 {
@@ -58,6 +59,8 @@ namespace nsMyGame
 				int directionalLightNum = 0;						//!< ディレクションライトの数
 				Vector3 ambientLight = GetDefaultAmbientLight();	//!< アンビエントライト
 				int pointLightNum = 0;								//!< ポイントライトの数
+				//!< ライトビュープロジェクション行列
+				Matrix mlvp[kMaxDirectionalLightNum][nsGraphic::nsShadow::nsShadowConstData::enShadowMapArea_num];
 				int spotLightNum = 0;								//!< スポットライトの数
 			};
 		}

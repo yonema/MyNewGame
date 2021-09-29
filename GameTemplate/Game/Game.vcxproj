@@ -292,7 +292,9 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="Bloom.cpp" />
+    <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="CTestMapForShadow.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -301,6 +303,7 @@
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="RenderingEngine.cpp" />
+    <ClCompile Include="ShadowMapRender.cpp" />
     <ClCompile Include="SkyCube.cpp" />
     <ClCompile Include="SoundCue.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
@@ -390,8 +393,11 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="Bloom.h" />
+    <ClInclude Include="CascadeShadowMapMatrix.h" />
     <ClInclude Include="CommonData.h" />
+    <ClInclude Include="CTestMapForShadow.h" />
     <ClInclude Include="GaussianBlur.h" />
+    <ClInclude Include="GaussianBlurConstData.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EffectPlayer.h" />
@@ -412,6 +418,8 @@
     <ClInclude Include="Render.h" />
     <ClInclude Include="RenderingEngine.h" />
     <ClInclude Include="RenderingEngineConstData.h" />
+    <ClInclude Include="ShadowConstDatah.h" />
+    <ClInclude Include="ShadowMapRender.h" />
     <ClInclude Include="SkyCube.h" />
     <ClInclude Include="NatureConstData.h" />
     <ClInclude Include="SoundCue.h" />
@@ -437,6 +445,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Assets\shader\DeferredLighting.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\DrawShadowMap.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>

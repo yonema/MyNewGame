@@ -3,7 +3,7 @@
 namespace nsMyGame
 {
 	/**
-	 * @brief 興津データ
+	 * @brief 共通データ
 	*/
 	namespace nsCommonData
 	{

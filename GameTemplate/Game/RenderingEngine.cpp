@@ -29,6 +29,7 @@ namespace nsMyGame
 			InitGBuffer();	// GBufferを初期化
 			// メインレンダリングターゲットをフレームバッファにコピーするためのスプライトの初期化
 			InitCopyMainRenderTargetToFrameBufferSprite();
+			InitShadowMapRender();	// シャドウマップレンダラーの初期化
 			InitDefferdLightingSprite();	// ディファ―ドライティングを行うためのスプライトの初期化
 
 			m_postEffect.Init(m_mainRenderTarget);	// ポストエフェクトの初期化
@@ -126,6 +127,20 @@ namespace nsMyGame
 		}
 
 		/**
+		 * @brief シャドウマップレンダラーの初期化
+		*/
+		void CRenderingEngine::InitShadowMapRender()
+		{
+			// シャドウマップレンダラーの初期化
+			for (auto& shadowMapRender : m_shadowMapRenders) 
+			{
+				shadowMapRender.Init();
+			}
+
+			return;
+		}
+
+		/**
 		 * @brief ディファ―ドライティングを行うためのスプライトの初期化
 		*/
 		void CRenderingEngine::InitDefferdLightingSprite()
@@ -136,13 +151,6 @@ namespace nsMyGame
 			// 画面全体にレンダリングするので幅と高さはフレームバッファーの幅と高さと同じ
 			spriteInitData.m_width = g_graphicsEngine->GetFrameBufferWidth();
 			spriteInitData.m_height = g_graphicsEngine->GetFrameBufferHeight();
-
-			// ディファードライティングで使用するテクスチャを設定
-			int texNo = 0;
-			for (auto& GBuffer : m_GBuffer)
-			{
-				spriteInitData.m_textures[texNo++] = &GBuffer.GetRenderTargetTexture();
-			}
 
 			// fxファイルパスを設定
 			spriteInitData.m_fxFilePath = m_kDefferdLightingSpriteFxFilePath;
@@ -155,19 +163,40 @@ namespace nsMyGame
 				sizeof(nsLight::CLightManager::GetInstance()->GetLightData());
 			// ディファードレンダリング用の定数バッファを登録
 			spriteInitData.m_expandConstantBuffer[1] = &m_defferdLightingCB;
-			spriteInitData.m_expandConstantBufferSize[1] = sizeof(spriteInitData);
+			spriteInitData.m_expandConstantBufferSize[1] = sizeof(m_defferdLightingCB);
 
-			// メインレンダリングターゲットに描画するため
-			// メインレンダリングターゲットとカラーフォーマットを合わせる
-			spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
+			// ディファードライティングで使用するテクスチャを設定
+
+			// テクスチャの番号
+			int texNo = 0;
+
+			// GBufferのレンダリングターゲットのテクスチャを設定する
+			for (auto& GBuffer : m_GBuffer)
+			{
+				spriteInitData.m_textures[texNo++] = &GBuffer.GetRenderTargetTexture();
+			}
+
+			// シャドウマップのテクスチャを設定する
+			for (int i = 0; i < nsLight::nsLightConstData::kMaxDirectionalLightNum; i++)
+			{
+				for (int areaNo = 0; areaNo < nsGraphic::nsShadow::nsShadowConstData::enShadowMapArea_num; areaNo++)
+				{
+					spriteInitData.m_textures[texNo++] = &m_shadowMapRenders[i].GetShadowMap(areaNo);
+				}
+			}
 
 			// IBLを行うか？、かつ
 			// IBLに使用するテクスチャが有効か？
 			if (m_defferdLightingCB.isIBL == true && m_IBLTexture.IsValid())
 			{
-				// IBLに使用するテクスチャを設定設定する
+				// IBLに使用するテクスチャを設定する
 				spriteInitData.m_textures[texNo++] = &m_IBLTexture;
 			}
+
+
+			// メインレンダリングターゲットに描画するため
+			// メインレンダリングターゲットとカラーフォーマットを合わせる
+			spriteInitData.m_colorBufferFormat[0] = m_mainRenderTarget.GetColorBufferFormat();
 
 			// 初期化データを使ってスプライトを初期化
 			m_diferredLightingSprite.Init(spriteInitData);
@@ -207,6 +236,9 @@ namespace nsMyGame
 			// 描画オブジェクトの登録
 			GameObjectManager::GetInstance()->ExecuteAddRender();
 
+			// シャドウマップに描画する
+			RenderToShadowMap(rc);
+
 			// GBufferに描画する
 			RenderToGBuffer(rc);
 
@@ -234,6 +266,29 @@ namespace nsMyGame
 		}
 
 		/**
+		 * @brief シャドウマップに描画する
+		 * @param[in] rc レンダリングコンテキスト
+		*/
+		void CRenderingEngine::RenderToShadowMap(RenderContext& rc)
+		{
+			// 現在のディレクションライトの数
+			const int ligNum = nsLight::CLightManager::GetInstance()->GetLightData().directionalLightNum;
+
+			// ライトの数だけ繰り返し
+			for (int ligNo = 0; ligNo < ligNum; ligNo++)
+			{
+				// 該当のディレクションライトの方向
+				Vector3& ligDir = nsLight::CLightManager::
+					GetInstance()->GetLightData().directionalLightData[ligNo].direction;
+
+				// 該当のディレクションライトが生成するシャドウマップを描画
+				m_shadowMapRenders[ligNo].Render(rc, ligNum, ligDir, m_renderObjects);
+			}
+
+			return;
+		}
+
+		/**
 		 * @brief GBufferに描画する
 		 * @param rc レンダリングコンテキスト
 		*/
@@ -250,7 +305,7 @@ namespace nsMyGame
 			rc.WaitUntilToPossibleSetRenderTargets(ARRAYSIZE(rts), rts);
 
 			// レンダリングターゲットを設定
-			rc.SetRenderTargets(ARRAYSIZE(rts), rts);
+			rc.SetRenderTargetsAndViewport(ARRAYSIZE(rts), rts);
 
 			// レンダリングターゲットをクリア
 			rc.ClearRenderTargetViews(ARRAYSIZE(rts), rts);
@@ -274,8 +329,22 @@ namespace nsMyGame
 		void CRenderingEngine::DefferdLighting(RenderContext& rc)
 		{
 			// ディファードライティングに必要なデータを更新する
+
 			// ビュープロジェクション行列の逆行列更新
 			m_defferdLightingCB.mViewProjInv.Inverse(g_camera3D->GetViewProjectionMatrix());
+
+			// ライトビュープロジェクション行列を更新
+			for (int ligNo = 0; ligNo < nsLight::nsLightConstData::kMaxDirectionalLightNum; ligNo++)
+			{
+				for (int areaNo = 0; areaNo < nsGraphic::nsShadow::nsShadowConstData::enShadowMapArea_num; areaNo++)
+				{
+					nsLight::CLightManager::GetInstance()->SetLVPMatrix(
+						ligNo,
+						areaNo,
+						m_shadowMapRenders[ligNo].GetLVPMatrix(areaNo)
+					);
+				}
+			}
 
 			// レンダリング先をメインレンダリングターゲットにする
 			// メインレンダリングターゲットを設定

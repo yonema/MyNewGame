@@ -14,6 +14,8 @@
 static const int kMaxDirectionalLightNum = 4;	//!< ディレクションライトの最大数
 static const int kMaxPointLightNum = 16;		//!< ポイントライトの最大数
 static const int kMaxSpotLightNum = 16;			//!< スポットライトの最大数
+static const int kMaxShadowMapNum = 3;	//!< シャドウマップの数
+
 
 ////////////////////////////////////////////////
 // 構造体
@@ -35,6 +37,8 @@ struct SPSIn{
 Texture2D<float4> g_albedoMap	: register(t0);		// アルベドマップ
 Texture2D<float4> g_normalMap	: register(t1);		// 法線
 Texture2D<float4> g_spacularMap : register(t2);		//スペキュラマップ
+Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t3);  //シャドウマップ。
+TextureCube<float4> g_skyCubeMap : register(t15);
 
 // PBRのライティングのヘッダー
 #include "PBRLighting.h"

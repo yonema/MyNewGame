@@ -60,7 +60,9 @@ void Material::InitFromTkmMaterila(
 	const wchar_t* fxFilePath,
 	const char* vsEntryPointFunc,
 	const char* vsSkinEntryPointFunc,
-	const char* psEntryPointFunc)
+	const char* psEntryPointFunc,
+	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+)
 {
 	//テクスチャをロード。
 	InitTexture(tkmMat);
@@ -82,10 +84,12 @@ void Material::InitFromTkmMaterila(
 		//シェーダーを初期化。
 		InitShaders(fxFilePath, vsEntryPointFunc, vsSkinEntryPointFunc, psEntryPointFunc);
 		//パイプラインステートを初期化。
-		InitPipelineState();
+		InitPipelineState(colorBufferFormat);
 	}
 }
-void Material::InitPipelineState()
+void Material::InitPipelineState(
+	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+)
 {
 	// 頂点レイアウトを定義する。
 	D3D12_INPUT_ELEMENT_DESC inputElementDescs[] =
@@ -113,6 +117,18 @@ void Material::InitPipelineState()
 	psoDesc.DepthStencilState.StencilEnable = FALSE;
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+
+	int numRenderTarget = 0;
+	for (auto& format : colorBufferFormat) {
+		if (format == DXGI_FORMAT_UNKNOWN) {
+			//フォーマットが指定されていない場所が来たら終わり。
+			break;
+}
+		psoDesc.RTVFormats[numRenderTarget] = colorBufferFormat[numRenderTarget];
+		numRenderTarget++;
+		}
+	psoDesc.NumRenderTargets = numRenderTarget;
+#if 0 //古い実装。
 	psoDesc.NumRenderTargets = 3;
 	psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;		//アルベドカラー出力用。
 #ifdef SAMPE_16_02
@@ -121,6 +137,7 @@ void Material::InitPipelineState()
 #else
 	psoDesc.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM;			//法線出力用。	
 	psoDesc.RTVFormats[2] = DXGI_FORMAT_R32G32B32A32_FLOAT;	//Z値。
+#endif
 #endif
 	psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 	psoDesc.SampleDesc.Count = 1;

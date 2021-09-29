@@ -27,6 +27,7 @@ namespace nsMyGame
 				Quaternion qRot;
 				qRot.SetRotationDegY(180.0f);
 				m_playerModel->SetRotatioin(qRot);
+				m_playerModel->SetIsShadowCaster(true);
 
 				// バックグラウンドモデルの初期化
 				m_bgModel = NewGO <nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);

@@ -8,6 +8,26 @@ namespace nsMyGame
 	*/
 	namespace nsGraphic
 	{
+
+		/**
+		 * @brief シャドウマップを描画する関数を実行
+		 * @param[in] rc レンダリングコンテキスト
+		 * @param[in] ligNo ライトの番号
+		 * @param[in] shadowMapNo シャドウマップの番号
+		 * @param[in] lvpMatrix ライトビュープロジェクション行列
+		*/
+		void CRender::OnRenderShadowMap(
+			RenderContext& rc,
+			const int ligNo,
+			const int shadowMapNo,
+			const Matrix& lvpMatrix
+		)
+		{
+			m_onRenderShadowMapFunc(rc, ligNo, shadowMapNo, lvpMatrix);
+
+			return;
+		}
+
 		/**
 		 * @brief GBufferに描画する関数を実行
 		 * @param[in] rc レンダリングコンテキスト

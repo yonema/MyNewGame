@@ -105,6 +105,9 @@
     <Filter Include="MyCode\Nature">
       <UniqueIdentifier>{7d7d2479-5622-47e4-8f2c-f209e90bb5fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Graphic\Shadow">
+      <UniqueIdentifier>{d82aeee7-4c83-439a-ac68-a1116716f6c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -341,11 +344,20 @@
     <ClCompile Include="Bloom.cpp">
       <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClCompile>
-    <ClCompile Include="GaussianBlur.cpp">
-      <Filter>MyCode\Graphic\PostEffect</Filter>
-    </ClCompile>
     <ClCompile Include="SkyCube.cpp">
       <Filter>MyCode\Nature</Filter>
+    </ClCompile>
+    <ClCompile Include="ShadowMapRender.cpp">
+      <Filter>MyCode\Graphic\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="GaussianBlur.cpp">
+      <Filter>MyCode\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="CascadeShadowMapMatrix.cpp">
+      <Filter>MyCode\Graphic\Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="CTestMapForShadow.cpp">
+      <Filter>MyCode\Maps\TestMaps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -640,9 +652,6 @@
     <ClInclude Include="Bloom.h">
       <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClInclude>
-    <ClInclude Include="GaussianBlur.h">
-      <Filter>MyCode\Graphic\PostEffect</Filter>
-    </ClInclude>
     <ClInclude Include="PostEffectConstData.h">
       <Filter>MyCode\Graphic\PostEffect</Filter>
     </ClInclude>
@@ -654,6 +663,24 @@
     </ClInclude>
     <ClInclude Include="TResourceBank.h">
       <Filter>MyCode\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowMapRender.h">
+      <Filter>MyCode\Graphic\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="ShadowConstDatah.h">
+      <Filter>MyCode\Graphic\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBlur.h">
+      <Filter>MyCode\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="GaussianBlurConstData.h">
+      <Filter>MyCode\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="CascadeShadowMapMatrix.h">
+      <Filter>MyCode\Graphic\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="CTestMapForShadow.h">
+      <Filter>MyCode\Maps\TestMaps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -679,6 +706,9 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\SkyCubeMap.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\DrawShadowMap.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

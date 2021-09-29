@@ -15,7 +15,9 @@ public:
 		const wchar_t* fxFilePath,
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntriyPointFunc,
-		const char* psEntryPointFunc);
+		const char* psEntryPointFunc,
+		const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+	);
 	/// <summary>
 	/// レンダリングを開始するときに呼び出す関数。
 	/// </summary>
@@ -75,7 +77,9 @@ private:
 	/// <summary>
 	/// パイプラインステートの初期化。
 	/// </summary>
-	void InitPipelineState();
+	void InitPipelineState(
+		const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+	);
 	/// <summary>
 	/// シェーダーの初期化。
 	/// </summary>

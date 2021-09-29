@@ -10,6 +10,8 @@
 static const int kMaxDirectionalLightNum = 4;	//!< ディレクションライトの最大数
 static const int kMaxPointLightNum = 16;		//!< ポイントライトの最大数
 static const int kMaxSpotLightNum = 16;			//!< スポットライトの最大数
+static const int kMaxShadowMapNum = 3;	//!< シャドウマップの数
+
 
 ///////////////////////////////////////
 // 構造体。
@@ -56,9 +58,8 @@ cbuffer defferdLightingCb : register(b2)
 Texture2D<float4> albedoTexture : register(t0);     // アルベド
 Texture2D<float4> normalTexture : register(t1);     // 法線
 Texture2D<float4> metallicShadowSmoothTexture : register(t2);   // メタリック、シャドウ、スムーステクスチャ。rに金属度、gに影パラメータ、aに滑らかさ。
-//Texture2D<float4> g_shadowMap[NUM_DIRECTIONAL_LIGHT][NUM_SHADOW_MAP] : register(t3);  //シャドウマップ。
-//TextureCube<float4> g_skyCubeMap : register(t15);
-TextureCube<float4> g_skyCubeMap : register(t3);
+Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t3);  //シャドウマップ。
+TextureCube<float4> g_skyCubeMap : register(t15);
 // タイルごとのポイントライトのインデックスのリスト
 //StructuredBuffer<uint> pointLightListInTile : register(t20);
 
@@ -129,6 +130,12 @@ float4 PSMain(SPSIn psIn) : SV_Target0
     // ディレクションライトのライティングの計算
     for (int ligNo = 0; ligNo < directionalLightNum; ligNo++)
     {
+		// 影の落ち具合を計算する。
+		float shadow = 0.0f;
+		if (directionalLightData[ligNo].castShadow == 1) {
+			//影を生成するなら。
+			shadow = CalcShadowRate(ligNo, worldPos) * 1.0f /*shadowParam*/;
+		}
         // PBRのライティングを計算
         lig += CalcLighting(
             directionalLightData[ligNo].direction,
@@ -139,7 +146,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
             metaric,
             smooth,
             specColor
-        );
+        ) * (1.0f - shadow);
     }
 
 	// ポイントライトのライティングの計算
