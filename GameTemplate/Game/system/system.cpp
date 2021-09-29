@@ -21,7 +21,6 @@ LRESULT CALLBACK MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		//delete g_engine;
 
 		// ’Ç‰Á
-		nsMyGame::nsMyEngine::CMyEngine::DeleteInstance();
 		PostQuitMessage(0);
 		break;	
 	default:

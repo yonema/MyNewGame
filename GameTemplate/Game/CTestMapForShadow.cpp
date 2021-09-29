@@ -86,13 +86,17 @@ namespace nsMyGame
 				Vector3 moveVec = Vector3::Zero;
 				float moveSpeed = 10.0f;
 
+				Vector3 cameraVec = { 0.0f,0.0f,-1.0f };
+				const float rotationSpeed = 2.0f;
+
+
 				if (g_pad[0]->GetLStickXF() >= 0.5f)
 				{
-					moveVec.x += moveSpeed;
+					m_cameraVecAngle -= rotationSpeed;
 				}
 				if (g_pad[0]->GetLStickXF() <= -0.5f)
 				{
-					moveVec.x -= moveSpeed;
+					m_cameraVecAngle += rotationSpeed;
 				}
 				if (g_pad[0]->GetLStickYF() >= 0.5f)
 				{
@@ -102,8 +106,24 @@ namespace nsMyGame
 				{
 					moveVec.y -= moveSpeed;
 				}
+				if (g_pad[0]->GetRStickYF() >= 0.5f)
+				{
+					m_cameraVecLength -= moveSpeed;
+				}
+				if (g_pad[0]->GetRStickYF() <= -0.5f)
+				{
+					m_cameraVecLength += moveSpeed;
+				}
 
-				g_camera3D->SetPosition(g_camera3D->GetPosition() + moveVec);
+				min(m_cameraVecAngle, 360.0f);
+				max(m_cameraVecAngle, 0.0f);
+				cameraVec.Scale(m_cameraVecLength);
+				Quaternion qRot;
+				qRot.SetRotationDegY(m_cameraVecAngle);
+				qRot.Apply(cameraVec);
+				cameraVec.y += g_camera3D->GetPosition().y + moveVec.y;
+
+				g_camera3D->SetPosition(cameraVec);
 
 				return;
 			}

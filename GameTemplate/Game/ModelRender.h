@@ -70,7 +70,7 @@ namespace nsMyGame
 				*/
 				void Init(
 					const char* filePath,
-					const EnModelUpAxis modelUpAxis = enModelUpAxisZ,
+					const EnModelUpAxis modelUpAxis = EnModelUpAxis::enModelUpAxisZ,
 					AnimationClip* animationClips = nullptr,
 					int numAnimationClip = 0
 					);

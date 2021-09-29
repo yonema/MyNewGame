@@ -108,6 +108,16 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief 指定したGBufferのカラーフォーマットを取得
+			 * @param[in] enGBufferNo GBufferの番号
+			 * @return カラーフォーマット
+			*/
+			DXGI_FORMAT GetGBufferColorFormat(const nsRenderingEngineConstData::EnGBuffer enGBufferNo) const
+			{
+				return m_GBuffer[enGBufferNo].GetColorBufferFormat();
+			}
+
+			/**
 			 * @brief IBLを再初期化する
 			 * @param[in] ddsFilePath IBLのテクスチャのddsファイルパス
 			 * @param[in] luminance IBLの明るさ

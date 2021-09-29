@@ -3,6 +3,7 @@
 #include "GameTime.h"
 #include "LightManager.h"
 #include "RenderingEngine.h"
+#include "RenderingEngineConstData.h"
 
 namespace nsMyGame
 {
@@ -95,6 +96,15 @@ namespace nsMyGame
 			{
 				// モデルの初期化データの共通部分の設定
 				SetCommonModelInitData(filePath, modelUpAxis);
+
+				// GBufferのカラーフォーマットに合わせる
+				for (int i = 0; i < nsMyEngine::nsRenderingEngineConstData::enGBufferNum; i++)
+				{
+					m_modelInitData.m_colorBufferFormat[i] = 
+						nsMyEngine::CRenderingEngine::GetInstance()->GetGBufferColorFormat(
+						static_cast<nsMyEngine::nsRenderingEngineConstData::EnGBuffer>(i)
+					);
+				}
 
 				// ディファードレンダリングにはモデルに拡張定数バッファはいらない。
 				// デフォルトのコンスタントバッファを設定

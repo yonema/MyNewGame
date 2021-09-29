@@ -17,15 +17,24 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	InitGame(hInstance, hPrevInstance, lpCmdLine, nCmdShow, TEXT("Game"));
 
 	//ゲームの生成
-	NewGO<nsGame::CGame>(nsCommonData::enPriorityFirst);
+	nsGame::CGame* game = NewGO<nsGame::CGame>(nsCommonData::enPriorityFirst);
 
 	// ここからゲームループ。
 	while (DispatchWindowMessage())
 	{
 		// エンジンのゲームループ
 		nsMyEngine::CMyEngine::GetInstance()->ExecuteGameLoop();
-
 	}
+
+	// ゲームの破棄
+	DeleteGO(game);
+
+	// オブジェクトマネージャーによるアップデートの実行
+	GameObjectManager::GetInstance()->ExecuteUpdate();
+
+	// エンジンのインスタンスを破棄する
+	nsMyGame::nsMyEngine::CMyEngine::DeleteInstance();
+
 
 	return 0;
 }

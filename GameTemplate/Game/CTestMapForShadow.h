@@ -57,8 +57,10 @@ namespace nsMyGame
 			private:	// データメンバ
 
 				nsGraphic::nsModel::CModelRender* m_planeModel;
-				nsGraphic::nsModel::CModelRender* m_unityChanModels[m_kPlayerNum];
-				nsGraphic::nsModel::CModelRender* m_blockModels[m_kBlockNum];
+				nsGraphic::nsModel::CModelRender* m_unityChanModels[m_kPlayerNum] = {};
+				nsGraphic::nsModel::CModelRender* m_blockModels[m_kBlockNum] = {};
+				float m_cameraVecAngle = 0.0f;
+				float m_cameraVecLength = 500.0f;
 
 			};
 		}
