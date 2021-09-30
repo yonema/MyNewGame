@@ -166,6 +166,9 @@ namespace nsMyGame
 			// ディファードレンダリング用の定数バッファを登録
 			spriteInitData.m_expandConstantBuffer[1] = &m_defferdLightingCB;
 			spriteInitData.m_expandConstantBufferSize[1] = sizeof(m_defferdLightingCB);
+			// IBL用の定数バッファを登録
+			spriteInitData.m_expandConstantBuffer[2] = &m_IBLCB;
+			spriteInitData.m_expandConstantBufferSize[2] = sizeof(m_IBLCB);
 
 			// ディファードライティングで使用するテクスチャを設定
 
@@ -189,7 +192,7 @@ namespace nsMyGame
 
 			// IBLを行うか？、かつ
 			// IBLに使用するテクスチャが有効か？
-			if (m_defferdLightingCB.isIBL == true && m_IBLTexture.IsValid())
+			if (m_IBLCB.isIBL == true && m_IBLTexture.IsValid())
 			{
 				// IBLに使用するテクスチャを設定する
 				spriteInitData.m_textures[texNo++] = &m_IBLTexture;
@@ -220,7 +223,7 @@ namespace nsMyGame
 			InitIBLData(ddsFilePath, luminance);
 
 			// IBLを行うか？を設定
-			m_defferdLightingCB.isIBL = isIBL;
+			m_IBLCB.isIBL = isIBL;
 
 			// ディファードライティングを行うためのスプライトを初期化する
 			InitDefferdLightingSprite();
@@ -459,7 +462,7 @@ namespace nsMyGame
 			m_IBLTexture.InitFromDDSFile(ddsFilePath);
 
 			// IBLの明るさを設定
-			m_defferdLightingCB.IBLLuminance = luminance;
+			m_IBLCB.IBLLuminance = luminance;
 
 			return;
 		}

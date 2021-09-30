@@ -25,6 +25,7 @@ namespace nsMyGame
 			*/
 			void CModelRender::OnDestroy()
 			{
+
 				return;
 			}
 
@@ -106,9 +107,8 @@ namespace nsMyGame
 					);
 				}
 
-				// ディファードレンダリングにはモデルに拡張定数バッファはいらない。
-				// デフォルトのコンスタントバッファを設定
-				//SetDefaultConstantBuffer(&modelInitData);
+				// GBufferに描画するモデルの定数バッファをセット
+				SetRenderToGBufferModelCB();
 
 				// 初期化処理のメインコア
 				InitMainCore(animationClips, numAnimationClip);
@@ -138,10 +138,10 @@ namespace nsMyGame
 				m_modelInitData.m_colorBufferFormat[0] =
 					nsMyEngine::CRenderingEngine::GetInstance()->GetMainRenderTargetFormat();
 
-				// デフォルトのコンスタントバッファを設定
-				SetDefaultConstantBuffer();
+				// 半透明描画用モデルの定数バッファをセット
+				SetTranslucentModelCB();
 
-				// デフォルトのシェーダーリソースビューを設定
+				// デフォルトのシェーダーリソースビューをセット
 				SetDefaultShaderResourceView();
 
 				// 初期化処理のメインコア
@@ -297,21 +297,38 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief GBufferに描画するモデルの定数バッファをセット
+			*/
+			void CModelRender::SetRenderToGBufferModelCB()
+			{
+				// モデルの拡張定数バッファの設定
+				m_modelInitData.m_expandConstantBuffer[0] = &m_modelExCB;
+				m_modelInitData.m_expandConstantBufferSize[0] = sizeof(m_modelExCB);
+
+				return;
+			}
+
+			/**
 			 * @brief デフォルトの定数バッファをセット
 			 * @param modelInitData モデルの初期化データ
 			*/
-			void CModelRender::SetDefaultConstantBuffer()
+			void CModelRender::SetTranslucentModelCB()
 			{
+				// ライトの情報を定数バッファに設定
 				m_modelInitData.m_expandConstantBuffer[0] =
 					&nsLight::CLightManager::GetInstance()->GetLightData();
 				m_modelInitData.m_expandConstantBufferSize[0] =
 					sizeof(nsLight::CLightManager::GetInstance()->GetLightData());
 
+				// モデルの拡張定数バッファの設定
+				m_modelInitData.m_expandConstantBuffer[1] = &m_modelExCB;
+				m_modelInitData.m_expandConstantBufferSize[1] = sizeof(m_modelExCB);
+
 				// フォワードレンダリングだけど、ディファ―ド用の定数バッファを持ってくる。
-				m_modelInitData.m_expandConstantBuffer[1] =
-					&nsMyEngine::CRenderingEngine::GetInstance()->GetDefferdLightingCB();
-				m_modelInitData.m_expandConstantBufferSize[1] =
-					sizeof(nsMyEngine::CRenderingEngine::GetInstance()->GetDefferdLightingCB());
+				m_modelInitData.m_expandConstantBuffer[2] =
+					&nsMyEngine::CRenderingEngine::GetInstance()->GetIBLCB();
+				m_modelInitData.m_expandConstantBufferSize[2] =
+					sizeof(nsMyEngine::CRenderingEngine::GetInstance()->GetIBLCB());
 
 				return;
 			}

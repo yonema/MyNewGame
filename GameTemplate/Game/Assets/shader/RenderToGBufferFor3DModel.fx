@@ -28,6 +28,18 @@ struct SPSOut
 };
 
 ///////////////////////////////////////
+// 定数バッファ。
+///////////////////////////////////////
+
+// register (b0)はModelVSCommon.hにある
+
+// モデルの拡張定数バッファ
+cbuffer expandCb : register (b1)
+{
+    int isShadowReciever;	//!< シャドウレシーバーか？
+}
+
+///////////////////////////////////////
 // シェーダーリソース
 ///////////////////////////////////////
 Texture2D<float4> g_albedo : register(t0);      //アルベドマップ
@@ -78,7 +90,7 @@ SPSIn VSSkinMain(SVSIn vsIn)
     return VSMainCore(vsIn, CalcSkinMatrix(vsIn));
 }
 
-SPSOut PSMainCore( SPSIn psIn, int isShadowReciever)
+SPSOut PSMainCore( SPSIn psIn/*, int isShadowReciever*/)
 {
     // G-Bufferに出力
     SPSOut psOut;
@@ -98,9 +110,9 @@ SPSOut PSMainCore( SPSIn psIn, int isShadowReciever)
 // モデル用のピクセルシェーダーのエントリーポイント
 SPSOut PSMain(SPSIn psIn)
 {
-    return PSMainCore(psIn, 0);
+    return PSMainCore(psIn/*, 0*/);
 }
 SPSOut PSMainShadowReciever(SPSIn psIn)
 {
-    return PSMainCore(psIn, 1);
+    return PSMainCore(psIn/*, 1*/);
 }

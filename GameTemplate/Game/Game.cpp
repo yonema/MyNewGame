@@ -25,9 +25,27 @@ namespace nsMyGame
 			m_gameDirectionalLight = NewGO<nsLight::CDirectionalLight>(nsCommonData::enPriorityFirst);
 			//m_gameDirectionalLight->SetDirection({ 1.0f,0.0f,0.0f });
 			//m_gameDirectionalLight->SetColor({ 1.0f,1.0f,1.0f,1.0f });
-			NewGO<nsMaps::nsTestMaps::CTestMap>(nsCommonData::enPriorityFirst, "testMap");
-			//NewGO<nsMaps::nsTestMaps::CTestMapForSpotLight>(nsCommonData::enPriorityFirst, "testMap");
-			//NewGO<nsMaps::nsTestMaps::CTestMapForShadow>(nsCommonData::enPriorityFirst, "testMap");
+
+			m_mapNum = 0;
+
+			// àÍî‘ñ⁄ÇÃóDêÊìx
+			using nsCommonData::enPriorityFirst;
+
+			switch (m_mapNum)
+			{
+			case 0:
+				NewGO<nsMaps::nsTestMaps::CTestMap>(enPriorityFirst, m_mapName);
+				break;
+			case 1:
+				NewGO<nsMaps::nsTestMaps::CTestMapForSpotLight>(enPriorityFirst, m_mapName);
+				break;
+			case 2:
+				NewGO<nsMaps::nsTestMaps::CTestMapForShadow>(enPriorityFirst, m_mapName);
+				break;
+			default:
+				break;
+			}
+
 
 			return true;
 		}
@@ -37,11 +55,23 @@ namespace nsMyGame
 		*/
 		void CGame::OnDestroy()
 		{
-			DeleteGO(FindGO<nsMaps::nsTestMaps::CTestMap>("testMap"));
-			//DeleteGO(FindGO<nsMaps::nsTestMaps::CTestMapForSpotLight>("testMap"));
-			//DeleteGO(FindGO<nsMaps::nsTestMaps::CTestMapForShadow>("testMap"));
 
 			DeleteGO(m_gameDirectionalLight);
+
+			switch (m_mapNum)
+			{
+			case 0:
+				DeleteGO(FindGO<nsMaps::nsTestMaps::CTestMap>(m_mapName));
+				break;
+			case 1:
+				DeleteGO(FindGO<nsMaps::nsTestMaps::CTestMapForSpotLight>(m_mapName));
+				break;
+			case 2:
+				DeleteGO(FindGO<nsMaps::nsTestMaps::CTestMapForShadow>(m_mapName));
+				break;
+			default:
+				break;
+			}
 
 			return;
 		}

@@ -682,6 +682,9 @@
     <ClInclude Include="CTestMapForShadow.h">
       <Filter>MyCode\Maps\TestMaps</Filter>
     </ClInclude>
+    <ClInclude Include="ModelRenderData.h">
+      <Filter>MyCode\Graphic\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">

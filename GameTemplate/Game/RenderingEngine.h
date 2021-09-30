@@ -62,16 +62,16 @@ namespace nsMyGame
 			*/
 			void SetIsIBL(const bool isIBL)
 			{
-				m_defferdLightingCB.isIBL = isIBL;
+				m_IBLCB.isIBL = isIBL;
 			}
 
 			/**
-			 * @brief ディファードライティング用の定数バッファの参照を得る
-			 * @return ディファードライティング用の定数バッファの参照
+			 * @brief IBL用の定数バッファの参照を得る
+			 * @return IBL用の定数バッファの参照
 			*/
-			nsRenderingEngineConstData::SDefferdLightingCB& GetDefferdLightingCB()
+			nsRenderingEngineConstData::SIBLCB& GetIBLCB()
 			{
-				return m_defferdLightingCB;
+				return m_IBLCB;
 			}
 
 			/**
@@ -278,6 +278,7 @@ namespace nsMyGame
 
 			//!< ディファードライティング用の定数バッファ
 			nsRenderingEngineConstData::SDefferdLightingCB m_defferdLightingCB;
+			nsRenderingEngineConstData::SIBLCB m_IBLCB;	//!< IBL用の定数バッファ
 			Texture m_IBLTexture;	//!< IBLに使用するテクスチャ
 
 			nsUtil::TResourceBank<TkmFile> m_tkmFileBank;	//!< tkmファイルバンク

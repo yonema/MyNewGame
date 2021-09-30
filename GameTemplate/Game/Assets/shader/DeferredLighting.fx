@@ -48,6 +48,12 @@ cbuffer cb : register(b0)
 cbuffer defferdLightingCb : register(b2)
 {
 	float4x4 mViewProjInv;      //!< ビュープロジェクション行列の逆行列
+}
+
+// IBL用の定数バッファ
+// RenderingEngineConstData.hのSIBLCBと同じ構造体にする
+cbuffer IBLCb : register (b3)
+{
 	int isIBL;					//!< IBLを行うか？1：行う。0：行わない。
 	float IBLLuminance;			//!< IBLの明るさ
 }
@@ -134,7 +140,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		float shadow = 0.0f;
 		if (directionalLightData[ligNo].castShadow == 1) {
 			//影を生成するなら。
-			shadow = CalcShadowRate(ligNo, worldPos) * 1.0f /*shadowParam*/;
+			shadow = CalcShadowRate(ligNo, worldPos) * shadowParam;
 		}
         // PBRのライティングを計算
         lig += CalcLighting(

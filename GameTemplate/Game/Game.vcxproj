@@ -398,6 +398,7 @@
     <ClInclude Include="CTestMapForShadow.h" />
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="GaussianBlurConstData.h" />
+    <ClInclude Include="ModelRenderData.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EffectPlayer.h" />

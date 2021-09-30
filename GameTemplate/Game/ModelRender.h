@@ -1,5 +1,6 @@
 #pragma once
 #include "ModelRenderConstData.h"
+#include "ModelRenderData.h"
 #include "Render.h"
 #include "LightConstData.h"
 #include "ShadowConstDatah.h"
@@ -202,6 +203,15 @@ namespace nsMyGame
 				*/
 				void SetIsShadowCaster(const bool isShadowCaster);
 
+				/**
+				 * @brief シャドウレシーバーか？を設定。trueで影が映る、falseで影が映らない。
+				 * @param[in] isShadowReciever シャドウレシーバーか？
+				*/
+				void SetIsShadowReciever(const bool isShadowReciever)
+				{
+					m_modelExCB.isShadowReciever = isShadowReciever;
+				}
+
 
 			private:	// privateなメンバ関数
 
@@ -248,9 +258,14 @@ namespace nsMyGame
 				);
 
 				/**
-				 * @brief デフォルトの定数バッファをセット
+				 * @brief GBufferに描画するモデルの定数バッファをセット
 				*/
-				void SetDefaultConstantBuffer();
+				void SetRenderToGBufferModelCB();
+
+				/**
+				 * @brief 半透明描画用モデルの定数バッファをセット
+				*/
+				void SetTranslucentModelCB();
 
 				/**
 				 * @brief デフォルトのシェーダーリソースビューをセット
@@ -292,6 +307,7 @@ namespace nsMyGame
 				CRender m_render;							//!< レンダラークラス
 				SkeletonPtr m_skeletonPtr;					//!< スケルトンクラス
 				AnimPtr m_animationPtr;						//!< アニメーションクラス
+				nsModelData::SExpandConstantBuffer m_modelExCB;	//!< モデルの拡張定数バッファ
 
 				Vector3 m_position = Vector3::Zero;				//!< 座標
 				Quaternion m_rotation = Quaternion::Identity;	//!< 回転

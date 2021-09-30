@@ -40,6 +40,13 @@ namespace nsMyGame
 			struct SDefferdLightingCB
 			{
 				Matrix mViewProjInv;	//!< ビュープロジェクション行列の逆行列
+			};
+
+			/**
+			 * @brief IBLに使用する定数バッファの構造体
+			*/
+			struct SIBLCB
+			{
 				bool isIBL = false;		//!< IBLを行うか？
 				float IBLLuminance = 1.0f;	//!< IBLの明るさ
 			};

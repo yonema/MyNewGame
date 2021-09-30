@@ -115,6 +115,12 @@ namespace nsMyGame
 					m_cameraVecLength += moveSpeed;
 				}
 
+				if (g_pad[0]->IsTrigger(enButtonA))
+				{
+					m_shadowReciever = !m_shadowReciever;
+					m_planeModel->SetIsShadowReciever(m_shadowReciever);
+				}
+
 				min(m_cameraVecAngle, 360.0f);
 				max(m_cameraVecAngle, 0.0f);
 				cameraVec.Scale(m_cameraVecLength);

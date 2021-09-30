@@ -7,11 +7,16 @@
 
 // レジスタ1の定数バッファはPBRLighting.hで使用
 
-// ディファードライティング用の定数バッファ
-// RenderingEngineConstData.hのSDefferdLightingCBと同じ構造体にする
-cbuffer defferdLightingCb : register(b2)
+// モデルの拡張定数バッファ
+cbuffer expandCb : register (b2)
 {
-	float4x4 mViewProjInv;      //!< ビュープロジェクション行列の逆行列
+	int isShadowReciever;	//!< シャドウレシーバーか？
+}
+
+// IBL用の定数バッファ
+// RenderingEngineConstData.hのSIBLCBと同じ構造体にする
+cbuffer defferdLightingCb : register(b3)
+{
 	int isIBL;					//!< IBLを行うか？1：行う。0：行わない。
 	float IBLLuminance;			//!< IBLの明るさ
 }
@@ -117,6 +122,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float smooth = g_spacularMap.SampleLevel(g_sampler, psIn.uv, 0).a;
 	if (smooth >= 1.0f)
 		smooth = 0.0f;
+	//影生成用のパラメータ。
+	float shadowParam = isShadowReciever;
 
 	// 視線に向かって伸びるベクトルを計算する
 	float3 toEye = normalize(eyePos - worldPos);
@@ -130,7 +137,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		float shadow = 0.0f;
 		if (directionalLightData[ligNo].castShadow == 1) {
 			//影を生成するなら。
-			shadow = CalcShadowRate(ligNo, worldPos) * 1.0f /*shadowParam*/;
+			shadow = CalcShadowRate(ligNo, worldPos) * shadowParam;
 		}
 		// PBRのライティングを計算
 		lig += CalcLighting(
