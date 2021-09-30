@@ -108,6 +108,9 @@
     <Filter Include="MyCode\Graphic\Shadow">
       <UniqueIdentifier>{d82aeee7-4c83-439a-ac68-a1116716f6c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Level3D">
+      <UniqueIdentifier>{ba52a1aa-6023-4d3b-8d57-877276976b75}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -357,6 +360,18 @@
       <Filter>MyCode\Graphic\Shadow</Filter>
     </ClCompile>
     <ClCompile Include="CTestMapForShadow.cpp">
+      <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClCompile>
+    <ClCompile Include="TklFile.cpp">
+      <Filter>MyCode\Level3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Level3D.cpp">
+      <Filter>MyCode\Level3D</Filter>
+    </ClCompile>
+    <ClCompile Include="MapChip.cpp">
+      <Filter>MyCode\Level3D</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMapForLevel3D.cpp">
       <Filter>MyCode\Maps\TestMaps</Filter>
     </ClCompile>
   </ItemGroup>
@@ -684,6 +699,18 @@
     </ClInclude>
     <ClInclude Include="ModelRenderData.h">
       <Filter>MyCode\Graphic\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="TklFile.h">
+      <Filter>MyCode\Level3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Level3D.h">
+      <Filter>MyCode\Level3D</Filter>
+    </ClInclude>
+    <ClInclude Include="MapChip.h">
+      <Filter>MyCode\Level3D</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMapForLevel3D.h">
+      <Filter>MyCode\Maps\TestMaps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

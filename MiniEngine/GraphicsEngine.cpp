@@ -217,27 +217,57 @@ bool GraphicsEngine::CreateD3DDevice( IDXGIFactory4* dxgiFactory )
 	IDXGIAdapter* adapterMaxVideoMemory = nullptr;				//最大ビデオメモリのアダプタ。
 	IDXGIAdapter* useAdapter = nullptr;							//最終的に使用するアダプタ。
 	SIZE_T videoMemorySize = 0;
+
+	// 変更。追加。
+	// 多分、PCのGPU調べて一番ビデオメモリとやらが多いやつ（アダプターっていうんかな？）を選んで、
+	// それでD3D12CreateDeviceをしてデバイス作るんかな。
+	// 前と変更したところは、
+	// 1.adapterTmpをコピーした時にAddRefで参照カウンタを増やす。
+	// 2.同じベンダのアダプターが2個以上あったとき、または最大ビデオメモリのアダプタが更新されるとき用に、
+	// 　nullptrじゃなかったらReleaseで参照カウンタを減らす処理を入れた。
+	// 3.使い終わったadapterTmpをReleaseで参照カウンタを減らす処理を入れた。
+	// 4.使い終わったadapterVenderとadapterMaxVideoMemoryをReleaseで参照カウンタを減らす処理を入れた。
+	// かな？多分。
+
 	for (int i = 0; dxgiFactory->EnumAdapters(i, &adapterTmp) != DXGI_ERROR_NOT_FOUND; i++) {
 		DXGI_ADAPTER_DESC desc;
 		adapterTmp->GetDesc(&desc);
 		
 		if (desc.DedicatedVideoMemory > videoMemorySize) {
 			//こちらのビデオメモリの方が多いので、こちらを使う。
+			if (adapterMaxVideoMemory != nullptr) {
+				adapterMaxVideoMemory->Release();
+			}
 			adapterMaxVideoMemory = adapterTmp;
+			adapterMaxVideoMemory->AddRef();
 			videoMemorySize = desc.DedicatedVideoMemory;
 		}
 		if (wcsstr(desc.Description, L"NVIDIA") != nullptr) {
 			//NVIDIA製
+			if (adapterVender[GPU_VenderNvidia]) {
+				adapterVender[GPU_VenderNvidia]->Release();
+			}
 			adapterVender[GPU_VenderNvidia] = adapterTmp;
+			adapterVender[GPU_VenderNvidia]->AddRef();
 		}
 		else if (wcsstr(desc.Description, L"AMD") != nullptr) {
 			//AMD製
+			if (adapterVender[GPU_VenderAMD]) {
+				adapterVender[GPU_VenderAMD]->Release();
+			}
 			adapterVender[GPU_VenderAMD] = adapterTmp;
+			adapterVender[GPU_VenderAMD]->AddRef();
 		}
 		else if (wcsstr(desc.Description, L"Intel") != nullptr) {
 			//Intel製
+				//Intel製
+			if (adapterVender[GPU_VenderIntel]) {
+				adapterVender[GPU_VenderIntel]->Release();
+			}
 			adapterVender[GPU_VenderIntel] = adapterTmp;
+			adapterVender[GPU_VenderIntel]->AddRef();
 		}
+		adapterTmp->Release();
 	}
 	//使用するアダプターを決める。
 	if (adapterVender[GPU_VenderNvidia] != nullptr) {
@@ -263,6 +293,14 @@ bool GraphicsEngine::CreateD3DDevice( IDXGIFactory4* dxgiFactory )
 			//D3Dデバイスの作成に成功した。
 			break;
 		}
+	}
+	for (auto& adapter : adapterVender) {
+		if (adapter) {
+			adapter->Release();
+		}
+	}
+	if (adapterMaxVideoMemory) {
+		adapterMaxVideoMemory->Release();
 	}
 	return m_d3dDevice != nullptr;
 }

@@ -212,6 +212,15 @@ namespace nsMyGame
 					m_modelExCB.isShadowReciever = isShadowReciever;
 				}
 
+				/**
+				 * @brief モデルの参照を得る
+				 * @return モデルの参照
+				*/
+				Model& GetModel() const
+				{
+					return *m_model.get();
+				}
+
 
 			private:	// privateなメンバ関数
 

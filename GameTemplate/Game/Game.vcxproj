@@ -296,6 +296,8 @@
     <ClCompile Include="CEffectPlayer.cpp" />
     <ClCompile Include="CTestMapForShadow.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
+    <ClCompile Include="Level3D.cpp" />
+    <ClCompile Include="MapChip.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="LightManager.cpp" />
@@ -309,7 +311,9 @@
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SoundSource.cpp" />
     <ClCompile Include="SpotLight.cpp" />
+    <ClCompile Include="TestMapForLevel3D.cpp" />
     <ClCompile Include="TestMapForSpotLight.cpp" />
+    <ClCompile Include="TklFile.cpp" />
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="FontRender.cpp" />
@@ -398,6 +402,8 @@
     <ClInclude Include="CTestMapForShadow.h" />
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="GaussianBlurConstData.h" />
+    <ClInclude Include="Level3D.h" />
+    <ClInclude Include="MapChip.h" />
     <ClInclude Include="ModelRenderData.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="DirectionalLight.h" />
@@ -432,8 +438,10 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="StopWatch.h" />
     <ClInclude Include="system\system.h" />
+    <ClInclude Include="TestMapForLevel3D.h" />
     <ClInclude Include="TestMap.h" />
     <ClInclude Include="TestMapForSpotLight.h" />
+    <ClInclude Include="TklFile.h" />
     <ClInclude Include="TResourceBank.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
