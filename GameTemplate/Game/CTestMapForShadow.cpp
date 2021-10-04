@@ -32,7 +32,7 @@ namespace nsMyGame
 				m_planeModel = NewGO<CModelRender>(enPriorityFirst);
 				m_planeModel->Init("Assets/modelData/debugModel/testBox.tkm");
 				m_planeModel->SetScale({ 10.0f,0.1f,10.0f });
-				m_planeModel->SetRotatioin(qRot);
+				m_planeModel->SetRotation(qRot);
 				m_planeModel->SetIsShadowCaster(true);
 
 				int posNum = 0;
@@ -41,7 +41,7 @@ namespace nsMyGame
 					unityChanModel = NewGO<CModelRender>(enPriorityFirst);
 					unityChanModel->Init("Assets/modelData/unityChan.tkm");
 					unityChanModel->SetPosition({ 50.0f,0.0f,50.0f * static_cast<float>(posNum++)});
-					unityChanModel->SetRotatioin(qRot);
+					unityChanModel->SetRotation(qRot);
 					unityChanModel->SetIsShadowCaster(true);
 				}
 
@@ -51,7 +51,7 @@ namespace nsMyGame
 					blockModel = NewGO<CModelRender>(enPriorityFirst);
 					blockModel->Init("Assets/modelData/debugModel/testBox.tkm");
 					blockModel->SetPosition({ -50.0f,0.0f,50.0f * static_cast<float>(posNum++) });
-					blockModel->SetRotatioin(qRot);
+					blockModel->SetRotation(qRot);
 					blockModel->SetIsShadowCaster(true);
 				}
 

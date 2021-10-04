@@ -65,29 +65,29 @@ namespace nsMyGame
 				/**
 				 * @brief 初期化関数
 				 * @param[in] filePath モデルのファイルパス
-				 * @param[in] modelUpAxis モデルのUP軸
 				 * @param[in] animationClips アニメーションクリップ
 				 * @param[in] numAnimationClip アニメーションクリップの数
+				 * @param[in] modelUpAxis モデルのUP軸
 				*/
 				void Init(
 					const char* filePath,
-					const EnModelUpAxis modelUpAxis = EnModelUpAxis::enModelUpAxisZ,
 					AnimationClip* animationClips = nullptr,
-					int numAnimationClip = 0
+					const int numAnimationClip = 0,
+					const EnModelUpAxis modelUpAxis = EnModelUpAxis::enModelUpAxisZ
 					);
 
 				/**
 				 * @brief 半透明描画用の初期化関数
 				 * @param[in] filePath モデルのファイルパス
-				 * @param[in] modelUpAxis モデルのUP軸
 				 * @param[in] animationClips アニメーションクリップ
 				 * @param[in] numAnimationClip アニメーションクリップの数
+				 * @param[in] modelUpAxis モデルのUP軸
 				*/
 				void IniTranslucent(
 					const char* filePath,
-					const EnModelUpAxis modelUpAxis = enModelUpAxisZ,
 					AnimationClip* animationClips = nullptr,
-					int numAnimationClip = 0
+					const int numAnimationClip = 0,
+					const EnModelUpAxis modelUpAxis = enModelUpAxisZ
 				);
 
 				/**
@@ -124,7 +124,7 @@ namespace nsMyGame
 				 * @brief 回転を設定する
 				 * @param[in] rot 回転を得る
 				*/
-				void SetRotatioin(const Quaternion& rot)
+				void SetRotation(const Quaternion& rot)
 				{
 					m_rotation = rot;
 				}

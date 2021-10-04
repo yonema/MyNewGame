@@ -26,13 +26,13 @@ namespace nsMyGame
 				m_playerModel->Init("Assets/modelData/unityChan.tkm");
 				Quaternion qRot;
 				qRot.SetRotationDegY(180.0f);
-				m_playerModel->SetRotatioin(qRot);
+				m_playerModel->SetRotation(qRot);
 				m_playerModel->SetIsShadowCaster(true);
 
 				// バックグラウンドモデルの初期化
 				m_bgModel = NewGO <nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 				m_bgModel->Init("Assets/modelData/bg/bg.tkm");
-				m_bgModel->SetRotatioin(qRot);
+				m_bgModel->SetRotation(qRot);
 
 				// スポットライトモデルの初期化
 				m_spotLightModel = NewGO <nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);

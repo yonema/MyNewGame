@@ -7,7 +7,8 @@ namespace nsMyGame
 	namespace nsGraphic {
 		namespace nsModel { class CModelRender; }	// モデルレンダラークラス
 	}
-	namespace nsNature { class CSkyCube; }	//スカイクラス
+	namespace nsNature { class CSkyCube; }	// スカイクラス
+	namespace nsPlayer { class CPlayer; }	// プレイヤークラス
 
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -20,19 +21,19 @@ namespace nsMyGame
 		namespace nsTestMaps
 		{
 			/**
-			 * @brief Level3D用のテストマップ
+			 * @brief プレイヤーの動きのテストマップ
 			*/
-			class CTestMapForLevel3D : public IGameObject
+			class CTestMapForPlayerMove : public IGameObject
 			{
 			public:		// コンストラクタとデストラクタ
 				/**
 				 * @brief コンストラクタ
 				*/
-				CTestMapForLevel3D() = default;
+				CTestMapForPlayerMove() = default;
 				/**
 				 * @brief コンストラクタ
 				*/
-				~CTestMapForLevel3D() = default;
+				~CTestMapForPlayerMove() = default;
 
 			public:		// オーバーライドしたメンバ関数
 
@@ -54,11 +55,11 @@ namespace nsMyGame
 
 
 			private:	// データメンバ
-				nsLevel3D::CLevel3D m_level3D;		//!< 3Dレベルクラス
-				nsNature::CSkyCube* m_skyCube = nullptr;
-				float m_angleX = 0.0f;
-				float m_angleY = 0.0f;
+				nsLevel3D::CLevel3D m_level3D;				//!< 3Dレベルクラス
+				nsNature::CSkyCube* m_skyCube = nullptr;	//!< スカイキューブ
+				nsPlayer::CPlayer* m_player = nullptr;		//!< プレイヤークラス
 			};
+
 		}
 	}
 }

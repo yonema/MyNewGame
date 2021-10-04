@@ -84,15 +84,15 @@ namespace nsMyGame
 			/**
 			 * @brief 初期化関数
 			 * @param filePath モデルのファイルパス
-			 * @param modelUpAxis モデルのUP軸
 			 * @param animationClips アニメーションクリップ
 			 * @param numAnimationClip アニメーションクリップの数
+			 * @param modelUpAxis モデルのUP軸
 			*/
 			void CModelRender::Init(
 				const char* filePath,
-				const EnModelUpAxis modelUpAxis,
 				AnimationClip* animationClips,
-				int numAnimationClip
+				const int numAnimationClip,
+				const EnModelUpAxis modelUpAxis
 			)
 			{
 				// モデルの初期化データの共通部分の設定
@@ -118,15 +118,15 @@ namespace nsMyGame
 			/**
 			 * @brief 半透明描画用の初期化関数
 			 * @param[in] filePath モデルのファイルパス
-			 * @param[in] modelUpAxis モデルのUP軸
 			 * @param[in] animationClips アニメーションクリップ
 			 * @param[in] numAnimationClip アニメーションクリップの数
+			 * @param[in] modelUpAxis モデルのUP軸
 			*/
 			void CModelRender::IniTranslucent(
 				const char* filePath,
-				const EnModelUpAxis modelUpAxis,
 				AnimationClip* animationClips,
-				int numAnimationClip
+				const int numAnimationClip,
+				const EnModelUpAxis modelUpAxis
 			)
 			{
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include "RigidBody.h"
+#include "CharacterController.h"
 
 class PhysicsWorld
 {
@@ -75,7 +77,7 @@ public:
 	{
 		m_dynamicWorld->convexSweepTest(castShape, convexFromWorld, convexToWorld, resultCallback, allowedCcdPenetration);
 	}
-#if 0
+#if 1
 	/*!
 	* @brief	コリジョンオブジェクトをワールドに登録。
 	*@param[in]	colliObj	コリジョンオブジェクト。
@@ -98,12 +100,12 @@ public:
 		std::function<void(const btCollisionObject& contactCollisionObject)> cb
 	);
 	void ContactTest(
-		CRigidBody& rb,
+		RigidBody& rb,
 		std::function<void(const btCollisionObject& contactCollisionObject)> cb
 	);
 		
 	void ContactTest(
-		CCharacterController& charaCon,
+		CharacterController& charaCon,
 		std::function<void(const btCollisionObject& contactCollisionObject)> cb
 	);
 #endif		

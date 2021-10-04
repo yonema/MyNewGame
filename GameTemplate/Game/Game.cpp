@@ -4,6 +4,7 @@
 #include "TestMapForSpotLight.h"
 #include "CTestMapForShadow.h"
 #include "TestMapForLevel3D.h"
+#include "TestMapForPlayerMove.h"
 #include "DirectionalLight.h"
 
 /**
@@ -27,7 +28,7 @@ namespace nsMyGame
 			//m_gameDirectionalLight->SetDirection({ 1.0f,0.0f,0.0f });
 			//m_gameDirectionalLight->SetColor({ 1.0f,1.0f,1.0f,1.0f });
 
-			m_mapNum = 3;
+			m_mapNum = 4;
 
 			// ˆê”Ô–Ú‚Ì—Dæ“x
 			using nsCommonData::enPriorityFirst;
@@ -45,6 +46,9 @@ namespace nsMyGame
 				break;
 			case 3:
 				NewGO<nsMaps::nsTestMaps::CTestMapForLevel3D>(enPriorityFirst, m_mapName);
+				break;
+			case 4:
+				NewGO<nsMaps::nsTestMaps::CTestMapForPlayerMove>(enPriorityFirst, m_mapName);
 				break;
 			default:
 				break;
@@ -75,6 +79,9 @@ namespace nsMyGame
 				break;
 			case 3:
 				DeleteGO(FindGO<nsMaps::nsTestMaps::CTestMapForLevel3D>(m_mapName));
+				break;
+			case 4:
+				DeleteGO(FindGO<nsMaps::nsTestMaps::CTestMapForPlayerMove>(m_mapName));
 				break;
 			default:
 				break;

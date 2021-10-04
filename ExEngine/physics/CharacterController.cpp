@@ -129,7 +129,7 @@ void CharacterController::Init(float radius, float height, const Vector3& positi
 
 	m_isInited = true;
 }
-const Vector3& CharacterController::Execute( Vector3& moveSpeed, float deltaTime )
+const Vector3& CharacterController::Execute(Vector3& moveSpeed, float deltaTime )
 {
 	if (moveSpeed.y > 0.0f) {
 		//‚Á”ò‚Ñ’†‚É‚·‚éB

@@ -36,10 +36,10 @@ namespace nsMyGame
 				m_animationClip[enAnim_walk].SetLoopFlag(true);
 				// モデルの初期化
 				m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-				m_modelRender->Init("Assets/modelData/unityChan.tkm", enModelUpAxisY, m_animationClip, enAnim_num);
+				m_modelRender->Init("Assets/modelData/unityChan.tkm", m_animationClip, enAnim_num, enModelUpAxisY);
 				Quaternion qRot;
 				qRot.SetRotationDegY(180.0f);
-				m_modelRender->SetRotatioin(qRot);
+				m_modelRender->SetRotation(qRot);
 
 				// フォントの初期化
 				m_fontRender = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFirst);

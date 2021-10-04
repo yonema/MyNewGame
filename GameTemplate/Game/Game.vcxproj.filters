@@ -111,6 +111,15 @@
     <Filter Include="MyCode\Level3D">
       <UniqueIdentifier>{ba52a1aa-6023-4d3b-8d57-877276976b75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Player">
+      <UniqueIdentifier>{2e934e0a-a7fc-4aa6-8510-84225e149530}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Camera">
+      <UniqueIdentifier>{f24fe930-376a-4730-b771-f6db666a9a1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Player\PlayerMovement">
+      <UniqueIdentifier>{a6323693-52b2-4677-ad1f-a9a56d3e361f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -373,6 +382,39 @@
     </ClCompile>
     <ClCompile Include="TestMapForLevel3D.cpp">
       <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClCompile>
+    <ClCompile Include="TestMapForPlayerMove.cpp">
+      <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInput.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerCamera.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SpringCamera.cpp">
+      <Filter>MyCode\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraCollisionSolver.cpp">
+      <Filter>MyCode\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\BoxCollider.cpp">
+      <Filter>ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\SphereCollider.cpp">
+      <Filter>ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerModel.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerMovement.cpp">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerWalkAndRun.cpp">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -711,6 +753,45 @@
     </ClInclude>
     <ClInclude Include="TestMapForLevel3D.h">
       <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMapForPlayerMove.h">
+      <Filter>MyCode\Maps\TestMaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerConstData.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInput.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCamera.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SpringCamera.h">
+      <Filter>MyCode\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraCollisionSolver.h">
+      <Filter>MyCode\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\BoxCollider.h">
+      <Filter>ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\CollisionAttr.h">
+      <Filter>ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\SphereCollider.h">
+      <Filter>ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerModel.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerMovement.h">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerWalkAndRun.h">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

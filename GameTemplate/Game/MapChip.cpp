@@ -17,14 +17,23 @@ namespace nsMyGame
 
 			// モデルレンダラーの更新
 			m_modelRender->SetPosition(objData.position);
-			m_modelRender->SetRotatioin(objData.rotation);
+			m_modelRender->SetRotation(objData.rotation);
 			m_modelRender->SetScale(objData.scale);
 
+			// 各種行列
+			Matrix mWorld, mTrans, mRotation, mScale;
+			mWorld = m_modelRender->GetModel().GetWorldMatrix();
+			mTrans.MakeTranslation(objData.position);
+			mRotation.MakeRotationFromQuaternion(objData.rotation);
+			mScale.MakeScaling(objData.scale);
+
+			// 全部合成
+			mWorld = mWorld * mScale * mRotation * mTrans;
 
 			//静的物理オブジェクトを作成。
 			m_physicsStaticObject.CreateFromModel(
 				m_modelRender->GetModel(),
-				m_modelRender->GetModel().GetWorldMatrix()
+				/*m_modelRender->GetModel().GetWorldMatrix()*/mWorld
 			);
 
 			return;

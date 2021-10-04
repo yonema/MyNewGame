@@ -51,13 +51,23 @@ namespace nsMyGame
 					bone->CalcWorldTRS(levelObjData.position, levelObjData.rotation, levelObjData.scale);
 
 					//ZupとYupの変更。
+					//float fix = levelObjData.position.y;
+					//levelObjData.position.y = levelObjData.position.z;
+					//levelObjData.position.z = -fix;
+
+					//fix = levelObjData.rotation.y;
+					//levelObjData.rotation.y = levelObjData.rotation.z;
+					//levelObjData.rotation.z = -fix;
+
+					// 変更。追加。
 					float fix = levelObjData.position.y;
 					levelObjData.position.y = levelObjData.position.z;
-					levelObjData.position.z = -fix;
+					levelObjData.position.z = fix;
 
 					fix = levelObjData.rotation.y;
-					levelObjData.rotation.y = levelObjData.rotation.z;
+					levelObjData.rotation.y = -levelObjData.rotation.z;
 					levelObjData.rotation.z = -fix;
+					levelObjData.rotation.x = -levelObjData.rotation.x;
 
 
 					std::swap(levelObjData.scale.y, levelObjData.scale.z);

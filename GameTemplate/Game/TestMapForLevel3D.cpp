@@ -29,8 +29,8 @@ namespace nsMyGame
 					}
 				);
 
-				m_sky = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
-				m_sky->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day);
+				m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
+				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day);
 
 				g_camera3D->SetFar(40000.0f);
 
@@ -42,7 +42,7 @@ namespace nsMyGame
 			*/
 			void CTestMapForLevel3D::OnDestroy()
 			{
-				DeleteGO(m_sky);
+				DeleteGO(m_skyCube);
 				return;
 			}
 
