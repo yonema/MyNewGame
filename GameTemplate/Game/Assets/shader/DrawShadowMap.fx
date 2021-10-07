@@ -9,7 +9,7 @@
 struct SPSIn
 {
     float4 pos : SV_POSITION;   // スクリーン空間でのピクセルの座標
-    float2 depth : TEXCOORD1;   // ライト空間での深度情報
+    //float2 depth : TEXCOORD1;   // ライト空間での深度情報
 };
 
 ///////////////////////////////////////////////////

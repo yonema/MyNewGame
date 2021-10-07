@@ -57,9 +57,9 @@ namespace nsMyGame
 				const float inputAxisMoveRight = m_playerInputData->axisMoveRight;
 
 				// 前、後移動の軸入力の絶対値
-				const float absInputAxisMoveForward = fabs(inputAxisMoveForward);
+				const float absInputAxisMoveForward = fabsf(inputAxisMoveForward);
 				// 右、左移動の軸入力の絶対値
-				const float absInputAxisMoveRight = fabs(inputAxisMoveRight);
+				const float absInputAxisMoveRight = fabsf(inputAxisMoveRight);
 
 				// 移動速度を加速する
 				Acceleration(inputAxisMoveForward, inputAxisMoveRight);
@@ -169,6 +169,7 @@ namespace nsMyGame
 					// 早期リターン
 					return;
 				}
+
 
 				// 前方向の移動速度が最高速度をオーバーしているか？
 				if (m_moveVecForward->Length() > kMaxSpeed * absInputMoveF)

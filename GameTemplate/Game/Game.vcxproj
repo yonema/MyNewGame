@@ -250,6 +250,7 @@
     <ClCompile Include="..\..\ExEngine\physics\CharacterController.cpp" />
     <ClCompile Include="..\..\ExEngine\physics\MeshCollider.cpp" />
     <ClCompile Include="..\..\ExEngine\physics\Physics.cpp" />
+    <ClCompile Include="..\..\ExEngine\physics\PhysicsGhostObject.cpp" />
     <ClCompile Include="..\..\ExEngine\physics\PhysicsStaticObject.cpp" />
     <ClCompile Include="..\..\ExEngine\physics\RigidBody.cpp" />
     <ClCompile Include="..\..\ExEngine\physics\SphereCollider.cpp" />
@@ -293,10 +294,14 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TkmFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Bloom.cpp" />
+    <ClCompile Include="Building.cpp" />
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="StringActionTargetManager.cpp" />
+    <ClCompile Include="SwingTarget.cpp" />
     <ClCompile Include="CTestMapForShadow.cpp" />
     <ClCompile Include="GaussianBlur.cpp" />
     <ClCompile Include="Level3D.cpp" />
@@ -360,6 +365,7 @@
     <ClInclude Include="..\..\ExEngine\physics\ICollider.h" />
     <ClInclude Include="..\..\ExEngine\physics\MeshCollider.h" />
     <ClInclude Include="..\..\ExEngine\physics\Physics.h" />
+    <ClInclude Include="..\..\ExEngine\physics\PhysicsGhostObject.h" />
     <ClInclude Include="..\..\ExEngine\physics\PhysicsStaticObject.h" />
     <ClInclude Include="..\..\ExEngine\physics\RigidBody.h" />
     <ClInclude Include="..\..\ExEngine\physics\SphereCollider.h" />
@@ -410,10 +416,15 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TkmFile.h" />
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="Bloom.h" />
+    <ClInclude Include="Building.h" />
+    <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
     <ClInclude Include="CommonData.h" />
+    <ClInclude Include="StringActionTargetManager.h" />
+    <ClInclude Include="SwingTarget.h" />
     <ClInclude Include="CTestMapForShadow.h" />
     <ClInclude Include="GaussianBlur.h" />
     <ClInclude Include="GaussianBlurConstData.h" />

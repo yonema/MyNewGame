@@ -120,6 +120,18 @@
     <Filter Include="MyCode\Player\PlayerMovement">
       <UniqueIdentifier>{a6323693-52b2-4677-ad1f-a9a56d3e361f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Geometry">
+      <UniqueIdentifier>{a0c9aec2-e412-4780-92f9-9042e3a13148}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\StringActionTarget">
+      <UniqueIdentifier>{e151ca94-9c81-40ac-8099-0cb75fe8af8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\StringActionTarget\SwingTarget">
+      <UniqueIdentifier>{fad4a7a9-b80d-4a55-b651-2c1cf3c9bb4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Building">
+      <UniqueIdentifier>{492357dd-fc2c-44ab-a296-8b9bb76cee92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -415,6 +427,21 @@
     </ClCompile>
     <ClCompile Include="PlayerWalkAndRun.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\ExEngine\physics\PhysicsGhostObject.cpp">
+      <Filter>ExEngine\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>MyCode\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="SwingTarget.cpp">
+      <Filter>MyCode\StringActionTarget\SwingTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="StringActionTargetManager.cpp">
+      <Filter>MyCode\StringActionTarget</Filter>
+    </ClCompile>
+    <ClCompile Include="Building.cpp">
+      <Filter>MyCode\Building</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -792,6 +819,24 @@
     </ClInclude>
     <ClInclude Include="PlayerWalkAndRun.h">
       <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ExEngine\physics\PhysicsGhostObject.h">
+      <Filter>ExEngine\physics</Filter>
+    </ClInclude>
+    <ClInclude Include="AABB.h">
+      <Filter>MyCode\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="SwingTarget.h">
+      <Filter>MyCode\StringActionTarget\SwingTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="StringActionTargetManager.h">
+      <Filter>MyCode\StringActionTarget</Filter>
+    </ClInclude>
+    <ClInclude Include="Building.h">
+      <Filter>MyCode\Building</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildingConstData.h">
+      <Filter>MyCode\Building</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

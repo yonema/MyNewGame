@@ -103,7 +103,7 @@ float CalcShadowRate(int ligNo, float3 worldPos)
                 float lit_factor = variance / (variance + md * md);
                 // 光が届く確率から影になる確率を計算する。
                 shadow = 1.0f - pow(lit_factor, 5.0f);
-
+                //shadow = 1.0f;
             }
             break;
         }

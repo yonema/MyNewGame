@@ -195,6 +195,8 @@ namespace nsMyGame
 				// モデルの初期化
 				m_model.reset(new Model);
 				m_model->Init(m_modelInitData);
+				// モデルの座標更新
+				m_model->UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
 				// アニメーションの初期化
 				InitAnimation(animationClips, numAnimationClips);
@@ -459,6 +461,7 @@ namespace nsMyGame
 					{
 						shadowModel.reset(new Model);
 						shadowModel->Init(shadowModelInitData);
+						shadowModel->UpdateWorldMatrix(m_position, m_rotation, m_scale);
 					}
 				}
 

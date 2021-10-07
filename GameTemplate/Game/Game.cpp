@@ -25,8 +25,10 @@ namespace nsMyGame
 		bool CGame::Start()
 		{
 			m_gameDirectionalLight = NewGO<nsLight::CDirectionalLight>(nsCommonData::enPriorityFirst);
-			//m_gameDirectionalLight->SetDirection({ 1.0f,0.0f,0.0f });
-			//m_gameDirectionalLight->SetColor({ 1.0f,1.0f,1.0f,1.0f });
+			Vector3 dir = { 0.0f,-1.0f,1.0f };
+			dir.Normalize();
+			//m_gameDirectionalLight->SetDirection(dir);
+			//m_gameDirectionalLight->SetColor({ 2.0f,2.0f,2.0f,1.0f });
 
 			m_mapNum = 4;
 

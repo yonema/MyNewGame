@@ -119,7 +119,13 @@ namespace nsMyGame
 				// ライトのポジション
 				Vector3 lightPos = lightTarget;
 				// ライトターゲットからライトの方向に応じた距離をとる
-				lightPos += (lightDirection) * (kLightMaxHeight / lightDirection.y);
+				Vector3 targetToLightPos = lightDirection;
+				targetToLightPos.Scale(-kLightMaxHeight);
+				lightPos += targetToLightPos;
+				//if (lightDirection.y != 0.0f)
+				//	lightPos += (lightDirection) * (kLightMaxHeight / lightDirection.y);
+				//else
+				//	lightPos += lightDirection * kLightMaxHeight;
 				// 上方向を設定
 				if (fabsf(lightDirection.y) > 0.9999f) {
 					// ほぼ真上、真下を向いている

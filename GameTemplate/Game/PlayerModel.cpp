@@ -79,9 +79,8 @@ namespace nsMyGame
 		*/
 		void CPlayerModel::InitModel(const Vector3& startPos, const Quaternion& startRot)
 		{
-			// プレイヤーモデルレンダラーの生成と初期化
+			// プレイヤーモデルレンダラーの生成
 			m_playerModel = NewGO<nsGraphic::nsModel::CModelRender>(enPriorityFirst);
-			m_playerModel->Init(kPlayerModelFilePath, m_animationClips, enAnim_num, enModelUpAxisY);
 
 			// プレイヤーの座標と回転の参照を受け取る
 			m_playerPosition = &startPos;
@@ -91,6 +90,10 @@ namespace nsMyGame
 			m_playerModel->SetPosition(*m_playerPosition);
 			m_playerModel->SetRotation(*m_playerRotation);
 
+			// プレイヤーモデルレンダラーの初期化
+			m_playerModel->Init(kPlayerModelFilePath, m_animationClips, enAnim_num, enModelUpAxisY);
+
+			// シャドウキャスターを有効にする
 			m_playerModel->SetIsShadowCaster(true);
 
 			return;

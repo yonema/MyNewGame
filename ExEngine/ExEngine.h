@@ -11,6 +11,8 @@
 #include "physics/CollisionAttr.h"
 #include "physics/CharacterController.h"
 #include "physics/PhysicsStaticObject.h"
+// ’Ç‰Á
+#include "physics/PhysicsGhostObject.h"
 
 #include "Effekseer.h"
 #include "EffekseerRendererDX12.h"

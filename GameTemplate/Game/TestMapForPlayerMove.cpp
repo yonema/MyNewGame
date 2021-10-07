@@ -2,6 +2,7 @@
 #include "TestMapForPlayerMove.h"
 #include "SkyCube.h"
 #include "Player.h"
+#include "Building.h"
 
 namespace nsMyGame
 {
@@ -27,16 +28,29 @@ namespace nsMyGame
 
 				// カメラの遠平面を設定
 				g_camera3D->SetFar(40000.0f);
-
+				int a = 0;
 				// レベルの生成
 				m_level3D.Init(
 					"Assets/levelData/testLevel.tkl",
-					[](nsLevel3D::SLevelObjectData& objData)
+					[&](nsLevel3D::SLevelObjectData& objData)
 					{
-						//if (objData.EqualObjectName(L"testBuilding"))
-						//{
-						//	return true;
-						//}
+						if (objData.EqualObjectName(L"testBuilding"))
+						{
+							if (a != 0)
+							{
+								a++;
+								return false;
+							}
+							nsBuilding::CBuilding* building = 
+								NewGO<nsBuilding::CBuilding>(nsCommonData::enPriorityFirst, "testBuilding");
+							building->Init(
+								"Assets/modelData/levelSource/testBuilding.tkm",
+								objData.position,
+								objData.rotation
+							);
+							a++;
+							return true;
+						}
 
 						return false;
 					}
@@ -56,6 +70,15 @@ namespace nsMyGame
 			{
 				DeleteGO(m_skyCube);	// スカイキューブクラスの破棄
 				DeleteGO(m_player);		// プレイヤークラスの破棄
+
+				QueryGOs<nsBuilding::CBuilding>(
+					"testBuilding",
+					[&](nsBuilding::CBuilding* building)->bool
+					{
+						DeleteGO(building);
+						return true;
+					}
+				);
 
 				return;
 			}

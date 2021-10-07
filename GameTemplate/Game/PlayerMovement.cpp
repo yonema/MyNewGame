@@ -57,7 +57,7 @@ namespace nsMyGame
 
 #ifdef MY_DEBUG
 				m_moveVecFont = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFirst);
-				m_moveVecFont->SetPosition({ -100.0f,100.0f });
+				m_moveVecFont->SetPosition({ -200.0f,200.0f });
 #endif
 
 				return;
@@ -113,7 +113,11 @@ namespace nsMyGame
 
 #ifdef MY_DEBUG
 				wchar_t text[256];
-				swprintf_s(text, L"x:%2.2f,y:%2.2f,z:%2.2f", m_moveVec.x, m_moveVec.y, m_moveVec.z);
+				//swprintf_s(text, L"x:%2.2f,y:%2.2f,z:%2.2f\nlen:%2.2f",
+				//	m_moveVec.x, m_moveVec.y, m_moveVec.z,m_moveVec.Length());
+				//swprintf_s(text, L"x:%2.2f,y:%2.2f,z:%2.2f",m_moveVec.x, m_moveVec.y, m_moveVec.z);
+				swprintf_s(text, L"forward:%2.2f,right:%2.2f\nlen:%2.2f",
+					m_playerInputData->axisMoveForward, m_playerInputData->axisMoveRight, m_moveVec.Length());
 				m_moveVecFont->SetText(text);
 #endif
 
@@ -126,7 +130,9 @@ namespace nsMyGame
 			void CPlayerMovement::UpdateTurnPlayer()
 			{
 				// X,Z平面での移動があるか？
-				if (fabs(m_moveVec.x) < 0.001f && fabs(m_moveVec.y) < 0.001f)
+				//if (fabsf(m_moveVec.x) < 0.001f && fabsf(m_moveVec.z) < 0.001f)
+				if (fabsf(m_playerInputData->axisMoveForward) < 0.001f &&
+					fabsf(m_playerInputData->axisMoveRight) < 0.001f)
 				{
 					// 移動していない
 					// 早期リターン
@@ -136,7 +142,11 @@ namespace nsMyGame
 				// tanθ = m_moveVec.x / m_moveVec.y
 				const float radAngle = atan2(m_moveVec.x, m_moveVec.z);
 				// ラジアン単位で回す
-				m_playerRotation->SetRotation(Vector3::AxisY, radAngle);
+				Quaternion nexrQRot;
+				nexrQRot.SetRotation(Vector3::AxisY, radAngle);
+				//m_moveVec.Length
+				m_playerRotation->Slerp(0.3f, *m_playerRotation, nexrQRot);
+				//m_playerRotation->SetRotation(Vector3::AxisY, radAngle);
 
 				return;
 			}

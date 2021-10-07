@@ -82,10 +82,15 @@ namespace nsMyGame
 		{
 			//////// 1.左スティックの入力情報を調べる ////////
 
+			// パッドの左スティックの軸入力情報
+			Vector2 padLStickF(m_pad->GetLStickXF(), m_pad->GetLStickYF());
+			// 何か正規化してくれてないから、正規化する
+			padLStickF.Normalize();
+
 			// Y軸方向の入力を調べる
-			m_playerInputData->axisMoveForward = m_pad->GetLStickYF();
+			m_playerInputData->axisMoveForward = padLStickF.y;
 			// X軸方向の入力を調べる
-			m_playerInputData->axisMoveRight = m_pad->GetLStickXF();
+			m_playerInputData->axisMoveRight = padLStickF.x;
 
 			// 軸入力があった場合は十字キーを調べる必要がないため、早期リターンを行う
 			if (m_playerInputData->axisMoveForward != 0.0f || m_playerInputData->axisMoveRight != 0.0f)
@@ -115,7 +120,7 @@ namespace nsMyGame
 				m_playerInputData->axisMoveRight = -kDPadInputPower;
 			}
 
-			// 斜め移動の移動の場合はルート2倍、入力量が多くなるため、ルート2で割る
+			// 斜め移動の移動の場合は、ルート2倍入力量が多くなるため、ルート2で割る
 			if (m_playerInputData->axisMoveForward != 0.0f && m_playerInputData->axisMoveRight != 0.0f)
 			{
 				m_playerInputData->axisMoveForward /= kSquareRootOfTwo;

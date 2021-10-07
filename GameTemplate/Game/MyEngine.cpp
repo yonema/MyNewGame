@@ -4,6 +4,7 @@
 #include "RenderingEngine.h"
 #include "SoundEngine.h"
 #include "LightManager.h"
+#include "StringActionTargetManager.h"
 #include "system/system.h"
 
 namespace nsMyGame
@@ -57,6 +58,8 @@ namespace nsMyGame
 			CRenderingEngine::CreateInstance();			// レンダリングエンジンの生成
 			EffectEngine::CreateInstance();				// エフェクトエンジンを生成
 			nsSound::CSoundEngine::CreateInstance();	// サウンドエンジンを生成
+			// スイングのターゲットのマネージャーを生成
+			nsStringActionTarget::CStringActionTargetManager::CreateInstance();
 
 			return;
 		}
@@ -66,6 +69,8 @@ namespace nsMyGame
 		*/
 		void CMyEngine::DeleteInstances()
 		{
+			// スイングのターゲットのマネージャーを破棄
+			nsStringActionTarget::CStringActionTargetManager::DeleteInstance();
 			nsSound::CSoundEngine::DeleteInstance();	// サウンドエンジンを破棄
 			EffectEngine::DeleteInstance();				// エフェクトエンジンを破棄
 			CRenderingEngine::DeleteInstance();			// レンダリングエンジンの破棄
