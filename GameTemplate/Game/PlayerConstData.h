@@ -23,6 +23,7 @@ namespace nsMyGame
 		{
 			constexpr float kGravityScale = 980.0f;	//!< 重力の強さ
 			constexpr float kJumpForce = 500.0f;	//!< ジャンプ力
+			constexpr float kModelRotRate = 0.3f;	//!< モデルの回転の補間率
 		}
 
 		/**

@@ -73,6 +73,20 @@ namespace nsMyGame
 					return m_modelRender->GetPosition();
 				}
 
+			private:	// privateなメンバ関数
+
+				/**
+				 * @brief スイングのターゲットの座標コンテナを再初期化する
+				 * @param[in] widthSegments 幅セグメント ( X )
+				 * @param[in] heightSegments 高さセグメント ( Y )
+				 * @param[in] lenghtSegments 長さセグメント ( Z )
+				*/
+				void ReInitSwingTargetPositions(
+					const UINT widthSegments,
+					const UINT heightSegments,
+					const UINT lengthSegments
+				);
+
 			private:	// データメンバ
 				nsGeometry::CAABB m_aabb;							//!< AABBクラス
 				std::vector<Vector3> m_swingTargetPositions;		//!< スイングのターゲットの座標コンテナ

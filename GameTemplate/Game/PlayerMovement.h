@@ -88,8 +88,7 @@ namespace nsMyGame
 				CPlayerWalkAndRun m_playerWalkAndRun;	//!< プレイヤーの歩きと走りクラス
 
 				Vector3 m_moveVec = Vector3::Zero;			//!< 移動ベクトル
-				Vector3 m_moveVecForward = Vector3::Zero;	//!< 前向きの移動ベクトル
-				Vector3 m_moveVecRight = Vector3::Zero;		//!< 右向きの移動ベクトル
+				Vector3 m_addMoveVec = Vector3::Zero;		//!< 加算移動ベクトル
 
 				const CPlayerCamera* m_playerCamera = nullptr;			//!< プレイヤーカメラの参照
 				const SPlayerInputData* m_playerInputData = nullptr;	//!< プレイヤー入力情報の参照

@@ -56,11 +56,11 @@ namespace nsMyGame
 			);
 
 		private:	// データメンバ
-			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;
-			nsStringActionTarget::nsSwingTarget::CSwingTarget m_swingTarget;
+			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;			//!< モデルレンダラー
+			nsStringActionTarget::nsSwingTarget::CSwingTarget m_swingTarget;	//!< スイングターゲット
 
 #ifdef MY_DEBUG
-			std::vector<nsGraphic::nsModel::CModelRender*> m_debugModels;
+			std::vector<nsGraphic::nsModel::CModelRender*> m_debugModels;	//!< デバック用モデル
 #endif
 
 		};

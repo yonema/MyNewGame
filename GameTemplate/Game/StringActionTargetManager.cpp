@@ -53,45 +53,65 @@ namespace nsMyGame
 			const float scopeRadius
 		)
 		{
+			// Y座標（高さ）を無視したXZ平面での座標
 			Vector3 fromPosXZ = fromPos;
 			fromPosXZ.y = 0.0f;
 
+			// 最短距離を保持しておく変数
 			float tmpDist = FLT_MAX;
+
+			// 戻り値用の座標のポインタ
 			const Vector3* retPosition = nullptr;
 
-
+			// 全てのスイングターゲットにクエリする
 			CStringActionTargetManager::GetInstance()->QuerySwingTarget(
 				[&](nsSwingTarget::CSwingTarget* swingTarget)
 				{
+					//////// 1.スイングターゲットがXZ平面で、有効範囲内か調べる ////////
+
+					// スイングターゲットのY座標（高さ）を無視したXZ平面での座標
 					Vector3 swingTargetPosXZ = swingTarget->GetPosition();
 					swingTargetPosXZ.y = 0.0f;
 
-					Vector3 distVec = fromPosXZ - swingTargetPosXZ;
+					// XZ平面でのスイングターゲットとの距離ベクトル
+					Vector3 distVec = fromPosXZ - swingTargetPosXZ;	// 距離ベクトル
+					// 高さを考慮しないで、スイングターゲットが有効範囲内か調べる
 					if (distVec.Length() > scopeRadius)
 					{
+						// 有効範囲内ではない
+						// 早期リターン
 						return;
 					}
 
+					//////// 2.スイングターゲットの座標たちの中で一番近い座標を探す ////////
+
+					// スイングターゲットの座標コンテナを取得
 					const std::vector<Vector3>& stPositions = swingTarget->GetSwingTargetPositions();
 
+					// 全ての座標を調べる
 					for (auto& stPos : stPositions)
 					{
-
+						// 座標との距離ベクトル
 						distVec = fromPos - stPos;
 
-						float destLen = distVec.Length();
+						// 座標との距離
+						const float destLen = distVec.Length();
 
+						// 今回の距離が今までの最短距離より短いか？
 						if (destLen < tmpDist)
 						{
+							// 短い場合はその距離とその座標を保治
 							tmpDist = destLen;
 							retPosition = &stPos;
 						}
 					}
 
-
+					// クエリ終了
+					return;
 				}
 			);
 
+			// スイングターゲットの座標を戻す。有効範囲内に無ければnullptrを戻す。
 			return retPosition;
 		}
 

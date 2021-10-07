@@ -27,7 +27,7 @@ namespace nsMyGame
 
 			// 8頂点の座標を計算
 
-			// 頂点は左手系ZUpなので、左手系YUpに置き換える
+			// （注意）頂点は左手系ZUpなので、左手系YUpに置き換える
 
 			// 左下手奥の場所の頂点
 			m_vertexPosition[enVertPos_X0Y0Z1] = centerPos;

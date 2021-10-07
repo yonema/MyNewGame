@@ -21,22 +21,18 @@ namespace nsMyGame
 
 			/**
 			 * @brief 初期化
-			 * @param[in,out] moveVecForward 前向きの移動ベクトルの参照
-			 * @param[in,out] moveVecRight 右向きの移動ベクトルの参照
+			 * @param[in,out] addMoveVec 加算移動ベクトルの参照
 			 * @param[in] camera プレイヤーカメラ
 			 * @param[in] playerInputData プレイヤー入力情報
 			*/
 			void CPlayerWalkAndRun::Init(
-				Vector3* moveVecForward,
-				Vector3* moveVecRight,
+				Vector3* addMoveVec,
 				const CPlayerCamera& camera,
 				const SPlayerInputData& playerInputData
 			)
 			{
-				// 前向きの移動ベクトルの参照をセット
-				m_moveVecForward = moveVecForward;
-				// 右向きの移動ベクトルの参照をセット
-				m_moveVecRight = moveVecRight;
+				// 加算移動ベクトルの参照をセット
+				m_addMoveVec = addMoveVec;
 				// プレイヤーのカメラをセット
 				m_playerCamera = &camera;
 				// プレイヤーの入力情報をセット
@@ -70,6 +66,8 @@ namespace nsMyGame
 				// 移動速度に制限をかける
 				LimitSpeed(absInputAxisMoveForward, absInputAxisMoveRight);
 
+				// 前のフレームの速度を更新
+				m_oldVelocity = m_addMoveVec->Length();
 
 				return;
 			}
@@ -92,9 +90,9 @@ namespace nsMyGame
 				moveRight.Normalize();
 
 				//奥方向への移動速度を加算。
-				*m_moveVecForward += moveForward * inputMoveF * kAcceleration;
+				*m_addMoveVec += moveForward * inputMoveF * kAcceleration;
 				//奥方向への移動速度を加算。
-				*m_moveVecRight += moveRight * inputMoveR * kAcceleration;
+				*m_addMoveVec += moveRight * inputMoveR * kAcceleration;
 
 				return;
 			}
@@ -124,32 +122,24 @@ namespace nsMyGame
 					friction = kGroundFriction;
 				}
 
-				// 前向きの移動ベクトルの摩擦を計算する
-				// 移動速度が最低速度以下なら
-				if (m_moveVecForward->Length() <= kMinSpeed)
+				// 摩擦を計算する
+				if (m_addMoveVec->Length() <= kMinSpeed)
 				{
+					// 移動速度が最低速度以下なら
 					// 移動ゼロにする
-					*m_moveVecForward = Vector3::Zero;
+					*m_addMoveVec = Vector3::Zero;
 				}
-				else if (absInputMoveF <= 0.001f)
+				else if (absInputMoveF <= 0.001f && absInputMoveR <= 0.001f)
 				{
 					// 入力がなかったら
 					// 摩擦て減速する
-					m_moveVecForward->Scale(friction);
+					m_addMoveVec->Scale(friction);
 				}
-
-				// 右向きの移動ベクトルの摩擦を計算する
-				// 移動速度が最低速度以下なら
-				if (m_moveVecRight->Length() <= kMinSpeed)
+				else if (m_addMoveVec->Length() < m_oldVelocity)
 				{
-					// 移動ゼロにする
-					*m_moveVecRight = Vector3::Zero;
-				}
-				else if (absInputMoveR <= 0.001f)
-				{
-					// 入力がなかったら
+					// 前のフレームより速度が落ちていたら
 					// 摩擦て減速する
-					m_moveVecRight->Scale(friction);
+					m_addMoveVec->Scale(friction);
 				}
 
 				return;
@@ -171,22 +161,13 @@ namespace nsMyGame
 				}
 
 
-				// 前方向の移動速度が最高速度をオーバーしているか？
-				if (m_moveVecForward->Length() > kMaxSpeed * absInputMoveF)
+				// 移動速度が最高速度をオーバーしているか？
+				if (m_addMoveVec->Length() > kMaxSpeed)
 				{
 					// オーバーしていたら最高速度を維持
-					m_moveVecForward->Normalize();
-					m_moveVecForward->Scale(kMaxSpeed * absInputMoveF);
+					m_addMoveVec->Normalize();
+					m_addMoveVec->Scale(kMaxSpeed);
 				}
-
-				// 右方向の移動速度が最高速度をオーバーしているか？
-				if (m_moveVecRight->Length() > kMaxSpeed * absInputMoveR)
-				{
-					// オーバーしていたら最高速度を維持
-					m_moveVecRight->Normalize();
-					m_moveVecRight->Scale(kMaxSpeed * absInputMoveR);
-				}
-				
 
 				return;
 			}

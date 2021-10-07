@@ -52,7 +52,7 @@ namespace nsMyGame
 				m_charaCon.Init(radius, height, *m_playerPosition);
 
 				// プレイヤーの歩きと走りのクラスの初期化
-				m_playerWalkAndRun.Init(&m_moveVecForward, &m_moveVecRight, playerCamera, playerInputData);
+				m_playerWalkAndRun.Init(&m_addMoveVec, playerCamera, playerInputData);
 
 
 #ifdef MY_DEBUG
@@ -89,8 +89,8 @@ namespace nsMyGame
 				// 移動ベクトルのX,Z成分を初期化
 				m_moveVec.x = 0.0f;
 				m_moveVec.z = 0.0f;
-				// 移動ベクトルに、前向きと移動ベクトルと右向きの移動ベクトルを加算する
-				m_moveVec += m_moveVecForward + m_moveVecRight;
+				// 移動ベクトルに、加算移動ベクトルを加算する
+				m_moveVec += m_addMoveVec;
 
 				// 重力
 				m_moveVec.y -= kGravityScale * nsTimer::GameTime().GetFrameDeltaTime();
@@ -131,6 +131,7 @@ namespace nsMyGame
 			{
 				// X,Z平面での移動があるか？
 				//if (fabsf(m_moveVec.x) < 0.001f && fabsf(m_moveVec.z) < 0.001f)
+				// 軸入力があるか？
 				if (fabsf(m_playerInputData->axisMoveForward) < 0.001f &&
 					fabsf(m_playerInputData->axisMoveRight) < 0.001f)
 				{
@@ -144,9 +145,8 @@ namespace nsMyGame
 				// ラジアン単位で回す
 				Quaternion nexrQRot;
 				nexrQRot.SetRotation(Vector3::AxisY, radAngle);
-				//m_moveVec.Length
-				m_playerRotation->Slerp(0.3f, *m_playerRotation, nexrQRot);
-				//m_playerRotation->SetRotation(Vector3::AxisY, radAngle);
+				// 現在の回転と次の回転を球面線形補間を行い、モデルを徐々に回転させる。
+				m_playerRotation->Slerp(kModelRotRate, *m_playerRotation, nexrQRot);
 
 				return;
 			}

@@ -18,6 +18,7 @@ namespace nsMyGame
 		*/
 		CBuilding::CBuilding()
 		{
+			// モデルレンダラーを初期化しておく
 			m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 
 			return;
@@ -64,24 +65,34 @@ namespace nsMyGame
 			const Vector3& scale
 		)
 		{
+			// モデルレンダラーのトランスフォームを更新
 			m_modelRender->SetPosition(pos);
 			m_modelRender->SetRotation(rot);
 			m_modelRender->SetScale(scale);
 
+			// モデルレンダラーを初期化
 			m_modelRender->Init(tkmFilePath);
 
+			// スイングターゲットを初期化
 			m_swingTarget.Init(*m_modelRender);
 
+			// スイングターゲットの座標を計算する
 			m_swingTarget.CalcSwingingTargetPositions(
 				kDefaultWidthSegments,
 				kDefaultHeightSegments,
 				kDefaultLengthSegments
 			);
+#ifdef TRUE
+#ifdef MY_DEBUG
 
+			// 計算されたスイングターゲットの座標コンテナを取得
 			const std::vector<Vector3>& swingTargetPositions = m_swingTarget.GetSwingTargetPositions();
 
+			// スイングターゲットの座標番号
 			int stPosNo = 0;
+			// スイングターゲットの座標の数だけキャパシティを確保
 			m_debugModels.reserve(swingTargetPositions.size());
+			// 全ての座標を調べる
 			for (auto& stPos : swingTargetPositions)
 			{
 				nsGraphic::nsModel::CModelRender* debugModel = 
@@ -91,7 +102,8 @@ namespace nsMyGame
 				m_debugModels.emplace_back(debugModel);
 
 			}
-
+#endif
+#endif
 
 			return;
 		}

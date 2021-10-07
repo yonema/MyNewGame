@@ -36,14 +36,12 @@ namespace nsMyGame
 
 				/**
 				 * @brief 初期化
-				 * @param[in,out] moveVecForward 前向きの移動ベクトルの参照
-				 * @param[in,out] moveVecRight 右向きの移動ベクトルの参照
+				 * @param[in,out] addMoveVec 加算移動ベクトルの参照
 				 * @param[in] camera プレイヤーカメラ
 				 * @param[in] playerInputData プレイヤー入力情報
 				*/
 				void Init(
-					Vector3* moveVecForward,
-					Vector3* moveVecRight,
+					Vector3* addMoveVec,
 					const CPlayerCamera& camera,
 					const SPlayerInputData& playerInputData
 				);
@@ -79,10 +77,10 @@ namespace nsMyGame
 				void LimitSpeed(const float absInputMoveF, const float absInputMoveR);
 
 			private:	// データメンバ
-				Vector3* m_moveVecForward = nullptr;			//!< 前向きの移動ベクトル
-				Vector3* m_moveVecRight = nullptr;				//!< 右向きの移動ベクトル
+				Vector3* m_addMoveVec = nullptr;				//!< 加算移動ベクトル
 				const CPlayerCamera* m_playerCamera = nullptr;	//!< プレイヤーカメラ
 				const SPlayerInputData* m_playerInputData = nullptr;	//!< プレイヤーの入力情報
+				float m_oldVelocity = 0.0f;						//!< 前のフレームの速度
 			};
 
 		}
