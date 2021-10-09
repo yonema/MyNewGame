@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "PlayerCamera.h"
+#include "Player.h"
 #include "PlayerConstData.h"
 
 namespace nsMyGame
@@ -10,14 +11,13 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// プレイヤーカメラの定数データを使用可能にする
-		using namespace nsPlayerCameraConstData;
+		using namespace nsPlayerConstData::nsPlayerCameraConstData;
 
 		/**
 		 * @brief 初期化
-		 * @param[in] startTargetPos スタート注視点
-		 * @param[in] inputData 入力情報
+		 * @param[in] player プレイヤーの参照
 		*/
-		void CPlayerCamera::Init(const Vector3& startTargetPos, const SPlayerInputData& inputData)
+		void CPlayerCamera::Init(const CPlayer& player)
 		{
 			// カメラをセット
 			m_camera = g_camera3D;
@@ -26,13 +26,11 @@ namespace nsMyGame
 			m_toCameraVec = kDefaultToCameraVec;
 
 			// プレイヤーの座標の参照をセット
-			m_playerPosition = &startTargetPos;
-			// プレイヤーの入力情報の参照をセット
-			m_playerInputData = &inputData;
+			m_playerRef = &player;
 
 			// カメラのスタートの視点と注視点を設定
-			m_camera->SetPosition(*m_playerPosition + m_toCameraVec);
-			m_camera->SetTarget(*m_playerPosition);
+			m_camera->SetPosition(m_playerRef->GetPosition() + m_toCameraVec);
+			m_camera->SetTarget(m_playerRef->GetPosition());
 
 			// バネカメラを初期化
 			m_springCamera.Init(*m_camera, kCameraMaxSpeed, true, kCameraRadius);
@@ -78,7 +76,9 @@ namespace nsMyGame
 
 			// 水平方向へのカメラの回転を計算する
 			// 垂直な軸、Y軸回りで回転させる
-			cameraQRot.SetRotationDegY(kCameraRotSpeed * m_playerInputData->axisCameraRotHorizontal);
+			cameraQRot.SetRotationDegY(
+				kCameraRotSpeed * m_playerRef->GetInputData().axisCameraRotHorizontal
+			);
 			// 注視点から視点へのベクトルを回転させる
 			cameraQRot.Apply(m_toCameraVec);
 
@@ -90,7 +90,10 @@ namespace nsMyGame
 			// 正規化する
 			axisH.Normalize();
 			// 水平な軸周りで回転させる
-			cameraQRot.SetRotationDeg(axisH, kCameraRotSpeed * m_playerInputData->axisCameraRotVertical);
+			cameraQRot.SetRotationDeg(
+				axisH,
+				kCameraRotSpeed * m_playerRef->GetInputData().axisCameraRotVertical
+			);
 			// 注視点から視点へのベクトルを回転させる
 			cameraQRot.Apply(m_toCameraVec);
 
@@ -131,7 +134,7 @@ namespace nsMyGame
 			//////// 1.カメラの注視点を計算する ////////
 
 			// 移動前の注視点をいれる
-			*targetPos_out = *m_playerPosition;
+			*targetPos_out = m_playerRef->GetPosition();
 			// プレイヤーの足元から少し上を注視点とする
 			targetPos_out->y += kTargetOffsetUp;
 			// プレイヤーの少し奥の方を注視点とする

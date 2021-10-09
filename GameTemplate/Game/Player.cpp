@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "PlayerConstData.h"
 
 namespace nsMyGame
 {
@@ -21,22 +20,19 @@ namespace nsMyGame
 		bool CPlayer::Start()
 		{
 			// プレイヤーモデルクラスの初期化
-			m_playerModel.Init(m_position, m_rotation);
+			m_playerModel.Init(*this);
 
 			// プレイヤーの入力情報クラスの初期化
-			m_playerInput.Init(&m_playerInputData);
+			m_playerInput.Init(this);
 
 			// プレイヤーカメラクラスの初期化
-			m_playerCamera.Init(m_position, m_playerInputData);
+			m_playerCamera.Init(*this);
 
 			// プレイヤー移動クラスの初期化
 			m_playerMove.Init(
 				kCapsuleRadius,
 				kDapsuleHeight,
-				&m_position,
-				&m_rotation,
-				m_playerCamera,
-				m_playerInputData
+				this
 				);
 
 			return true;
@@ -58,7 +54,7 @@ namespace nsMyGame
 		void CPlayer::Update()
 		{
 			// 入力処理を実行
-			m_playerInput.ExecuteInput();
+			m_playerInput.ExecuteUpdate();
 
 			// プレイヤーの移動を実行
 			m_playerMove.ExecuteUpdate();
@@ -71,5 +67,6 @@ namespace nsMyGame
 
 			return;
 		}
+
 	}
 }

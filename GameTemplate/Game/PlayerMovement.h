@@ -1,6 +1,7 @@
 #pragma once
 #include "Noncopyable.h"
 #include "PlayerWalkAndRun.h"
+#include "PlayerSwingAction.h"
 
 // デバック用
 #ifdef MY_DEBUG
@@ -15,8 +16,7 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// 前方宣言
-		class CPlayerCamera;	// プレイヤーカメラクラス
-		struct SPlayerInputData;	//プレイヤーの入力情報構造体
+		class CPlayer;	// プレイヤークラス
 
 		/**
 		 * @brief プレイヤーの動き関連のネームスペース
@@ -50,24 +50,53 @@ namespace nsMyGame
 				 * @brief 初期化
 				 * @param[in] radius カプセルコライダーの半径
 				 * @param[in] height カプセルコライダーの高さ
-				 * @param[in,out] position プレイヤーの座標の参照
-				 * @param[in,out] rotation プレイヤーの回転の参照
-				 * @param[in] playerCamera プレイヤーカメラ
-				 * @param[in] playerInputData プレイヤー入力情報
+				 * @param[in,out] player プレイヤーの参照
 				*/
 				void Init(
 					const float radius,
 					const float height,
-					Vector3* position,
-					Quaternion* rotation,
-					const CPlayerCamera& playerCamera,
-					const SPlayerInputData& playerInputData
+					CPlayer* player
 				);
 
 				/**
 				 * @brief プレイヤーの移動クラスのアップデートを実行する
 				*/
 				void ExecuteUpdate();
+
+				/**
+				 * @brief 移動ベクトルを設定する
+				 * @param[in] addMoveVec 移動ベクトル
+				*/
+				void SetAddMoveVec(const Vector3& addMoveVec)
+				{
+					m_addMoveVec = addMoveVec;
+				}
+
+				/**
+				 * @brief 移動ベクトルを得る
+				 * @return 移動ベクトル
+				*/
+				const Vector3& GetAddMoveVec() const
+				{
+					return m_addMoveVec;
+				}
+
+				/**
+				 * @brief 移動べクトルを正規化する
+				*/
+				void NormalizeAddMoveVec()
+				{
+					m_addMoveVec.Normalize();
+				}
+
+				/**
+				 * @brief 空中か？を得る
+				 * @return 空中か？
+				*/
+				bool IsAir() const
+				{
+					return m_charaCon.IsJump();
+				}
 
 
 			private:	// privateなメンバ関数
@@ -83,17 +112,16 @@ namespace nsMyGame
 				void UpdateTurnPlayer();
 
 			private:	// データメンバ
+				CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
+
 				CharacterController m_charaCon;			//!< キャラクターコントローラー
 
 				CPlayerWalkAndRun m_playerWalkAndRun;	//!< プレイヤーの歩きと走りクラス
+				CPlayerSwingAction m_playerSwingAction;	//!< プレイヤーのスイングアクションクラス
 
-				Vector3 m_moveVec = Vector3::Zero;			//!< 移動ベクトル
-				Vector3 m_addMoveVec = Vector3::Zero;		//!< 加算移動ベクトル
+				Vector3 m_moveVec = Vector3::Zero;		//!< 移動ベクトル
+				Vector3 m_addMoveVec = Vector3::Zero;	//!< 加算移動ベクトル
 
-				const CPlayerCamera* m_playerCamera = nullptr;			//!< プレイヤーカメラの参照
-				const SPlayerInputData* m_playerInputData = nullptr;	//!< プレイヤー入力情報の参照
-				Vector3* m_playerPosition = nullptr;					//!< プレイヤーの座標の参照
-				Quaternion* m_playerRotation = nullptr;					//!< プレイヤーの回転の参照
 
 				// デバック用
 #ifdef MY_DEBUG

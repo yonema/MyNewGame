@@ -443,6 +443,9 @@
     <ClCompile Include="Building.cpp">
       <Filter>MyCode\Building</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerSwingAction.cpp">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -837,6 +840,9 @@
     </ClInclude>
     <ClInclude Include="BuildingConstData.h">
       <Filter>MyCode\Building</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerSwingAction.h">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

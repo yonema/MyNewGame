@@ -58,7 +58,7 @@ namespace nsMyGame
 
 				// ƒvƒŒƒCƒ„[‚Ì¶¬
 				m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPriorityFirst);
-				m_player->SetStartPosition({ 0.0f,500.0f,0.0f });
+				m_player->SetPosition({ 0.0f,500.0f,0.0f });
 
 				return true;
 			}

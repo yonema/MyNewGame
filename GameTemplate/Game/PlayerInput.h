@@ -8,6 +8,9 @@ namespace nsMyGame
 	*/
 	namespace nsPlayer
 	{
+		// 前方宣言
+		class CPlayer;	// プレイヤークラス
+
 		/**
 		 * @brief プレイヤーの入力情報構造体
 		*/
@@ -18,6 +21,7 @@ namespace nsMyGame
 			float axisCameraRotVertical = 0.0f;		//!< カメラの縦回転の軸入力情報
 			float axisCameraRotHorizontal = 0.0f;	//!< カメラの横回転の軸入力情報
 			bool actionJump = false;				//!< ジャンプの入力情報
+			bool actionSwing = false;
 		};
 
 		/**
@@ -39,14 +43,23 @@ namespace nsMyGame
 
 			/**
 			 * @brief 初期化
-			 * @param[in,out] playerInputData プレイヤーの入力情報
+			 * @param[in,out] player プレイヤーの参照
 			*/
-			void Init(SPlayerInputData* playerInputData);
+			void Init(CPlayer* player);
 
 			/**
 			 * @brief 入力処理を実行する
 			*/
-			void ExecuteInput();
+			void ExecuteUpdate();
+
+			/**
+			 * @brief プレイヤーの入力情報を得る
+			 * @return プレイy－の入力情報
+			*/
+			const SPlayerInputData& GetPlayerInputData() const
+			{
+				return m_playerInputData;
+			}
 
 		private:	// privateなメンバ関数
 
@@ -71,8 +84,10 @@ namespace nsMyGame
 			void OnUpdateInputAxisCameraRot();
 
 		private:	// データメンバ
-			const GamePad* m_pad = nullptr;					//!<  ゲームパッド
-			SPlayerInputData* m_playerInputData = nullptr;	//!< プレイヤーの入力情報の参照
+			const GamePad* m_pad = nullptr;		//!<  ゲームパッド
+			CPlayer* m_playerRef = nullptr;		//!< プレイヤーの参照
+			SPlayerInputData m_playerInputData;	//!< プレイヤーの入力情報
+
 
 		};
 	}

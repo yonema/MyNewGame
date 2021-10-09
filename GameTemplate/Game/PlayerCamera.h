@@ -1,6 +1,5 @@
 #pragma once
 #include "Noncopyable.h"
-#include "PlayerInput.h"
 #include "SpringCamera.h"
 
 namespace nsMyGame
@@ -11,7 +10,7 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// 前方宣言
-		struct SPlayerInputData;	// プレイヤーの入力情報構造体
+		class CPlayer;	// プレイヤーの入力情報構造体
 
 		/**
 		 * @brief プレイヤーのカメラクラス
@@ -32,10 +31,9 @@ namespace nsMyGame
 
 			/**
 			 * @brief 初期化
-			 * @param[in] startTargetPos スタート注視点
-			 * @param[in] inputData 入力情報
+			 * @param[in] player プレイヤーの参照
 			*/
-			void Init(const Vector3& startTargetPos, const SPlayerInputData& inputData);
+			void Init(const CPlayer& player);
 
 			/**
 			 * @brief プレイヤーカメラクラスのアップデートを実行する
@@ -85,13 +83,10 @@ namespace nsMyGame
 			void UpdateSpringCamera(const Vector3& pos, const Vector3& targetPos);
 
 		private:	// データメンバ
-			Camera* m_camera = nullptr;				//!< カメラ
-			nsCamera::CSpringCamera m_springCamera;	//!< バネカメラ
-			Vector3 m_toCameraVec = Vector3::Zero;	//!< 注視点から視点へのベクトル
-
-			const Vector3* m_playerPosition = nullptr;				//!< プレイヤーの座標の参照
-			const SPlayerInputData* m_playerInputData = nullptr;	//!< プレイヤーの入力情報の参照
-
+			Camera* m_camera = nullptr;					//!< カメラ
+			nsCamera::CSpringCamera m_springCamera;		//!< バネカメラ
+			Vector3 m_toCameraVec = Vector3::Zero;		//!< 注視点から視点へのベクトル
+			const CPlayer* m_playerRef = nullptr;		//!< プレイヤーの参照
 		};
 
 	}

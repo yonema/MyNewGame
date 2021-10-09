@@ -17,6 +17,9 @@ namespace nsMyGame
 	*/
 	namespace nsPlayer
 	{
+		// 前方宣言
+		class CPlayer;	// プレイヤークラス
+
 		/**
 		 * @brief プレイヤーモデルクラス
 		*/
@@ -36,10 +39,9 @@ namespace nsMyGame
 
 			/**
 			 * @brief 初期化
-			 * @param[in] startPos スタート座標
-			 * @param[in] startRot スタート回転
+			 * @param[in] player プレイヤーの参照
 			*/
-			void Init(const Vector3& startPos, const Quaternion& startRot);
+			void Init(const CPlayer& player);
 
 			/**
 			 * @brief プレイヤーモデルクラスのアップデートを実行する
@@ -56,10 +58,8 @@ namespace nsMyGame
 
 			/**
 			 * @brief モデル初期化
-			 * @param[in] startPos スタート座標
-			 * @param[in] startRot スタート回転
 			*/
-			void InitModel(const Vector3& startPos, const Quaternion& startRot);
+			void InitModel();
 
 			/**
 			 * @brief モデル解放
@@ -77,19 +77,17 @@ namespace nsMyGame
 			void UpdateAnimationTransition();
 
 		private:	// データメンバ
+			const CPlayer* m_playerRef = nullptr;						//!< プレイヤーの参照
 			nsGraphic::nsModel::CModelRender* m_playerModel = nullptr;	//!< プレイヤーのモデルレンダラー
+
 			//!< アニメーションクリップスクラス
-			AnimationClip m_animationClips[	nsPlayerModelRenderConstData::enAnim_num];
-
+			AnimationClip m_animationClips[nsPlayerConstData::nsPlayerModelRenderConstData::enAnim_num];
 			//!< アニメーションステート
-			nsPlayerModelRenderConstData::EnAnimationClips m_animState =
-				nsPlayerModelRenderConstData::enAnim_idle;
-
+			nsPlayerConstData::nsPlayerModelRenderConstData::EnAnimationClips m_animState =
+				nsPlayerConstData::nsPlayerModelRenderConstData::enAnim_idle;
 			//!< アニメーション補完時間
-			float m_AnimInterpolateTime = nsPlayerModelRenderConstData::kDefaultAnimInterpolateTime;
-
-			const Vector3* m_playerPosition = nullptr;		//!< プレイヤーの座標の参照
-			const Quaternion* m_playerRotation = nullptr;	//!< プレイヤーの回転の参照
+			float m_AnimInterpolateTime = 
+				nsPlayerConstData::nsPlayerModelRenderConstData::kDefaultAnimInterpolateTime;
 
 		};
 

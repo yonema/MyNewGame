@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "PlayerModel.h"
+#include "Player.h"
 #include "ModelRender.h"
 
 namespace nsMyGame
@@ -13,7 +14,7 @@ namespace nsMyGame
 		// 共通データを使用可能にする
 		using namespace nsCommonData;
 		// プレイヤーの定数データを使用可能にする
-		using namespace nsPlayerModelRenderConstData;
+		using namespace nsPlayerConstData::nsPlayerModelRenderConstData;
 
 		/**
 		* @brief デストラクタ
@@ -27,16 +28,18 @@ namespace nsMyGame
 		}
 
 		/**
-		 * @brief 初期化
-		 * @param startPos スタート座標
-		 * @param startRot スタート回転
+		 * @brief モデル初期化
+		 * @param[in] player プレイヤーの参照
 		*/
-		void CPlayerModel::Init(const Vector3& startPos, const Quaternion& startRot)
+		void CPlayerModel::Init(const CPlayer& player)
 		{
+			// プレイヤーの参照をセット
+			m_playerRef = &player;
+
 			// アニメーション初期化
 			InitAnimation();
 			// モデル初期化
-			InitModel(startPos, startRot);
+			InitModel();
 
 			return;
 		}
@@ -74,21 +77,15 @@ namespace nsMyGame
 
 		/**
 		 * @brief モデル初期化
-		 * @param[in] startPos スタート座標
-		 * @param[in] startRot スタート回転
 		*/
-		void CPlayerModel::InitModel(const Vector3& startPos, const Quaternion& startRot)
+		void CPlayerModel::InitModel()
 		{
 			// プレイヤーモデルレンダラーの生成
 			m_playerModel = NewGO<nsGraphic::nsModel::CModelRender>(enPriorityFirst);
 
-			// プレイヤーの座標と回転の参照を受け取る
-			m_playerPosition = &startPos;
-			m_playerRotation = &startRot;
-
 			// 座標と回転を設定
-			m_playerModel->SetPosition(*m_playerPosition);
-			m_playerModel->SetRotation(*m_playerRotation);
+			m_playerModel->SetPosition(m_playerRef->GetPosition());
+			m_playerModel->SetRotation(m_playerRef->GetRotation());
 
 			// プレイヤーモデルレンダラーの初期化
 			m_playerModel->Init(kPlayerModelFilePath, m_animationClips, enAnim_num, enModelUpAxisY);
@@ -124,8 +121,8 @@ namespace nsMyGame
 		void CPlayerModel::UpdateTransform()
 		{
 			// 座標と回転を更新
-			m_playerModel->SetPosition(*m_playerPosition);
-			m_playerModel->SetRotation(*m_playerRotation);
+			m_playerModel->SetPosition(m_playerRef->GetPosition());
+			m_playerModel->SetRotation(m_playerRef->GetRotation());
 
 			return;
 		}

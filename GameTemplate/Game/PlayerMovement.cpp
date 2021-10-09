@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "PlayerMovement.h"
+#include "Player.h"
 #include "PlayerConstData.h"
-#include "PlayerCamera.h"
-#include "PlayerInput.h"
 #include "GameTime.h"
 
 namespace nsMyGame
@@ -19,40 +18,31 @@ namespace nsMyGame
 		namespace nsPlayerMovenent
 		{
 			// プレイヤー移動クラスの定数データを使用可能にする
-			using namespace nsPlayerMoveConstData;
+			using namespace nsPlayerConstData::nsPlayerMoveConstData;
 
 			/**
 			 * @brief 初期化
 			 * @param[in] radius カプセルコライダーの半径
 			 * @param[in] height カプセルコライダーの高さ
-			 * @param[in,out] position プレイヤーの座標の参照
-			 * @param[in,out] rotation プレイヤーの回転の参照
-			 * @param[in] playerCamera プレイヤーカメラ
-			 * @param[in] playerInputData プレイヤー入力情報
+			 * @param[in,out] player プレイヤーの参照
 			*/
 			void CPlayerMovement::Init(
 				const float radius,
 				const float height,
-				Vector3* position,
-				Quaternion* rotation,
-				const CPlayerCamera& playerCamera,
-				const SPlayerInputData& playerInputData
+				CPlayer* player
 			)
 			{
-				// プレイヤーの座標の参照をセットする
-				m_playerPosition = position;
-				// プレイヤーの回転の参照をセットする
-				m_playerRotation = rotation;
-				// プレイヤーカメラをセットする
-				m_playerCamera = &playerCamera;
-				// プレイヤーの入力情報をセットする
-				m_playerInputData = &playerInputData;
+				// プレイヤーの参照をセットする
+				m_playerRef = player;
 
 				// キャラクターコントローラ初期化
-				m_charaCon.Init(radius, height, *m_playerPosition);
+				m_charaCon.Init(radius, height, m_playerRef->GetPosition());
 
 				// プレイヤーの歩きと走りのクラスの初期化
-				m_playerWalkAndRun.Init(&m_addMoveVec, playerCamera, playerInputData);
+				m_playerWalkAndRun.Init(*m_playerRef, this);
+
+				// プレイヤーのスイングアクションクラスの初期化
+				m_playerSwingAction.Init(*m_playerRef, this);
 
 
 #ifdef MY_DEBUG
@@ -83,32 +73,47 @@ namespace nsMyGame
 			*/
 			void CPlayerMovement::UpdateMovePlayer()
 			{
-				// 歩きと走りを実行
-				m_playerWalkAndRun.Execute(m_charaCon.IsJump());
-
-				// 移動ベクトルのX,Z成分を初期化
-				m_moveVec.x = 0.0f;
-				m_moveVec.z = 0.0f;
-				// 移動ベクトルに、加算移動ベクトルを加算する
-				m_moveVec += m_addMoveVec;
-
-				// 重力
-				m_moveVec.y -= kGravityScale * nsTimer::GameTime().GetFrameDeltaTime();
-
-				// ジャンプ
-				// ジャンプボタンが押されている、かつ、地面についている
-				if (m_playerInputData->actionJump && m_charaCon.IsOnGround())
+				if (m_playerRef->GetInputData().actionSwing)
 				{
-					m_moveVec.y += kJumpForce;
+					m_playerSwingAction.Execute();
+
+					m_playerRef->SetPosition(m_addMoveVec);
+					m_charaCon.SetPosition(m_addMoveVec);
+
+					m_moveVec = Vector3::Zero;
+					m_addMoveVec = Vector3::Zero;
 				}
-
-				// キャラクターコントローラー実行
-				*m_playerPosition = m_charaCon.Execute(m_moveVec, nsTimer::GameTime().GetFrameDeltaTime());
-
-				// 地面についていたら、重力リセット
-				if (m_charaCon.IsOnGround())
+				else
 				{
-					m_moveVec.y = 0.0f;
+					// 歩きと走りを実行
+					m_playerWalkAndRun.Execute();
+
+					// 移動ベクトルのX,Z成分を初期化
+					m_moveVec.x = 0.0f;
+					m_moveVec.z = 0.0f;
+
+
+					// 移動ベクトルに、加算移動ベクトルを加算する
+					m_moveVec += m_addMoveVec;
+
+					// 重力
+					m_moveVec.y -= kGravityScale * nsTimer::GameTime().GetFrameDeltaTime();
+
+					// ジャンプ
+					// ジャンプボタンが押されている、かつ、地面についている
+					if (m_playerRef->GetInputData().actionJump && m_charaCon.IsOnGround())
+					{
+						m_moveVec.y += kJumpForce;
+					}
+
+					// キャラクターコントローラー実行
+					m_playerRef->SetPosition(m_charaCon.Execute(m_moveVec, nsTimer::GameTime().GetFrameDeltaTime()));
+
+					// 地面についていたら、重力リセット
+					if (m_charaCon.IsOnGround())
+					{
+						m_moveVec.y = 0.0f;
+					}
 				}
 
 #ifdef MY_DEBUG
@@ -117,7 +122,9 @@ namespace nsMyGame
 				//	m_moveVec.x, m_moveVec.y, m_moveVec.z,m_moveVec.Length());
 				//swprintf_s(text, L"x:%2.2f,y:%2.2f,z:%2.2f",m_moveVec.x, m_moveVec.y, m_moveVec.z);
 				swprintf_s(text, L"forward:%2.2f,right:%2.2f\nlen:%2.2f",
-					m_playerInputData->axisMoveForward, m_playerInputData->axisMoveRight, m_moveVec.Length());
+					m_playerRef->GetInputData().axisMoveForward,
+					m_playerRef->GetInputData().axisMoveRight,
+					m_moveVec.Length());
 				m_moveVecFont->SetText(text);
 #endif
 
@@ -130,10 +137,10 @@ namespace nsMyGame
 			void CPlayerMovement::UpdateTurnPlayer()
 			{
 				// X,Z平面での移動があるか？
-				//if (fabsf(m_moveVec.x) < 0.001f && fabsf(m_moveVec.z) < 0.001f)
+				if (fabsf(m_moveVec.x) < 0.001f && fabsf(m_moveVec.z) < 0.001f)
 				// 軸入力があるか？
-				if (fabsf(m_playerInputData->axisMoveForward) < 0.001f &&
-					fabsf(m_playerInputData->axisMoveRight) < 0.001f)
+				//if (fabsf(m_playerRef->GetInputData().axisMoveForward) < 0.001f &&
+				//	fabsf(m_playerRef->GetInputData().axisMoveRight) < 0.001f)
 				{
 					// 移動していない
 					// 早期リターン
@@ -146,7 +153,8 @@ namespace nsMyGame
 				Quaternion nexrQRot;
 				nexrQRot.SetRotation(Vector3::AxisY, radAngle);
 				// 現在の回転と次の回転を球面線形補間を行い、モデルを徐々に回転させる。
-				m_playerRotation->Slerp(kModelRotRate, *m_playerRotation, nexrQRot);
+				nexrQRot.Slerp(kModelRotRate, m_playerRef->GetRotation(), nexrQRot);
+				m_playerRef->SetRotation(nexrQRot);
 
 				return;
 			}

@@ -9,14 +9,16 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// 前方宣言
-		class CPlayerCamera;		// プレイヤーカメラ
-		struct SPlayerInputData;	//プレイヤーの入力情報構造体
+		class CPlayer;			// プレイヤークラス
 
 		/**
 		 * @brief プレイヤーの動き関連のネームスペース
 		*/
 		namespace nsPlayerMovenent
 		{
+			// 前方宣言
+			class CPlayerMovement;	// プレイヤーの動きクラス
+
 			/**
 			 * @brief プレイヤーの歩きと走りクラス
 			*/
@@ -36,21 +38,18 @@ namespace nsMyGame
 
 				/**
 				 * @brief 初期化
-				 * @param[in,out] addMoveVec 加算移動ベクトルの参照
-				 * @param[in] camera プレイヤーカメラ
-				 * @param[in] playerInputData プレイヤー入力情報
+				 * @param[in] player プレイヤー
+				 * @param[in,out] playerMovement プレイヤー移動クラスの参照
 				*/
 				void Init(
-					Vector3* addMoveVec,
-					const CPlayerCamera& camera,
-					const SPlayerInputData& playerInputData
+					const CPlayer& player,
+					CPlayerMovement* playerMovement
 				);
 
 				/**
 				 * @brief 歩きと走りの処理を実行
-				 * @param[in] isAir 空中か？
 				*/
-				void Execute(const bool isAir);
+				void Execute();
 
 			private:	// privateなメンバ関数
 
@@ -65,9 +64,8 @@ namespace nsMyGame
 				 * @brief 摩擦の計算
 				 * @param[in] absInputMoveF 前、後の軸入力の絶対値
 				 * @param[in] absInputMoveR 右、左の軸入力の絶対値
-				 * @param[in] isAir 空中か？
 				*/
-				void Friction(const float absInputMoveF, const float absInputMoveR, const bool isAir);
+				void Friction(const float absInputMoveF, const float absInputMoveR);
 
 				/**
 				 * @brief 移動速度に速度制限をかける
@@ -77,9 +75,8 @@ namespace nsMyGame
 				void LimitSpeed(const float absInputMoveF, const float absInputMoveR);
 
 			private:	// データメンバ
-				Vector3* m_addMoveVec = nullptr;				//!< 加算移動ベクトル
-				const CPlayerCamera* m_playerCamera = nullptr;	//!< プレイヤーカメラ
-				const SPlayerInputData* m_playerInputData = nullptr;	//!< プレイヤーの入力情報
+				CPlayerMovement* m_playerMovementRef = nullptr;	//!< 移動クラスの参照
+				const CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
 				float m_oldVelocity = 0.0f;						//!< 前のフレームの速度
 			};
 

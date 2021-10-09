@@ -3,6 +3,7 @@
 #include "PlayerMovement.h"
 #include "PlayerInput.h"
 #include "PlayerCamera.h"
+#include "PlayerConstData.h"
 
 namespace nsMyGame
 {
@@ -51,14 +52,57 @@ namespace nsMyGame
 		public:		// メンバ関数
 
 			/**
-			 * @brief 初期位置を設定する
-			 * @param[in] startPos スタート座標
+			 * @brief 座標を設定する
+			 * @param[in] pos 座標
 			*/
-			void SetStartPosition(const Vector3& startPos)
+			void SetPosition(const Vector3& pos)
 			{
-				// スタート関数がまだ完了していないか？
-				if (!IsStart())
-					m_position = startPos;
+				m_position = pos;
+			}
+
+			/**
+			 * @brief 座標を得る
+			 * @return 座標
+			*/
+			const Vector3& GetPosition() const
+			{
+				return m_position;
+			}
+
+			/**
+			 * @brief 回転をセットする
+			 * @param[in] rot 回転
+			*/
+			void SetRotation(const Quaternion& rot)
+			{
+				m_rotation = rot;
+			}
+
+			/**
+			 * @brief 回転を得る
+			 * @return 回転
+			*/
+			const Quaternion& GetRotation() const
+			{
+				return m_rotation;
+			}
+
+			/**
+			 * @brief プレイヤーの入力情報を得る
+			 * @return プレイヤーの入力情報
+			*/
+			const SPlayerInputData& GetInputData() const
+			{
+				return m_playerInput.GetPlayerInputData();
+			}
+
+			/**
+			 * @brief プレイヤーのカメラを得る
+			 * @return プレイヤーのカメラ
+			*/
+			const CPlayerCamera& GetCamera() const
+			{
+				return m_playerCamera;
 			}
 
 		private:	// privateなメンバ関数
@@ -70,9 +114,9 @@ namespace nsMyGame
 			CPlayerModel m_playerModel;						//!< プレイヤーモデルクラス
 			CPlayerInput m_playerInput;						//!< プレイヤー入力クラス
 			CPlayerCamera m_playerCamera;					//!< プレイヤーカメラクラス
-			nsPlayerMovenent::CPlayerMovement m_playerMove;						//!< プレイヤー移動クラス
-
-			SPlayerInputData m_playerInputData;				//!< プレイヤーの入力情報
+			nsPlayerMovenent::CPlayerMovement m_playerMove;	//!< プレイヤー移動クラス
+			//!< プレイヤーのステート
+			nsPlayerConstData::EnPlayerState m_playerState = nsPlayerConstData::enWalkAndRun;
 		};
 
 	}

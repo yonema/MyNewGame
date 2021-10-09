@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "PlayerWalkAndRun.h"
+#include "Player.h"
+#include "PlayerMovement.h"
 #include "PlayerConstData.h"
-#include "PlayerCamera.h"
-#include "PlayerInput.h"
 
 namespace nsMyGame
 {
@@ -17,40 +17,35 @@ namespace nsMyGame
 		namespace nsPlayerMovenent
 		{
 			// プレイヤーの歩きと走りクラスの定数データを使用可能にする
-			using namespace nsPlayerWalkAndRunConstData;
+			using namespace nsPlayerConstData::nsPlayerWalkAndRunConstData;
 
 			/**
 			 * @brief 初期化
-			 * @param[in,out] addMoveVec 加算移動ベクトルの参照
-			 * @param[in] camera プレイヤーカメラ
-			 * @param[in] playerInputData プレイヤー入力情報
+			 * @param[in] player プレイヤー
+			 * @param[in,out] playerMovement プレイヤー移動クラスの参照
 			*/
 			void CPlayerWalkAndRun::Init(
-				Vector3* addMoveVec,
-				const CPlayerCamera& camera,
-				const SPlayerInputData& playerInputData
+				const CPlayer& player,
+				CPlayerMovement* playerMovement
 			)
 			{
+				// プレイヤーの参照をセット
+				m_playerRef = &player;
 				// 加算移動ベクトルの参照をセット
-				m_addMoveVec = addMoveVec;
-				// プレイヤーのカメラをセット
-				m_playerCamera = &camera;
-				// プレイヤーの入力情報をセット
-				m_playerInputData = &playerInputData;
+				m_playerMovementRef = playerMovement;
 
 				return;
 			}
 
 			/**
 			 * @brief 歩きと走りの処理を実行
-			 * @param[in] isAir 空中か？
 			*/
-			void CPlayerWalkAndRun::Execute(const bool isAir)
+			void CPlayerWalkAndRun::Execute()
 			{
 				// 前、後移動の軸入力
-				const float inputAxisMoveForward = m_playerInputData->axisMoveForward;
+				const float inputAxisMoveForward = m_playerRef->GetInputData().axisMoveForward;
 				// 右、左移動の軸入力
-				const float inputAxisMoveRight = m_playerInputData->axisMoveRight;
+				const float inputAxisMoveRight = m_playerRef->GetInputData().axisMoveRight;
 
 				// 前、後移動の軸入力の絶対値
 				const float absInputAxisMoveForward = fabsf(inputAxisMoveForward);
@@ -61,13 +56,13 @@ namespace nsMyGame
 				Acceleration(inputAxisMoveForward, inputAxisMoveRight);
 
 				// 摩擦を計算する
-				Friction(absInputAxisMoveForward, absInputAxisMoveRight, isAir);
+				Friction(absInputAxisMoveForward, absInputAxisMoveRight);
 
 				// 移動速度に制限をかける
 				LimitSpeed(absInputAxisMoveForward, absInputAxisMoveRight);
 
 				// 前のフレームの速度を更新
-				m_oldVelocity = m_addMoveVec->Length();
+				m_oldVelocity = m_playerMovementRef->GetAddMoveVec().Length();
 
 				return;
 			}
@@ -80,9 +75,9 @@ namespace nsMyGame
 			void CPlayerWalkAndRun::Acceleration(const float inputMoveF, const float inputMoveR)
 			{
 				// 移動の前方向
-				Vector3 moveForward = m_playerCamera->GetCameraForward();
+				Vector3 moveForward = m_playerRef->GetCamera().GetCameraForward();
 				// 移動の右方向
-				Vector3 moveRight = m_playerCamera->GetCameraRight();
+				Vector3 moveRight = m_playerRef->GetCamera().GetCameraRight();
 				// Y成分を消してXZ平面での前方向と右方向に変換する
 				moveForward.y = 0.0f;
 				moveForward.Normalize();
@@ -90,9 +85,13 @@ namespace nsMyGame
 				moveRight.Normalize();
 
 				//奥方向への移動速度を加算。
-				*m_addMoveVec += moveForward * inputMoveF * kAcceleration;
+				m_playerMovementRef->SetAddMoveVec(
+					m_playerMovementRef->GetAddMoveVec() + moveForward * inputMoveF * kAcceleration
+				);
 				//奥方向への移動速度を加算。
-				*m_addMoveVec += moveRight * inputMoveR * kAcceleration;
+				m_playerMovementRef->SetAddMoveVec(
+					m_playerMovementRef->GetAddMoveVec() + moveRight * inputMoveR * kAcceleration
+				);
 
 				return;
 			}
@@ -101,17 +100,14 @@ namespace nsMyGame
 			 * @brief 摩擦の計算
 			 * @param[in] absInputMoveF 前、後の軸入力の絶対値
 			 * @param[in] absInputMoveR 右、左の軸入力の絶対値
-			 * @param[in] isAir 空中か？
 			*/
-			void CPlayerWalkAndRun::Friction(
-				const float absInputMoveF, const float absInputMoveR, const bool isAir
-			)
+			void CPlayerWalkAndRun::Friction(const float absInputMoveF, const float absInputMoveR)
 			{
 				// 摩擦力
 				float friction = 0.0f;
 
 				// 空中か？
-				if (isAir)
+				if (m_playerMovementRef->IsAir())
 				{
 					// 空中の摩擦力
 					friction = kAirFriction;
@@ -122,24 +118,31 @@ namespace nsMyGame
 					friction = kGroundFriction;
 				}
 
+				// 移動ベクトルの大きさ
+				const float moveVecLen = m_playerMovementRef->GetAddMoveVec().Length();
+
 				// 摩擦を計算する
-				if (m_addMoveVec->Length() <= kMinSpeed)
+				if (moveVecLen <= kMinSpeed)
 				{
 					// 移動速度が最低速度以下なら
 					// 移動ゼロにする
-					*m_addMoveVec = Vector3::Zero;
+					m_playerMovementRef->SetAddMoveVec(Vector3::Zero);
 				}
 				else if (absInputMoveF <= 0.001f && absInputMoveR <= 0.001f)
 				{
 					// 入力がなかったら
 					// 摩擦て減速する
-					m_addMoveVec->Scale(friction);
+					m_playerMovementRef->SetAddMoveVec(
+						m_playerMovementRef->GetAddMoveVec() * friction
+					);
 				}
-				else if (m_addMoveVec->Length() < m_oldVelocity)
+				else if (moveVecLen < m_oldVelocity)
 				{
 					// 前のフレームより速度が落ちていたら
 					// 摩擦て減速する
-					m_addMoveVec->Scale(friction);
+					m_playerMovementRef->SetAddMoveVec(
+						m_playerMovementRef->GetAddMoveVec() * friction
+					);
 				}
 
 				return;
@@ -162,11 +165,11 @@ namespace nsMyGame
 
 
 				// 移動速度が最高速度をオーバーしているか？
-				if (m_addMoveVec->Length() > kMaxSpeed)
+				if (m_playerMovementRef->GetAddMoveVec().Length() > kMaxSpeed)
 				{
 					// オーバーしていたら最高速度を維持
-					m_addMoveVec->Normalize();
-					m_addMoveVec->Scale(kMaxSpeed);
+					m_playerMovementRef->NormalizeAddMoveVec();
+					m_playerMovementRef->SetAddMoveVec(m_playerMovementRef->GetAddMoveVec() * kMaxSpeed);
 				}
 
 				return;
