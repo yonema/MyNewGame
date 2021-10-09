@@ -21,19 +21,19 @@ namespace nsMyGame
 		class CPlayer;	// プレイヤークラス
 
 		/**
-		 * @brief プレイヤーモデルクラス
+		 * @brief プレイヤーモデルアニメーションクラス
 		*/
-		class CPlayerModel : private nsUtil::Noncopyable
+		class CPlayerModelAnimation : private nsUtil::Noncopyable
 		{
 		public:		// コンストラクタとデストラクタ
 			/**
 			 * @brief コンストラクタ
 			*/
-			CPlayerModel() = default;
+			CPlayerModelAnimation() = default;
 			/**
 			* @brief デストラクタ
 			*/
-			~CPlayerModel();
+			~CPlayerModelAnimation();
 
 		public:		// メンバ関数
 

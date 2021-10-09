@@ -80,9 +80,10 @@ namespace nsMyGame
 			m_swingTarget.CalcSwingingTargetPositions(
 				kDefaultWidthSegments,
 				kDefaultHeightSegments,
-				kDefaultLengthSegments
+				kDefaultLengthSegments,
+				1000.0f
 			);
-#ifdef TRUE
+#ifdef no
 #ifdef MY_DEBUG
 
 			// 計算されたスイングターゲットの座標コンテナを取得

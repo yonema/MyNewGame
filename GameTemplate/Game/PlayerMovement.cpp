@@ -58,6 +58,18 @@ namespace nsMyGame
 			*/
 			void CPlayerMovement::ExecuteUpdate()
 			{
+				// スイングアクションがtrueで、かつ、空中だったら
+				if (m_playerRef->GetInputData().actionSwing && IsAir())
+				{
+					// スイング状態
+					m_playerRef->SetState(nsPlayerConstData::enSwing);
+				}
+				else
+				{
+					// 歩きと走り状態
+					m_playerRef->SetState(nsPlayerConstData::enWalkAndRun);
+				}
+
 				// プレイヤーの移動を更新
 				UpdateMovePlayer();
 
@@ -73,18 +85,10 @@ namespace nsMyGame
 			*/
 			void CPlayerMovement::UpdateMovePlayer()
 			{
-				if (m_playerRef->GetInputData().actionSwing)
+				// ステートで処理を振り分ける
+				switch (m_playerRef->GetState())
 				{
-					m_playerSwingAction.Execute();
-
-					m_playerRef->SetPosition(m_addMoveVec);
-					m_charaCon.SetPosition(m_addMoveVec);
-
-					m_moveVec = Vector3::Zero;
-					m_addMoveVec = Vector3::Zero;
-				}
-				else
-				{
+				case nsPlayerConstData::enWalkAndRun:	// 歩きと走り
 					// 歩きと走りを実行
 					m_playerWalkAndRun.Execute();
 
@@ -114,6 +118,19 @@ namespace nsMyGame
 					{
 						m_moveVec.y = 0.0f;
 					}
+					break;
+				case nsPlayerConstData::enSwing:	// スイング
+
+					// スイングアクションを実行
+					m_playerSwingAction.Execute();
+
+					m_playerRef->SetPosition(m_addMoveVec);
+					m_charaCon.SetPosition(m_addMoveVec);
+
+					m_moveVec = Vector3::Zero;
+					m_addMoveVec = Vector3::Zero;
+
+					break;
 				}
 
 #ifdef MY_DEBUG
@@ -137,7 +154,7 @@ namespace nsMyGame
 			void CPlayerMovement::UpdateTurnPlayer()
 			{
 				// X,Z平面での移動があるか？
-				if (fabsf(m_moveVec.x) < 0.001f && fabsf(m_moveVec.z) < 0.001f)
+				if (fabsf(m_moveVec.x) < kMoveVecMin && fabsf(m_moveVec.z) < kMoveVecMin)
 				// 軸入力があるか？
 				//if (fabsf(m_playerRef->GetInputData().axisMoveForward) < 0.001f &&
 				//	fabsf(m_playerRef->GetInputData().axisMoveRight) < 0.001f)

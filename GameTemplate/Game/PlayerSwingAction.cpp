@@ -44,7 +44,7 @@ namespace nsMyGame
 				if (m_playerRef->GetInputData().actionSwing)
 				{
 					target = nsStringActionTarget::GetNearestSwintTargetPointWithinScope(
-						m_playerRef->GetPosition(), 5000.0f
+						m_playerRef->GetPosition(), 2000.0f
 					);
 
 					if (target != nullptr)

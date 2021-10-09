@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "PlayerModel.h"
+#include "PlayerModelAnimation.h"
 #include "Player.h"
 #include "ModelRender.h"
 
@@ -19,7 +19,7 @@ namespace nsMyGame
 		/**
 		* @brief デストラクタ
 		*/
-		CPlayerModel::~CPlayerModel()
+		CPlayerModelAnimation::~CPlayerModelAnimation()
 		{
 			// モデル解放
 			ReleaseModel();
@@ -31,7 +31,7 @@ namespace nsMyGame
 		 * @brief モデル初期化
 		 * @param[in] player プレイヤーの参照
 		*/
-		void CPlayerModel::Init(const CPlayer& player)
+		void CPlayerModelAnimation::Init(const CPlayer& player)
 		{
 			// プレイヤーの参照をセット
 			m_playerRef = &player;
@@ -47,7 +47,7 @@ namespace nsMyGame
 		/**
 		 * @brief プレイヤーモデルクラスのアップデートを実行する
 		*/
-		void CPlayerModel::ExecuteUpdate()
+		void CPlayerModelAnimation::ExecuteUpdate()
 		{
 			// トランスフォームを更新
 			UpdateTransform();
@@ -62,7 +62,7 @@ namespace nsMyGame
 		/**
 		 * @brief アニメーション初期化
 		*/
-		void CPlayerModel::InitAnimation()
+		void CPlayerModelAnimation::InitAnimation()
 		{
 			// アニメーションの初期化
 
@@ -78,7 +78,7 @@ namespace nsMyGame
 		/**
 		 * @brief モデル初期化
 		*/
-		void CPlayerModel::InitModel()
+		void CPlayerModelAnimation::InitModel()
 		{
 			// プレイヤーモデルレンダラーの生成
 			m_playerModel = NewGO<nsGraphic::nsModel::CModelRender>(enPriorityFirst);
@@ -99,7 +99,7 @@ namespace nsMyGame
 		/**
 		* @brief モデル解放
 		*/
-		void CPlayerModel::ReleaseModel()
+		void CPlayerModelAnimation::ReleaseModel()
 		{
 			// 初期化していないか？
 			if (!m_playerModel)
@@ -118,7 +118,7 @@ namespace nsMyGame
 		/**
 		 * @brief トランスフォームを更新
 		*/
-		void CPlayerModel::UpdateTransform()
+		void CPlayerModelAnimation::UpdateTransform()
 		{
 			// 座標と回転を更新
 			m_playerModel->SetPosition(m_playerRef->GetPosition());
@@ -131,7 +131,7 @@ namespace nsMyGame
 		/**
 		 * @brief アニメーション遷移を更新
 		*/
-		void CPlayerModel::UpdateAnimationTransition()
+		void CPlayerModelAnimation::UpdateAnimationTransition()
 		{
 			// アニメーション再生
 			// 前フレームと同じアニメーションをPlayした場合、なにもしない

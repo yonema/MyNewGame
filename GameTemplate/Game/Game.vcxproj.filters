@@ -419,9 +419,6 @@
     <ClCompile Include="..\..\ExEngine\physics\SphereCollider.cpp">
       <Filter>ExEngine\physics</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerModel.cpp">
-      <Filter>MyCode\Player</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerMovement.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
@@ -445,6 +442,12 @@
     </ClCompile>
     <ClCompile Include="PlayerSwingAction.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerModelAnimation.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerStringModel.cpp">
+      <Filter>MyCode\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -814,9 +817,6 @@
     <ClInclude Include="..\..\ExEngine\physics\SphereCollider.h">
       <Filter>ExEngine\physics</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerModel.h">
-      <Filter>MyCode\Player</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerMovement.h">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClInclude>
@@ -843,6 +843,12 @@
     </ClInclude>
     <ClInclude Include="PlayerSwingAction.h">
       <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerModelAnimation.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerStringModel.h">
+      <Filter>MyCode\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

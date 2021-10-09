@@ -66,15 +66,19 @@ namespace nsMyGame
 		*/
 		void CPlayerInput::UpdateInputAction()
 		{
-			// ジャンプ
+			// Aボタントリガー
 			if (m_pad->IsTrigger(enButtonA))
 			{
+				// ジャンプ
 				m_playerInputData.actionJump = true;
 			}
 
-			// スイング
+			// RB2ボタントリガー
 			if (m_pad->IsTrigger(enButtonRB2))
 			{
+				// ダッシュ
+				m_playerInputData.actionDush = true;
+				// スイング
 				m_playerInputData.actionSwing = true;
 			}
 

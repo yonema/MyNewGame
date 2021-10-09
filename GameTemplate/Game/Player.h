@@ -1,5 +1,5 @@
 #pragma once
-#include "PlayerModel.h"
+#include "PlayerModelAnimation.h"
 #include "PlayerMovement.h"
 #include "PlayerInput.h"
 #include "PlayerCamera.h"
@@ -14,7 +14,7 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// 前方宣言
-		class CPlayerModel;	// プレイヤーモデルクラス
+		class CPlayerModelAnimation;	// プレイヤーモデルアニメーションクラス
 
 		/**
 		 * @brief プレイヤークラス
@@ -105,13 +105,31 @@ namespace nsMyGame
 				return m_playerCamera;
 			}
 
+			/**
+			 * @brief プレイヤーのステートをセットする
+			 * @param[in] state ステート
+			*/
+			void SetState(const nsPlayerConstData::EnPlayerState state)
+			{
+				m_playerState = state;
+			}
+
+			/**
+			 * @brief プレイヤーのステートを得る
+			 * @return ステート
+			*/
+			nsPlayerConstData::EnPlayerState GetState() const
+			{
+				return m_playerState;
+			}
+
 		private:	// privateなメンバ関数
 
 		private:	// データメンバ
 			Vector3 m_position = Vector3::Zero;				//!< 座標
 			Quaternion m_rotation = Quaternion::Identity;	//!< 回転
 
-			CPlayerModel m_playerModel;						//!< プレイヤーモデルクラス
+			CPlayerModelAnimation m_playerModelAnimation;	//!< プレイヤーモデルアニメーションクラス
 			CPlayerInput m_playerInput;						//!< プレイヤー入力クラス
 			CPlayerCamera m_playerCamera;					//!< プレイヤーカメラクラス
 			nsPlayerMovenent::CPlayerMovement m_playerMove;	//!< プレイヤー移動クラス

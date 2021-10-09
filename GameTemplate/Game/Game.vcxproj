@@ -300,6 +300,7 @@
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="PlayerStringModel.cpp" />
     <ClCompile Include="PlayerSwingAction.cpp" />
     <ClCompile Include="StringActionTargetManager.cpp" />
     <ClCompile Include="SwingTarget.cpp" />
@@ -311,7 +312,7 @@
     <ClCompile Include="PlayerCamera.cpp" />
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
-    <ClCompile Include="PlayerModel.cpp" />
+    <ClCompile Include="PlayerModelAnimation.cpp" />
     <ClCompile Include="PlayerWalkAndRun.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -424,6 +425,7 @@
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
     <ClInclude Include="CommonData.h" />
+    <ClInclude Include="PlayerStringModel.h" />
     <ClInclude Include="PlayerSwingAction.h" />
     <ClInclude Include="StringActionTargetManager.h" />
     <ClInclude Include="SwingTarget.h" />
@@ -438,7 +440,7 @@
     <ClInclude Include="PlayerConstData.h" />
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="PlayerMovement.h" />
-    <ClInclude Include="PlayerModel.h" />
+    <ClInclude Include="PlayerModelAnimation.h" />
     <ClInclude Include="PlayerWalkAndRun.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="DirectionalLight.h" />

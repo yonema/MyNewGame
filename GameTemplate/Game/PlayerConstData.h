@@ -33,6 +33,7 @@ namespace nsMyGame
 				constexpr float kGravityScale = 980.0f;	//!< 重力の強さ
 				constexpr float kJumpForce = 500.0f;	//!< ジャンプ力
 				constexpr float kModelRotRate = 0.3f;	//!< モデルの回転の補間率
+				constexpr float kMoveVecMin = 0.001f;	//!< 移動ベクトルの最小値
 			}
 
 			/**
@@ -40,11 +41,13 @@ namespace nsMyGame
 			*/
 			namespace nsPlayerWalkAndRunConstData
 			{
-				constexpr float kAcceleration = 10.0f;	//!< 加速度
-				constexpr float kMaxSpeed = 500.0f;		//!< 最高速度
-				constexpr float kMinSpeed = 2.0f;		//!< 最低速度
-				constexpr float kGroundFriction = 0.9f;	//!< 地面の摩擦
-				constexpr float kAirFriction = 1.0f;	//!< 空中の摩擦
+				constexpr float kWalkAcceleration = 10.0f;	//!< 歩き時の加速度
+				constexpr float kRunAcceleration = 20.0f;	//!< 走り時の加速度
+				constexpr float kWalkMaxSpeed = 500.0f;		//!< 歩き時の最高速度
+				constexpr float kRunMaxSpeed = 1000.0f;		//!< 走り時の最高速度
+				constexpr float kMinSpeed = 2.0f;			//!< 最低速度
+				constexpr float kGroundFriction = 0.9f;		//!< 地面の摩擦
+				constexpr float kAirFriction = 1.0f;		//!< 空中の摩擦
 			}
 
 			/**
@@ -81,6 +84,7 @@ namespace nsMyGame
 			{
 				constexpr float kDPadInputPower = 1.0f;					//!< 十字キー入力の移動量
 				static const float kSquareRootOfTwo = std::sqrtf(2.0f);	//!< ルート2の値
+				constexpr float kInputAxisMin = 0.001f;					//!< 軸入力の最小値
 			}
 
 			/**

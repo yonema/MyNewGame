@@ -18,6 +18,8 @@ namespace nsMyGame
 		{
 			// プレイヤーの歩きと走りクラスの定数データを使用可能にする
 			using namespace nsPlayerConstData::nsPlayerWalkAndRunConstData;
+			// 軸入力の最小値を使用可能にする
+			using nsPlayerConstData::nsPlayerInputConstData::kInputAxisMin;
 
 			/**
 			 * @brief 初期化
@@ -42,24 +44,20 @@ namespace nsMyGame
 			*/
 			void CPlayerWalkAndRun::Execute()
 			{
-				// 前、後移動の軸入力
-				const float inputAxisMoveForward = m_playerRef->GetInputData().axisMoveForward;
-				// 右、左移動の軸入力
-				const float inputAxisMoveRight = m_playerRef->GetInputData().axisMoveRight;
+				// 軸入力値を更新する
+				UpdateInputAxisParam();
 
-				// 前、後移動の軸入力の絶対値
-				const float absInputAxisMoveForward = fabsf(inputAxisMoveForward);
-				// 右、左移動の軸入力の絶対値
-				const float absInputAxisMoveRight = fabsf(inputAxisMoveRight);
+				// 歩きか走りかを決める
+				WalkOrRun();
 
 				// 移動速度を加速する
-				Acceleration(inputAxisMoveForward, inputAxisMoveRight);
+				Acceleration();
 
 				// 摩擦を計算する
-				Friction(absInputAxisMoveForward, absInputAxisMoveRight);
+				Friction();
 
 				// 移動速度に制限をかける
-				LimitSpeed(absInputAxisMoveForward, absInputAxisMoveRight);
+				LimitSpeed();
 
 				// 前のフレームの速度を更新
 				m_oldVelocity = m_playerMovementRef->GetAddMoveVec().Length();
@@ -68,11 +66,55 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief 移動速度を加速させる
-			 * @param inputMoveF 前、後の軸入力
-			 * @param inputMoveR 右、左の軸入力
+			 * @brief 軸入力値を更新
 			*/
-			void CPlayerWalkAndRun::Acceleration(const float inputMoveF, const float inputMoveR)
+			void CPlayerWalkAndRun::UpdateInputAxisParam()
+			{
+				// 前、後移動の軸入力
+				m_inputMoveF = m_playerRef->GetInputData().axisMoveForward;
+				// 右、左移動の軸入力
+				m_inputMoveR = m_playerRef->GetInputData().axisMoveRight;
+
+				// 前、後移動の軸入力の絶対値
+				m_absInputMoveF = fabsf(m_inputMoveF);
+				// 右、左移動の軸入力の絶対値
+				m_absInputMoveR = fabsf(m_inputMoveR);
+
+				return;
+			}
+
+			/**
+			 * @brief 歩きか走りかを決める
+			*/
+			void CPlayerWalkAndRun::WalkOrRun()
+			{
+				// ダッシュ入力がされていない
+				if (m_playerRef->GetInputData().actionDush != true)
+				{
+					// 歩き状態
+
+					// 加速度を設定
+					m_acceleration = kWalkAcceleration;
+					// 最高速度を設定
+					m_maxSpeed = kWalkMaxSpeed;
+				}
+				else
+				{
+					// ダッシュ状態
+										
+					// 加速度を設定
+					m_acceleration = kRunAcceleration;
+					// 最高速度を設定
+					m_maxSpeed = kRunMaxSpeed;
+				}
+
+				return;
+			}
+
+			/**
+			 * @brief 移動速度を加速させる
+			*/
+			void CPlayerWalkAndRun::Acceleration()
 			{
 				// 移動の前方向
 				Vector3 moveForward = m_playerRef->GetCamera().GetCameraForward();
@@ -86,11 +128,11 @@ namespace nsMyGame
 
 				//奥方向への移動速度を加算。
 				m_playerMovementRef->SetAddMoveVec(
-					m_playerMovementRef->GetAddMoveVec() + moveForward * inputMoveF * kAcceleration
+					m_playerMovementRef->GetAddMoveVec() + moveForward * m_inputMoveF * m_acceleration
 				);
 				//奥方向への移動速度を加算。
 				m_playerMovementRef->SetAddMoveVec(
-					m_playerMovementRef->GetAddMoveVec() + moveRight * inputMoveR * kAcceleration
+					m_playerMovementRef->GetAddMoveVec() + moveRight * m_inputMoveR * m_acceleration
 				);
 
 				return;
@@ -98,10 +140,8 @@ namespace nsMyGame
 
 			/**
 			 * @brief 摩擦の計算
-			 * @param[in] absInputMoveF 前、後の軸入力の絶対値
-			 * @param[in] absInputMoveR 右、左の軸入力の絶対値
 			*/
-			void CPlayerWalkAndRun::Friction(const float absInputMoveF, const float absInputMoveR)
+			void CPlayerWalkAndRun::Friction()
 			{
 				// 摩擦力
 				float friction = 0.0f;
@@ -128,7 +168,7 @@ namespace nsMyGame
 					// 移動ゼロにする
 					m_playerMovementRef->SetAddMoveVec(Vector3::Zero);
 				}
-				else if (absInputMoveF <= 0.001f && absInputMoveR <= 0.001f)
+				else if (m_absInputMoveF <= kInputAxisMin && m_absInputMoveR <= kInputAxisMin)
 				{
 					// 入力がなかったら
 					// 摩擦て減速する
@@ -150,13 +190,11 @@ namespace nsMyGame
 
 			/**
 			 * @brief 移動速度に速度制限をかける
-			 * @param[in] absInputMoveF 前、後の軸入力の絶対値
-			 * @param[in] absInputMoveR 右、左の軸入力の絶対値
 			*/
-			void CPlayerWalkAndRun::LimitSpeed(const float absInputMoveF, const float absInputMoveR)
+			void CPlayerWalkAndRun::LimitSpeed()
 			{
 				// 軸入力があるか？
-				if (absInputMoveF <= 0.001f && absInputMoveR <= 0.001f)
+				if (m_absInputMoveF <= kInputAxisMin && m_absInputMoveR <= kInputAxisMin)
 				{
 					// ない場合は速度制限をかけない
 					// 早期リターン
@@ -165,11 +203,11 @@ namespace nsMyGame
 
 
 				// 移動速度が最高速度をオーバーしているか？
-				if (m_playerMovementRef->GetAddMoveVec().Length() > kMaxSpeed)
+				if (m_playerMovementRef->GetAddMoveVec().Length() > m_maxSpeed)
 				{
 					// オーバーしていたら最高速度を維持
 					m_playerMovementRef->NormalizeAddMoveVec();
-					m_playerMovementRef->SetAddMoveVec(m_playerMovementRef->GetAddMoveVec() * kMaxSpeed);
+					m_playerMovementRef->SetAddMoveVec(m_playerMovementRef->GetAddMoveVec() * m_maxSpeed);
 				}
 
 				return;

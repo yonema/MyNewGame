@@ -54,30 +54,44 @@ namespace nsMyGame
 			private:	// privateなメンバ関数
 
 				/**
-				 * @brief 移動速度を加速させる
-				 * @param inputMoveF 前、後の軸入力
-				 * @param inputMoveR 右、左の軸入力
+				 * @brief 軸入力値を更新
 				*/
-				void Acceleration(const float inputMoveF, const float inputMoveR);
+				void UpdateInputAxisParam();
+
+				/**
+				 * @brief 歩きか走りかを決める
+				*/
+				void WalkOrRun();
+
+				/**
+				 * @brief 移動速度を加速させる
+				*/
+				void Acceleration();
 
 				/**
 				 * @brief 摩擦の計算
-				 * @param[in] absInputMoveF 前、後の軸入力の絶対値
-				 * @param[in] absInputMoveR 右、左の軸入力の絶対値
 				*/
-				void Friction(const float absInputMoveF, const float absInputMoveR);
+				void Friction();
 
 				/**
 				 * @brief 移動速度に速度制限をかける
-				 * @param[in] absInputMoveF 前、後の軸入力の絶対値
-				 * @param[in] absInputMoveR 右、左の軸入力の絶対値
 				*/
-				void LimitSpeed(const float absInputMoveF, const float absInputMoveR);
+				void LimitSpeed();
 
 			private:	// データメンバ
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< 移動クラスの参照
 				const CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
 				float m_oldVelocity = 0.0f;						//!< 前のフレームの速度
+
+				// 軸入力値
+				float m_inputMoveF = 0.0f;			//!< 前、後移動の軸入力値
+				float m_inputMoveR = 0.0f;			//!< 右、左移動の軸入力値
+				float m_absInputMoveF = 0.0f;		//!< 前、後移動の軸入力の絶対値
+				float m_absInputMoveR = 0.0f;		//!< 右、左移動の軸入力の絶対値
+
+				// 歩きと走りで変わるパラメータ
+				float m_acceleration = 0.0f;	//!< 加速度
+				float m_maxSpeed = 0.0f;		//!< 最高速度
 			};
 
 		}

@@ -19,8 +19,8 @@ namespace nsMyGame
 		*/
 		bool CPlayer::Start()
 		{
-			// プレイヤーモデルクラスの初期化
-			m_playerModel.Init(*this);
+			// プレイヤーモデルアニメーションクラスの初期化
+			m_playerModelAnimation.Init(*this);
 
 			// プレイヤーの入力情報クラスの初期化
 			m_playerInput.Init(this);
@@ -62,8 +62,8 @@ namespace nsMyGame
 			// カメラクラスを更新
 			m_playerCamera.ExecuteUpdate();
 
-			// モデルクラスを更新
-			m_playerModel.ExecuteUpdate();
+			// モデルアニメーションクラスを更新
+			m_playerModelAnimation.ExecuteUpdate();
 
 			return;
 		}

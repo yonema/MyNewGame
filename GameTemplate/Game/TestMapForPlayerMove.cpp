@@ -36,10 +36,10 @@ namespace nsMyGame
 					{
 						if (objData.EqualObjectName(L"testBuilding"))
 						{
-							if (a != 0)
+							if (a != 1)
 							{
 								a++;
-								return false;
+								//return false;
 							}
 							nsBuilding::CBuilding* building = 
 								NewGO<nsBuilding::CBuilding>(nsCommonData::enPriorityFirst, "testBuilding");

@@ -48,11 +48,13 @@ namespace nsMyGame
 				 * @param[in] widthSegments 幅セグメント ( X )
 				 * @param[in] heightSegments 高さセグメント ( Y )
 				 * @param[in] lenghtSegments 長さセグメント ( Z )
+				 * @param[in] heightLowerLimit 高さの制限。指定した高さ以下のターゲットは作られません。
 				*/
 				void CalcSwingingTargetPositions(
 					const UINT widthSegments,
 					const UINT heightSegments,
-					const UINT lengthSegments
+					const UINT lengthSegments,
+					const float	heightLowerLimit = 0.0f
 				);
 
 				/**
