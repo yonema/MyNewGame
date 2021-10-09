@@ -19,16 +19,16 @@ namespace nsMyGame
 
 			/**
 			 * @brief 初期化
-			 * @param[in] player プレイヤー
+			 * @param[in,out] player プレイヤー
 			 * @param[in,out] playerMovement プレイヤー移動クラスの参照
 			*/
 			void CPlayerSwingAction::Init(
-				const CPlayer& player,
+				CPlayer* player,
 				CPlayerMovement* playerMovement
 			)
 			{
 				// プレイヤーの参照をセット
-				m_playerRef = &player;
+				m_playerRef = player;
 				// 加算移動ベクトルの参照をセット
 				m_playerMovementRef = playerMovement;
 
@@ -46,15 +46,17 @@ namespace nsMyGame
 					target = nsStringActionTarget::GetNearestSwintTargetPointWithinScope(
 						m_playerRef->GetPosition(), 2000.0f
 					);
+					m_playerMovementRef->SetAddMoveVec(m_playerRef->GetPosition());
 
 					if (target != nullptr)
 					{
-						m_playerMovementRef->SetAddMoveVec(*target);
+						//m_playerMovementRef->SetAddMoveVec(*target);
+						m_playerRef->StartStringStretchToPos(*target);
 					}
-					else
-					{
-						m_playerMovementRef->SetAddMoveVec(m_playerRef->GetPosition());
-					}
+					//else
+					//{
+					//	m_playerMovementRef->SetAddMoveVec(m_playerRef->GetPosition());
+					//}
 
 					
 				}

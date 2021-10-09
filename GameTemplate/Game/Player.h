@@ -3,6 +3,7 @@
 #include "PlayerMovement.h"
 #include "PlayerInput.h"
 #include "PlayerCamera.h"
+#include "PlayerStringModel.h"
 #include "PlayerConstData.h"
 
 namespace nsMyGame
@@ -123,6 +124,26 @@ namespace nsMyGame
 				return m_playerState;
 			}
 
+			/**
+			 * @brief 糸が指定した座標に向かって伸びる処理を開始する
+			 * @param[in] pos 伸びる先の座標
+			*/
+			void StartStringStretchToPos(const Vector3& pos);
+
+			/**
+			 * @brief 糸が指定した座標に向かって伸びる処理を終了する
+			*/
+			void EndStringStretchToPos();
+
+			/**
+			 * @brief 糸が伸びきっているか？を得る
+			 * @return 糸が伸びきっているか？
+			*/
+			bool IsStringStretched() const
+			{
+				return m_playerStringModel->IsStretched();
+			}
+
 		private:	// privateなメンバ関数
 
 		private:	// データメンバ
@@ -135,6 +156,7 @@ namespace nsMyGame
 			nsPlayerMovenent::CPlayerMovement m_playerMove;	//!< プレイヤー移動クラス
 			//!< プレイヤーのステート
 			nsPlayerConstData::EnPlayerState m_playerState = nsPlayerConstData::enWalkAndRun;
+			CPlayerStringModel* m_playerStringModel = nullptr;	//!< プレイヤーの糸のモデルクラス
 		};
 
 	}

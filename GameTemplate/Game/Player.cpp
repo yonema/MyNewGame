@@ -35,6 +35,10 @@ namespace nsMyGame
 				this
 				);
 
+			// プレイヤーの糸のモデルクラスの生成と初期化
+			m_playerStringModel = NewGO<CPlayerStringModel>(nsCommonData::enPriorityFirst);
+			m_playerStringModel->Init(*this);
+
 			return true;
 		}
 
@@ -43,7 +47,8 @@ namespace nsMyGame
 		*/
 		void CPlayer::OnDestroy()
 		{
-
+			// プレイヤーの糸のモデルクラスの破棄
+			DeleteGO(m_playerStringModel);
 
 			return;
 		}
@@ -64,6 +69,27 @@ namespace nsMyGame
 
 			// モデルアニメーションクラスを更新
 			m_playerModelAnimation.ExecuteUpdate();
+
+			return;
+		}
+
+		/**
+		 * @brief 糸が指定した座標に向かって伸びる処理を開始する
+		 * @param[in] pos 伸びる先の座標
+		*/
+		void CPlayer::StartStringStretchToPos(const Vector3& pos)
+		{
+			m_playerStringModel->StartStretchToPos(pos);
+
+			return;
+		}
+
+		/**
+		 * @brief 糸が指定した座標に向かって伸びる処理を終了する
+		*/
+		void CPlayer::EndStringStretchToPos()
+		{
+			m_playerStringModel->EndStretchToPos();
 
 			return;
 		}

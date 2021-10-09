@@ -78,6 +78,15 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief プレイヤーの糸のモデルクラスの定数データ
+			*/
+			namespace nsPlayerStringModelConstData
+			{
+				//!< 糸のモデルファイルパス
+				constexpr const char* const kStringModelFilePath = "Assets/modelData/testString.tkm";
+			}
+
+			/**
 			 * @brief プレイヤー入力クラスの定数データ
 			*/
 			namespace nsPlayerInputConstData

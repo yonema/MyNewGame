@@ -42,7 +42,7 @@ namespace nsMyGame
 				m_playerWalkAndRun.Init(*m_playerRef, this);
 
 				// プレイヤーのスイングアクションクラスの初期化
-				m_playerSwingAction.Init(*m_playerRef, this);
+				m_playerSwingAction.Init(m_playerRef, this);
 
 
 #ifdef MY_DEBUG
@@ -105,7 +105,7 @@ namespace nsMyGame
 
 					// ジャンプ
 					// ジャンプボタンが押されている、かつ、地面についている
-					if (m_playerRef->GetInputData().actionJump && m_charaCon.IsOnGround())
+					if (m_playerRef->GetInputData().actionJump/* && m_charaCon.IsOnGround()*/)
 					{
 						m_moveVec.y += kJumpForce;
 					}

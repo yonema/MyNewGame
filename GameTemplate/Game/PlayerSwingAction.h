@@ -38,11 +38,11 @@ namespace nsMyGame
 
 				/**
 				 * @brief 初期化
-				 * @param[in] player プレイヤー
+				 * @param[in.out] player プレイヤー
 				 * @param[in,out] playerMovement プレイヤー移動クラスの参照
 				*/
 				void Init(
-					const CPlayer& player,
+					CPlayer* player,
 					CPlayerMovement* playerMovement
 				);
 
@@ -52,7 +52,7 @@ namespace nsMyGame
 				void Execute();
 
 			private:	// データメンバ
-				const CPlayer* m_playerRef = nullptr;			//!< プレイヤークラスの参照
+				CPlayer* m_playerRef = nullptr;					//!< プレイヤークラスの参照
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< プレイヤー移動クラスの参照
 			};
 		}

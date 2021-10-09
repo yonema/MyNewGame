@@ -81,9 +81,11 @@ namespace nsMyGame
 				kDefaultWidthSegments,
 				kDefaultHeightSegments,
 				kDefaultLengthSegments,
-				1000.0f
+				//1000.0f
+				//-10.0f
+				0.0f
 			);
-#ifdef no
+#ifdef TRUE
 #ifdef MY_DEBUG
 
 			// 計算されたスイングターゲットの座標コンテナを取得
