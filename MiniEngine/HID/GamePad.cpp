@@ -104,6 +104,16 @@ void GamePad::Update()
 		//接続されている。
 		m_state.bConnected = true;
 		for (const VirtualPadToXPad& vPadToXPad : vPadToXPadTable) {
+
+			// 追加。変更。
+			if (vPadToXPad.xButton == 0)
+			{
+				// ここではRB2とLB2は入力できないため、必ず0（入力してない）で上書きされてしまう。
+				// そのためRB2とLB2の時は処理を飛ばすようにする。
+				// RB2とLB2の入力判定はもう少し後で行われる。
+				continue;
+			}
+
 			if (m_state.state.Gamepad.wButtons & vPadToXPad.xButton) {
 				m_trigger[vPadToXPad.vButton] = 1 ^ m_press[vPadToXPad.vButton];
 				m_press[vPadToXPad.vButton] = 1;

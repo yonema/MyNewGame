@@ -36,7 +36,7 @@ namespace nsMyGame
 					{
 						if (objData.EqualObjectName(L"testBuilding"))
 						{
-							if (a != 1)
+							if (a != 2)
 							{
 								a++;
 								return false;

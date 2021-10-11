@@ -51,6 +51,22 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief プレイヤーのスイングアクションクラスの定数データ
+			*/
+			namespace nsPlayerSwingActionConstData
+			{
+				/**
+				 * @brief スイングアクションのステート
+				*/
+				enum EnSwingActionState
+				{
+					enFindSwingTarget,		//!< スイングターゲットを探す
+					enIsStringStretching,	//!< 糸を伸ばし中
+					enIsSwinging,			//!< スイング中
+					enEnd,					//!< 終了
+				};
+			}
+			/**
 			 * @brief プレイヤーモデルクラスの定数データ
 			*/
 			namespace nsPlayerModelRenderConstData

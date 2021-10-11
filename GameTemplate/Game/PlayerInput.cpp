@@ -74,7 +74,7 @@ namespace nsMyGame
 			}
 
 			// RB2ボタントリガー
-			if (m_pad->IsTrigger(enButtonRB2))
+			if (g_pad[0]->IsPress(enButtonRB2))
 			{
 				// ダッシュ
 				m_playerInputData.actionDush = true;

@@ -1,8 +1,6 @@
 #include "stdafx.h"
 #include "PlayerMovement.h"
 #include "Player.h"
-#include "PlayerConstData.h"
-#include "GameTime.h"
 
 namespace nsMyGame
 {
@@ -67,7 +65,7 @@ namespace nsMyGame
 				else
 				{
 					// 歩きと走り状態
-					m_playerRef->SetState(nsPlayerConstData::enWalkAndRun);
+					//m_playerRef->SetState(nsPlayerConstData::enWalkAndRun);
 				}
 
 				// プレイヤーの移動を更新
@@ -79,59 +77,50 @@ namespace nsMyGame
 				return;
 			}
 
+			/**
+			 * @brief キャラクターコントローラーを使った移動
+			*/
+			void CPlayerMovement::MoveWithCharacterController()
+			{
+				// キャラクターコントローラー実行
+				m_playerRef->SetPosition(
+					m_charaCon.Execute(m_moveVec, nsTimer::GameTime().GetFrameDeltaTime())
+				);
+
+				return;
+			}
+
 
 			/**
 			 * @brief プレイヤーの移動を更新
 			*/
 			void CPlayerMovement::UpdateMovePlayer()
 			{
+				bool executeWalkAndRunFlag = true;
+
 				// ステートで処理を振り分ける
 				switch (m_playerRef->GetState())
 				{
-				case nsPlayerConstData::enWalkAndRun:	// 歩きと走り
-					// 歩きと走りを実行
-					m_playerWalkAndRun.Execute();
-
-					// 移動ベクトルのX,Z成分を初期化
-					m_moveVec.x = 0.0f;
-					m_moveVec.z = 0.0f;
-
-
-					// 移動ベクトルに、加算移動ベクトルを加算する
-					m_moveVec += m_addMoveVec;
-
-					// 重力
-					m_moveVec.y -= kGravityScale * nsTimer::GameTime().GetFrameDeltaTime();
-
-					// ジャンプ
-					// ジャンプボタンが押されている、かつ、地面についている
-					if (m_playerRef->GetInputData().actionJump/* && m_charaCon.IsOnGround()*/)
-					{
-						m_moveVec.y += kJumpForce;
-					}
-
-					// キャラクターコントローラー実行
-					m_playerRef->SetPosition(m_charaCon.Execute(m_moveVec, nsTimer::GameTime().GetFrameDeltaTime()));
-
-					// 地面についていたら、重力リセット
-					if (m_charaCon.IsOnGround())
-					{
-						m_moveVec.y = 0.0f;
-					}
-					break;
 				case nsPlayerConstData::enSwing:	// スイング
 
 					// スイングアクションを実行
-					m_playerSwingAction.Execute();
+					executeWalkAndRunFlag = m_playerSwingAction.Execute();
 
-					m_playerRef->SetPosition(m_addMoveVec);
-					m_charaCon.SetPosition(m_addMoveVec);
+					//m_playerRef->SetPosition(m_addMoveVec);
+					//m_charaCon.SetPosition(m_addMoveVec);
 
-					m_moveVec = Vector3::Zero;
-					m_addMoveVec = Vector3::Zero;
+					//m_moveVec = Vector3::Zero;
+					//m_addMoveVec = Vector3::Zero;
 
 					break;
 				}
+
+				if (executeWalkAndRunFlag)
+				{
+					// 歩きと走りを実行
+					m_playerWalkAndRun.Execute();
+				}
+
 
 #ifdef MY_DEBUG
 				wchar_t text[256];

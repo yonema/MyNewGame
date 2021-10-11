@@ -64,23 +64,29 @@ namespace nsMyGame
 				void WalkOrRun();
 
 				/**
-				 * @brief 移動速度を加速させる
+				 * @brief 加速を計算
 				*/
-				void Acceleration();
+				void CalcAcceleration();
 
 				/**
 				 * @brief 摩擦の計算
 				*/
-				void Friction();
+				void CalcFriction();
 
 				/**
-				 * @brief 移動速度に速度制限をかける
+				 * @brief 速度制限の計算
 				*/
-				void LimitSpeed();
+				void CalcLimitSpeed();
+
+				/**
+				 * @brief 実際に移動させる
+				*/
+				void Move();
 
 			private:	// データメンバ
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< 移動クラスの参照
 				const CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
+				Vector3 m_addMoveVec = Vector3::Zero;			//!< 加算移動ベクトル
 				float m_oldVelocity = 0.0f;						//!< 前のフレームの速度
 
 				// 軸入力値

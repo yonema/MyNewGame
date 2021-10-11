@@ -20,6 +20,8 @@ namespace nsMyGame
 			using namespace nsPlayerConstData::nsPlayerWalkAndRunConstData;
 			// 軸入力の最小値を使用可能にする
 			using nsPlayerConstData::nsPlayerInputConstData::kInputAxisMin;
+			// ジャンプ力を使用可能にする
+			using nsPlayerConstData::nsPlayerMoveConstData::kJumpForce;
 
 			/**
 			 * @brief 初期化
@@ -50,17 +52,20 @@ namespace nsMyGame
 				// 歩きか走りかを決める
 				WalkOrRun();
 
-				// 移動速度を加速する
-				Acceleration();
+				// 加速を計算
+				CalcAcceleration();
 
-				// 摩擦を計算する
-				Friction();
+				// 摩擦を計算
+				CalcFriction();
 
-				// 移動速度に制限をかける
-				LimitSpeed();
+				// 速度制限の計算
+				CalcLimitSpeed();
+
+				// 実際に移動させる
+				Move();
 
 				// 前のフレームの速度を更新
-				m_oldVelocity = m_playerMovementRef->GetAddMoveVec().Length();
+				m_oldVelocity = m_addMoveVec.Length();
 
 				return;
 			}
@@ -112,9 +117,9 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief 移動速度を加速させる
+			 * @brief 加速を計算
 			*/
-			void CPlayerWalkAndRun::Acceleration()
+			void CPlayerWalkAndRun::CalcAcceleration()
 			{
 				// 移動の前方向
 				Vector3 moveForward = m_playerRef->GetCamera().GetCameraForward();
@@ -127,13 +132,9 @@ namespace nsMyGame
 				moveRight.Normalize();
 
 				//奥方向への移動速度を加算。
-				m_playerMovementRef->SetAddMoveVec(
-					m_playerMovementRef->GetAddMoveVec() + moveForward * m_inputMoveF * m_acceleration
-				);
+				m_addMoveVec += moveForward * m_inputMoveF * m_acceleration;
 				//奥方向への移動速度を加算。
-				m_playerMovementRef->SetAddMoveVec(
-					m_playerMovementRef->GetAddMoveVec() + moveRight * m_inputMoveR * m_acceleration
-				);
+				m_addMoveVec += moveRight * m_inputMoveR * m_acceleration;
 
 				return;
 			}
@@ -141,7 +142,7 @@ namespace nsMyGame
 			/**
 			 * @brief 摩擦の計算
 			*/
-			void CPlayerWalkAndRun::Friction()
+			void CPlayerWalkAndRun::CalcFriction()
 			{
 				// 摩擦力
 				float friction = 0.0f;
@@ -159,39 +160,35 @@ namespace nsMyGame
 				}
 
 				// 移動ベクトルの大きさ
-				const float moveVecLen = m_playerMovementRef->GetAddMoveVec().Length();
+				const float moveVecLen = m_addMoveVec.Length();
 
 				// 摩擦を計算する
 				if (moveVecLen <= kMinSpeed)
 				{
 					// 移動速度が最低速度以下なら
 					// 移動ゼロにする
-					m_playerMovementRef->SetAddMoveVec(Vector3::Zero);
+					m_addMoveVec = Vector3::Zero;
 				}
 				else if (m_absInputMoveF <= kInputAxisMin && m_absInputMoveR <= kInputAxisMin)
 				{
 					// 入力がなかったら
 					// 摩擦て減速する
-					m_playerMovementRef->SetAddMoveVec(
-						m_playerMovementRef->GetAddMoveVec() * friction
-					);
+					m_addMoveVec.Scale(friction);
 				}
 				else if (moveVecLen < m_oldVelocity)
 				{
 					// 前のフレームより速度が落ちていたら
 					// 摩擦て減速する
-					m_playerMovementRef->SetAddMoveVec(
-						m_playerMovementRef->GetAddMoveVec() * friction
-					);
+					m_addMoveVec.Scale(friction);
 				}
 
 				return;
 			}
 
 			/**
-			 * @brief 移動速度に速度制限をかける
+			 * @brief 速度制限の計算
 			*/
-			void CPlayerWalkAndRun::LimitSpeed()
+			void CPlayerWalkAndRun::CalcLimitSpeed()
 			{
 				// 軸入力があるか？
 				if (m_absInputMoveF <= kInputAxisMin && m_absInputMoveR <= kInputAxisMin)
@@ -203,12 +200,47 @@ namespace nsMyGame
 
 
 				// 移動速度が最高速度をオーバーしているか？
-				if (m_playerMovementRef->GetAddMoveVec().Length() > m_maxSpeed)
+				if (m_addMoveVec.Length() > m_maxSpeed)
 				{
 					// オーバーしていたら最高速度を維持
-					m_playerMovementRef->NormalizeAddMoveVec();
-					m_playerMovementRef->SetAddMoveVec(m_playerMovementRef->GetAddMoveVec() * m_maxSpeed);
+					m_addMoveVec.Normalize();
+					m_addMoveVec.Scale(m_maxSpeed);
 				}
+
+				return;
+			}
+
+			/**
+			 * @brief 実際に移動させる
+			*/
+			void CPlayerWalkAndRun::Move()
+			{
+				// 移動ベクトルのX,Z成分を初期化
+				m_playerMovementRef->ResetMoveVecX();
+				m_playerMovementRef->ResetMoveVecZ();
+
+				// 移動ベクトルに、加算移動ベクトルを加算する
+				m_playerMovementRef->AddMoveVec(m_addMoveVec);
+
+				// 重力をかける
+				m_playerMovementRef->ApplyGravity();
+
+				// ジャンプ
+				// ジャンプボタンが押されている、かつ、地面についている
+				if (m_playerRef->GetInputData().actionJump/* && m_charaCon.IsOnGround()*/)
+				{
+					m_playerMovementRef->AddMoveVec({ 0.0f, kJumpForce,0.0f });
+				}
+
+				// キャラクターコントローラーを使って移動させる
+				m_playerMovementRef->MoveWithCharacterController();
+
+				// 地面についていたら、重力リセット
+				if (m_playerMovementRef->IsAir() == false)
+				{
+					m_playerMovementRef->ResetMoveVecY();
+				}
+
 
 				return;
 			}

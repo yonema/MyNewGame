@@ -48,15 +48,6 @@ namespace nsMyGame
 		*/
 		void CPlayerStringModel::Update()
 		{
-			// L‚Ñ‚«‚Á‚Ä‚¢‚é‚©H
-			if (m_isStretched == true)
-			{
-				// L‚Ñ‚«‚Á‚Ä‚é
-				// ‘ŠúƒŠƒ^[ƒ“
-				return;
-			}
-
-			// L‚Ñ‚«‚Á‚Ä‚È‚¢
 
 			// ƒ‚ƒfƒ‹‚ð‰ñ“]‚³‚¹‚éˆ—
 			ModelRotation();
@@ -74,6 +65,7 @@ namespace nsMyGame
 			if (scale.z > distLen)
 			{
 				scale.z = distLen;
+				m_isStretched = true;
 			}
 
 			m_modelRender->SetScale(scale);

@@ -81,9 +81,7 @@ namespace nsMyGame
 				kDefaultWidthSegments,
 				kDefaultHeightSegments,
 				kDefaultLengthSegments,
-				//1000.0f
-				//-10.0f
-				0.0f
+				kDefaultHeightLowerLimit
 			);
 #ifdef TRUE
 #ifdef MY_DEBUG

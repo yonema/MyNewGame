@@ -2,6 +2,10 @@
 #include "Noncopyable.h"
 #include "PlayerWalkAndRun.h"
 #include "PlayerSwingAction.h"
+#include "PlayerConstData.h"
+#include "GameTime.h"
+
+
 
 // デバック用
 #ifdef MY_DEBUG
@@ -64,30 +68,49 @@ namespace nsMyGame
 				void ExecuteUpdate();
 
 				/**
-				 * @brief 移動ベクトルを設定する
-				 * @param[in] addMoveVec 移動ベクトル
+				 * @brief 移動ベクトルに加算する
+				 * @param[in] addMoveVec 加算移動ベクトル
 				*/
-				void SetAddMoveVec(const Vector3& addMoveVec)
+				void AddMoveVec(const Vector3& addMoveVec)
 				{
-					m_addMoveVec = addMoveVec;
+					m_moveVec += addMoveVec;
 				}
 
 				/**
 				 * @brief 移動ベクトルを得る
 				 * @return 移動ベクトル
 				*/
-				const Vector3& GetAddMoveVec() const
+				const Vector3& GetMoveVec() const
 				{
-					return m_addMoveVec;
+					return m_moveVec;
 				}
 
 				/**
-				 * @brief 移動べクトルを正規化する
+				 * @brief 移動ベクトルのX成分のリセットする
 				*/
-				void NormalizeAddMoveVec()
+				void ResetMoveVecX() { m_moveVec.x = 0.0f; }
+				/**
+				 * @brief 移動ベクトルのY成分のリセットする
+				*/
+				void ResetMoveVecY() { m_moveVec.y = 0.0f; }
+				/**
+				 * @brief 移動ベクトルのZ成分のリセットする
+				*/
+				void ResetMoveVecZ() { m_moveVec.z = 0.0f; }
+
+				/**
+				 * @brief 重力を得る
+				*/
+				float ApplyGravity()
 				{
-					m_addMoveVec.Normalize();
+					return m_moveVec.y -= nsPlayerConstData::nsPlayerMoveConstData::kGravityScale *
+						nsTimer::GameTime().GetFrameDeltaTime();
 				}
+
+				/**
+				 * @brief キャラクターコントローラーを使った移動
+				*/
+				void MoveWithCharacterController();
 
 				/**
 				 * @brief 空中か？を得る
@@ -95,7 +118,7 @@ namespace nsMyGame
 				*/
 				bool IsAir() const
 				{
-					return m_charaCon.IsJump();
+					return !m_charaCon.IsOnGround();
 				}
 
 
@@ -113,14 +136,11 @@ namespace nsMyGame
 
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
-
+				Vector3 m_moveVec = Vector3::Zero;		//!< 移動ベクトル
 				CharacterController m_charaCon;			//!< キャラクターコントローラー
 
 				CPlayerWalkAndRun m_playerWalkAndRun;	//!< プレイヤーの歩きと走りクラス
 				CPlayerSwingAction m_playerSwingAction;	//!< プレイヤーのスイングアクションクラス
-
-				Vector3 m_moveVec = Vector3::Zero;		//!< 移動ベクトル
-				Vector3 m_addMoveVec = Vector3::Zero;	//!< 加算移動ベクトル
 
 
 				// デバック用
