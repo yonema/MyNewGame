@@ -29,13 +29,25 @@ namespace nsMyGame
 
 
 			/**
-			 * @brief 引数で渡したオブジェクト名のオブジェクトか調べる
-			 * @param[in] objName 調べる名前
+			 * @brief 引数で渡したオブジェクト名のオブジェクトか調べる（ワイド文字列）
+			 * @param[in] objName 調べる名前（ワイド文字列）
 			 * @return 名前が同じか？
 			*/
 			bool EqualObjectName(const wchar_t* objName)
 			{
 				return wcscmp(objName, name) == 0;
+			}
+
+			/**
+			 * @brief 引数で渡したオブジェクト名のオブジェクトか調べる（マルチバイト文字列）
+			 * @param[in] objName 調べる名前（マルチバイト文字列）
+			 * @return 名前が同じか？
+			*/
+			bool EqualObjectName(const char* objName)
+			{
+				wchar_t objNameW[256];
+				mbstowcs(objNameW, objName, sizeof(objName) * 2);
+				return wcscmp(objNameW, name) == 0;
 			}
 
 			/**

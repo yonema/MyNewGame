@@ -53,13 +53,13 @@ namespace nsMyGame
 
 		/**
 		 * @brief 初期化
-		 * @param[in] tkmFilePath tkmファイルパス
+			 * @param[in] buildingType 建物の種類
 		 * @param[in] pos 座標
 		 * @param[in] rot 回転
 		 * @param[in] scale 拡大率
 		*/
 		void CBuilding::Init(
-			const char* tkmFilePath,
+			const nsBuildingConstData::EnBuildingType buildingType,
 			const Vector3& pos,
 			const Quaternion rot,
 			const Vector3& scale
@@ -71,7 +71,7 @@ namespace nsMyGame
 			m_modelRender->SetScale(scale);
 
 			// モデルレンダラーを初期化
-			m_modelRender->Init(tkmFilePath);
+			m_modelRender->Init(kBuildingModelFilePath[buildingType]);
 
 			// スイングターゲットを初期化
 			m_swingTarget.Init(*m_modelRender);
@@ -83,7 +83,10 @@ namespace nsMyGame
 				kDefaultLengthSegments,
 				kDefaultHeightLowerLimit
 			);
-#ifdef TRUE
+
+			m_staticObject.CreateFromModel(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix());
+
+#ifdef no
 #ifdef MY_DEBUG
 
 			// 計算されたスイングターゲットの座標コンテナを取得

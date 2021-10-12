@@ -1,9 +1,11 @@
 #include "stdafx.h"
-#include "TestMapForPlayerMove.h"
+#include "ProtoMap.h"
 #include "SkyCube.h"
 #include "Player.h"
 #include "Building.h"
 #include "BuildingConstData.h"
+#include "MapConstDatah.h"
+
 
 namespace nsMyGame
 {
@@ -15,50 +17,57 @@ namespace nsMyGame
 		/**
 		 * @brief テストマップ（レベル）用のネームスペース
 		*/
-		namespace nsTestMaps
+		namespace nsProtoMaps
 		{
-
-			const char* const CTestMapForPlayerMove::m_kBuildingName = "testBuilding";
-			const char* const CTestMapForPlayerMove::m_kLevelFilePaht = "Assets/levelData/testLevel.tkl";
+			// マップの定数データを使用可能にする
+			using namespace nsMapConstData;
 
 			/**
 			 * @brief スタート関数
 			 * @return アップデートを行うか？
 			*/
-			bool CTestMapForPlayerMove::Start()
+			bool CProtoMap::Start()
 			{
 				// スカイキューブの生成と初期化
 				m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
 				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day);
 
-				// カメラの遠平面を設定
-				g_camera3D->SetFar(40000.0f);
-				int a = 0;
 
 				// 建物の名前のワイド文字列
 				wchar_t buildingNameW[32];
-				mbstowcs(buildingNameW, m_kBuildingName, sizeof(m_kBuildingName));
+				mbstowcs(buildingNameW, kBuildingName, sizeof(kBuildingName));
+
 
 				// レベルの生成
 				m_level3D.Init(
-					m_kLevelFilePaht,
+					kLevelFilePath[enLevelProto],
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
-						if (objData.EqualObjectName(buildingNameW))
+						// 建物の生成
+						if (objData.EqualObjectName(kBuildingName))
 						{
-							if (a != 2)
-							{
-								a++;
-								return false;
-							}
-							nsBuilding::CBuilding* building = 
-								NewGO<nsBuilding::CBuilding>(nsCommonData::enPriorityFirst, m_kBuildingName);
+
+							nsBuilding::CBuilding* building =
+								NewGO<nsBuilding::CBuilding>(nsCommonData::enPriorityFirst, kBuildingName);
 							building->Init(
 								nsBuilding::nsBuildingConstData::enTestBuilding,
 								objData.position,
 								objData.rotation
 							);
-							a++;
+							return true;
+						}
+						// プレイヤーの生成
+						else if (objData.EqualObjectName(kPlayerName))
+						{
+							m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPriorityFirst);
+							m_player->SetPosition(objData.position);
+							m_player->SetRotation(objData.rotation);
+
+							return true;
+						}
+						// ゴールの生成
+						else if (objData.EqualObjectName(kGoalName))
+						{
 							return true;
 						}
 
@@ -66,24 +75,20 @@ namespace nsMyGame
 					}
 				);
 
-				// プレイヤーの生成
-				m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPriorityFirst);
-				m_player->SetPosition({ 0.0f,500.0f,0.0f });
-
 				return true;
 			}
 
 			/**
 			 * @brief 破棄した時に呼ばれる関数
 			*/
-			void CTestMapForPlayerMove::OnDestroy()
+			void CProtoMap::OnDestroy()
 			{
 				DeleteGO(m_skyCube);	// スカイキューブクラスの破棄
 				DeleteGO(m_player);		// プレイヤークラスの破棄
 
 				// 建物をすべて破棄
 				QueryGOs<nsBuilding::CBuilding>(
-					m_kBuildingName,
+					kBuildingName,
 					[&](nsBuilding::CBuilding* building)->bool
 					{
 						DeleteGO(building);
@@ -97,12 +102,10 @@ namespace nsMyGame
 			/**
 			 * @brief アップデート関数
 			*/
-			void CTestMapForPlayerMove::Update()
+			void CProtoMap::Update()
 			{
 				return;
 			}
-
-
 		}
 	}
 }

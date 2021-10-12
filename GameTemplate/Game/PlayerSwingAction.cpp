@@ -161,7 +161,7 @@ namespace nsMyGame
 				qRot.SetRotation(rotAxis, 3.14f * 0.5f);
 				qRot.Apply(verticalDir);
 				verticalDir.Normalize();
-				verticalDir.Scale(500.0f);
+				verticalDir.Scale(1000.0f);
 
 				Vector3 next = m_playerRef->GetPosition() + verticalDir;
 

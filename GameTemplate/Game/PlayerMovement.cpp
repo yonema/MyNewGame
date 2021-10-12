@@ -56,8 +56,8 @@ namespace nsMyGame
 			*/
 			void CPlayerMovement::ExecuteUpdate()
 			{
-				// スイングアクションがtrueで、かつ、空中だったら
-				if (m_playerRef->GetInputData().actionSwing && IsAir())
+				// スイングトリガーがtrueで、かつ、空中だったら
+				if (m_playerRef->GetInputData().triggerSwing && IsAir())
 				{
 					// スイング状態
 					m_playerRef->SetState(nsPlayerConstData::enSwing);
@@ -105,12 +105,6 @@ namespace nsMyGame
 
 					// スイングアクションを実行
 					executeWalkAndRunFlag = m_playerSwingAction.Execute();
-
-					//m_playerRef->SetPosition(m_addMoveVec);
-					//m_charaCon.SetPosition(m_addMoveVec);
-
-					//m_moveVec = Vector3::Zero;
-					//m_addMoveVec = Vector3::Zero;
 
 					break;
 				}

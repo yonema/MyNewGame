@@ -22,6 +22,7 @@ namespace nsMyGame
 			float axisCameraRotHorizontal = 0.0f;	//!< カメラの横回転の軸入力情報
 			bool actionJump = false;				//!< ジャンプの入力情報
 			bool actionDush = false;				//!< ダッシュの入力情報
+			bool triggerSwing = false;				//!< スイングのトリガー情報
 			bool actionSwing = false;				//!< スイングの入力情報
 		};
 

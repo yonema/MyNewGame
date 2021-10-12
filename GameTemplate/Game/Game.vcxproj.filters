@@ -132,6 +132,9 @@
     <Filter Include="MyCode\Building">
       <UniqueIdentifier>{492357dd-fc2c-44ab-a296-8b9bb76cee92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Maps\protoMaps">
+      <UniqueIdentifier>{d0d9310d-6448-40e0-b7ff-29a128ab16f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -448,6 +451,9 @@
     </ClCompile>
     <ClCompile Include="PlayerStringModel.cpp">
       <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="ProtoMap.cpp">
+      <Filter>MyCode\Maps\protoMaps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -849,6 +855,12 @@
     </ClInclude>
     <ClInclude Include="PlayerStringModel.h">
       <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtoMap.h">
+      <Filter>MyCode\Maps\protoMaps</Filter>
+    </ClInclude>
+    <ClInclude Include="MapConstDatah.h">
+      <Filter>MyCode\Maps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

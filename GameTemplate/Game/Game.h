@@ -43,7 +43,7 @@ namespace nsMyGame
 		private:
 			nsLight::CDirectionalLight* m_gameDirectionalLight = nullptr;	//!< ゲーム全体のディレクションライト
 			int m_mapNum = 0;
-			const char* m_mapName = "testMap";
+			const char* m_mapName = "map";
 		};
 	}
 }

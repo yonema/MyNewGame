@@ -43,13 +43,13 @@ namespace nsMyGame
 
 			/**
 			 * @brief 初期化
-			 * @param[in] tkmFilePath tkmファイルパス
+			 * @param[in] buildingType 建物の種類
 			 * @param[in] pos 座標
 			 * @param[in] rot 回転
 			 * @param[in] scale 拡大率
 			*/
 			void Init(
-				const char* tkmFilePath,
+				const nsBuildingConstData::EnBuildingType buildingType,
 				const Vector3& pos,
 				const Quaternion rot = Quaternion::Identity,
 				const Vector3& scale = Vector3::One
@@ -58,6 +58,7 @@ namespace nsMyGame
 		private:	// データメンバ
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;			//!< モデルレンダラー
 			nsStringActionTarget::nsSwingTarget::CSwingTarget m_swingTarget;	//!< スイングターゲット
+			PhysicsStaticObject m_staticObject;									//!< 静的オブジェクト
 
 #ifdef MY_DEBUG
 			std::vector<nsGraphic::nsModel::CModelRender*> m_debugModels;	//!< デバック用モデル

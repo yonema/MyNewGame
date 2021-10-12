@@ -16,24 +16,24 @@ namespace nsMyGame
 	namespace nsMaps
 	{
 		/**
-		 * @brief テストマップ（レベル）用のネームスペース
+		 * @brief プロトマップ（レベル）用のネームスペース
 		*/
-		namespace nsTestMaps
+		namespace nsProtoMaps
 		{
 			/**
-			 * @brief プレイヤーの動きのテストマップ
+			 * @brief プロト用マップクラス
 			*/
-			class CTestMapForPlayerMove : public IGameObject
+			class CProtoMap : public IGameObject
 			{
 			public:		// コンストラクタとデストラクタ
 				/**
 				 * @brief コンストラクタ
 				*/
-				CTestMapForPlayerMove() = default;
+				CProtoMap() = default;
 				/**
 				 * @brief コンストラクタ
 				*/
-				~CTestMapForPlayerMove() = default;
+				~CProtoMap() = default;
 
 			public:		// オーバーライドしたメンバ関数
 
@@ -53,15 +53,10 @@ namespace nsMyGame
 				*/
 				void Update() override final;
 
-			private:	// 定数
-				static const char* const m_kBuildingName;	//!< 建物の名前
-				static const char* const m_kLevelFilePaht;	//!< レベルのファイルパス
-
 			private:	// データメンバ
 				nsLevel3D::CLevel3D m_level3D;				//!< 3Dレベルクラス
 				nsNature::CSkyCube* m_skyCube = nullptr;	//!< スカイキューブ
 				nsPlayer::CPlayer* m_player = nullptr;		//!< プレイヤークラス
-
 			};
 
 		}

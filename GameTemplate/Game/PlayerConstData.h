@@ -117,16 +117,18 @@ namespace nsMyGame
 			*/
 			namespace nsPlayerCameraConstData
 			{
-				constexpr float kCameraMaxSpeed = 1000.0f;	//!< カメラの最大速度
+				constexpr float kCameraMaxSpeed = 5000.0f;	//!< カメラの最大速度
 				constexpr float kCameraRadius = 5.0f;		//!< カメラのコリジョンの半径
 
 				constexpr float kTargetOffsetUp = 80.0f;		//!< 注視点の上下のオフセット
 				constexpr float kTargetOffsetForward = 20.0f;	//!< 注視点の前後のオフセット
 
-				//!< デフォルトの注視点から視点へのベクトル
-				static const Vector3 kDefaultToCameraVec = { 0.0f,300.0f,-500.0f };
+				constexpr float kDefaultCameraFar = 40000.0f;	//!< デフォルトの遠平面
 
-				constexpr float kCameraRotSpeed = 1.0f;		//!< カメラの回転するスピード
+				//!< デフォルトの注視点から視点へのベクトル
+				static const Vector3 kDefaultToCameraVec = { 0.0f,50.0f,-400.0f };
+
+				constexpr float kCameraRotSpeed = 3.0f;		//!< カメラの回転するスピード
 				//!< 注視点から視点への方向ベクトルのYの最大値。カメラの下向きの上限。
 				constexpr float kMaxToCameraDirY = 0.8f;
 				//!< 注視点から視点への方向ベクトルのYの最小値。カメラの上向きの上限。

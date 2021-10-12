@@ -300,6 +300,7 @@
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="ProtoMap.cpp" />
     <ClCompile Include="PlayerStringModel.cpp" />
     <ClCompile Include="PlayerSwingAction.cpp" />
     <ClCompile Include="StringActionTargetManager.cpp" />
@@ -425,6 +426,8 @@
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
     <ClInclude Include="CommonData.h" />
+    <ClInclude Include="MapConstDatah.h" />
+    <ClInclude Include="ProtoMap.h" />
     <ClInclude Include="PlayerStringModel.h" />
     <ClInclude Include="PlayerSwingAction.h" />
     <ClInclude Include="StringActionTargetManager.h" />

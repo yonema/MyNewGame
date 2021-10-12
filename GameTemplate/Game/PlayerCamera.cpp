@@ -22,6 +22,9 @@ namespace nsMyGame
 			// カメラをセット
 			m_camera = g_camera3D;
 
+			// カメラの遠平面を設定
+			m_camera->SetFar(kDefaultCameraFar);
+
 			// デフォルトの注視点から視点へのベクトルを設定
 			m_toCameraVec = kDefaultToCameraVec;
 
