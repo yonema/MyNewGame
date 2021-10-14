@@ -192,7 +192,7 @@ namespace nsMyGame
 				Vector3 debugVec = m_playerRef->GetPosition() - *m_swingTargetPos;
 				wchar_t text[128];
 				swprintf_s(text, L"StringLen:%2.2f", debugVec.Length());
-				m_debugFont->SetText(text);
+				//m_debugFont->SetText(text);
 				return;
 			}
 

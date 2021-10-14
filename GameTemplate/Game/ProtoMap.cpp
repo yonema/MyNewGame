@@ -5,6 +5,8 @@
 #include "Building.h"
 #include "BuildingConstData.h"
 #include "MapConstDatah.h"
+#include "GameMainState.h"
+#include "Goal.h"
 
 
 namespace nsMyGame
@@ -28,6 +30,9 @@ namespace nsMyGame
 			*/
 			bool CProtoMap::Start()
 			{
+				// ゲームステートの生成
+				m_gameState = NewGO<nsGameState::CGameMainState>(nsCommonData::enPriorityFirst);
+
 				// スカイキューブの生成と初期化
 				m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
 				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day);
@@ -68,12 +73,19 @@ namespace nsMyGame
 						// ゴールの生成
 						else if (objData.EqualObjectName(kGoalName))
 						{
+							m_goal = NewGO <nsGoal::CGoal>(nsCommonData::enPriorityFirst);
+							m_goal->Init(objData.position, objData.rotation, objData.scale, *m_player);
+
 							return true;
 						}
 
 						return false;
 					}
 				);
+
+
+				// タイマーの計測を始める
+				m_gameState->StartTimingGame();
 
 				return true;
 			}
@@ -85,6 +97,7 @@ namespace nsMyGame
 			{
 				DeleteGO(m_skyCube);	// スカイキューブクラスの破棄
 				DeleteGO(m_player);		// プレイヤークラスの破棄
+				DeleteGO(m_goal);		// ゴールを破棄
 
 				// 建物をすべて破棄
 				QueryGOs<nsBuilding::CBuilding>(

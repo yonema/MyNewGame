@@ -146,6 +146,9 @@ namespace nsMyGame
 				//スプライトの初期化
 				m_sprite.Init(initData);
 
+				//スプライトの更新
+				m_sprite.Update(m_position, m_rotation, m_scale, m_pivot);
+
 				return;
 			}
 

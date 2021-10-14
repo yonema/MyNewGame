@@ -135,6 +135,15 @@
     <Filter Include="MyCode\Maps\protoMaps">
       <UniqueIdentifier>{d0d9310d-6448-40e0-b7ff-29a128ab16f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\GameState">
+      <UniqueIdentifier>{6f0e59cb-f5a4-445d-8d8b-107bf5f2bdd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\UI">
+      <UniqueIdentifier>{cdc7730a-3213-420a-8971-2102e7044086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\Goal">
+      <UniqueIdentifier>{c04d89f9-8262-4800-a948-94093dde5e2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -454,6 +463,15 @@
     </ClCompile>
     <ClCompile Include="ProtoMap.cpp">
       <Filter>MyCode\Maps\protoMaps</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMainState.cpp">
+      <Filter>MyCode\GameState</Filter>
+    </ClCompile>
+    <ClCompile Include="GameMainUI.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Goal.cpp">
+      <Filter>MyCode\Goal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -861,6 +879,21 @@
     </ClInclude>
     <ClInclude Include="MapConstDatah.h">
       <Filter>MyCode\Maps</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMainState.h">
+      <Filter>MyCode\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="UIConstData.h">
+      <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="GameMainUI.h">
+      <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Goal.h">
+      <Filter>MyCode\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="GoalConstData.h">
+      <Filter>MyCode\Goal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

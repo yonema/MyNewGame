@@ -300,6 +300,9 @@
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="GameMainUI.cpp" />
+    <ClCompile Include="GameMainState.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="ProtoMap.cpp" />
     <ClCompile Include="PlayerStringModel.cpp" />
     <ClCompile Include="PlayerSwingAction.cpp" />
@@ -425,7 +428,11 @@
     <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
+    <ClInclude Include="GameMainUI.h" />
     <ClInclude Include="CommonData.h" />
+    <ClInclude Include="GameMainState.h" />
+    <ClInclude Include="Goal.h" />
+    <ClInclude Include="GoalConstData.h" />
     <ClInclude Include="MapConstDatah.h" />
     <ClInclude Include="ProtoMap.h" />
     <ClInclude Include="PlayerStringModel.h" />
@@ -485,6 +492,7 @@
     <ClInclude Include="TestMapForSpotLight.h" />
     <ClInclude Include="TklFile.h" />
     <ClInclude Include="TResourceBank.h" />
+    <ClInclude Include="UIConstData.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />

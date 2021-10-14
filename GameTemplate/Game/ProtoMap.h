@@ -9,6 +9,8 @@ namespace nsMyGame
 	}
 	namespace nsNature { class CSkyCube; }	// スカイクラス
 	namespace nsPlayer { class CPlayer; }	// プレイヤークラス
+	namespace nsGameState { class CGameMainState; }	// ゲームメインステートクラス
+	namespace nsGoal { class CGoal; }	// ゴールクラス
 
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -57,6 +59,8 @@ namespace nsMyGame
 				nsLevel3D::CLevel3D m_level3D;				//!< 3Dレベルクラス
 				nsNature::CSkyCube* m_skyCube = nullptr;	//!< スカイキューブ
 				nsPlayer::CPlayer* m_player = nullptr;		//!< プレイヤークラス
+				nsGoal::CGoal* m_goal = nullptr;			//!< ゴールクラス
+				nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステートクラス
 			};
 
 		}
