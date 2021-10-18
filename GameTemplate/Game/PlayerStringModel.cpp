@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "PlayerConstData.h"
 #include "ModelRender.h"
+#include "GameTime.h"
 
 namespace nsMyGame
 {
@@ -54,27 +55,28 @@ namespace nsMyGame
 			
 			// L‚Î‚·ˆ—
 
+			// Šg‘å—¦‚ðŽæ“¾
 			Vector3 scale = m_modelRender->GetScale();
-
-			scale.z += 50.0f;
-
-			Vector3 distVec = m_toStretchPos - m_playerRef->GetPosition();
-
+			// Z•ûŒüi‘O•ûŒüj‚ÉŠg‘å‚·‚é
+			scale.z += m_stretchSpeed;
+			// L‚Ñ‚éæ‚Ö‚Ì‹——£ƒxƒNƒgƒ‹
+			const Vector3 distVec = m_toStretchPos - m_playerRef->GetPosition();
+			// L‚Ñ‚éæ‚Ö‚Ì‹——£‚Ì‘å‚«‚³
 			const float distLen = distVec.Length();
-
+			// Šg‘å—¦‚ªAL‚Ñ‚éæ‚Ö‚Ì‹——£‚Ì‘å‚«‚³‚æ‚è‘å‚«‚¢‚©H
 			if (scale.z > distLen)
 			{
+				// ‘å‚«‚¢
+				// Šg‘å—¦‚ð‹——£‚É‡‚í‚¹‚é
 				scale.z = distLen;
+				// L‚Ñ‚«‚Á‚½
 				m_isStretched = true;
 			}
 
+			// ƒ‚ƒfƒ‹‚ÌŠg‘å—¦‚ÆÀ•W‚ðÝ’è‚·‚é
 			m_modelRender->SetScale(scale);
 			m_modelRender->SetPosition(m_playerRef->GetPosition());
-
-			
-
-
-
+						
 			return;
 		}
 
@@ -90,6 +92,12 @@ namespace nsMyGame
 			// L‚Ñ‚éæ‚ÌÀ•W‚ðÝ’è‚·‚é
 			m_toStretchPos = pos;
 
+			// L‚Ñ‚éæ‚Ö‚ÌƒxƒNƒgƒ‹
+			Vector3 toStretchVec = m_toStretchPos - m_playerRef->GetPosition();
+			// L‚Ñ‚é‘¬“x‚ðÝ’è‚·‚é
+			m_stretchSpeed =
+				toStretchVec.Length() * nsTimer::CGameTime().GetFrameDeltaTime() / kStretchedTime;
+
 			// Ž©g‚ð—LŒø‰»‚·‚é
 			Activate();
 
@@ -99,7 +107,9 @@ namespace nsMyGame
 			// ƒ‚ƒfƒ‹‚ð‰ñ“]‚³‚¹‚éˆ—
 			ModelRotation();
 
+			// ƒ‚ƒfƒ‹‚ÌŠg‘å—¦‚ð‰Šú‰»
 			m_modelRender->SetScale(Vector3::One);
+			// ƒ‚ƒfƒ‹‚ÌÀ•W‚ðÝ’è‚·‚é
 			m_modelRender->SetPosition(m_playerRef->GetPosition());
 
 			return;

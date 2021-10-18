@@ -20,8 +20,10 @@ namespace nsMyGame
 			*/
 			enum EnPlayerState
 			{
-				enWalkAndRun,	//!< 歩きと走り
-				enSwing,		//!< スイング
+				enWalkAndRun,			//!< 歩きと走り
+				enSwing,				//!< スイング
+				enAirAfterStringAction,	//!< 糸を使ったアクションの後の空中状態
+
 			};
 
 
@@ -30,24 +32,27 @@ namespace nsMyGame
 			*/
 			namespace nsPlayerMoveConstData
 			{
-				constexpr float kGravityScale = 980.0f;	//!< 重力の強さ
-				constexpr float kJumpForce = 500.0f;	//!< ジャンプ力
+				constexpr float kGravityScale = 980.0f * 2.0f;	//!< 重力の強さ
+				constexpr float kMaxFallSpeed = 2000.0f;		//!< 最高落下速度
+				constexpr float kJumpForce = 700.0f;	//!< ジャンプ力
 				constexpr float kModelRotRate = 0.3f;	//!< モデルの回転の補間率
 				constexpr float kMoveVecMin = 0.001f;	//!< 移動ベクトルの最小値
 			}
 
 			/**
-			 * @brief プレイヤーの歩きと走りクラスの定数データ
+			 * @brief プレイヤーの通常の動きクラスの定数データ
 			*/
-			namespace nsPlayerWalkAndRunConstData
+			namespace nsPlayerNormalMovementConstData
 			{
-				constexpr float kWalkAcceleration = 10.0f;	//!< 歩き時の加速度
-				constexpr float kRunAcceleration = 20.0f;	//!< 走り時の加速度
+				constexpr float kWalkAcceleration = 20.0f;	//!< 歩き時の加速度
+				constexpr float kRunAcceleration = 40.0f;	//!< 走り時の加速度
 				constexpr float kWalkMaxSpeed = 500.0f;		//!< 歩き時の最高速度
 				constexpr float kRunMaxSpeed = 1000.0f;		//!< 走り時の最高速度
 				constexpr float kMinSpeed = 2.0f;			//!< 最低速度
 				constexpr float kGroundFriction = 0.9f;		//!< 地面の摩擦
 				constexpr float kAirFriction = 1.0f;		//!< 空中の摩擦
+				constexpr float kBreakThresholdAngle = 135.0f;		//!< ブレーキの角度のしきい値
+				constexpr float kBreakThresholdVelocity = 135.0f;	//!< ブレーキの速度のしきい値
 			}
 
 			/**
@@ -100,6 +105,7 @@ namespace nsMyGame
 			{
 				//!< 糸のモデルファイルパス
 				constexpr const char* const kStringModelFilePath = "Assets/modelData/testString.tkm";
+				constexpr float kStretchedTime = 0.1f;	//!< 糸が伸びきるまでの時間
 			}
 
 			/**
@@ -117,7 +123,7 @@ namespace nsMyGame
 			*/
 			namespace nsPlayerCameraConstData
 			{
-				constexpr float kCameraMaxSpeed = 5000.0f;	//!< カメラの最大速度
+				constexpr float kCameraMaxSpeed = 10000.0f;	//!< カメラの最大速度
 				constexpr float kCameraRadius = 5.0f;		//!< カメラのコリジョンの半径
 
 				constexpr float kTargetOffsetUp = 80.0f;		//!< 注視点の上下のオフセット
@@ -133,6 +139,9 @@ namespace nsMyGame
 				constexpr float kMaxToCameraDirY = 0.8f;
 				//!< 注視点から視点への方向ベクトルのYの最小値。カメラの上向きの上限。
 				constexpr float kMinToCameraDirY = -0.5f;
+
+				//!< バネの減衰率。値が大きいほど、カメラが遅れて追従してくる
+				constexpr float kSpringDampingRate = 0.7f;
 
 			}
 		}

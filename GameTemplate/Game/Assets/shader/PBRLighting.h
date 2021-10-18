@@ -189,26 +189,26 @@ float CalcDiffuseFromFresnel(float3 N, float3 L, float3 V, float smooth)
     // 光源に向かうベクトルと視線に向かうベクトルのハーフベクトルを求める
     float3 H = normalize(L+V);
     
-    //粗さは0.5で固定。
+    //粗さ
     float roughness = 1.0f - smooth;
     
-    //これは
+    //これはEA DICEが発表した改良コード。
     float energyBias = lerp(0.0f, 0.5f, roughness);
-    float energyFactor = lerp(1.0, 1.0/1.51, roughness);
+    float energyFactor = lerp(1.0f, 1.0f / 1.51f, roughness);
 
     // 光源に向かうベクトルとハーフベクトルがどれだけ似ているかを内積で求める
     float dotLH = saturate(dot(L,H));
     // 光源に向かうベクトルとハーフベクトル、光が平行に入射したときの拡散反射量を求めている。
-    float Fd90 = energyBias + 2.0 * dotLH * dotLH * roughness;
+    float Fd90 = energyBias + 2.0f * dotLH * dotLH * roughness;
     
     // 法線と光源に向かうベクトルｗを利用して拡散反射率を求めています
     float dotNL = saturate(dot(N,L));
-    float FL = (1 + (Fd90 - 1) * pow(1 - dotNL, 5));
+    float FL = (1.0f + (Fd90 - 1.0f) * pow(1.0f - dotNL, 5.0f));
 
     
     // 法線と視点に向かうベクトルを利用して拡散反射率を求めています
     float dotNV = saturate(dot(N,V));
-    float FV =  (1 + (Fd90 - 1) * pow(1 - dotNV, 5));
+    float FV =  (1.0f + (Fd90 - 1.0f) * pow(1.0f - dotNV, 5.0f));
 
     //法線と光源への方向に依存する拡散反射率と、法線と視点ベクトルに依存する拡散反射率を
     // 乗算して最終的な拡散反射率を求めている。PIで除算しているのは正規化を行うため

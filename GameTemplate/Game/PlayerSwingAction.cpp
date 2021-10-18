@@ -40,12 +40,12 @@ namespace nsMyGame
 
 			/**
 			 * @brief スイングアクションを実行
-			 * @return 歩きと走りの処理を行うか？
+			 * @return 通常の動きの処理を行うか？
 			*/
 			bool CPlayerSwingAction::Execute()
 			{
-				// 歩きと走りの処理を行うか？
-				bool executeWalkAndRunFlag = false;
+				// 通常の動きの処理を行うか？
+				bool executeNormalMovementFlag = false;
 
 				// スイングターゲットを探すか？
 				if (m_swingActionState == enFindSwingTarget)
@@ -57,13 +57,14 @@ namespace nsMyGame
 				if (m_playerRef->GetInputData().actionSwing != true)
 				{
 					m_swingActionState = enEnd;
+					m_playerRef->SetState(nsPlayerConstData::enAirAfterStringAction);
 				}
 
 				switch (m_swingActionState)
 				{
 				case enIsStringStretching:
 
-					executeWalkAndRunFlag = true;
+					executeNormalMovementFlag = true;
 
 					if (m_playerMovementRef->IsAir() != true)
 					{
@@ -72,27 +73,34 @@ namespace nsMyGame
 					else if (m_playerRef->IsStringStretched())
 					{
 						m_swingActionState = EnSwingActionState::enIsSwinging;
+						if (m_swingSpeed <= FLT_EPSILON)
+						{
+							m_swingSpeed = 500.0f + fabsf(m_playerMovementRef->GetMoveVec().y) * 0.5f;
+						}
 					}
 					
 					break;
 				case enIsSwinging:
 
-					executeWalkAndRunFlag = false;
+					executeNormalMovementFlag = false;
 
 					SwingAction();
+					if (m_playerMovementRef->IsAir() != true)
+					{
+						m_swingActionState = EnSwingActionState::enEnd;
+					}
 
 					break;
 				case enEnd:
 
-					executeWalkAndRunFlag = true;
+					executeNormalMovementFlag = true;
 					m_swingActionState = enFindSwingTarget;
 					m_playerRef->EndStringStretchToPos();
 					m_playerRef->SetState(nsPlayerConstData::EnPlayerState::enWalkAndRun);
-
 					break;
 				}
 
-				return executeWalkAndRunFlag;
+				return executeNormalMovementFlag;
 			}
 
 
@@ -142,41 +150,113 @@ namespace nsMyGame
 			*/
 			void CPlayerSwingAction::SwingAction()
 			{
-				// スイングターゲット（支点）から自身の座標（重り）へのベクトル
-				Vector3 fromSwingTargetToPosVec = m_playerRef->GetPosition() - *m_swingTargetPos;
-				// 移動する方向
-				Vector3 moveDir = m_playerRef->GetCamera().GetCameraForward();
-				moveDir.y = 0.5f;
-				moveDir.Normalize();
+				// 加算移動ベクトル
+				Vector3 addMoveVec = Vector3::Zero;
+				
+				// プレイヤーからスイングターゲットまでのXZ平面でのベクトル
+				Vector3 playerToTargetVecXZ = *m_swingTargetPos - m_playerRef->GetPosition();
+				// Y成分を消去
+				playerToTargetVecXZ.y = 0.0f;
 
-				// 支点から重りへのベクトルを90度回すための軸
-				Vector3 rotAxis = Vector3::Down;//fromSwingTargetToPosVec;
-				rotAxis.Normalize();
-				rotAxis.Cross(moveDir);
+				// XZ平面での前方向
+				Vector3 forwardDirXZ = m_playerRef->GetCamera().GetCameraForward();
+				// Y成分を消去
+				forwardDirXZ.y = 0.0f;
+				// 正規化
+				forwardDirXZ.Normalize();
 
-				// 支点から重りへのベクトルを90度回した方向ベクトル
-				Vector3 verticalDir = fromSwingTargetToPosVec;
-				// 90度回す回転クォータニオン
-				Quaternion qRot;
-				qRot.SetRotation(rotAxis, 3.14f * 0.5f);
-				qRot.Apply(verticalDir);
-				verticalDir.Normalize();
-				verticalDir.Scale(1000.0f);
+				// XZ平面の前方向に、プレイヤーからスイングターゲットへのXZ平面のベクトルを射影する
+				float projectToTargetVecXZToForwardDirXZ = Dot(forwardDirXZ, playerToTargetVecXZ);
 
-				Vector3 next = m_playerRef->GetPosition() + verticalDir;
+				// XZ平面での、前方向のみの、スイングターゲットへのベクトル
+				Vector3 toTargetFowardVecXZ = forwardDirXZ;
+				toTargetFowardVecXZ.Scale(projectToTargetVecXZToForwardDirXZ);
+				// XZ平面での、前方向のみの、スイングターゲットの座標
+				const Vector3 toTargetForwardPosXZ = m_playerRef->GetPosition() + toTargetFowardVecXZ;
+				// 前方向と上方向のみの、スイングターゲットの座標
+				Vector3 toTargetForwardUpPos = toTargetForwardPosXZ;
+				toTargetForwardUpPos.y = m_swingTargetPos->y;
 
-				Vector3 toNextVec = next - *m_swingTargetPos;
-				Vector3 toNextDir = toNextVec;
-				toNextDir.Normalize();
-				Vector3 toOldVec = fromSwingTargetToPosVec;
-				toOldVec.Normalize();
-				float rad = acosf(Dot(toNextDir, toOldVec));
+				// 前方向と上方向のみのスイングターゲットの座標からプレイヤーへのベクトル
+				const Vector3 toTargetForwardUpToPlayerVec = m_playerRef->GetPosition() - toTargetForwardUpPos;
+				// 前方向と上方向のみのスイングターゲットの座標からプレイヤーへの方向
+				Vector3 targetUptoPlayerDir = toTargetForwardUpToPlayerVec;
+				// 正規化する
+				targetUptoPlayerDir.Normalize();
 
-				qRot.SetRotation(rotAxis, rad);
-				qRot.Apply(toNextVec);
+				// XZ平面での前方向と、スイングターゲットからプレイヤーへの方向の内積
+				float dotFowardDirXZAndToPlayerDir = 
+					Dot(forwardDirXZ, targetUptoPlayerDir);
 
-				Vector3 add = *m_swingTargetPos + toNextVec - m_playerRef->GetPosition();
+				// 加算移動方向ベクトル
+				Vector3 addMoveDir = targetUptoPlayerDir;
+				// 加算移動方向ベクトルを回転させる回転クォータニオン
+				Quaternion qRotForAddMoveDir;
+				// 加算移動方向ベクトルを回転させる回転軸
+				Vector3 rotAxisForAddMoveDir = Cross(targetUptoPlayerDir, forwardDirXZ);
+				if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
+				{
+					rotAxisForAddMoveDir = Cross(Vector3::Down, forwardDirXZ);
+				}
+				rotAxisForAddMoveDir.Normalize();
 
+				// 内積が負か？、つまり、スイングターゲットより手前側にいるか？
+				if (dotFowardDirXZAndToPlayerDir < 0.0f)
+				{
+					// 手前側
+
+					float rate = dotFowardDirXZAndToPlayerDir + 1.0f;
+					rate = pow(rate, 2.0f);
+
+					// 回転クォータニオンを90度回転させる
+					qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, 3.14f * 0.5f);
+					// 加算移動方向ベクトルを回転させる
+					qRotForAddMoveDir.Apply(addMoveDir);
+					addMoveVec = addMoveDir;
+					m_swingSpeed += 5.0f;
+					addMoveVec.Scale(m_swingSpeed);
+
+				}
+				else
+				{
+					// 奥側
+
+					float radAngle = 3.14f * 0.5f;
+					Vector3 to = m_playerRef->GetPosition() - toTargetForwardPosXZ;
+					float rate = to.Length() / 1000.0f;
+					rate = pow(rate, 4.0f);
+					rate = min(rate, 3.14f * 0.5f);
+
+					if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
+					{
+						if (m_swingSpeed2 <= -50.0f)
+						{
+							m_swingSpeed2 = m_swingSpeed;
+						}
+						float dot = Dot(forwardDirXZ, targetUptoPlayerDir);
+						float rad = acosf(dot);
+						float angleRate = rad / (3.14f * 0.1f);
+						m_swingSpeed = Math::Lerp<float>(min(1.0f,angleRate), m_swingSpeed2, 0.0f);
+					}
+					else
+					{
+
+						m_swingSpeed += 5.0f;
+						addMoveDir = forwardDirXZ;
+						radAngle = 3.14f * 0.5f * rate;
+
+					}
+
+					// 回転クォータニオンを90度回転させる
+					qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, radAngle);
+					// 加算移動方向ベクトルを回転させる
+					qRotForAddMoveDir.Apply(addMoveDir);
+					addMoveDir.Normalize();
+					addMoveVec = addMoveDir;
+					rate += 0.5f;
+					addMoveVec.Scale(m_swingSpeed /*+= 5.0f * min(rate, 1.0f)*/);
+
+				}
 
 
 				m_playerMovementRef->ResetMoveVecX();
@@ -184,15 +264,12 @@ namespace nsMyGame
 				m_playerMovementRef->ResetMoveVecZ();
 
 				// 移動ベクトルに、加算移動ベクトルを加算する
-				m_playerMovementRef->AddMoveVec(add);
+				m_playerMovementRef->AddMoveVec(addMoveVec);
 
 				// キャラクターコントローラーを使って移動させる
 				m_playerMovementRef->MoveWithCharacterController();
 
-				Vector3 debugVec = m_playerRef->GetPosition() - *m_swingTargetPos;
-				wchar_t text[128];
-				swprintf_s(text, L"StringLen:%2.2f", debugVec.Length());
-				//m_debugFont->SetText(text);
+
 				return;
 			}
 

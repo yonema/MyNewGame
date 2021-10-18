@@ -6,6 +6,7 @@
 #include "LightManager.h"
 #include "StringActionTargetManager.h"
 #include "system/system.h"
+#include "DebugManager.h"
 
 namespace nsMyGame
 {
@@ -60,6 +61,7 @@ namespace nsMyGame
 			nsSound::CSoundEngine::CreateInstance();	// サウンドエンジンを生成
 			// スイングのターゲットのマネージャーを生成
 			nsStringActionTarget::CStringActionTargetManager::CreateInstance();
+			nsDebug::CDebugManager::CreateInstance();	// デバックマネージャーを生成
 
 			return;
 		}
@@ -69,6 +71,7 @@ namespace nsMyGame
 		*/
 		void CMyEngine::DeleteInstances()
 		{
+			nsDebug::CDebugManager::DeleteInstance();	// デバックマネージャーを破棄
 			// スイングのターゲットのマネージャーを破棄
 			nsStringActionTarget::CStringActionTargetManager::DeleteInstance();
 			nsSound::CSoundEngine::DeleteInstance();	// サウンドエンジンを破棄
@@ -139,6 +142,17 @@ namespace nsMyGame
 				restTime = nsTimer::STOP_WATCH_CONST_DATA::MILLISECOND_FOR_LOCK_60FPS -
 					static_cast<int>(m_stopWatch->GetElapsedMillisecond());
 			} while (restTime > 0);
+
+			return;
+		}
+
+
+		/**
+		 * @brief 事前の破棄処理
+		*/
+		void CMyEngine::PreDelete()
+		{
+			nsDebug::CDebugManager::GetInstance()->PreDelete();
 
 			return;
 		}

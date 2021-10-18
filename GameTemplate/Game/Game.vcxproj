@@ -300,6 +300,7 @@
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="GameMainUI.cpp" />
     <ClCompile Include="GameMainState.cpp" />
     <ClCompile Include="Goal.cpp" />
@@ -317,7 +318,7 @@
     <ClCompile Include="PlayerInput.cpp" />
     <ClCompile Include="PlayerMovement.cpp" />
     <ClCompile Include="PlayerModelAnimation.cpp" />
-    <ClCompile Include="PlayerWalkAndRun.cpp" />
+    <ClCompile Include="PlayerNormalMovement.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="LightManager.cpp" />
@@ -336,6 +337,7 @@
     <ClCompile Include="TestMapForPlayerMove.cpp" />
     <ClCompile Include="TestMapForSpotLight.cpp" />
     <ClCompile Include="TklFile.cpp" />
+    <ClCompile Include="VectorRender.cpp" />
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="FontRender.cpp" />
@@ -428,6 +430,7 @@
     <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
+    <ClInclude Include="DebugManager.h" />
     <ClInclude Include="GameMainUI.h" />
     <ClInclude Include="CommonData.h" />
     <ClInclude Include="GameMainState.h" />
@@ -451,7 +454,7 @@
     <ClInclude Include="PlayerInput.h" />
     <ClInclude Include="PlayerMovement.h" />
     <ClInclude Include="PlayerModelAnimation.h" />
-    <ClInclude Include="PlayerWalkAndRun.h" />
+    <ClInclude Include="PlayerNormalMovement.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="EffectPlayer.h" />
@@ -494,6 +497,7 @@
     <ClInclude Include="TResourceBank.h" />
     <ClInclude Include="UIConstData.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="VectorRender.h" />
     <ClInclude Include="WaveFile.h" />
     <ClInclude Include="WaveFileBank.h" />
   </ItemGroup>

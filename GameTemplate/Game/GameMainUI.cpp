@@ -36,6 +36,8 @@ namespace nsMyGame
 		{
 			DeleteGO(m_timerFR);
 
+			DeleteGO(m_goalSR);
+
 			return;
 		}
 

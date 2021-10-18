@@ -36,17 +36,11 @@ namespace nsMyGame
 				// キャラクターコントローラ初期化
 				m_charaCon.Init(radius, height, m_playerRef->GetPosition());
 
-				// プレイヤーの歩きと走りのクラスの初期化
-				m_playerWalkAndRun.Init(*m_playerRef, this);
+				// プレイヤーの通常の動きクラスの初期化
+				m_playerNormalMovement.Init(*m_playerRef, this);
 
 				// プレイヤーのスイングアクションクラスの初期化
 				m_playerSwingAction.Init(m_playerRef, this);
-
-
-#ifdef MY_DEBUG
-				m_moveVecFont = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFirst);
-				m_moveVecFont->SetPosition({ -200.0f,200.0f });
-#endif
 
 				return;
 			}
@@ -111,22 +105,10 @@ namespace nsMyGame
 
 				if (executeWalkAndRunFlag)
 				{
-					// 歩きと走りを実行
-					m_playerWalkAndRun.Execute();
+					// 通常の動きを実行
+					m_playerNormalMovement.Execute();
 				}
 
-
-#ifdef MY_DEBUG
-				wchar_t text[256];
-				//swprintf_s(text, L"x:%2.2f,y:%2.2f,z:%2.2f\nlen:%2.2f",
-				//	m_moveVec.x, m_moveVec.y, m_moveVec.z,m_moveVec.Length());
-				//swprintf_s(text, L"x:%2.2f,y:%2.2f,z:%2.2f",m_moveVec.x, m_moveVec.y, m_moveVec.z);
-				swprintf_s(text, L"forward:%2.2f,right:%2.2f\nlen:%2.2f",
-					m_playerRef->GetInputData().axisMoveForward,
-					m_playerRef->GetInputData().axisMoveRight,
-					m_moveVec.Length());
-				m_moveVecFont->SetText(text);
-#endif
 
 				return;
 			}

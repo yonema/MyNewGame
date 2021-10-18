@@ -109,6 +109,8 @@ namespace nsMyGame
 					}
 				);
 
+				DeleteGO(m_gameState);
+
 				return;
 			}
 

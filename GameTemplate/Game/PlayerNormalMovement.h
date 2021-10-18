@@ -20,19 +20,19 @@ namespace nsMyGame
 			class CPlayerMovement;	// プレイヤーの動きクラス
 
 			/**
-			 * @brief プレイヤーの歩きと走りクラス
+			 * @brief プレイヤーの通常の動きクラス
 			*/
-			class CPlayerWalkAndRun : private nsUtil::Noncopyable
+			class CPlayerNormalMovement : private nsUtil::Noncopyable
 			{
 			public:		// コンストラクタとデストラクタ
 				/**
 				 * @brief コンストラクタ
 				*/
-				CPlayerWalkAndRun() = default;
+				CPlayerNormalMovement() = default;
 				/**
 				 * @brief デストラクタ
 				*/
-				~CPlayerWalkAndRun() = default;
+				~CPlayerNormalMovement() = default;
 
 			public:		// メンバ関数
 
@@ -47,11 +47,21 @@ namespace nsMyGame
 				);
 
 				/**
-				 * @brief 歩きと走りの処理を実行
+				 * @brief 通常の動きの処理を実行
 				*/
 				void Execute();
 
 			private:	// privateなメンバ関数
+
+				/**
+				 * @brief 歩きか走りの移動の処理
+				*/
+				void WalkOrRunMove();
+
+				/**
+				 * @brief 糸を使ったアクションの後の空中の処理
+				*/
+				void AirAfterStringAction();
 
 				/**
 				 * @brief 軸入力値を更新
@@ -59,9 +69,19 @@ namespace nsMyGame
 				void UpdateInputAxisParam();
 
 				/**
+				 * @brief 糸を使ったアクションの後の空中状態か調べる
+				*/
+				void CheckIsAirAfterStringAction();
+
+				/**
 				 * @brief 歩きか走りかを決める
 				*/
 				void WalkOrRun();
+
+				/**
+				 * @brief 移動方向を更新する
+				*/
+				void UpdateMoveDir();
 
 				/**
 				 * @brief 加速を計算
@@ -86,16 +106,16 @@ namespace nsMyGame
 			private:	// データメンバ
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< 移動クラスの参照
 				const CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
-				Vector3 m_addMoveVec = Vector3::Zero;			//!< 加算移動ベクトル
+				Vector3 m_moveDir = Vector3::Zero;				//!< 移動方向
+				float m_velocity = 0.0f;						//!< スピード
 				float m_oldVelocity = 0.0f;						//!< 前のフレームの速度
 
 				// 軸入力値
 				float m_inputMoveF = 0.0f;			//!< 前、後移動の軸入力値
 				float m_inputMoveR = 0.0f;			//!< 右、左移動の軸入力値
-				float m_absInputMoveF = 0.0f;		//!< 前、後移動の軸入力の絶対値
-				float m_absInputMoveR = 0.0f;		//!< 右、左移動の軸入力の絶対値
+				bool m_isInputMove = false;			//!< 軸入力があるか？
 
-				// 歩きと走りで変わるパラメータ
+				// 通常の動きで変わるパラメータ
 				float m_acceleration = 0.0f;	//!< 加速度
 				float m_maxSpeed = 0.0f;		//!< 最高速度
 			};

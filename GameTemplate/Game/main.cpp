@@ -25,6 +25,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 	// ゲームの破棄
 	DeleteGO(game);
 
+	// 事前破棄処理
+	nsMyGame::nsMyEngine::CMyEngine::GetInstance()->PreDelete();
+
 	// ゲームを破棄するために、オブジェクトマネージャーによるアップデートの実行
 	GameObjectManager::GetInstance()->ExecuteUpdate();
 

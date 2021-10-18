@@ -2,9 +2,6 @@
 #include "Noncopyable.h"
 #include "PlayerConstData.h"
 
-#ifdef MY_DEBUG
-#include "FontRender.h"
-#endif
 
 namespace nsMyGame
 {
@@ -37,23 +34,11 @@ namespace nsMyGame
 				/**
 				 * @brief コンストラクタ
 				*/
-				CPlayerSwingAction()// = default;
-				{
-#ifdef MY_DEBUG
-					m_debugFont = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFirst);
-					m_debugFont->SetText(L"StringLen:");
-					m_debugFont->SetPosition({ -100.0f,-100.0f });
-#endif
-				}
+				CPlayerSwingAction() = default;
 				/**
 				 * @brief デストラクタ
 				*/
-				~CPlayerSwingAction()// = default;
-				{
-#ifdef MY_DEBUG
-					DeleteGO(m_debugFont);
-#endif
-				}
+				~CPlayerSwingAction() = default;
 
 			public:		// メンバ関数
 
@@ -69,9 +54,18 @@ namespace nsMyGame
 
 				/**
 				 * @brief スイングアクションを実行
-				 * @return 歩きと走りの処理を行うか？
+				 * @return 通常の動きの処理を行うか？
 				*/
 				bool Execute();
+
+				/**
+				 * @brief スイング中の速度をリセットする
+				*/
+				void ResetSwingSpeed()
+				{
+					m_swingSpeed = 0.0f;
+					m_swingSpeed = -100.0f;
+				}
 
 			private:	// privateなメンバ関数
 
@@ -93,10 +87,10 @@ namespace nsMyGame
 				EnSwingActionState m_swingActionState = 
 					nsPlayerConstData::nsPlayerSwingActionConstData::enFindSwingTarget;
 				float m_swingRadAngle = 0.0f;						//!< スイングのラジアン角度
+				int m_swingCounter = 0;
+				float m_swingSpeed = 0.0f;
+				float m_swingSpeed2 = -100.0f;
 
-#ifdef MY_DEBUG
-				nsGraphic::nsFont::CFontRender* m_debugFont = nullptr;
-#endif
 
 			};
 		}

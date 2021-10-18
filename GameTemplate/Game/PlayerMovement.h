@@ -1,16 +1,9 @@
 #pragma once
 #include "Noncopyable.h"
-#include "PlayerWalkAndRun.h"
+#include "PlayerNormalMovement.h"
 #include "PlayerSwingAction.h"
 #include "PlayerConstData.h"
 #include "GameTime.h"
-
-
-
-// デバック用
-#ifdef MY_DEBUG
-#include "FontRender.h"
-#endif
 
 namespace nsMyGame
 {
@@ -40,13 +33,7 @@ namespace nsMyGame
 				/**
 				 * @brief デストラクタ
 				*/
-				~CPlayerMovement()
-				{
-#ifdef MY_DEBUG
-					DeleteGO(m_moveVecFont);
-#endif
-					return;
-				}
+				~CPlayerMovement() = default;
 
 			public:		// メンバ関数
 
@@ -99,12 +86,16 @@ namespace nsMyGame
 				void ResetMoveVecZ() { m_moveVec.z = 0.0f; }
 
 				/**
-				 * @brief 重力を得る
+				 * @brief 重力をかける
 				*/
-				float ApplyGravity()
+				void ApplyGravity()
 				{
-					return m_moveVec.y -= nsPlayerConstData::nsPlayerMoveConstData::kGravityScale *
+					m_moveVec.y -= nsPlayerConstData::nsPlayerMoveConstData::kGravityScale *
 						nsTimer::GameTime().GetFrameDeltaTime();
+					if (m_moveVec.y < -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed)
+					{
+						m_moveVec.y = -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed;
+					}
 				}
 
 				/**
@@ -139,14 +130,9 @@ namespace nsMyGame
 				Vector3 m_moveVec = Vector3::Zero;		//!< 移動ベクトル
 				CharacterController m_charaCon;			//!< キャラクターコントローラー
 
-				CPlayerWalkAndRun m_playerWalkAndRun;	//!< プレイヤーの歩きと走りクラス
+				CPlayerNormalMovement m_playerNormalMovement;	//!< プレイヤーの通常の動きクラス
 				CPlayerSwingAction m_playerSwingAction;	//!< プレイヤーのスイングアクションクラス
 
-
-				// デバック用
-#ifdef MY_DEBUG
-				nsGraphic::nsFont::CFontRender* m_moveVecFont = nullptr;
-#endif
 
 			};
 		}

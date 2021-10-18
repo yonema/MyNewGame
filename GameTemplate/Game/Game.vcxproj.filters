@@ -144,6 +144,9 @@
     <Filter Include="MyCode\Goal">
       <UniqueIdentifier>{c04d89f9-8262-4800-a948-94093dde5e2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Debug">
+      <UniqueIdentifier>{4b8ba549-984e-4d14-a0e0-7a7d49c34520}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -434,9 +437,6 @@
     <ClCompile Include="PlayerMovement.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerWalkAndRun.cpp">
-      <Filter>MyCode\Player\PlayerMovement</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\ExEngine\physics\PhysicsGhostObject.cpp">
       <Filter>ExEngine\physics</Filter>
     </ClCompile>
@@ -472,6 +472,15 @@
     </ClCompile>
     <ClCompile Include="Goal.cpp">
       <Filter>MyCode\Goal</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerNormalMovement.cpp">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClCompile>
+    <ClCompile Include="VectorRender.cpp">
+      <Filter>MyCode\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugManager.cpp">
+      <Filter>MyCode\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -844,9 +853,6 @@
     <ClInclude Include="PlayerMovement.h">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerWalkAndRun.h">
-      <Filter>MyCode\Player\PlayerMovement</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ExEngine\physics\PhysicsGhostObject.h">
       <Filter>ExEngine\physics</Filter>
     </ClInclude>
@@ -894,6 +900,15 @@
     </ClInclude>
     <ClInclude Include="GoalConstData.h">
       <Filter>MyCode\Goal</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerNormalMovement.h">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="VectorRender.h">
+      <Filter>MyCode\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugManager.h">
+      <Filter>MyCode\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

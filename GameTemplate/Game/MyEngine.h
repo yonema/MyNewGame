@@ -37,6 +37,11 @@ namespace nsMyGame
 			*/
 			void ExecuteGameLoop();
 
+			/**
+			 * @brief 事前の破棄処理
+			*/
+			void PreDelete();
+
 		public:		// staticなメンバ関数
 			/**
 			 * @brief 唯一のインスタンスを生成する

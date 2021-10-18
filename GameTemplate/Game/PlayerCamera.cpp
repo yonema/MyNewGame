@@ -38,6 +38,9 @@ namespace nsMyGame
 			// バネカメラを初期化
 			m_springCamera.Init(*m_camera, kCameraMaxSpeed, true, kCameraRadius);
 
+			// バネの減衰率を設定
+			m_springCamera.SetDampingRate(kSpringDampingRate);
+
 			return;
 		}
 

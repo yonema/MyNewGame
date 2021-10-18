@@ -92,6 +92,7 @@ namespace nsMyGame
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< ƒ‚ƒfƒ‹ƒŒƒ“ƒ_ƒ‰[
 			bool m_isStretched = true;									//!< L‚Ñ‚«‚Á‚Ä‚¢‚é‚©H
 			Vector3 m_toStretchPos = Vector3::Zero;						//!< L‚Ñ‚éæ‚ÌÀ•W
+			float m_stretchSpeed = 0.0f;								//!< L‚Ñ‚é‘¬“x
 		};
 
 	}

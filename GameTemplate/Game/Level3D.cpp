@@ -69,6 +69,11 @@ namespace nsMyGame
 					levelObjData.rotation.z = -fix;
 					levelObjData.rotation.x = -levelObjData.rotation.x;
 
+					Quaternion qRot;
+					qRot.SetRotationY(3.14f * 1.0f);
+					//levelObjData.rotation.Multiply(qRot);
+					qRot.Multiply(levelObjData.rotation);
+					levelObjData.rotation = qRot;
 
 					std::swap(levelObjData.scale.y, levelObjData.scale.z);
 					//ZupÅÃYupÅ@èIÇÌÇËÅB
