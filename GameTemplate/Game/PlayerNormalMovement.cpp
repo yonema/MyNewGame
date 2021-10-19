@@ -101,10 +101,7 @@ namespace nsMyGame
 			*/
 			void CPlayerNormalMovement::AirAfterStringAction()
 			{
-				if(!m_playerMovementRef->IsAir())
-				{
-					//m_playerRef->SetS
-				}
+
 				// ²“ü—Í’l‚ğXV‚·‚é
 				UpdateInputAxisParam();
 

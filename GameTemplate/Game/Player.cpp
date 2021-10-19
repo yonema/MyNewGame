@@ -70,6 +70,7 @@ namespace nsMyGame
 			// モデルアニメーションクラスを更新
 			m_playerModelAnimation.ExecuteUpdate();
 
+
 			return;
 		}
 

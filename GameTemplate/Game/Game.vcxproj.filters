@@ -482,6 +482,9 @@
     <ClCompile Include="DebugManager.cpp">
       <Filter>MyCode\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="TextPanelRender.cpp">
+      <Filter>MyCode\Debug</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -911,6 +914,9 @@
       <Filter>MyCode\Debug</Filter>
     </ClInclude>
     <ClInclude Include="DebugConstData.h">
+      <Filter>MyCode\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="TextPanelRender.h">
       <Filter>MyCode\Debug</Filter>
     </ClInclude>
   </ItemGroup>

@@ -29,7 +29,7 @@ namespace nsMyGame
 			m_render.SetOnRender2DFunc([&](RenderContext& rc) { this->Render2D(rc); });
 
 			// フォントのシャドウパラメータを設定
-			m_font.SetShadowParam(true, kVectorFontShadowOffset, kVectorFontColor);
+			m_font.SetShadowParam(true, kVectorFontShadowOffset, Vector4::Black);
 
 			return true;
 		}
@@ -127,7 +127,7 @@ namespace nsMyGame
 				wchar_t wc[126];
 				mbstowcs(wc, vectorRenderData.name.c_str(), vectorRenderData.name.length() + 1);
 				Vector2 textPos = { pos.x, pos.y - 4.0f };
-				float between = 16.0f;
+				float between = 40.0f * m_fontScale;
 
 				// ベクトルの名前を表示
 				swprintf_s(text, L"%s", wc);

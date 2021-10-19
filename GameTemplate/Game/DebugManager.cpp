@@ -16,7 +16,10 @@ namespace nsMyGame
 		CDebugManager::CDebugManager()
 		{
 #ifdef MY_DEBUG
+			// ベクトル描画クラスの生成
 			m_vectorRender = NewGO<CVectorRender>(nsCommonData::enPriorityFinal);
+			// テキストパネル描画クラスの生成
+			m_textPanelRender = NewGO<CTextPanelRender>(nsCommonData::enPriorityFinal);
 #endif
 
 			return;
@@ -37,6 +40,7 @@ namespace nsMyGame
 		{
 #ifdef MY_DEBUG
 			DeleteGO(m_vectorRender);
+			DeleteGO(m_textPanelRender);
 #endif
 
 

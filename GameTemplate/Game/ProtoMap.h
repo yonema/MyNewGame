@@ -61,6 +61,7 @@ namespace nsMyGame
 				nsPlayer::CPlayer* m_player = nullptr;		//!< プレイヤークラス
 				nsGoal::CGoal* m_goal = nullptr;			//!< ゴールクラス
 				nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステートクラス
+				nsGraphic::nsModel::CModelRender* m_stage = nullptr;
 			};
 
 		}

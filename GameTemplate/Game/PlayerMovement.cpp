@@ -95,11 +95,22 @@ namespace nsMyGame
 				// ステートで処理を振り分ける
 				switch (m_playerRef->GetState())
 				{
-				case nsPlayerConstData::enSwing:	// スイング
+				// スイング
+				case nsPlayerConstData::enSwing:
 
 					// スイングアクションを実行
 					executeWalkAndRunFlag = m_playerSwingAction.Execute();
 
+					break;
+
+				// 糸を使ったアクションの後の空中状態
+				case nsPlayerConstData::enAirAfterStringAction:
+					// 地面についあたら
+					if (!IsAir())
+					{
+						// ステートを歩きと走り状態に遷移
+						m_playerRef->SetState(nsPlayerConstData::enWalkAndRun);
+					}
 					break;
 				}
 

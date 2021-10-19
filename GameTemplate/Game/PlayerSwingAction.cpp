@@ -54,25 +54,35 @@ namespace nsMyGame
 					FindSwingTarget();
 				}
 
+				// スイングアクションをやめたか？
 				if (m_playerRef->GetInputData().actionSwing != true)
 				{
-					m_swingActionState = enEnd;
+					m_swingActionState = EnSwingActionState::enEnd;
 					m_playerRef->SetState(nsPlayerConstData::enAirAfterStringAction);
+				}
+
+				// 地面についてしまったか？
+				if (m_playerMovementRef->IsAir() != true)
+				{
+					m_swingActionState = EnSwingActionState::enEnd;
+					m_playerRef->SetState(nsPlayerConstData::EnPlayerState::enWalkAndRun);
+
 				}
 
 				switch (m_swingActionState)
 				{
+				// 糸を伸ばしている最中
 				case enIsStringStretching:
 
 					executeNormalMovementFlag = true;
 
-					if (m_playerMovementRef->IsAir() != true)
+					// 伸ばし切ったか？
+					if (m_playerRef->IsStringStretched())
 					{
-						m_swingActionState = EnSwingActionState::enEnd;
-					}
-					else if (m_playerRef->IsStringStretched())
-					{
+						// 伸ばし切ったから、ステートをスイング中に遷移
 						m_swingActionState = EnSwingActionState::enIsSwinging;
+
+						
 						if (m_swingSpeed <= FLT_EPSILON)
 						{
 							m_swingSpeed = 500.0f + fabsf(m_playerMovementRef->GetMoveVec().y) * 0.5f;
@@ -81,24 +91,25 @@ namespace nsMyGame
 					}
 					
 					break;
+
+				// スイング中
 				case enIsSwinging:
 
 					executeNormalMovementFlag = false;
 
+					// スイング中の処理
 					SwingAction();
-					if (m_playerMovementRef->IsAir() != true)
-					{
-						m_swingActionState = EnSwingActionState::enEnd;
-					}
 
 					break;
+
+				// スイング終了
 				case enEnd:
 
 					executeNormalMovementFlag = true;
+					// ステートをスイングターゲットを探す状態に戻しておく
 					m_swingActionState = enFindSwingTarget;
+					// 糸に終了を知らせる
 					m_playerRef->EndStringStretchToPos();
-					m_playerRef->SetState(nsPlayerConstData::EnPlayerState::enWalkAndRun);
-					//m_playerRef->SetState(nsPlayerConstData::enAirAfterStringAction);
 
 					break;
 				}

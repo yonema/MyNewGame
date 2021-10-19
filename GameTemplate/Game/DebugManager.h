@@ -1,6 +1,7 @@
 #pragma once
 #include "VectorRender.h"
 #include "DebugConstData.h"
+#include "TextPanelRender.h"
 #include "Noncopyable.h"
 
 namespace nsMyGame
@@ -12,7 +13,8 @@ namespace nsMyGame
 	{
 
 		/**
-		 * @brief デバックのマネージャー
+		 * @brief デバックのマネージャー。
+		 * @details デバックで使用する機能を管理するクラス。Releaseビルドでは動作しない。
 		 * @note シングルトンパターンを使用
 		*/
 		class CDebugManager : private nsUtil::Noncopyable
@@ -83,12 +85,23 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief 描画するテキストをテキストパネルに追加
+			 * @param[in] text テキスト
+			*/
+			void AddTextPanel(const char* text)
+			{
+#ifdef MY_DEBUG
+				m_textPanelRender->AddTextPanel(text);
+#endif
+			}
+			/**
 			 * @brief 事前の破棄処理
 			*/
 			void PreDelete();
 
 		private:	// データメンバ
-			CVectorRender* m_vectorRender = nullptr;
+			CVectorRender* m_vectorRender = nullptr;		//!< ベクトル描画クラス
+			CTextPanelRender* m_textPanelRender = nullptr;	//!< テキストパネル描画クラス
 
 		};
 
@@ -118,6 +131,16 @@ namespace nsMyGame
 			{ name,vector,origin, };
 
 			CDebugManager::GetInstance()->AddVector(vectorRenderData);
+		}
+
+
+		/**
+		 * @brief テキストパネルにテキストを描画する
+		 * @param[in] text テキスト
+		*/
+		static inline void DrawTextPanel(const char* text)
+		{
+			CDebugManager::GetInstance()->AddTextPanel(text);
 		}
 
 

@@ -15,7 +15,7 @@ namespace nsMyGame
 	namespace nsDebug
 	{
 		/**
-		 * @brief ベクトル描画クラス
+		 * @brief デバック用のベクトル描画クラス
 		*/
 		class CVectorRender : public IGameObject
 		{
