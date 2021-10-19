@@ -15,7 +15,9 @@ namespace nsMyGame
 		*/
 		CDebugManager::CDebugManager()
 		{
+#ifdef MY_DEBUG
 			m_vectorRender = NewGO<CVectorRender>(nsCommonData::enPriorityFinal);
+#endif
 
 			return;
 		}
@@ -33,7 +35,9 @@ namespace nsMyGame
 		*/
 		void CDebugManager::PreDelete()
 		{
+#ifdef MY_DEBUG
 			DeleteGO(m_vectorRender);
+#endif
 
 
 			return;

@@ -1,5 +1,6 @@
 #pragma once
 #include "Render.h"
+#include "DebugConstData.h"
 
 namespace nsMyGame
 {
@@ -66,7 +67,7 @@ namespace nsMyGame
 
 			/**
 			 * @brief 描画するベクトルを追加
-			 * @param renderData 
+			 * @param[in] renderData ベクトル描画データ
 			*/
 			void AddVector(const SVectorRenderData& renderData)
 			{
@@ -74,26 +75,28 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief 
+			 * @brief ベクトルのフォントの拡大率を設定する
+			 * @param[in] scale 拡大率
 			*/
-			void ResetVectorRenderDatas()
+			void SetFontScale(const float scale)
 			{
-				m_vectorRenderDatas.clear();
+				m_fontScale = scale;
 			}
 
 		private:	// privateなメンバ関数
 
 			/**
 			 * @brief 2D描画関数
-			 * @param rc レンダリングコンテキスト
+			 * @param[in,out] rc レンダリングコンテキスト
 			*/
 			void Render2D(RenderContext& rc);
 
 		private:	// データメンバ
-			std::vector<SVectorRenderData> m_vectorRenderDatas;
-			nsGraphic::CRender m_render;										//!< レンダラークラス
-			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;
-			Font m_font;
+			std::vector<SVectorRenderData> m_vectorRenderDatas;			//!< ベクトルレンダラーのデータ集
+			nsGraphic::CRender m_render;								//!< レンダラークラス
+			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
+			Font m_font;												//!< フォント
+			float m_fontScale = nsDebugConstData::kVectorFontScale;		//!< ベクトルのフォントの拡大率
 
 		};
 

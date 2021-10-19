@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Player.h"
-#include "DebugManager.h"
 
 namespace nsMyGame
 {
@@ -70,10 +69,6 @@ namespace nsMyGame
 
 			// モデルアニメーションクラスを更新
 			m_playerModelAnimation.ExecuteUpdate();
-
-			Vector3 pos = GetPosition();
-			pos.y += 100.0f;
-			nsDebug::DrawVector(pos, { 0.0f,0.0f,500.0f }, "ddd");
 
 			return;
 		}

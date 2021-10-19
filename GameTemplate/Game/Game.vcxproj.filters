@@ -910,6 +910,9 @@
     <ClInclude Include="DebugManager.h">
       <Filter>MyCode\Debug</Filter>
     </ClInclude>
+    <ClInclude Include="DebugConstData.h">
+      <Filter>MyCode\Debug</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">

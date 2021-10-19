@@ -101,14 +101,19 @@ namespace nsMyGame
 			*/
 			void CPlayerNormalMovement::AirAfterStringAction()
 			{
+				if(!m_playerMovementRef->IsAir())
+				{
+					//m_playerRef->SetS
+				}
 				// 軸入力値を更新する
 				UpdateInputAxisParam();
 
 				// 移動方向を更新する
 				UpdateMoveDir();
 
-
-				m_velocity = m_playerMovementRef->GetMoveVec().Length();
+				Vector3 moveVecXZ = m_playerMovementRef->GetMoveVec();
+				moveVecXZ.y = 0.0f;
+				m_velocity = moveVecXZ.Length();
 
 				// 実際に移動させる
 				Move();

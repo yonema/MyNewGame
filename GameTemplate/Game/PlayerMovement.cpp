@@ -110,6 +110,9 @@ namespace nsMyGame
 				}
 
 
+				nsDebug::DrawVector(m_playerRef->GetPosition(), m_moveVec, "playerVec");
+
+
 				return;
 			}
 

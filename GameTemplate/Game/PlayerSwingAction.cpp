@@ -77,6 +77,7 @@ namespace nsMyGame
 						{
 							m_swingSpeed = 500.0f + fabsf(m_playerMovementRef->GetMoveVec().y) * 0.5f;
 						}
+						m_swingSpeed = 1500.0f;
 					}
 					
 					break;
@@ -97,6 +98,8 @@ namespace nsMyGame
 					m_swingActionState = enFindSwingTarget;
 					m_playerRef->EndStringStretchToPos();
 					m_playerRef->SetState(nsPlayerConstData::EnPlayerState::enWalkAndRun);
+					//m_playerRef->SetState(nsPlayerConstData::enAirAfterStringAction);
+
 					break;
 				}
 
@@ -110,7 +113,7 @@ namespace nsMyGame
 			void CPlayerSwingAction::FindSwingTarget()
 			{
 
-				Vector3 toFindSwintTargetPos = { 0.0f,1000.0f,500.0f };
+				Vector3 toFindSwintTargetPos = { 0.0f,2000.0f,1000.0f };
 				Vector3 forward = m_playerRef->GetCamera().GetCameraForward();
 				forward.y = 0.0f;
 				forward.Normalize();
@@ -213,7 +216,7 @@ namespace nsMyGame
 					// ‰ÁŽZˆÚ“®•ûŒüƒxƒNƒgƒ‹‚ð‰ñ“]‚³‚¹‚é
 					qRotForAddMoveDir.Apply(addMoveDir);
 					addMoveVec = addMoveDir;
-					m_swingSpeed += 5.0f;
+					//m_swingSpeed += 5.0f;
 					addMoveVec.Scale(m_swingSpeed);
 
 				}
@@ -223,8 +226,8 @@ namespace nsMyGame
 
 					float radAngle = 3.14f * 0.5f;
 					Vector3 to = m_playerRef->GetPosition() - toTargetForwardPosXZ;
-					float rate = to.Length() / 1000.0f;
-					rate = pow(rate, 4.0f);
+					float rate = to.Length() / toTargetForwardUpToPlayerVec.Length();
+					rate = pow(rate, 2.0f);
 					rate = min(rate, 3.14f * 0.5f);
 
 					if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
@@ -241,7 +244,7 @@ namespace nsMyGame
 					else
 					{
 
-						m_swingSpeed += 5.0f;
+						//m_swingSpeed += 5.0f;
 						addMoveDir = forwardDirXZ;
 						radAngle = 3.14f * 0.5f * rate;
 

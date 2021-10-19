@@ -430,6 +430,7 @@
     <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
+    <ClInclude Include="DebugConstData.h" />
     <ClInclude Include="DebugManager.h" />
     <ClInclude Include="GameMainUI.h" />
     <ClInclude Include="CommonData.h" />

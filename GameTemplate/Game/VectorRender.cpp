@@ -3,6 +3,7 @@
 #include "ModelRender.h"
 #include "RenderingEngine.h"
 
+
 namespace nsMyGame
 {
 	/**
@@ -10,19 +11,25 @@ namespace nsMyGame
 	*/
 	namespace nsDebug
 	{
+		// デバックの定数データを使用可能にする
+		using namespace nsDebugConstData;
 		/**
 		 * @brief Updateの直前で呼ばれる開始処理
 		 * @return アップデートを行うか？
 		*/
 		bool CVectorRender::Start()
 		{
+			// モデルレンダラーの生成と初期化
 			m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-			m_modelRender->Init("Assets/modelData/preset/vector.tkm");
+			m_modelRender->Init(kVectorModel);
+			// 無効化
 			m_modelRender->Deactivate();
 
+			// レンダラークラスに2D描画関数を設定する
 			m_render.SetOnRender2DFunc([&](RenderContext& rc) { this->Render2D(rc); });
 
-			m_font.SetShadowParam(true, 1.0f, Vector4::Black);
+			// フォントのシャドウパラメータを設定
+			m_font.SetShadowParam(true, kVectorFontShadowOffset, kVectorFontColor);
 
 			return true;
 		}
@@ -42,28 +49,38 @@ namespace nsMyGame
 		*/
 		void CVectorRender::AlwaysUpdate()
 		{
+			// ベクトルレンダラーのデータ集が空か？
 			if (m_vectorRenderDatas.empty())
 			{
+				// 空のため、無効化
 				m_modelRender->Deactivate();
-			}
-			else
-			{
-				m_modelRender->Activate();
+
+				// 早期リターン
+				return;
 			}
 
+			// 有効化
+			m_modelRender->Activate();
+			
+			// ベクトルレンダラーのデータ集からすべて取り出して、モデルのパラメータを更新する
 			for (const auto& vectorRenderData : m_vectorRenderDatas)
 			{
+				// 回転
 				Quaternion rot;
+				// ベクトルの向きに回転させる
 				rot.SetRotation(Vector3::AxisZ, vectorRenderData.vector);
-				float s = vectorRenderData.vector.Length() / 100.0f;
-				float wideAndHeight = s * 0.2f;
-				wideAndHeight = max(wideAndHeight, 1.0f);
+
+				// 拡大率
+				// 現在のベクトルモデルの長さが100のため、100で除算
+				float scale = vectorRenderData.vector.Length() / kVectorModelLength;
+				// 幅と高さの倍率は下げる
+				float wideAndHeight = scale * kVectorModelWidthAndHeightScale;
+
+				// ベクトルモデルのトランスフォームを設定する
 				m_modelRender->SetPosition(vectorRenderData.origin);
 				m_modelRender->SetRotation(rot);
-				m_modelRender->SetScale({ wideAndHeight, wideAndHeight, s });
+				m_modelRender->SetScale({ wideAndHeight, wideAndHeight, scale });
 			}
-
-
 
 			return;
 		}
@@ -79,12 +96,14 @@ namespace nsMyGame
 
 		/**
 		 * @brief 2D描画関数
-		 * @param rc レンダリングコンテキスト
+		 * @param[in,out] rc レンダリングコンテキスト
 		*/
 		void CVectorRender::Render2D(RenderContext& rc)
 		{
+			// フォント描画開始
 			m_font.Begin(rc);
 
+			// ベクトルレンダラーのデータ集からすべて取り出して、フォントのパラメータを更新する
 			for (const auto& vectorRenderData : m_vectorRenderDatas)
 			{
 				Vector4 pos;
@@ -102,8 +121,21 @@ namespace nsMyGame
 				pos.x *= half_w;
 				pos.y *= half_h;
 
-				//ベクトルデータを表示。
+				// ベクトルのテキスト表示用パラメータ
+				const Vector2 pivot = { 0.0f,1.0f };
 				wchar_t text[256];
+				wchar_t wc[126];
+				mbstowcs(wc, vectorRenderData.name.c_str(), vectorRenderData.name.length() + 1);
+				Vector2 textPos = { pos.x, pos.y - 4.0f };
+				float between = 16.0f;
+
+				// ベクトルの名前を表示
+				swprintf_s(text, L"%s", wc);
+				m_font.Draw(text, textPos, Vector4::White, 0.0f, m_fontScale, pivot);
+
+				//ベクトルデータを表示。
+				memset(text, 0, sizeof(text));
+				textPos.y -= between;
 				swprintf_s(
 					text,
 					L"vec[ %.3f, %.3f, %.3f ]",
@@ -111,9 +143,11 @@ namespace nsMyGame
 					vectorRenderData.vector.y,
 					vectorRenderData.vector.z
 				);
-				m_font.Draw(text, { pos.x, pos.y - 4.0f }, Vector4::White, 0.0f, 0.4f, { 0.0f, 1.0f });
+				m_font.Draw(text, textPos, Vector4::White, 0.0f, m_fontScale, pivot);
+
 				//向きデータを表示。
 				auto dir = vectorRenderData.vector;
+				textPos.y -= between;
 				dir.Normalize();
 				memset(text, 0, sizeof(text));
 				swprintf_s(
@@ -123,18 +157,23 @@ namespace nsMyGame
 					dir.y,
 					dir.z
 				);
-				m_font.Draw(text, { pos.x, pos.y - 20.0f }, Vector4::White, 0.0f, 0.4f, { 0.0f, 1.0f });
+				m_font.Draw(text, textPos, Vector4::White, 0.0f, m_fontScale, pivot);
+
 				//スカラーを表示。
 				memset(text, 0, sizeof(text));
+				textPos.y -= between;
 				swprintf_s(
 					text,
 					L"scalar[ %.3f ]",
 					vectorRenderData.vector.Length()
 				);
-				m_font.Draw(text, { pos.x, pos.y - 36.0f }, Vector4::White, 0.0f, 0.4f, { 0.0f, 1.0f });
+				m_font.Draw(text, textPos, Vector4::White, 0.0f, m_fontScale, pivot);
 			}
+
+			// フォントの描画終了
 			m_font.End(rc);
 			
+			// ベクトルのデータ集をクリアする
 			m_vectorRenderDatas.clear();
 			return;
 		}
