@@ -14,6 +14,8 @@ namespace nsMyGame
 		{
 			//////// ベクトル描画クラスの定数 ////////
 
+			constexpr int kVectorRenderDatasNum = 16;	//!< ベクトル描画データ集の数
+
 			//!< ベクトルのデフォルトの名前
 			constexpr const char* const kDefaultVectorName = "vector";
 		
@@ -26,7 +28,9 @@ namespace nsMyGame
 			constexpr float kVectorModelWidthAndHeightScale = 0.2f;	//!< ベクトルのモデルの幅と高さ倍率
 
 
-			//////// デバックテキスト描画クラスの定数 ////////
+			//////// テキストパネル描画クラスの定数 ////////
+
+			constexpr int kTextPanelDatasNum = 64;		//!< テキストパネルのデータ集の数
 
 			constexpr int kTextSize = 128;	//!< テキストのサイズ
 			//!<　デフォルトのテキストの座標

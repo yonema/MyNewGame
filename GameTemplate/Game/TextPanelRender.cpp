@@ -19,6 +19,9 @@ namespace nsMyGame
 		*/
 		bool CTextPanelRender::Start()
 		{
+			// テキストパネルのデータ集のキャパシティを確保
+			m_textPanelDatas.reserve(kTextPanelDatasNum);
+
 			// レンダラークラスに2D描画関数を設定する
 			m_render.SetOnRender2DFunc([&](RenderContext& rc) { this->Render2D(rc); });
 

@@ -19,6 +19,9 @@ namespace nsMyGame
 		*/
 		bool CVectorRender::Start()
 		{
+			// ベクトル描画データ集のキャパシティを確保
+			m_vectorRenderDatas.reserve(kVectorRenderDatasNum);
+
 			// モデルレンダラーの生成と初期化
 			m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 			m_modelRender->Init(kVectorModel);
