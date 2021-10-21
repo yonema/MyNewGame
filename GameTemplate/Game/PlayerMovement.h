@@ -1,6 +1,6 @@
 #pragma once
 #include "Noncopyable.h"
-#include "PlayerNormalMovement.h"
+#include "PlayerWalkAndRun.h"
 #include "PlayerSwingAction.h"
 #include "PlayerConstData.h"
 #include "GameTime.h"
@@ -73,6 +73,17 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 移動速度を得る
+				 * @return 移動速度
+				*/
+				float GetVelocity() const
+				{
+					Vector3 moveVecXZ = m_moveVec;
+					moveVecXZ.y = 0.0f;
+					return moveVecXZ.Length();
+				}
+
+				/**
 				 * @brief 移動ベクトルのX成分のリセットする
 				*/
 				void ResetMoveVecX() { m_moveVec.x = 0.0f; }
@@ -86,24 +97,6 @@ namespace nsMyGame
 				void ResetMoveVecZ() { m_moveVec.z = 0.0f; }
 
 				/**
-				 * @brief 重力をかける
-				*/
-				void ApplyGravity()
-				{
-					m_moveVec.y -= nsPlayerConstData::nsPlayerMoveConstData::kGravityScale *
-						nsTimer::GameTime().GetFrameDeltaTime();
-					if (m_moveVec.y < -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed)
-					{
-						m_moveVec.y = -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed;
-					}
-				}
-
-				/**
-				 * @brief キャラクターコントローラーを使った移動
-				*/
-				void MoveWithCharacterController();
-
-				/**
 				 * @brief 空中か？を得る
 				 * @return 空中か？
 				*/
@@ -112,6 +105,14 @@ namespace nsMyGame
 					return !m_charaCon.IsOnGround();
 				}
 
+				/**
+				 * @brief スイングアクションの参照を得る
+				 * @return スイングアクションの参照
+				*/
+				const CPlayerSwingAction& GetPlayerSwingAction() const
+				{
+					return m_playerSwingAction;
+				}
 
 			private:	// privateなメンバ関数
 
@@ -125,14 +126,24 @@ namespace nsMyGame
 				*/
 				void UpdateTurnPlayer();
 
+				/**
+				 * @brief 重力をかける
+				*/
+				void ApplyGravity();
+
+				/**
+				 * @brief キャラクターコントローラーを使った移動
+				*/
+				void MoveWithCharacterController();
+
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
 				Vector3 m_moveVec = Vector3::Zero;		//!< 移動ベクトル
 				CharacterController m_charaCon;			//!< キャラクターコントローラー
 
-				CPlayerNormalMovement m_playerNormalMovement;	//!< プレイヤーの通常の動きクラス
+				CPlayerWalkAndRun m_playerWalkAndRun;	//!< プレイヤーの歩きと走りクラス
 				CPlayerSwingAction m_playerSwingAction;	//!< プレイヤーのスイングアクションクラス
-
+				bool m_useGravity = true;				//!< 重力を使用するか？
 
 			};
 		}

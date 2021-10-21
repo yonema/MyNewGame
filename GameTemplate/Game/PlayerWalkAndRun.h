@@ -20,19 +20,19 @@ namespace nsMyGame
 			class CPlayerMovement;	// プレイヤーの動きクラス
 
 			/**
-			 * @brief プレイヤーの通常の動きクラス
+			 * @brief プレイヤーの歩きと走りクラス
 			*/
-			class CPlayerNormalMovement : private nsUtil::Noncopyable
+			class CPlayerWalkAndRun : private nsUtil::Noncopyable
 			{
 			public:		// コンストラクタとデストラクタ
 				/**
 				 * @brief コンストラクタ
 				*/
-				CPlayerNormalMovement() = default;
+				CPlayerWalkAndRun() = default;
 				/**
 				 * @brief デストラクタ
 				*/
-				~CPlayerNormalMovement() = default;
+				~CPlayerWalkAndRun() = default;
 
 			public:		// メンバ関数
 
@@ -47,7 +47,7 @@ namespace nsMyGame
 				);
 
 				/**
-				 * @brief 通常の動きの処理を実行
+				 * @brief 歩きと走りの処理を実行
 				*/
 				void Execute();
 
@@ -113,9 +113,8 @@ namespace nsMyGame
 				// 軸入力値
 				float m_inputMoveF = 0.0f;			//!< 前、後移動の軸入力値
 				float m_inputMoveR = 0.0f;			//!< 右、左移動の軸入力値
-				bool m_isInputMove = false;			//!< 軸入力があるか？
 
-				// 通常の動きで変わるパラメータ
+				// 歩きと走りで変わるパラメータ
 				float m_acceleration = 0.0f;	//!< 加速度
 				float m_maxSpeed = 0.0f;		//!< 最高速度
 			};

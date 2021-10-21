@@ -47,10 +47,11 @@ namespace nsMyGame
 			/**
 			 * @brief 描画するテキストをテキストパネルに追加
 			 * @param[in] text テキスト
+			 * @param[in] headText 先頭に付けるテキスト
 			*/
-			void AddTextPanel(const char* text)
+			void AddTextPanel(const std::wstring& text, const std::wstring& headText)
 			{
-				m_textPanelDatas.emplace_back(std::move(text));
+				m_textPanelDatas.emplace_back(std::move(headText + text));
 			}
 
 			/**
@@ -60,7 +61,7 @@ namespace nsMyGame
 			void Render2D(RenderContext& rc);
 
 		private:	// データメンバ
-			std::vector<const char*> m_textPanelDatas;	//!< テキストパネルのデータ集
+			std::vector<std::wstring> m_textPanelDatas;						//!< テキストパネルのデータ集
 			nsGraphic::CRender m_render;									//!< レンダラークラス
 			float m_textScale = nsDebugConstData::kDefaultTextScale;		//!< テキストの拡大率
 			Font m_font;													//!< フォント

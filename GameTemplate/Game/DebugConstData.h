@@ -34,7 +34,7 @@ namespace nsMyGame
 
 			constexpr int kTextSize = 128;	//!< テキストのサイズ
 			//!<　デフォルトのテキストの座標
-			static const Vector2 kDefaultTextPosition = { 400.0f,300.0f };
+			static const Vector2 kDefaultTextPosition = { 300.0f,350.0f };
 			constexpr float kDefaultTextScale = 0.5f;	//!< デフォルトのテキストの拡大率
 			constexpr float kDefaultTextShadowOffset = 1.0f;	//!< デフォルトのテキストのシャドウオフセット
 		}

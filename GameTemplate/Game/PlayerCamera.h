@@ -66,6 +66,12 @@ namespace nsMyGame
 			void CalcCameraRotation();
 
 			/**
+			 * @brief 自動的にカメラをプレイヤーの移動先に向ける
+			*/
+			void AutoTurnToPlayerDestination();
+
+
+			/**
 			 * @brief カメラの視点と注視点を計算する
 			 * @param[out] pos_out 視点が格納される
 			 * @param[out] targetPos_out 注視点が格納される

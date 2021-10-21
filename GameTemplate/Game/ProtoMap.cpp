@@ -43,7 +43,7 @@ namespace nsMyGame
 				mbstowcs(buildingNameW, kBuildingName, sizeof(kBuildingName));
 
 				//m_stage = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-				//m_stage->Init("Assets/modelData/city2/city.tkm");
+				//m_stage->Init("Assets/modelData/Building/Building_01_A.tkm");
 
 				// ƒŒƒxƒ‹‚Ì¶¬
 				m_level3D.Init(

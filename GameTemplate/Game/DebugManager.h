@@ -87,13 +87,16 @@ namespace nsMyGame
 			/**
 			 * @brief 描画するテキストをテキストパネルに追加
 			 * @param[in] text テキスト
+			 * @param[in] headText 先頭に付けるテキスト
 			*/
-			void AddTextPanel(const char* text)
+			void AddTextPanel(const std::wstring& text, const std::wstring& headText)
 			{
 #ifdef MY_DEBUG
-				m_textPanelRender->AddTextPanel(text);
+				m_textPanelRender->AddTextPanel(text, headText);
 #endif
 			}
+
+
 			/**
 			 * @brief 事前の破棄処理
 			*/
@@ -135,14 +138,24 @@ namespace nsMyGame
 
 
 		/**
-		 * @brief テキストパネルにテキストを描画する
+		 * @brief 描画するテキストをテキストパネルに追加
 		 * @param[in] text テキスト
+		 * @param[in] headText 先頭に付けるテキスト
 		*/
-		static inline void DrawTextPanel(const char* text)
+		static inline void DrawTextPanel(const std::wstring& text, const std::wstring& headText = L"")
 		{
-			CDebugManager::GetInstance()->AddTextPanel(text);
+			CDebugManager::GetInstance()->AddTextPanel(text, headText);
 		}
 
+		/**
+		 * @brief 描画するテキストをテキストパネルに追加（bool）
+		 * @param[in] boolText ブール値
+		 * @param[in] headText 先頭に付けるテキスト
+		*/
+		static inline void DrawTextPanelBool(const bool boolText, const std::wstring& headText = L"")
+		{
+			CDebugManager::GetInstance()->AddTextPanel(boolText ? L"true" : L"false", headText);
+		}
 
 	}
 }

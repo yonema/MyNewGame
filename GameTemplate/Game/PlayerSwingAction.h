@@ -54,9 +54,8 @@ namespace nsMyGame
 
 				/**
 				 * @brief スイングアクションを実行
-				 * @return 通常の動きの処理を行うか？
 				*/
-				bool Execute();
+				void Execute();
 
 				/**
 				 * @brief スイング中の速度をリセットする
@@ -67,6 +66,15 @@ namespace nsMyGame
 					m_swingSpeed = -100.0f;
 				}
 
+				/**
+				 * @brief スイング中のスピードを得る
+				 * @return スイング中のスピード
+				*/
+				float GetSwingSpeed() const
+				{
+					return m_swingSpeed;
+				}
+
 			private:	// privateなメンバ関数
 
 				/**
@@ -75,9 +83,19 @@ namespace nsMyGame
 				void FindSwingTarget();
 
 				/**
+				 * @brief 糸を伸ばしている最中の処理
+				*/
+				void StringStretching();
+
+				/**
 				 * @brief スイングアクションの処理
 				*/
 				void SwingAction();
+
+				/**
+				 * @brief スイング後の空中の処理
+				*/
+				void AirAfterSwing();
 
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;					//!< プレイヤークラスの参照
@@ -90,7 +108,7 @@ namespace nsMyGame
 				int m_swingCounter = 0;
 				float m_swingSpeed = 0.0f;
 				float m_swingSpeed2 = -100.0f;
-
+				Vector3 m_inputMoveDirXZ = Vector3::Zero;
 
 			};
 		}

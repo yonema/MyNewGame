@@ -58,6 +58,18 @@ namespace nsMyGame
 		*/
 		void CPlayer::Update()
 		{
+			switch (m_playerState)
+			{
+			case enWalkAndRun:
+				nsDebug::DrawTextPanel(L"[PlayerState:WalkAndRun]");
+				break;
+
+			case enSwing:
+				nsDebug::DrawTextPanel(L"[PlayerState:Swing]");
+
+				break;
+			}
+
 			// “ü—Íˆ—‚ğÀs
 			m_playerInput.ExecuteUpdate();
 

@@ -36,8 +36,8 @@ namespace nsMyGame
 				// キャラクターコントローラ初期化
 				m_charaCon.Init(radius, height, m_playerRef->GetPosition());
 
-				// プレイヤーの通常の動きクラスの初期化
-				m_playerNormalMovement.Init(*m_playerRef, this);
+				// プレイヤーの歩きと走りクラスの初期化
+				m_playerWalkAndRun.Init(*m_playerRef, this);
 
 				// プレイヤーのスイングアクションクラスの初期化
 				m_playerSwingAction.Init(m_playerRef, this);
@@ -68,6 +68,29 @@ namespace nsMyGame
 				// プレイヤーの回転を更新
 				UpdateTurnPlayer();
 
+				nsDebug::DrawVector(m_playerRef->GetPosition(), m_moveVec, "playerVec");
+				nsDebug::DrawTextPanel(std::to_wstring(GetVelocity()), L"speed");
+
+				return;
+			}
+
+			/**
+			 * @brief 重力をかける
+			*/
+			void CPlayerMovement::ApplyGravity()
+			{
+				if (m_useGravity != true)
+				{
+					return;
+				}
+
+				m_moveVec.y -= nsPlayerConstData::nsPlayerMoveConstData::kGravityScale *
+					nsTimer::GameTime().GetFrameDeltaTime();
+				if (m_moveVec.y < -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed)
+				{
+					m_moveVec.y = -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed;
+				}
+
 				return;
 			}
 
@@ -90,38 +113,27 @@ namespace nsMyGame
 			*/
 			void CPlayerMovement::UpdateMovePlayer()
 			{
-				bool executeWalkAndRunFlag = true;
 
 				// ステートで処理を振り分ける
 				switch (m_playerRef->GetState())
 				{
+				// 歩きと走り
+				case nsPlayerConstData::enWalkAndRun:
+					// 歩きと走りを実行
+					m_playerWalkAndRun.Execute();
+					break;
 				// スイング
 				case nsPlayerConstData::enSwing:
 
 					// スイングアクションを実行
-					executeWalkAndRunFlag = m_playerSwingAction.Execute();
+					m_playerSwingAction.Execute();
 
-					break;
-
-				// 糸を使ったアクションの後の空中状態
-				case nsPlayerConstData::enAirAfterStringAction:
-					// 地面についあたら
-					if (!IsAir())
-					{
-						// ステートを歩きと走り状態に遷移
-						m_playerRef->SetState(nsPlayerConstData::enWalkAndRun);
-					}
 					break;
 				}
 
-				if (executeWalkAndRunFlag)
-				{
-					// 通常の動きを実行
-					m_playerNormalMovement.Execute();
-				}
+				ApplyGravity();
 
-
-				nsDebug::DrawVector(m_playerRef->GetPosition(), m_moveVec, "playerVec");
+				MoveWithCharacterController();
 
 
 				return;

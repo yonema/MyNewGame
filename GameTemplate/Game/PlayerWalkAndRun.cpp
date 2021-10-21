@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "PlayerNormalMovement.h"
+#include "PlayerWalkAndRun.h"
 #include "Player.h"
 #include "PlayerMovement.h"
 #include "PlayerConstData.h"
@@ -16,10 +16,8 @@ namespace nsMyGame
 		*/
 		namespace nsPlayerMovenent
 		{
-			// プレイヤーの通常の動きクラスの定数データを使用可能にする
-			using namespace nsPlayerConstData::nsPlayerNormalMovementConstData;
-			// 軸入力の最小値を使用可能にする
-			using nsPlayerConstData::nsPlayerInputConstData::kInputAxisMin;
+			// プレイヤーの歩きと走りクラスの定数データを使用可能にする
+			using namespace nsPlayerConstData::nsPlayerWalkAndRunConstData;
 			// ジャンプ力を使用可能にする
 			using nsPlayerConstData::nsPlayerMoveConstData::kJumpForce;
 
@@ -28,7 +26,7 @@ namespace nsMyGame
 			 * @param[in] player プレイヤー
 			 * @param[in,out] playerMovement プレイヤー移動クラスの参照
 			*/
-			void CPlayerNormalMovement::Init(
+			void CPlayerWalkAndRun::Init(
 				const CPlayer& player,
 				CPlayerMovement* playerMovement
 			)
@@ -42,31 +40,22 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief 通常の動きの処理を実行
+			 * @brief 歩きと走りの処理を実行
 			*/
-			void CPlayerNormalMovement::Execute()
+			void CPlayerWalkAndRun::Execute()
 			{
-				if (!m_playerMovementRef->IsAir())
-				{
+				nsDebug::DrawTextPanel(L"[WalkAndRun:Execute]");
 
-				}
-				// ステートが糸アクション後の空中の処理か？
-				if (m_playerRef->GetState() == nsPlayerConstData::enAirAfterStringAction)
-				{
-					// 糸アクション後の空中の処理
-					AirAfterStringAction();
-				}
-				else
-				{
-					// 歩きか走りの移動の処理
-					WalkOrRunMove();
-				}
+				// 歩きか走りの移動の処理
+				WalkOrRunMove();
+				
+				return;
 			}
 
 			/**
 			 * @brief 歩きか走りの移動の処理
 			*/
-			void CPlayerNormalMovement::WalkOrRunMove()
+			void CPlayerWalkAndRun::WalkOrRunMove()
 			{
 				// 軸入力値を更新する
 				UpdateInputAxisParam();
@@ -99,7 +88,7 @@ namespace nsMyGame
 			/**
 			 * @brief 糸を使ったアクションの後の空中の処理
 			*/
-			void CPlayerNormalMovement::AirAfterStringAction()
+			void CPlayerWalkAndRun::AirAfterStringAction()
 			{
 
 				// 軸入力値を更新する
@@ -108,9 +97,14 @@ namespace nsMyGame
 				// 移動方向を更新する
 				UpdateMoveDir();
 
-				Vector3 moveVecXZ = m_playerMovementRef->GetMoveVec();
-				moveVecXZ.y = 0.0f;
-				m_velocity = moveVecXZ.Length();
+				// 加速を計算
+				CalcAcceleration();
+
+				// 速度制限の計算
+				CalcLimitSpeed();
+
+				
+				m_velocity += m_playerMovementRef->GetPlayerSwingAction().GetSwingSpeed();
 
 				// 実際に移動させる
 				Move();
@@ -121,23 +115,12 @@ namespace nsMyGame
 			/**
 			 * @brief 軸入力値を更新
 			*/
-			void CPlayerNormalMovement::UpdateInputAxisParam()
+			void CPlayerWalkAndRun::UpdateInputAxisParam()
 			{
 				// 前、後移動の軸入力
 				m_inputMoveF = m_playerRef->GetInputData().axisMoveForward;
 				// 右、左移動の軸入力
 				m_inputMoveR = m_playerRef->GetInputData().axisMoveRight;
-
-				// 前、後移動の軸入力の絶対値
-				if (fabsf(m_inputMoveF) <= kInputAxisMin && fabsf(m_inputMoveR) <= kInputAxisMin)
-				{
-					m_isInputMove = false;
-				}
-				else
-				{
-					m_isInputMove = true;
-				}
-
 
 				return;
 			}
@@ -145,7 +128,7 @@ namespace nsMyGame
 			/**
 			 * @brief 糸を使ったアクションの後の空中状態か調べる
 			*/
-			void CPlayerNormalMovement::CheckIsAirAfterStringAction()
+			void CPlayerWalkAndRun::CheckIsAirAfterStringAction()
 			{
 
 
@@ -156,7 +139,7 @@ namespace nsMyGame
 			/**
 			 * @brief 歩きか走りかを決める
 			*/
-			void CPlayerNormalMovement::WalkOrRun()
+			void CPlayerWalkAndRun::WalkOrRun()
 			{
 				// ダッシュ入力がされていない
 				if (m_playerRef->GetInputData().actionDush != true)
@@ -184,10 +167,10 @@ namespace nsMyGame
 			/**
 			 * @brief 移動方向を更新する
 			*/
-			void CPlayerNormalMovement::UpdateMoveDir()
+			void CPlayerWalkAndRun::UpdateMoveDir()
 			{
 				// 軸入力がないか？
-				if (m_isInputMove != true)
+				if (m_playerRef->GetInputData().inputMoveAxis != true)
 				{
 					// ない。早期リターン。
 					return;
@@ -231,11 +214,11 @@ namespace nsMyGame
 			/**
 			 * @brief 加速を計算
 			*/
-			void CPlayerNormalMovement::CalcAcceleration()
+			void CPlayerWalkAndRun::CalcAcceleration()
 			{
 
 				// 軸入力があるか？
-				if (m_isInputMove)
+				if (m_playerRef->GetInputData().inputMoveAxis)
 				{
 					// ある
 					// 加速する
@@ -248,7 +231,7 @@ namespace nsMyGame
 			/**
 			 * @brief 摩擦の計算
 			*/
-			void CPlayerNormalMovement::CalcFriction()
+			void CPlayerWalkAndRun::CalcFriction()
 			{
 				// 摩擦力
 				float friction = 0.0f;
@@ -272,7 +255,7 @@ namespace nsMyGame
 					// 移動速度ゼロにする
 					m_velocity = 0.0f;
 				}
-				else if (m_isInputMove != true)
+				else if (m_playerRef->GetInputData().inputMoveAxis != true)
 				{
 					// 入力がなかったら
 					// 摩擦て減速する
@@ -291,7 +274,7 @@ namespace nsMyGame
 			/**
 			 * @brief 速度制限の計算
 			*/
-			void CPlayerNormalMovement::CalcLimitSpeed()
+			void CPlayerWalkAndRun::CalcLimitSpeed()
 			{
 				// 移動速度が最高速度をオーバーしているか？
 				if (m_velocity > m_maxSpeed)
@@ -306,7 +289,7 @@ namespace nsMyGame
 			/**
 			 * @brief 実際に移動させる
 			*/
-			void CPlayerNormalMovement::Move()
+			void CPlayerWalkAndRun::Move()
 			{
 				// 移動ベクトルのX,Z成分を初期化
 				m_playerMovementRef->ResetMoveVecX();
@@ -315,8 +298,6 @@ namespace nsMyGame
 				// 移動ベクトルに、加算移動ベクトルを加算する
 				m_playerMovementRef->AddMoveVec(m_moveDir * m_velocity);
 
-				// 重力をかける
-				m_playerMovementRef->ApplyGravity();
 
 				// ジャンプ
 				// ジャンプボタンが押されている、かつ、地面についている
@@ -324,10 +305,6 @@ namespace nsMyGame
 				{
 					m_playerMovementRef->AddMoveVec({ 0.0f, kJumpForce,0.0f });
 				}
-
-				// キャラクターコントローラーを使って移動させる
-				m_playerMovementRef->MoveWithCharacterController();
-
 
 				return;
 			}

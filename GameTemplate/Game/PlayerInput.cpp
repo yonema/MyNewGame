@@ -109,8 +109,11 @@ namespace nsMyGame
 			m_playerInputData.axisMoveRight = padLStickF.x;
 
 			// 軸入力があった場合は十字キーを調べる必要がないため、早期リターンを行う
-			if (m_playerInputData.axisMoveForward != 0.0f || m_playerInputData.axisMoveRight != 0.0f)
+			if (fabsf(m_playerInputData.axisMoveForward) > kInputAxisMin || 
+				fabsf(m_playerInputData.axisMoveRight) > kInputAxisMin)
 			{
+				// あった
+				m_playerInputData.inputMoveAxis = true;
 				return;
 			}
 
@@ -143,6 +146,13 @@ namespace nsMyGame
 				m_playerInputData.axisMoveRight /= kSquareRootOfTwo;
 			}
 
+			// 軸入力があったか？
+			if (m_playerInputData.axisMoveForward != 0.0f || m_playerInputData.axisMoveRight != 0.0f)
+			{
+				// あった
+				m_playerInputData.inputMoveAxis = true;
+			}
+
 			return;
 		}
 
@@ -157,6 +167,14 @@ namespace nsMyGame
 			m_playerInputData.axisCameraRotVertical = m_pad->GetRStickYF();
 			// X軸方向の入力を調べる
 			m_playerInputData.axisCameraRotHorizontal = m_pad->GetRStickXF();
+
+			// 入力があったか？
+			if (fabsf(m_playerInputData.axisCameraRotVertical) > kInputAxisMin ||
+				fabsf(m_playerInputData.axisCameraRotHorizontal) > kInputAxisMin)
+			{
+				// あった
+				m_playerInputData.inputCameraAxis = true;
+			}
 
 			return;
 		}

@@ -22,8 +22,6 @@ namespace nsMyGame
 			{
 				enWalkAndRun,			//!< 歩きと走り
 				enSwing,				//!< スイング
-				enAirAfterStringAction,	//!< 糸を使ったアクションの後の空中状態
-
 			};
 
 
@@ -40,9 +38,9 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief プレイヤーの通常の動きクラスの定数データ
+			 * @brief プレイヤーの歩きと走りクラスの定数データ
 			*/
-			namespace nsPlayerNormalMovementConstData
+			namespace nsPlayerWalkAndRunConstData
 			{
 				constexpr float kWalkAcceleration = 20.0f;	//!< 歩き時の加速度
 				constexpr float kRunAcceleration = 40.0f;	//!< 走り時の加速度
@@ -68,8 +66,25 @@ namespace nsMyGame
 					enFindSwingTarget,		//!< スイングターゲットを探す
 					enIsStringStretching,	//!< 糸を伸ばし中
 					enIsSwinging,			//!< スイング中
+					enIsAirAfterSwing,		//!< スイング後の空中
 					enEnd,					//!< 終了
 				};
+
+				constexpr int kFindSwintTargetNum = 5;	//!< スイングターゲットを探す数
+				//!< スイングターゲットを探す座標へのベクトル集
+				static const Vector3 kToFindSwingTargetVecs[kFindSwintTargetNum] =
+				{
+					{ 0.0f,2000.0f,1000.0f },		// 前上
+					{ 1000.0f,2000.0f,0.0f },		// 右上
+					{ -1000.0f,2000.0f,0.0f },		// 左上
+					{ 0.0f,2000.0f,0.0f },			// 真上
+					{ 0.0f,0.0f,0.0f }				// 中心
+				};
+				//!< 優先度が高いスイングターゲットの数
+				constexpr int kHighPriorityFindSwintTargetNum = 1;
+				//!< スイングターゲットを探す有効範囲の半径
+				constexpr float kFindSwingTargetScope = 2000.0f;
+
 			}
 			/**
 			 * @brief プレイヤーモデルクラスの定数データ
@@ -134,6 +149,9 @@ namespace nsMyGame
 				//!< デフォルトの注視点から視点へのベクトル
 				static const Vector3 kDefaultToCameraVec = { 0.0f,50.0f,-400.0f };
 
+				//!< デフォルトの注視点から視点への距離
+				constexpr float kDefaultToCameraDistance = 400.0f;
+
 				constexpr float kCameraRotSpeed = 3.0f;		//!< カメラの回転するスピード
 				//!< 注視点から視点への方向ベクトルのYの最大値。カメラの下向きの上限。
 				constexpr float kMaxToCameraDirY = 0.8f;
@@ -143,6 +161,9 @@ namespace nsMyGame
 				//!< バネの減衰率。値が大きいほど、カメラが遅れて追従してくる
 				constexpr float kSpringDampingRate = 0.7f;
 
+				constexpr float kAutoTurnSpeedMin = 0.01f;	//!< カメラが自動で回転する最小スピード
+				constexpr float kAutoTurnSpeedMax = 0.05f;	//!< カメラが自動で回転する最大スピード
+				constexpr float kAutoTurnExecuteThreshold = 0.99f;	//!< カメラが自動で回転を実行するしきい値
 			}
 		}
 	}

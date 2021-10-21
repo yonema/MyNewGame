@@ -18,8 +18,10 @@ namespace nsMyGame
 		{
 			float axisMoveForward = 0.0f;			//!< 前、後移動の軸入力情報
 			float axisMoveRight = 0.0f;				//!< 右、左移動の軸入力情報
+			bool inputMoveAxis = false;				//!< 移動の軸入力があったか？
 			float axisCameraRotVertical = 0.0f;		//!< カメラの縦回転の軸入力情報
 			float axisCameraRotHorizontal = 0.0f;	//!< カメラの横回転の軸入力情報
+			bool inputCameraAxis = false;			//!< カメラの軸入力があったか？
 			bool actionJump = false;				//!< ジャンプの入力情報
 			bool actionDush = false;				//!< ダッシュの入力情報
 			bool triggerSwing = false;				//!< スイングのトリガー情報

@@ -61,17 +61,13 @@ namespace nsMyGame
 
 			for (const auto& textPanelData : m_textPanelDatas)
 			{
-				// テキスト
-				wchar_t text[kTextSize];
-				// charをwcharに変換
-				mbstowcs(text, textPanelData, kTextSize);
 				// テキストの縦の間
 				const float between = 40.0f * m_textScale;
 				// 基点
 				const Vector2 pivot = { 0.0f,1.0f };
 
 				// テキストを描画
-				m_font.Draw(text, pos, Vector4::White, 0.0f, m_textScale, pivot);
+				m_font.Draw(textPanelData.c_str(), pos, Vector4::White, 0.0f, m_textScale, pivot);
 
 				// 座標を下に下げる	
 				pos.y -= between;

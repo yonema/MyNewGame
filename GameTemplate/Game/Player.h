@@ -107,6 +107,15 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief プレイヤーの移動クラスの参照を得る
+			 * @return プレイヤーの移動クラスの参照
+			*/
+			const nsPlayerMovenent::CPlayerMovement& GetPlayerMovement() const
+			{
+				return m_playerMove;
+			}
+
+			/**
 			 * @brief プレイヤーのステートをセットする
 			 * @param[in] state ステート
 			*/

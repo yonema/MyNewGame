@@ -455,9 +455,6 @@
     <ClCompile Include="PlayerSwingAction.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerModelAnimation.cpp">
-      <Filter>MyCode\Player</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerStringModel.cpp">
       <Filter>MyCode\Player</Filter>
     </ClCompile>
@@ -473,9 +470,6 @@
     <ClCompile Include="Goal.cpp">
       <Filter>MyCode\Goal</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerNormalMovement.cpp">
-      <Filter>MyCode\Player\PlayerMovement</Filter>
-    </ClCompile>
     <ClCompile Include="VectorRender.cpp">
       <Filter>MyCode\Debug</Filter>
     </ClCompile>
@@ -484,6 +478,12 @@
     </ClCompile>
     <ClCompile Include="TextPanelRender.cpp">
       <Filter>MyCode\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerModelAnimation.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerWalkAndRun.cpp">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -877,9 +877,6 @@
     <ClInclude Include="PlayerSwingAction.h">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerModelAnimation.h">
-      <Filter>MyCode\Player</Filter>
-    </ClInclude>
     <ClInclude Include="PlayerStringModel.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
@@ -904,9 +901,6 @@
     <ClInclude Include="GoalConstData.h">
       <Filter>MyCode\Goal</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerNormalMovement.h">
-      <Filter>MyCode\Player\PlayerMovement</Filter>
-    </ClInclude>
     <ClInclude Include="VectorRender.h">
       <Filter>MyCode\Debug</Filter>
     </ClInclude>
@@ -918,6 +912,12 @@
     </ClInclude>
     <ClInclude Include="TextPanelRender.h">
       <Filter>MyCode\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerModelAnimation.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerWalkAndRun.h">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

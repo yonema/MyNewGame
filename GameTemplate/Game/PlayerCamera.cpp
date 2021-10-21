@@ -52,6 +52,9 @@ namespace nsMyGame
 			// カメラの回転を計算する
 			CalcCameraRotation();
 
+			// 自動的にカメラをプレイヤーの移動先に向ける
+			AutoTurnToPlayerDestination();
+
 			// カメラの視点
 			Vector3 cameraPos = Vector3::Back;
 			// カメラの注視点
@@ -63,6 +66,7 @@ namespace nsMyGame
 			// バネカメラを更新する
 			UpdateSpringCamera(cameraPos, camereTargetPos);
 
+			nsDebug::DrawTextPanel(std::to_wstring(m_toCameraVec.Length()), L"m_toCameraVec");
 
 			return;
 		}
@@ -126,6 +130,95 @@ namespace nsMyGame
 				m_toCameraVec = oldToCameraVec;
 			}
 
+			// ベクトルをずっとApplyで回していると、ちょっとずつ伸びてくるから、正規化して伸ばす。
+
+			// 向きを正規化してから
+			m_toCameraVec.Normalize();
+			// 伸ばす
+			m_toCameraVec.Scale(kDefaultToCameraDistance);
+
+			return;
+		}
+
+
+		/**
+		 * @brief 自動的にカメラをプレイヤーの移動先に向ける
+		*/
+		void CPlayerCamera::AutoTurnToPlayerDestination()
+		{
+			// カメラの軸入力があるか？か、
+			// 移動の軸入力がないか？
+			if (m_playerRef->GetInputData().inputCameraAxis == true ||
+				m_playerRef->GetInputData().inputMoveAxis != true)
+			{
+				// カメラの回転があるか、移動していない時は、何もしない。早期リターン
+				return;
+			}
+
+			// カメラの回転の操作をしていない時、かつ、移動の操作をしている時に、処理を行う
+
+			//////// まずはY座標を移動させる ////////
+			// Y座標を補完して、徐々に高さが合うようにする
+			m_toCameraVec.y = Math::Lerp(0.03f, m_toCameraVec.y, kDefaultToCameraVec.y);
+
+			//////// 次にXZ平面で移動させる ////////
+
+			// 目標の「カメラへのベクトル」
+			Vector3 targetToCameraVec = kDefaultToCameraVec;
+			// モデルの回転で回す
+			m_playerRef->GetRotation().Apply(targetToCameraVec);
+
+			// XZ平面での、目標の「カメラへの方向ベクトル」
+			Vector3 targetToCameraDirXZ = targetToCameraVec;
+			targetToCameraDirXZ.y = 0.0f;		// Y成分を消去する
+			targetToCameraDirXZ.Normalize();	// 正規化する
+
+			// XZ平面での、現在の「カメラへの方向ベクトル」
+			Vector3 toCameraDirXZ = m_toCameraVec;
+			toCameraDirXZ.y = 0.0f;				// Y成分を消去する
+			toCameraDirXZ.Normalize();			// 正規化する
+
+			// 目標の「カメラへの方向ベクトル」と現在の「カメラへの方向ベクトル」の内積がしきい値以上
+			if (Dot(targetToCameraDirXZ, toCameraDirXZ) >= kAutoTurnExecuteThreshold)
+			{
+				// ほぼ同じ向きのため動かす必要なし。早期リターン。
+				return;
+			}
+
+			// XZ平面での、目標の「カメラへの方向ベクトル」の「右向きの方向ベクトル」
+			Vector3 targetToCameraRightDirXZ = Cross(Vector3::Up, targetToCameraDirXZ);
+			targetToCameraRightDirXZ.Normalize();	// 正規化する
+
+			// XZ平面での、目標のベクトルの「右向きの方向ベクトル」と現在の「カメラへの方向ベクトル」の内積
+			float dotRightAndToCamDirXZ = Dot(targetToCameraRightDirXZ, toCameraDirXZ);
+
+			// 回転スピードの補完率。プレイヤーの速度が速いほど、早く回転する
+			float turnSpeedRate = m_playerRef->GetPlayerMovement().GetVelocity() / 
+				nsPlayerConstData::nsPlayerWalkAndRunConstData::kRunMaxSpeed;
+			// 回転するラジアン角
+			float turnSpeed = Math::Lerp(min(1.0f, turnSpeedRate), kAutoTurnSpeedMin, kAutoTurnSpeedMax);
+
+			nsDebug::DrawTextPanel(std::to_wstring(turnSpeedRate), L"turnSpeedRate:");
+
+			// 現在のベクトルが、目標のベクトルの右側にあるか？
+			if (dotRightAndToCamDirXZ >= 0.0f)
+			{
+				// 現在のベクトルが右側、目標のベクトルが左側にあるから、左向きに回す
+				// 反対向きに回す
+				turnSpeed = -turnSpeed;
+				nsDebug::DrawTextPanel(L"CameraAutoTurn:Left");
+			}
+			else
+			{
+				// 現在のベクトルが左側、目標のベクトルが右側にあるから、右向きに回す
+				nsDebug::DrawTextPanel(L"CameraAutoTurn:Right");
+			}
+
+			// 回転クォータニオン
+			Quaternion qRot;
+			qRot.SetRotationY(turnSpeed);
+			// XZ平面で、カメラへのベクトルを回す
+			qRot.Apply(m_toCameraVec);
 
 			return;
 		}
