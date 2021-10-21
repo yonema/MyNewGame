@@ -69,6 +69,8 @@ namespace nsMyGame
 
 				break;
 			}
+			nsDebug::DrawTextPanel(m_position, L"pos:");
+			
 
 			// “ü—Íˆ—‚ğÀs
 			m_playerInput.ExecuteUpdate();

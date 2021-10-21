@@ -148,6 +148,18 @@ namespace nsMyGame
 		}
 
 		/**
+		 * @brief 描画するテキストをテキストパネルに追加（Vector3）
+		 * @param[in] vectorText ベクトルテキスト
+		 * @param[in] headText 先頭に付けるテキスト
+		*/
+		static inline void DrawTextPanel(const Vector3& vectorText, const std::wstring& headText = L"")
+		{
+			wchar_t text[128];
+			swprintf_s(text, L"(%2.2f,%2.2f,%2.2f)", vectorText.x, vectorText.y, vectorText.z);
+			CDebugManager::GetInstance()->AddTextPanel(text, headText);
+		}
+
+		/**
 		 * @brief 描画するテキストをテキストパネルに追加（bool）
 		 * @param[in] boolText ブール値
 		 * @param[in] headText 先頭に付けるテキスト

@@ -401,6 +401,10 @@ namespace nsMyGame
 				Vector3 moveVecXZ = moveVec;
 				moveVecXZ.y = 0.0f;
 				float velocity = moveVecXZ.Length();
+				if (velocity < nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed)
+				{
+					velocity = nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed;
+				}
 
 				if (m_playerRef->GetInputData().inputMoveAxis)
 				{

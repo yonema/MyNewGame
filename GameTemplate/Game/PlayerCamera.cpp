@@ -193,8 +193,10 @@ namespace nsMyGame
 			float dotRightAndToCamDirXZ = Dot(targetToCameraRightDirXZ, toCameraDirXZ);
 
 			// 回転スピードの補完率。プレイヤーの速度が速いほど、早く回転する
-			float turnSpeedRate = m_playerRef->GetPlayerMovement().GetVelocity() / 
-				nsPlayerConstData::nsPlayerWalkAndRunConstData::kRunMaxSpeed;
+			float turnSpeedRate = max(0.0f, m_playerRef->GetPlayerMovement().GetVelocity() -
+				nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed);
+			turnSpeedRate /= (nsPlayerConstData::nsPlayerWalkAndRunConstData::kRunMaxSpeed - 
+				nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed);
 			// 回転するラジアン角
 			float turnSpeed = Math::Lerp(min(1.0f, turnSpeedRate), kAutoTurnSpeedMin, kAutoTurnSpeedMax);
 
