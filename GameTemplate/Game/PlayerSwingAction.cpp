@@ -311,11 +311,24 @@ namespace nsMyGame
 
 					float rate = dotFowardDirXZAndToPlayerDir + 1.0f;
 					rate = pow(rate, 2.0f);
+					if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
+					{
+						addMoveDir = forwardDirXZ;
+						addMoveDir.y -= 10.0f;
 
-					// 回転クォータニオンを90度回転させる
-					qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, 3.14f * 0.5f);
-					// 加算移動方向ベクトルを回転させる
-					qRotForAddMoveDir.Apply(addMoveDir);
+					}
+					else if (m_playerRef->GetPosition().y > 250.0f)
+					{
+						// 回転クォータニオンを90度回転させる
+						qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, 3.14f * 0.5f);
+						// 加算移動方向ベクトルを回転させる
+						qRotForAddMoveDir.Apply(addMoveDir);
+					}
+					else
+					{
+						addMoveDir = forwardDirXZ;
+					}
+
 
 				}
 				else
@@ -380,6 +393,9 @@ namespace nsMyGame
 
 				// 移動ベクトルに、加算移動ベクトルを加算する
 				m_playerMovementRef->AddMoveVec(addMoveVec);
+
+				Vector3 dist = m_playerRef->GetPosition() - *m_swingTargetPos;
+				nsDebug::DrawTextPanel(std::to_wstring(dist.Length()), L"toSwintTargetLen:");
 
 				return;
 			}

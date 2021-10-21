@@ -38,13 +38,6 @@ namespace nsMyGame
 				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day);
 
 
-				// 建物の名前のワイド文字列
-				wchar_t buildingNameW[32];
-				mbstowcs(buildingNameW, kBuildingName, sizeof(kBuildingName));
-
-				//m_stage = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-				//m_stage->Init("Assets/modelData/Building/Building_01_A.tkm");
-
 				// レベルの生成
 				m_level3D.Init(
 					kLevelFilePath[enLevelProto],

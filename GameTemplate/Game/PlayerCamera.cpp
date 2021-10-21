@@ -49,6 +49,8 @@ namespace nsMyGame
 		*/
 		void CPlayerCamera::ExecuteUpdate()
 		{
+			nsDebug::DrawTextPanel(L"[Camera:Execute]");
+
 			// ƒJƒƒ‰‚Ì‰ñ“]‚ğŒvZ‚·‚é
 			CalcCameraRotation();
 
