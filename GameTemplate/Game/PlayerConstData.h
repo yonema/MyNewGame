@@ -164,6 +164,7 @@ namespace nsMyGame
 				constexpr float kAutoTurnSpeedMin = 0.01f;	//!< カメラが自動で回転する最小スピード
 				constexpr float kAutoTurnSpeedMax = 0.05f;	//!< カメラが自動で回転する最大スピード
 				constexpr float kAutoTurnExecuteThreshold = 0.99f;	//!< カメラが自動で回転を実行するしきい値
+				constexpr float kAutoTurnYRate = 0.03f;		//!< カメラのY座標が自動で回転する率
 			}
 		}
 	}

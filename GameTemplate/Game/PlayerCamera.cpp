@@ -159,7 +159,7 @@ namespace nsMyGame
 
 			//////// まずはY座標を移動させる ////////
 			// Y座標を補完して、徐々に高さが合うようにする
-			m_toCameraVec.y = Math::Lerp(0.03f, m_toCameraVec.y, kDefaultToCameraVec.y);
+			m_toCameraVec.y = Math::Lerp(kAutoTurnYRate, m_toCameraVec.y, kDefaultToCameraVec.y);
 
 			//////// 次にXZ平面で移動させる ////////
 
