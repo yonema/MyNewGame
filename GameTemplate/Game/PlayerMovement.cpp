@@ -53,13 +53,8 @@ namespace nsMyGame
 				// スイングトリガーがtrueで、かつ、空中だったら
 				if (m_playerRef->GetInputData().triggerSwing && IsAir())
 				{
-					// スイング状態
-					m_playerRef->SetState(nsPlayerConstData::enSwing);
-				}
-				else
-				{
-					// 歩きと走り状態
-					//m_playerRef->SetState(nsPlayerConstData::enWalkAndRun);
+					// スイング状態へ遷移
+					m_playerRef->ChangeSwingState();
 				}
 
 				// プレイヤーの移動を更新

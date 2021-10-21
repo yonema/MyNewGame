@@ -106,6 +106,14 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 歩きと走りのクラスの移動パラメータを合わせる
+				*/
+				void MuchWalkAndRunMoveParam()
+				{
+					m_playerWalkAndRun.MuchMoveParam();
+				}
+
+				/**
 				 * @brief スイングアクションの参照を得る
 				 * @return スイングアクションの参照
 				*/

@@ -51,6 +51,12 @@ namespace nsMyGame
 				*/
 				void Execute();
 
+				/**
+				 * @brief 現在の動きに、移動パラメータを合わせる
+				*/
+				void MuchMoveParam();
+
+
 			private:	// privateなメンバ関数
 
 				/**
@@ -67,11 +73,6 @@ namespace nsMyGame
 				 * @brief 軸入力値を更新
 				*/
 				void UpdateInputAxisParam();
-
-				/**
-				 * @brief 糸を使ったアクションの後の空中状態か調べる
-				*/
-				void CheckIsAirAfterStringAction();
 
 				/**
 				 * @brief 歩きか走りかを決める

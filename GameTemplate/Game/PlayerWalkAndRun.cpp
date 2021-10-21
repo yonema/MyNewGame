@@ -40,6 +40,27 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief 現在の動きに、移動パラメータを合わせる
+			*/
+			void CPlayerWalkAndRun::MuchMoveParam()
+			{
+				// 現在の移動ベクトルを取得
+				m_moveDir = m_playerMovementRef->GetMoveVec();
+				// Y成分を消去
+				m_moveDir.y = 0.0f;
+
+				// 速度をXZ平面での移動ベクトルから計算
+				m_velocity = m_moveDir.Length();
+				// 前のフレームの速度を設定
+				m_oldVelocity = m_velocity;
+
+				// 移動ベクトルを移動方向ベクトルにする
+				m_moveDir.Normalize();	// 正規化する
+
+				return;
+			}
+
+			/**
 			 * @brief 歩きと走りの処理を実行
 			*/
 			void CPlayerWalkAndRun::Execute()
@@ -124,17 +145,6 @@ namespace nsMyGame
 
 				return;
 			}
-
-			/**
-			 * @brief 糸を使ったアクションの後の空中状態か調べる
-			*/
-			void CPlayerWalkAndRun::CheckIsAirAfterStringAction()
-			{
-
-
-				return;
-			}
-
 
 			/**
 			 * @brief 歩きか走りかを決める

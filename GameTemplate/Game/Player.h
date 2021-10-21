@@ -116,13 +116,14 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief プレイヤーのステートをセットする
-			 * @param[in] state ステート
+			 * @brief 歩きと走り状態へ遷移する
 			*/
-			void SetState(const nsPlayerConstData::EnPlayerState state)
-			{
-				m_playerState = state;
-			}
+			void ChangeWalkAndRunState();
+
+			/**
+			 * @brief スイング状態へ遷移する
+			*/
+			void ChangeSwingState();
 
 			/**
 			 * @brief プレイヤーのステートを得る

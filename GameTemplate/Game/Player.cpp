@@ -69,8 +69,8 @@ namespace nsMyGame
 
 				break;
 			}
-			nsDebug::DrawTextPanel(m_position, L"pos:");
-			
+
+			nsDebug::DrawTextPanel(m_position, L"pos");
 
 			// 入力処理を実行
 			m_playerInput.ExecuteUpdate();
@@ -85,6 +85,26 @@ namespace nsMyGame
 			m_playerModelAnimation.ExecuteUpdate();
 
 
+			return;
+		}
+
+		/**
+		 * @brief 歩きと走り状態へ遷移する
+		*/
+		void CPlayer::ChangeWalkAndRunState()
+		{
+			m_playerState = enWalkAndRun;
+			// 歩きと走りのクラスの移動パラメータを合わせる
+			m_playerMove.MuchWalkAndRunMoveParam();
+			return;
+		}
+
+		/**
+		 * @brief スイング状態へ遷移する
+		*/
+		void CPlayer::ChangeSwingState()
+		{
+			m_playerState = enSwing;
 			return;
 		}
 

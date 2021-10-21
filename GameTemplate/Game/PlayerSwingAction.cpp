@@ -66,8 +66,6 @@ namespace nsMyGame
 				{
 					// スイングアクションを終了する
 					m_swingActionState = EnSwingActionState::enEnd;
-					// プレイヤーのステートを歩きと走りにする
-					m_playerRef->SetState(nsPlayerConstData::EnPlayerState::enWalkAndRun);
 
 				}
 
@@ -97,7 +95,8 @@ namespace nsMyGame
 					m_swingActionState = enFindSwingTarget;
 					// 糸に終了を知らせる
 					m_playerRef->EndStringStretchToPos();
-
+					// プレイヤーのステートを歩きと走りにする
+					m_playerRef->ChangeWalkAndRunState();
 					break;
 				}
 
@@ -317,7 +316,7 @@ namespace nsMyGame
 						addMoveDir.y -= 10.0f;
 
 					}
-					else if (m_playerRef->GetPosition().y > 250.0f)
+					else if (m_playerRef->GetPosition().y > 100.0f)
 					{
 						// 回転クォータニオンを90度回転させる
 						qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, 3.14f * 0.5f);
