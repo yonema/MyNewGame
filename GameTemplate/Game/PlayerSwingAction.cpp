@@ -55,6 +55,13 @@ namespace nsMyGame
 				// スイングアクションをやめたか？
 				if (m_playerRef->GetInputData().actionSwing != true)
 				{
+					if (m_swingActionState == EnSwingActionState::enIsSwinging)
+					{
+						m_accelerationAfterSwing = kInitialVelocityOfAterSwingAcceleration;
+						
+						m_speedAfterSwing = m_playerMovementRef->GetVelocity();
+						m_inputMoveDirXZ = Vector3::Zero;
+					}
 					// ステートをスイング後の空中状態に遷移する
 					m_swingActionState = EnSwingActionState::enIsAirAfterSwing;
 					// 糸に終了を知らせる
@@ -83,6 +90,7 @@ namespace nsMyGame
 					// スイング中の処理
 					SwingAction();
 					break;
+
 				// スイング後の空中
 				case enIsAirAfterSwing:
 					// スイング後の空中の処理
@@ -97,6 +105,8 @@ namespace nsMyGame
 					m_playerRef->EndStringStretchToPos();
 					// プレイヤーのステートを歩きと走りにする
 					m_playerRef->ChangeWalkAndRunState();
+					m_swingSpeed = 0.0f;
+
 					break;
 				}
 
@@ -226,10 +236,14 @@ namespace nsMyGame
 				// スイングスピードの初期速度を決める
 				if (m_swingSpeed <= FLT_EPSILON)
 				{
-					m_swingSpeed = 500.0f + fabsf(m_playerMovementRef->GetMoveVec().y) * 0.5f;
+					m_swingSpeed = 1000.0f + fabsf(m_playerMovementRef->GetMoveVec().y) * 0.5f;
 				}
-				m_swingSpeed = 1500.0f;
-
+				else
+				{
+					m_swingSpeed = m_playerMovementRef->GetVelocity();
+				}
+				
+				m_startDecelerateSwingSpeed = -100.0f;
 				m_inputMoveDirXZ = Vector3::Zero;
 				return;
 			}
@@ -342,14 +356,14 @@ namespace nsMyGame
 
 					if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
 					{
-						if (m_swingSpeed2 <= -50.0f)
+						if (m_startDecelerateSwingSpeed <= -50.0f)
 						{
-							m_swingSpeed2 = m_swingSpeed;
+							m_startDecelerateSwingSpeed = m_swingSpeed;
 						}
 						float dot = Dot(forwardDirXZ, targetUptoPlayerDir);
 						float rad = acosf(dot);
 						float angleRate = rad / (3.14f * 0.1f);
-						m_swingSpeed = Math::Lerp<float>(min(1.0f,angleRate), m_swingSpeed2, 0.0f);
+						m_swingSpeed = Math::Lerp<float>(min(1.0f,angleRate), m_startDecelerateSwingSpeed, 0.0f);
 						addMoveDir = forwardDirXZ;
 						radAngle = 3.14f * 0.5f * min(1.0f, angleRate);
 						radAngle = Math::Lerp<float>(min(1.0f, angleRate), 3.14f * 0.4f, 3.14f * 0.5f);
@@ -415,7 +429,16 @@ namespace nsMyGame
 				Vector3 moveVec = m_playerMovementRef->GetMoveVec();
 				Vector3 moveVecXZ = moveVec;
 				moveVecXZ.y = 0.0f;
-				float velocity = moveVecXZ.Length();
+				Vector3 addMoveDir = moveVecXZ;
+				addMoveDir.Normalize();
+				m_accelerationAfterSwing *= 0.99f;
+				if (m_accelerationAfterSwing <= kMinVelocityOfAfterSwingAcceleration)
+				{
+					m_accelerationAfterSwing = kMinVelocityOfAfterSwingAcceleration;
+				}
+				float velocity = m_speedAfterSwing + m_accelerationAfterSwing;
+
+
 				if (velocity < nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed)
 				{
 					velocity = nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed;
@@ -423,27 +446,42 @@ namespace nsMyGame
 
 				if (m_playerRef->GetInputData().inputMoveAxis)
 				{
-					// 移動の前方向
-					Vector3 moveForward = m_playerRef->GetCamera().GetCameraForward();
-					// 移動の右方向
-					Vector3 moveRight = m_playerRef->GetCamera().GetCameraRight();
-					// Y成分を消してXZ平面での前方向と右方向に変換する
-					moveForward.y = 0.0f;
-					moveForward.Normalize();
-					moveRight.y = 0.0f;
-					moveRight.Normalize();
+					//// 移動の前方向
+					//Vector3 moveForward = m_playerRef->GetCamera().GetCameraForward();
+					//// 移動の右方向
+					//Vector3 moveRight = m_playerRef->GetCamera().GetCameraRight();
+					//// Y成分を消してXZ平面での前方向と右方向に変換する
+					//moveForward.y = 0.0f;
+					//moveForward.Normalize();
+					//moveRight.y = 0.0f;
+					//moveRight.Normalize();
 
-					//奥、手前方向への移動方向を加算。
-					Vector3 newMoveDir = moveForward * m_playerRef->GetInputData().axisMoveForward;	// 新しい移動方向
-					// 右、左方向への移動方向を加算
-					newMoveDir += moveRight * m_playerRef->GetInputData().axisMoveRight;
+					////奥、手前方向への移動方向を加算。
+					//Vector3 newMoveDir = moveForward * m_playerRef->GetInputData().axisMoveForward;	// 新しい移動方向
+					//// 右、左方向への移動方向を加算
+					//newMoveDir += moveRight * m_playerRef->GetInputData().axisMoveRight;
 
-					newMoveDir.Scale(velocity);
-					addVec = newMoveDir;
+					//newMoveDir.Scale(velocity);
+					//addVec = newMoveDir;
+
+					Vector3 rightDirXZ = m_playerRef->GetCamera().GetCameraRight();
+					rightDirXZ.y = 0.0f;
+					rightDirXZ.Normalize();
+					float rightPower = m_playerRef->GetInputData().axisMoveRight / 5.0f;
+					rightDirXZ.Scale(rightPower);
+					m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, rightDirXZ);
+					addMoveDir += m_inputMoveDirXZ;
+
+					addMoveDir.Normalize();
+					addVec = addMoveDir;
+					addVec.Scale(velocity);
 				}
 				else
 				{
-					addVec = moveVecXZ;
+					Vector3 moveDirXZ = moveVecXZ;
+					moveDirXZ.Normalize();
+					moveDirXZ.Scale(velocity);
+					addVec = moveDirXZ;
 				}
 
 				m_playerMovementRef->ResetMoveVecX();

@@ -85,6 +85,11 @@ namespace nsMyGame
 				//!< スイングターゲットを探す有効範囲の半径
 				constexpr float kFindSwingTargetScope = 2000.0f;
 
+				//!< スイング後の加速の初速
+				constexpr float kInitialVelocityOfAterSwingAcceleration = 1000.0f;
+				//!< スイング後の加速の最低速度
+				constexpr float kMinVelocityOfAfterSwingAcceleration = 
+					kInitialVelocityOfAterSwingAcceleration * 0.2f;
 			}
 			/**
 			 * @brief プレイヤーモデルクラスの定数データ
