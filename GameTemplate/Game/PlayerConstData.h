@@ -45,7 +45,7 @@ namespace nsMyGame
 				constexpr float kWalkAcceleration = 20.0f;	//!< 歩き時の加速度
 				constexpr float kRunAcceleration = 40.0f;	//!< 走り時の加速度
 				constexpr float kWalkMaxSpeed = 500.0f;		//!< 歩き時の最高速度
-				constexpr float kRunMaxSpeed = 1000.0f;		//!< 走り時の最高速度
+				constexpr float kRunMaxSpeed = 750.0f;		//!< 走り時の最高速度
 				constexpr float kMinSpeed = 2.0f;			//!< 最低速度
 				constexpr float kGroundFriction = 0.9f;		//!< 地面の摩擦
 				constexpr float kAirFriction = 1.0f;		//!< 空中の摩擦
@@ -85,11 +85,21 @@ namespace nsMyGame
 				//!< スイングターゲットを探す有効範囲の半径
 				constexpr float kFindSwingTargetScope = 2000.0f;
 
+				// 減速し始めるスピードの初期値
+				constexpr float kStartDecelerateSwingSpeedInitialValue = -100.0f;
+
+				constexpr float kInitialSwingSpeed = 1500.0f;	//!< 最初のスイングスピード
+				//!< 落下速度が最初のスイングスピードに与える影響率
+				constexpr float kFallImpactRateForInitialSwingSpeed = 0.5f;
+				constexpr float kMaxSwingSpeed = 4000.0f;	//!< 最大スイングスピード
+				//!< スイングの加速を引き継ぐ割合
+				constexpr float kTakeOverSwingAccelerationRate = 0.5f;
+
 				//!< スイング後の加速の初速
-				constexpr float kInitialVelocityOfAterSwingAcceleration = 1000.0f;
+				constexpr float kInitialVelocityOfAterSwingAcceleration = 500.0f;
 				//!< スイング後の加速の最低速度
 				constexpr float kMinVelocityOfAfterSwingAcceleration = 
-					kInitialVelocityOfAterSwingAcceleration * 0.2f;
+					kInitialVelocityOfAterSwingAcceleration * 0.1f;
 			}
 			/**
 			 * @brief プレイヤーモデルクラスの定数データ
@@ -166,8 +176,13 @@ namespace nsMyGame
 				//!< バネの減衰率。値が大きいほど、カメラが遅れて追従してくる
 				constexpr float kSpringDampingRate = 0.7f;
 
+				constexpr float kAutoTurnStartTime = 1.0f;	//!< 自動でカメラが回転し始めるタイム
+				//!< 自動でカメラが回転時始めるタイマーをリセットするタイム
+				constexpr float kAutoTurnStartTimerResetTime = 0.1f;
+				//!< カメラが自動で回転するスピード率の累乗の数
+				constexpr float kAutoTurnSpeedRatePowPower = 2.0f;
 				constexpr float kAutoTurnSpeedMin = 0.01f;	//!< カメラが自動で回転する最小スピード
-				constexpr float kAutoTurnSpeedMax = 0.05f;	//!< カメラが自動で回転する最大スピード
+				constexpr float kAutoTurnSpeedMax = 0.1f;	//!< カメラが自動で回転する最大スピード
 				constexpr float kAutoTurnExecuteThreshold = 0.99f;	//!< カメラが自動で回転を実行するしきい値
 				constexpr float kAutoTurnYRate = 0.03f;		//!< カメラのY座標が自動で回転する率
 			}

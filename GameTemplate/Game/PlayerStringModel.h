@@ -1,4 +1,5 @@
 #pragma once
+#include "ModelRender.h"
 
 namespace nsMyGame
 {
@@ -78,6 +79,15 @@ namespace nsMyGame
 			bool IsStretched() const
 			{
 				return m_isStretched;
+			}
+
+			/**
+			 * @brief …‚Ì’·‚³‚ğ“¾‚é
+			 * @return …‚Ì’·‚³
+			*/
+			float GetStringLength() const
+			{
+				return m_modelRender->GetScale().z;
 			}
 
 		private:	// private‚Èƒƒ“ƒoŠÖ”

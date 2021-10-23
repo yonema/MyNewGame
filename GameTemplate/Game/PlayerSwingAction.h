@@ -97,6 +97,11 @@ namespace nsMyGame
 				*/
 				void AirAfterSwing();
 
+				/**
+				 * @brief スイング処理の終了
+				*/
+				void EndSwing();
+
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;					//!< プレイヤークラスの参照
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< プレイヤー移動クラスの参照
@@ -106,10 +111,15 @@ namespace nsMyGame
 					nsPlayerConstData::nsPlayerSwingActionConstData::enFindSwingTarget;
 				float m_swingRadAngle = 0.0f;						//!< スイングのラジアン角度
 				float m_swingSpeed = 0.0f;							//!< スイングスピード
-				float m_startDecelerateSwingSpeed = -100.0f;		//!< 減速し始めるスイングスピード
+				//!< 減速し始めるスイングスピード
+				float m_startDecelerateSwingSpeed = 
+					nsPlayerConstData::nsPlayerSwingActionConstData::kStartDecelerateSwingSpeedInitialValue;
 				Vector3 m_inputMoveDirXZ = Vector3::Zero;			//!< 入力によって生じたXZ平面での移動方向
-				float m_speedAfterSwing = 0.0f;						//!< スイング後のスピード
+				float m_velocityAfterSwing = 0.0f;					//!< スイング後の速度
 				float m_accelerationAfterSwing = 0.0f;				//!< スイング後の加速
+				float m_swingStartYPos = 0.0f;						//!< スイング開始時のY座標
+				float m_swingMinYPos = 0.0f;						//!< スイング中の最低Y座標
+				float m_swingStringLen = 0.0f;						//!< スイングの糸の長さ
 			};
 		}
 	}

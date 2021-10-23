@@ -154,6 +154,15 @@ namespace nsMyGame
 				return m_playerStringModel->IsStretched();
 			}
 
+			/**
+			 * @brief 糸の長さを得る
+			 * @return 糸の長さ
+			*/
+			float GetStringLength() const
+			{
+				return m_playerStringModel->GetStringLength();
+			}
+
 		private:	// privateなメンバ関数
 
 		private:	// データメンバ

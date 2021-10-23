@@ -93,6 +93,8 @@ namespace nsMyGame
 			nsCamera::CSpringCamera m_springCamera;		//!< バネカメラ
 			Vector3 m_toCameraVec = Vector3::Zero;		//!< 注視点から視点へのベクトル
 			const CPlayer* m_playerRef = nullptr;		//!< プレイヤーの参照
+			float m_autoTurnStartTimer = 0.0f;			//!< 自動でカメラが回転し始めるタイマー
+			float m_autoTurnStartTimerResetTimer = 0.0f;	//!< 自動でカメラを回転し始めるタイマーをリセットするタイマー
 		};
 
 	}

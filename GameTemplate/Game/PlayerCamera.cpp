@@ -148,16 +148,44 @@ namespace nsMyGame
 		*/
 		void CPlayerCamera::AutoTurnToPlayerDestination()
 		{
+			nsDebug::DrawTextPanel(m_autoTurnStartTimerResetTimer, L"resetTimer");
+
 			// カメラの軸入力があるか？か、
 			// 移動の軸入力がないか？
 			if (m_playerRef->GetInputData().inputCameraAxis == true ||
 				m_playerRef->GetInputData().inputMoveAxis != true)
 			{
-				// カメラの回転があるか、移動していない時は、何もしない。早期リターン
+				// カメラの回転があるか、移動していない時は、自動回転しない。
+
+				// 自動でカメラを回転し始めるタイマーをリセットするタイマーが一定時間進んでいないか？
+				if (m_autoTurnStartTimerResetTimer < kAutoTurnStartTimerResetTime)
+				{
+					// 進んでいない。タイマーを進める。
+					m_autoTurnStartTimerResetTimer += nsTimer::GameTime().GetFrameDeltaTime();
+					return;
+				}
+				// 進んだ。タイマーをリセットする・
+				m_autoTurnStartTimer = 0.0f;
+				// 早期リターン
 				return;
 			}
 
-			// カメラの回転の操作をしていない時、かつ、移動の操作をしている時に、処理を行う
+			// カメラの回転の操作をしていない時、かつ、移動の操作をしている状態
+
+			// 自動でカメラを回転し始めるタイマーをリセットするタイマーをリセットする
+			m_autoTurnStartTimerResetTimer = 0.0f;
+
+			// 自動でカメラが回転し始めるタイマーが、一定時間進んでいないか？
+			if (m_autoTurnStartTimer < kAutoTurnStartTime)
+			{
+				// 進んでいない。タイマーを進める。
+				m_autoTurnStartTimer += nsTimer::GameTime().GetFrameDeltaTime();
+				// 早期リターン
+				return;
+			}
+
+			// カメラの回転の操作をしていない時、かつ、移動の操作をしている状態で、
+			// 一定時間経過後、自動回転の処理を行う
 
 			//////// まずはY座標を移動させる ////////
 			// Y座標を補完して、徐々に高さが合うようにする
@@ -194,13 +222,19 @@ namespace nsMyGame
 			// XZ平面での、目標のベクトルの「右向きの方向ベクトル」と現在の「カメラへの方向ベクトル」の内積
 			float dotRightAndToCamDirXZ = Dot(targetToCameraRightDirXZ, toCameraDirXZ);
 
-			// 回転スピードの補完率。プレイヤーの速度が速いほど、早く回転する
-			float turnSpeedRate = max(0.0f, m_playerRef->GetPlayerMovement().GetVelocity() -
-				nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed);
-			turnSpeedRate /= (nsPlayerConstData::nsPlayerWalkAndRunConstData::kRunMaxSpeed - 
-				nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed);
-			// 回転するラジアン角
-			float turnSpeed = Math::Lerp(min(1.0f, turnSpeedRate), kAutoTurnSpeedMin, kAutoTurnSpeedMax);
+			// 回転速度の計算。プレイヤーの速度が速いほど、早く回転する。
+
+			// 最低補間率の速度
+			const float minRateSpeed = nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed;
+			// 最高補完率の速度
+			const float maxRateSpeed = nsPlayerConstData::nsPlayerSwingActionConstData::kInitialSwingSpeed;
+			// 回転スピードの補完率。プレイヤーの速度に応じて、0.0f～1.0fの値に正規化する。
+			float turnSpeedRate = max(0.0f, m_playerRef->GetPlayerMovement().GetVelocity() - minRateSpeed);
+			turnSpeedRate = min(1.0f,turnSpeedRate / (maxRateSpeed - minRateSpeed));
+			// スピードの変化を指数関数的にする
+			turnSpeedRate = pow(turnSpeedRate, kAutoTurnSpeedRatePowPower);
+			// 回転するスピード
+			float turnSpeed = Math::Lerp(turnSpeedRate, kAutoTurnSpeedMin, kAutoTurnSpeedMax);
 
 			nsDebug::DrawTextPanel(std::to_wstring(turnSpeedRate), L"turnSpeedRate:");
 

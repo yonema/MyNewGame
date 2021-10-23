@@ -148,6 +148,16 @@ namespace nsMyGame
 		}
 
 		/**
+		 * @brief 描画するテキストをテキストパネルに追加（float）
+		 * @param[in] floatText floatのテキスト
+		 * @param[in] headText 先頭に付けるテキスト
+		*/
+		static inline void DrawTextPanel(const float floatText, const std::wstring& headText = L"")
+		{
+			CDebugManager::GetInstance()->AddTextPanel(std::to_wstring(floatText), headText);
+		}
+
+		/**
 		 * @brief 描画するテキストをテキストパネルに追加（Vector3）
 		 * @param[in] vectorText ベクトルテキスト
 		 * @param[in] headText 先頭に付けるテキスト

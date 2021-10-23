@@ -2,7 +2,6 @@
 #include "PlayerStringModel.h"
 #include "Player.h"
 #include "PlayerConstData.h"
-#include "ModelRender.h"
 #include "GameTime.h"
 
 namespace nsMyGame
