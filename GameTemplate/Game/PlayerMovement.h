@@ -2,6 +2,7 @@
 #include "Noncopyable.h"
 #include "PlayerWalkAndRun.h"
 #include "PlayerSwingAction.h"
+#include "PlayerWallRun.h"
 #include "PlayerConstData.h"
 #include "GameTime.h"
 
@@ -106,6 +107,15 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 壁に触れているか？を得る
+				 * @return 壁に触れているか？
+				*/
+				bool IsOnWall() const
+				{
+					return m_charaCon.IsOnWall();
+				}
+
+				/**
 				 * @brief 歩きと走りのクラスの移動パラメータを合わせる
 				*/
 				void MuchWalkAndRunMoveParam()
@@ -151,6 +161,7 @@ namespace nsMyGame
 
 				CPlayerWalkAndRun m_playerWalkAndRun;	//!< プレイヤーの歩きと走りクラス
 				CPlayerSwingAction m_playerSwingAction;	//!< プレイヤーのスイングアクションクラス
+				CPlayerWallRun m_playerWallRun;			//!< プレイヤーの壁を走る処理クラス
 				bool m_useGravity = true;				//!< 重力を使用するか？
 
 			};

@@ -84,6 +84,7 @@ namespace nsMyGame
 			// モデルアニメーションクラスを更新
 			m_playerModelAnimation.ExecuteUpdate();
 
+			nsDebug::DrawTextPanelBool(m_playerMove.IsOnWall(), L"IsOnWall:");
 
 			return;
 		}

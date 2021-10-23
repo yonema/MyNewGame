@@ -94,4 +94,20 @@ private:
 	float				m_radius = 0.0f;				//!<カプセルコライダーの半径。
 	float				m_height = 0.0f;				//!<カプセルコライダーの高さ。
 	RigidBody			m_rigidBody;					//剛体。
+
+	// 追加
+public:		// メンバ関数
+
+	/**
+	 * @brief 壁に触れているか？を得る
+	 * @return 壁に触れているか？
+	*/
+	bool IsOnWall() const
+	{
+		return m_isOnWall;
+	}
+
+private:	// データメンバ
+	bool m_isOnWall = false;							//!< 壁に触れている？
+
 };

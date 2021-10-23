@@ -148,6 +148,11 @@ const Vector3& CharacterController::Execute(Vector3& moveSpeed, float deltaTime 
 	//XZ平面での衝突検出と衝突解決を行う。
 	{
 		int loopCount = 0;
+
+		// 追加
+		// 壁に触れているか？を初期化
+		m_isOnWall = false;
+
 		while (true) {
 			//現在の座標から次の移動先へ向かうベクトルを求める。
 			Vector3 addPos;
@@ -179,6 +184,11 @@ const Vector3& CharacterController::Execute(Vector3& moveSpeed, float deltaTime 
 			PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 
 			if (callback.isHit) {
+
+				// 追加
+				// 一回でもヒットしたら、壁に触れている判定。
+				m_isOnWall = true;
+
 				//当たった。
 				//壁。
 				Vector3 vT0, vT1;

@@ -485,6 +485,9 @@
     <ClCompile Include="PlayerWalkAndRun.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerWallRun.cpp">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -917,6 +920,9 @@
       <Filter>MyCode\Player</Filter>
     </ClInclude>
     <ClInclude Include="PlayerWalkAndRun.h">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerWallRun.h">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClInclude>
   </ItemGroup>

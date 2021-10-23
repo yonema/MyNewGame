@@ -42,6 +42,9 @@ namespace nsMyGame
 				// プレイヤーのスイングアクションクラスの初期化
 				m_playerSwingAction.Init(m_playerRef, this);
 
+				// プレイヤーの壁を走る処理クラスの初期化
+				m_playerWallRun.Init(m_playerRef, this);
+
 				return;
 			}
 
