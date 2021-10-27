@@ -22,6 +22,7 @@ namespace nsMyGame
 			{
 				enWalkAndRun,			//!< 歩きと走り
 				enSwing,				//!< スイング
+				enWallRun,				//!< 壁走り
 			};
 
 
@@ -74,7 +75,7 @@ namespace nsMyGame
 				//!< スイングターゲットを探す座標へのベクトル集
 				static const Vector3 kToFindSwingTargetVecs[kFindSwintTargetNum] =
 				{
-					{ 0.0f,2000.0f,1000.0f },		// 前上
+					{ 0.0f,2000.0f,2000.0f },		// 前上
 					{ 1000.0f,2000.0f,0.0f },		// 右上
 					{ -1000.0f,2000.0f,0.0f },		// 左上
 					{ 0.0f,2000.0f,0.0f },			// 真上
@@ -100,6 +101,8 @@ namespace nsMyGame
 				//!< スイング後の加速の最低速度
 				constexpr float kMinVelocityOfAfterSwingAcceleration = 
 					kInitialVelocityOfAterSwingAcceleration * 0.1f;
+
+				constexpr float kMaxCameraOffsetUp = 40.0f;
 			}
 			/**
 			 * @brief プレイヤーモデルクラスの定数データ
@@ -156,10 +159,10 @@ namespace nsMyGame
 				constexpr float kCameraMaxSpeed = 10000.0f;	//!< カメラの最大速度
 				constexpr float kCameraRadius = 5.0f;		//!< カメラのコリジョンの半径
 
-				constexpr float kTargetOffsetUp = 80.0f;		//!< 注視点の上下のオフセット
+				constexpr float kTargetOffsetUp = 40.0f;		//!< 注視点の上下のオフセット
 				constexpr float kTargetOffsetForward = 20.0f;	//!< 注視点の前後のオフセット
 
-				constexpr float kDefaultCameraFar = 40000.0f;	//!< デフォルトの遠平面
+				constexpr float kDefaultCameraFar = 100000.0f;	//!< デフォルトの遠平面
 
 				//!< デフォルトの注視点から視点へのベクトル
 				static const Vector3 kDefaultToCameraVec = { 0.0f,50.0f,-400.0f };
@@ -174,7 +177,7 @@ namespace nsMyGame
 				constexpr float kMinToCameraDirY = -0.5f;
 
 				//!< バネの減衰率。値が大きいほど、カメラが遅れて追従してくる
-				constexpr float kSpringDampingRate = 0.7f;
+				constexpr float kSpringDampingRate = 1.0f;
 
 				constexpr float kAutoTurnStartTime = 1.0f;	//!< 自動でカメラが回転し始めるタイム
 				//!< 自動でカメラが回転時始めるタイマーをリセットするタイム

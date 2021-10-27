@@ -107,6 +107,15 @@ namespace nsMyGame
 			}
 
 			/**
+ * @brief プレイヤーのカメラを得る
+ * @return プレイヤーのカメラ
+*/
+			CPlayerCamera& GetCamera()
+			{
+				return m_playerCamera;
+			}
+
+			/**
 			 * @brief プレイヤーの移動クラスの参照を得る
 			 * @return プレイヤーの移動クラスの参照
 			*/
@@ -124,6 +133,11 @@ namespace nsMyGame
 			 * @brief スイング状態へ遷移する
 			*/
 			void ChangeSwingState();
+
+			/**
+			 * @brief 壁走り状態へ遷移する
+			*/
+			void ChangeWallRun();
 
 			/**
 			 * @brief プレイヤーのステートを得る

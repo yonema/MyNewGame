@@ -28,6 +28,8 @@ namespace nsMyGame
 			// デフォルトの注視点から視点へのベクトルを設定
 			m_toCameraVec = kDefaultToCameraVec;
 
+			m_targetOffsetUp = kTargetOffsetUp;
+
 			// プレイヤーの座標の参照をセット
 			m_playerRef = &player;
 
@@ -273,13 +275,14 @@ namespace nsMyGame
 			// 移動前の注視点をいれる
 			*targetPos_out = m_playerRef->GetPosition();
 			// プレイヤーの足元から少し上を注視点とする
-			targetPos_out->y += kTargetOffsetUp;
+			targetPos_out->y += m_targetOffsetUp;
 			// プレイヤーの少し奥の方を注視点とする
 			*targetPos_out += m_camera->GetForward() * kTargetOffsetForward;
 
 			//////// 2. カメラの視点を計算する ////////
 
 			*pos_out = *targetPos_out + m_toCameraVec;
+			pos_out->y += m_cameraPositionOffsetUp;
 
 			return;
 		}

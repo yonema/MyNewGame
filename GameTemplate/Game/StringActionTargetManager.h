@@ -15,6 +15,20 @@ namespace nsMyGame
 		}
 
 		/**
+		 * @brief 一番近いスイングターゲットのポイントの座標を探す処理のデータ
+		*/
+		struct SFindNearestSwingTargetPointData
+		{
+			Vector3 findSwingTargetOrigin = Vector3::Zero;			//!< スイングターゲットを探す原点
+			float findSwingTargetScopeRadius = 0.0f;				//!< スイングターゲットを探す有効範囲
+			Vector3 findSwingTargetPointOrigin = Vector3::Zero;		//!< スイングターゲットのポイントを探す原点
+			float findSwingTargetPointScopeRadius = 0.0f;			//!< スイングターゲットのポイントを探す有効範囲
+			float heightLowerLimit = 0.0f;							//!< 高さの下限
+			Vector3 forwardLimitDir = Vector3::Zero;				//!< 前方向の制限の方向ベクトル
+			Vector3 forwardLimitOrigin = Vector3::Zero;				//!< 前方向の制限の原点
+		};
+
+		/**
 		 * @brief 糸を使ったアクションのターゲット関連のマネージャー
 		 * @note シングルトンパターンを使用
 		*/
@@ -88,11 +102,11 @@ namespace nsMyGame
 
 			/**
 			 * @brief 全てのスイングターゲットにクエリを実行
-			 * @param func 実行するコールバック関数
+			 * @param[in] func 実行する関数
 			*/
-			void QuerySwingTarget(std::function<void(nsSwingTarget::CSwingTarget* swingTarget)>func)
+			void QuerySwingTarget(const std::function<void(nsSwingTarget::CSwingTarget* swingTarget)>func)
 			{
-				for (auto& st : m_swingTargets)
+				for (const auto& st : m_swingTargets)
 				{
 					func(st);
 				}
@@ -112,14 +126,24 @@ namespace nsMyGame
 		};
 
 		/**
-		 * @brief 指定された座標から有効範囲内にあるスイングターゲットの座標の中で一番近い座標を得る
-		 * @param[in] fromPos 座標
-		 * @param[in] scopeRadius 有効範囲の半径
+		 * @brief 指定された座標から有効範囲内にあるスイングターゲットにクエリを実行
+		 * @param[in] fromPos 指定座標
+		 * @param[in] scopeRadius 有効範囲
+		 * @param[in] func 実行する関数
+		*/
+		void QuerySwingTargetWithinScope(
+			const Vector3& fromPos,
+			const float scopeRadius,
+			const std::function<void(nsSwingTarget::CSwingTarget* swingTarget)>func
+		);
+
+		/**
+		 * @brief 指定された座標から有効範囲内にあるスイングターゲットの座標の中で一番近い座標を探してくる
+		 * @param[in] data 一番近いスイングターゲットのポイントの座標を探す処理のデータ
 		 * @return スイングターゲットの座標。有効範囲内に無ければnullptrを戻す。
 		*/
-		const Vector3* const GetNearestSwintTargetPointWithinScope(
-			const Vector3& fromPos,
-			const float scopeRadius
+		const Vector3* const FindNearestSwingTargetPoint(
+			const SFindNearestSwingTargetPointData& data
 		);
 	}
 }

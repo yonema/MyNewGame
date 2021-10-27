@@ -120,6 +120,8 @@ namespace nsMyGame
 				float m_swingStartYPos = 0.0f;						//!< スイング開始時のY座標
 				float m_swingMinYPos = 0.0f;						//!< スイング中の最低Y座標
 				float m_swingStringLen = 0.0f;						//!< スイングの糸の長さ
+				int m_swingDonwCounter = 0;
+				float m_g = 0.0f;
 			};
 		}
 	}

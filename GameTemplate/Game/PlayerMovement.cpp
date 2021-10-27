@@ -53,12 +53,8 @@ namespace nsMyGame
 			*/
 			void CPlayerMovement::ExecuteUpdate()
 			{
-				// スイングトリガーがtrueで、かつ、空中だったら
-				if (m_playerRef->GetInputData().triggerSwing && IsAir())
-				{
-					// スイング状態へ遷移
-					m_playerRef->ChangeSwingState();
-				}
+				// ステートを更新
+				UpdateState();
 
 				// プレイヤーの移動を更新
 				UpdateMovePlayer();
@@ -105,6 +101,27 @@ namespace nsMyGame
 				return;
 			}
 
+			/**
+			 * @brief ステートを更新する
+			*/
+			void CPlayerMovement::UpdateState()
+			{
+
+				//if (IsOnWall())
+				//{
+				//	m_playerRef->ChangeWallRun();
+				//	return;
+				//}
+
+				// スイングトリガーがtrueで、かつ、空中だったら
+				if (m_playerRef->GetInputData().actionSwing && IsAir())
+				{
+					// スイング状態へ遷移
+					m_playerRef->ChangeSwingState();
+				}
+
+				return;
+			}
 
 			/**
 			 * @brief プレイヤーの移動を更新
@@ -122,10 +139,13 @@ namespace nsMyGame
 					break;
 				// スイング
 				case nsPlayerConstData::enSwing:
-
 					// スイングアクションを実行
 					m_playerSwingAction.Execute();
-
+					break;
+				// 壁走り
+				case nsPlayerConstData::enWallRun:
+					// 壁走りを実行
+					m_playerWallRun.Execute();
 					break;
 				}
 

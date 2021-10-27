@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "PlayerWallRun.h"
+#include "Player.h"
+#include "PlayerMovement.h"
 
 namespace nsMyGame
 {
@@ -38,7 +40,14 @@ namespace nsMyGame
 			*/
 			void CPlayerWallRun::Execute()
 			{
+				nsDebug::DrawTextPanel(L"[WallRun:Execute]");
 
+				// 重力を使用不可にする
+				m_playerMovementRef->SetUseGravity(false);
+
+				m_playerMovementRef->ResetMoveVecX();
+				m_playerMovementRef->ResetMoveVecY();
+				m_playerMovementRef->ResetMoveVecZ();
 
 				return;
 			}

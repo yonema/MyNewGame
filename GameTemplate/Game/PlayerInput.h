@@ -24,7 +24,6 @@ namespace nsMyGame
 			bool inputCameraAxis = false;			//!< カメラの軸入力があったか？
 			bool actionJump = false;				//!< ジャンプの入力情報
 			bool actionDush = false;				//!< ダッシュの入力情報
-			bool triggerSwing = false;				//!< スイングのトリガー情報
 			bool actionSwing = false;				//!< スイングの入力情報
 		};
 

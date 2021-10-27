@@ -73,12 +73,6 @@ namespace nsMyGame
 				m_playerInputData.actionJump = true;
 			}
 
-			// RB2ボタントリガー
-			if (m_pad->IsTrigger(enButtonRB2))
-			{
-				// スイングトリガー
-				m_playerInputData.triggerSwing = true;
-			}
 			// RB2ボタンが押されているか？
 			if (m_pad->IsPress(enButtonRB2))
 			{

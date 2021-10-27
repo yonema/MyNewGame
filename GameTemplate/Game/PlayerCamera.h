@@ -58,6 +58,16 @@ namespace nsMyGame
 				return m_camera->GetRight();
 			}
 
+			void SetTargetOffsetUp(const float offsetUp)
+			{
+				m_targetOffsetUp = offsetUp;
+			}
+
+			void SetCameraPositionOffsetUp(const float cameraPosUp)
+			{
+				m_cameraPositionOffsetUp = cameraPosUp;
+			}
+
 		private:	// privateなメンバ関数
 
 			/**
@@ -95,6 +105,8 @@ namespace nsMyGame
 			const CPlayer* m_playerRef = nullptr;		//!< プレイヤーの参照
 			float m_autoTurnStartTimer = 0.0f;			//!< 自動でカメラが回転し始めるタイマー
 			float m_autoTurnStartTimerResetTimer = 0.0f;	//!< 自動でカメラを回転し始めるタイマーをリセットするタイマー
+			float m_targetOffsetUp = 0.0f;
+			float m_cameraPositionOffsetUp = 0.0f;
 		};
 
 	}

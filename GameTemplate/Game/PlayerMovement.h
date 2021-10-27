@@ -116,6 +116,15 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 重力を使用するか？を設定する
+				 * @param useGravity 重力を使用するか？
+				*/
+				void SetUseGravity(const bool useGravity)
+				{
+					m_useGravity = useGravity;
+				}
+
+				/**
 				 * @brief 歩きと走りのクラスの移動パラメータを合わせる
 				*/
 				void MuchWalkAndRunMoveParam()
@@ -133,6 +142,11 @@ namespace nsMyGame
 				}
 
 			private:	// privateなメンバ関数
+
+				/**
+				 * @brief ステートを更新する
+				*/
+				void UpdateState();
 
 				/**
 				 * @brief プレイヤーの移動を更新

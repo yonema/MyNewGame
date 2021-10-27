@@ -23,7 +23,7 @@ namespace nsMyGame
 			constexpr float kDefaultIBLLuminance = 1.0f;	//!< IBLのデフォルトの明るさ
 
 			//!< デフォルトのスカイの拡大率
-			const Vector3 kDefaultSkySclae = Vector3::One * 1000.0f;
+			const Vector3 kDefaultSkySclae = Vector3::One * 5000.0f;
 
 			/**
 			 * @brief スカイキューブのタイプ

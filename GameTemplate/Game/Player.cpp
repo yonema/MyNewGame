@@ -84,8 +84,6 @@ namespace nsMyGame
 			// モデルアニメーションクラスを更新
 			m_playerModelAnimation.ExecuteUpdate();
 
-			nsDebug::DrawTextPanelBool(m_playerMove.IsOnWall(), L"IsOnWall:");
-
 			return;
 		}
 
@@ -108,6 +106,16 @@ namespace nsMyGame
 			m_playerState = enSwing;
 			return;
 		}
+
+		/**
+		 * @brief 壁走り状態へ遷移する
+		*/
+		void CPlayer::ChangeWallRun()
+		{
+			m_playerState = enWallRun;
+			return;
+		}
+
 
 		/**
 		 * @brief 糸が指定した座標に向かって伸びる処理を開始する

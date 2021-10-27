@@ -54,7 +54,7 @@ namespace nsMyGame
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;					//!< プレイヤークラスの参照
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< プレイヤー移動クラスの参照
-
+				Vector3 m_addMoveVec = Vector3::Zero;			//!< 加算移動ベクトル
 
 			};
 		}
