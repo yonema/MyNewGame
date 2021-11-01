@@ -79,6 +79,7 @@ namespace nsMyGame
 		private:	// データメンバ
 			const CPlayer* m_playerRef = nullptr;						//!< プレイヤーの参照
 			nsGraphic::nsModel::CModelRender* m_playerModel = nullptr;	//!< プレイヤーのモデルレンダラー
+			nsGraphic::nsModel::CModelRender* m_playerNoTransparentModel = nullptr;	//!< プレイヤーのモデルレンダラー
 
 			//!< アニメーションクリップスクラス
 			AnimationClip m_animationClips[nsPlayerConstData::nsPlayerModelRenderConstData::enAnim_num];

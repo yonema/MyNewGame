@@ -5,6 +5,8 @@
 //法線スムージング。
 class NormalSmoothing {
 private:
+	using CBSP = nsMyGame::nsGeometry::CBSP;
+
 	struct SSmoothVertex {
 		Vector3 newNormal = g_vec3Zero;
 		TkmFile::SVertex* vertex = nullptr;
@@ -59,15 +61,26 @@ public:
 		//ステップ２　座標と向きが同じ頂点の法線を平均化していく。
 		if(mesh.isFlatShading == 0)
 		{
+			// 追加
+			//重複している頂点の法線を平均化
+			CBSP bsp;
 			//重複している頂点の法線を平均化
 			std::vector<SSmoothVertex> smoothVertex;
 			smoothVertex.reserve(mesh.vertexBuffer.size());
 			for (auto& v : mesh.vertexBuffer) {
+				// BSPツリーのリーフを追加
+				bsp.AddLeaf(v.pos, &v.normal);
 				smoothVertex.push_back({ v.normal, &v });
 			}
-			for (auto& va : smoothVertex) {	
+			//BSPツリーを構築。
+			bsp.Build();
+			
+
+#if 1 // こっちの計算量は頂点数をNとしたときに、O(N^2)
+
+			for (auto& va : smoothVertex) {
 				for (auto& vb : smoothVertex) {
-					
+
 					if (va.vertex != vb.vertex
 						&& va.vertex->pos.x == vb.vertex->pos.x
 						&& va.vertex->pos.y == vb.vertex->pos.y
@@ -82,6 +95,28 @@ public:
 				}
 				va.newNormal.Normalize();
 			}
+
+#else // こっちの計算量は頂点数をNとした時に、O(NlogN)
+			for (auto& va : smoothVertex) {
+				bsp.WalkTree(va.vertex->pos, [&](CBSP::SLeaf* leaf) {
+					if (va.vertex->pos.x == leaf->position.x
+						&& va.vertex->pos.y == leaf->position.y
+						&& va.vertex->pos.z == leaf->position.z) {
+						//同じ座標。
+						auto* normal = static_cast<Vector3*>(leaf->extraData);
+						if (va.vertex->normal.Dot(*normal) > 0.0f) {
+							//同じ向き。
+							va.newNormal += *normal;
+						}
+					}
+					});
+				va.newNormal.Normalize();
+			}
+#endif
+
+			// 追加。ここまで。
+
+
 			for (auto& va : smoothVertex) {
 				va.vertex->normal = va.newNormal;
 			}
@@ -286,6 +321,7 @@ void TkmFile::BuildMaterial(SMaterial& tkmMat, FILE* fp, const char* filePath)
 void TkmFile::BuildTangentAndBiNormal()
 {
 	NormalSmoothing normalSmoothing;
+	// 頂点バッファはメッシュごとに独立しているので、スムージングを４つのスレッドで分担して行うことができる。
 	for (auto& mesh : m_meshParts) {
 		for (auto& indexBuffer : mesh.indexBuffer16Array) {
 			normalSmoothing.Execute(mesh, indexBuffer);
@@ -346,6 +382,7 @@ void TkmFile::Load(const char* filePath)
 			vertex.indices[1] = vertexTmp.indices[1] != -1 ? vertexTmp.indices[1] : 0;
 			vertex.indices[2] = vertexTmp.indices[2] != -1 ? vertexTmp.indices[2] : 0;
 			vertex.indices[3] = vertexTmp.indices[3] != -1 ? vertexTmp.indices[3] : 0;
+
 		}
 		
 		//続いてインデックスバッファ。
@@ -382,6 +419,7 @@ void TkmFile::Load(const char* filePath)
 
 		}
 	}
+
 	//接ベクトルと従ベクトルを構築する。
 	BuildTangentAndBiNormal();
 

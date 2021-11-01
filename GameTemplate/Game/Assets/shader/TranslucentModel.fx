@@ -237,6 +237,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	float4 finalColor = 1.0f;
 	finalColor.xyz = lig;
+	finalColor.a = albedoColor.a;
 
 	// 自己発光カラーを加える
 	finalColor.xyz += emissionColor.xyz;

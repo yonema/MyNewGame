@@ -58,6 +58,11 @@ namespace nsMyGame
 				void Execute();
 
 				/**
+				 * @brief スイングアクションの前に行う処理
+				*/
+				void PreSwingAction();
+
+				/**
 				 * @brief スイング中の速度をリセットする
 				*/
 				void ResetSwingSpeed()

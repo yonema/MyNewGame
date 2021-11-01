@@ -45,35 +45,8 @@ namespace nsMyGame
 			{
 				nsDebug::DrawTextPanel(L"[SwingAction:Execute]");
 
-				// スイングターゲットを探すか？
-				if (m_swingActionState == enFindSwingTarget)
-				{
-					// スイングターゲットを探す
-					FindSwingTarget();
-				}
-
-				// スイングアクションをやめたか？
-				if (m_playerRef->GetInputData().actionSwing != true)
-				{
-					if (m_swingActionState == EnSwingActionState::enIsSwinging)
-					{
-						m_accelerationAfterSwing = kInitialVelocityOfAterSwingAcceleration;
-						
-						m_velocityAfterSwing = m_playerMovementRef->GetVelocity();
-						m_inputMoveDirXZ = Vector3::Zero;
-					}
-					// ステートをスイング後の空中状態に遷移する
-					m_swingActionState = EnSwingActionState::enIsAirAfterSwing;
-					// 糸に終了を知らせる
-					m_playerRef->EndStringStretchToPos();
-				}
-
-				// 地面についてしまったか？
-				if (m_playerMovementRef->IsAir() != true)
-				{
-					// スイングアクションを終了する
-					m_swingActionState = EnSwingActionState::enEnd;
-				}
+				// スイングアクションの前に行う処理
+				PreSwingAction();
 
 				// スイング中の処理をステートで割り振る
 				switch (m_swingActionState)
@@ -102,6 +75,57 @@ namespace nsMyGame
 					EndSwing();
 					break;
 				}
+
+				return;
+			}
+
+			/**
+			 * @brief スイングアクションの前に行う処理
+			*/
+			void CPlayerSwingAction::PreSwingAction()
+			{
+				// スイングターゲットを探すか？
+				if (m_swingActionState == enFindSwingTarget)
+				{
+					// スイングターゲットを探す
+					FindSwingTarget();
+
+					// 早期リターン
+					return;
+				}
+
+				// スイングアクションをやめたか？
+				if (m_playerRef->GetInputData().actionSwing != true)
+				{
+					// スイング中にスイングをやめたか？
+					if (m_swingActionState == EnSwingActionState::enIsSwinging)
+					{
+						// スイング後の加速の初速をリセット
+						m_accelerationAfterSwing = kInitialVelocityOfAterSwingAcceleration;
+						// スイング後の速度を保持
+						m_velocityAfterSwing = m_playerMovementRef->GetVelocity();
+						// 入力によって生じたXZ平面での移動方向をリセット
+						m_inputMoveDirXZ = Vector3::Zero;
+					}
+					// ステートをスイング後の空中状態に遷移する
+					m_swingActionState = EnSwingActionState::enIsAirAfterSwing;
+					// 糸に終了を知らせる
+					m_playerRef->EndStringStretchToPos();
+
+					// 早期リターン
+					return;
+				}
+
+				// 地面についてしまったか？
+				if (m_playerMovementRef->IsAir() != true)
+				{
+					// スイングアクションを終了する
+					m_swingActionState = EnSwingActionState::enEnd;
+
+					// 早期リターン
+					return;
+				}
+
 
 				return;
 			}
@@ -246,9 +270,9 @@ namespace nsMyGame
 				// 入力によって生じたXZ平面での移動方向を初期化する
 				m_inputMoveDirXZ = Vector3::Zero;
 				m_swingDonwCounter = 0;
-				m_playerRef->GetCamera().SetTargetOffsetUp(
-					nsPlayerConstData::nsPlayerCameraConstData::kTargetOffsetUp + kMaxCameraOffsetUp);
-				m_playerRef->GetCamera().SetCameraPositionOffsetUp(kMaxCameraOffsetUp);
+				//m_playerRef->GetCamera().SetTargetOffsetUp(
+				//	nsPlayerConstData::nsPlayerCameraConstData::kTargetOffsetUp + kMaxCameraOffsetUp);
+				//m_playerRef->GetCamera().SetCameraPositionOffsetUp(kMaxCameraOffsetUp);
 
 				if (m_playerRef->GetPosition().y < m_swingTargetPos->y)
 				{
@@ -400,11 +424,11 @@ namespace nsMyGame
 						//// 加算移動方向ベクトルを回転させる
 						//qRotForAddMoveDir.Apply(addMoveDir);
 
-						//addMoveDir = forwardDirXZ;
+						addMoveDir = forwardDirXZ;
 						rate = 1.0f - rate;
 						float radAngle = 3.14f * 0.1f * -rate;
 						// 回転クォータニオンを90度回転させる
-						qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, 3.14f * 0.5f);
+						qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, radAngle/*3.14f * 0.5f*/);
 						// 加算移動方向ベクトルを回転させる
 						qRotForAddMoveDir.Apply(addMoveDir);
 					}
@@ -421,9 +445,9 @@ namespace nsMyGame
 					float radAngle = 3.14f * 0.5f;
 					Vector3 to = m_playerRef->GetPosition() - toTargetForwardPosXZ;
 					//float rate = to.Length() / toTargetForwardUpToPlayerVec.Length();
-					float rate = toTargetFowardVecXZ.Length() / m_swingStringLen;
-					rate = min(rate, 1.0f);
-					rate = pow(rate, 4.0f);
+					//float rate = toTargetFowardVecXZ.Length() / m_swingStringLen;
+					//rate = min(rate, 1.0f);
+					//rate = pow(rate, 4.0f);
 					//rate = min(rate, 3.14f * 0.5f);
 					addSwingForwardVec = targetUptoPlayerDir;
 
@@ -459,9 +483,9 @@ namespace nsMyGame
 
 					float cameraOffsetUpRate = Dot(targetUptoPlayerDir, Vector3::Down);
 					cameraOffsetUpRate = pow(cameraOffsetUpRate, 4.0f);
-					m_playerRef->GetCamera().SetTargetOffsetUp((kMaxCameraOffsetUp * cameraOffsetUpRate)
+					/*m_playerRef->GetCamera().SetTargetOffsetUp((kMaxCameraOffsetUp * cameraOffsetUpRate)
 						+ nsPlayerConstData::nsPlayerCameraConstData::kTargetOffsetUp);
-					m_playerRef->GetCamera().SetCameraPositionOffsetUp(kMaxCameraOffsetUp * cameraOffsetUpRate);
+					m_playerRef->GetCamera().SetCameraPositionOffsetUp(kMaxCameraOffsetUp * cameraOffsetUpRate);*/
 				}
 				if (m_swingDonwCounter <= 30)
 				{
@@ -500,12 +524,11 @@ namespace nsMyGame
 				Vector3 addMoveVec = addMoveDir;
 				addMoveVec.Scale(m_swingSpeed);
 				addMoveVec += addSwingForwardVec;
-				m_playerMovementRef->ResetMoveVecX();
-				m_playerMovementRef->ResetMoveVecY();
-				m_playerMovementRef->ResetMoveVecZ();
+
 
 				// 移動ベクトルに、加算移動ベクトルを加算する
 				m_playerMovementRef->AddMoveVec(addMoveVec);
+				m_playerMovementRef->LimitMoveVec(m_swingSpeed);
 
 				Vector3 dist = m_playerRef->GetPosition() - *m_swingTargetPos;
 				nsDebug::DrawTextPanel(std::to_wstring(dist.Length()), L"toSwintTargetLen:");
@@ -524,9 +547,9 @@ namespace nsMyGame
 				{
 					m_swingActionState = enFindSwingTarget;
 				}
-				m_playerRef->GetCamera().SetTargetOffsetUp(
-					nsPlayerConstData::nsPlayerCameraConstData::kTargetOffsetUp);
-				m_playerRef->GetCamera().SetCameraPositionOffsetUp(0.0f);
+				//m_playerRef->GetCamera().SetTargetOffsetUp(
+				//	nsPlayerConstData::nsPlayerCameraConstData::kTargetOffsetUp);
+				//m_playerRef->GetCamera().SetCameraPositionOffsetUp(0.0f);
 
 
 				Vector3 addVec = Vector3::Zero;
@@ -589,6 +612,7 @@ namespace nsMyGame
 				m_playerRef->EndStringStretchToPos();
 				// プレイヤーのステートを歩きと走りにする
 				m_playerRef->ChangeWalkAndRunState();
+				// スイングスピードをリセット
 				m_swingSpeed = 0.0f;
 
 				return;

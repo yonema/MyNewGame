@@ -296,6 +296,7 @@
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="Bloom.cpp" />
+    <ClCompile Include="BSP.cpp" />
     <ClCompile Include="Building.cpp" />
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
@@ -428,6 +429,7 @@
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="AABB.h" />
     <ClInclude Include="Bloom.h" />
+    <ClInclude Include="BSP.h" />
     <ClInclude Include="Building.h" />
     <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />

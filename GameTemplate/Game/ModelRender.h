@@ -171,6 +171,15 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief アニメーションのスピードを設定
+				 * @param[in] animSpeed アニメーションのスピード
+				*/
+				void SetAnimationSpeed(const float animSpeed)
+				{
+					m_animationSpeed = animSpeed;
+				}
+
+				/**
 				 * @brief 自己発光カラーを設定
 				 * @param[in] emmisonColor 自己発光カラー
 				*/
@@ -316,6 +325,7 @@ namespace nsMyGame
 				CRender m_render;							//!< レンダラークラス
 				SkeletonPtr m_skeletonPtr;					//!< スケルトンクラス
 				AnimPtr m_animationPtr;						//!< アニメーションクラス
+				float m_animationSpeed = 1.0f;				//!< アニメーションのスピード
 				nsModelData::SExpandConstantBuffer m_modelExCB;	//!< モデルの拡張定数バッファ
 
 				Vector3 m_position = Vector3::Zero;				//!< 座標

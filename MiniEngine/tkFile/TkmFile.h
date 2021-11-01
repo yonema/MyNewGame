@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "../../GameTemplate/Game/BSP.h"
 	
 /// <summary>
 /// tkmファイルクラス。
@@ -130,4 +131,7 @@ private:
 	void BuildTangentAndBiNormal();
 private:
 	std::vector< SMesh>	m_meshParts;		//メッシュパーツ。
+	using CBSP = nsMyGame::nsGeometry::CBSP;
+	CBSP m_bpsOnVertexPosition;				// 頂点座標を使ったBSPツリー。
+
 };

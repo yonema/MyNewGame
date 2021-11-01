@@ -43,6 +43,8 @@ namespace nsMyGame
 			// ƒoƒl‚ÌŒ¸Š—¦‚ğİ’è
 			m_springCamera.SetDampingRate(kSpringDampingRate);
 
+			m_toCameraDistance = kDefaultToCameraDistance;
+
 			return;
 		}
 

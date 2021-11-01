@@ -74,6 +74,12 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 加算移動ベクトルに制限をかける
+				 * @param[in] limit 制限
+				*/
+				void LimitMoveVec(const float limit);
+
+				/**
 				 * @brief 移動速度を得る
 				 * @return 移動速度
 				*/

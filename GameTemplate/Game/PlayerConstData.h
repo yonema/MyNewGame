@@ -43,10 +43,10 @@ namespace nsMyGame
 			*/
 			namespace nsPlayerWalkAndRunConstData
 			{
-				constexpr float kWalkAcceleration = 20.0f;	//!< 歩き時の加速度
-				constexpr float kRunAcceleration = 40.0f;	//!< 走り時の加速度
-				constexpr float kWalkMaxSpeed = 500.0f;		//!< 歩き時の最高速度
-				constexpr float kRunMaxSpeed = 750.0f;		//!< 走り時の最高速度
+				constexpr float kWalkAcceleration = 50.0f;	//!< 歩き時の加速度
+				constexpr float kRunAcceleration = 100.0f;	//!< 走り時の加速度
+				constexpr float kWalkMaxSpeed = 750.0f;		//!< 歩き時の最高速度
+				constexpr float kRunMaxSpeed = 1200.0f;		//!< 走り時の最高速度
 				constexpr float kMinSpeed = 2.0f;			//!< 最低速度
 				constexpr float kGroundFriction = 0.9f;		//!< 地面の摩擦
 				constexpr float kAirFriction = 1.0f;		//!< 空中の摩擦
@@ -71,18 +71,17 @@ namespace nsMyGame
 					enEnd,					//!< 終了
 				};
 
-				constexpr int kFindSwintTargetNum = 5;	//!< スイングターゲットを探す数
+				constexpr int kFindSwintTargetNum = 4;	//!< スイングターゲットを探す数
 				//!< スイングターゲットを探す座標へのベクトル集
 				static const Vector3 kToFindSwingTargetVecs[kFindSwintTargetNum] =
 				{
 					{ 0.0f,2000.0f,2000.0f },		// 前上
-					{ 1000.0f,2000.0f,0.0f },		// 右上
-					{ -1000.0f,2000.0f,0.0f },		// 左上
-					{ 0.0f,2000.0f,0.0f },			// 真上
+					{ 500.0f,2000.0f,2000.0f },		// 前上
+					{ -500.0f,2000.0f,2000.0f },		// 前上
 					{ 0.0f,0.0f,0.0f }				// 中心
 				};
 				//!< 優先度が高いスイングターゲットの数
-				constexpr int kHighPriorityFindSwintTargetNum = 1;
+				constexpr int kHighPriorityFindSwintTargetNum = 3;
 				//!< スイングターゲットを探す有効範囲の半径
 				constexpr float kFindSwingTargetScope = 2000.0f;
 
@@ -97,7 +96,7 @@ namespace nsMyGame
 				constexpr float kTakeOverSwingAccelerationRate = 0.5f;
 
 				//!< スイング後の加速の初速
-				constexpr float kInitialVelocityOfAterSwingAcceleration = 500.0f;
+				constexpr float kInitialVelocityOfAterSwingAcceleration = 1500.0f;
 				//!< スイング後の加速の最低速度
 				constexpr float kMinVelocityOfAfterSwingAcceleration = 
 					kInitialVelocityOfAterSwingAcceleration * 0.1f;
@@ -110,7 +109,10 @@ namespace nsMyGame
 			namespace nsPlayerModelRenderConstData
 			{
 				//!< プレイヤーのモデルデータのファイスパス
-				constexpr const char* const kPlayerModelFilePath = "Assets/modelData/unityChan.tkm";
+				constexpr const char* const kPlayerModelFilePath = "Assets/modelData/sayaka_kunoichi/sayaka_kunoichi.tkm";
+				//!< プレイヤーの透明部分がないモデルデータのファイルパス
+				constexpr const char* const kPlayerNoTransparentModelFilePath =
+					"Assets/modelData/sayaka_kunoichi_noTransparent/sayaka_kunoichi_noTransparent.tkm";
 
 				/**
 				 * @brief アニメーションクリップス
@@ -118,14 +120,29 @@ namespace nsMyGame
 				enum EnAnimationClips
 				{
 					enAnim_idle,	//!< アイドル
+					enAnim_ninjaIdle,	//!< 忍者アイドル
 					enAnim_walk,	//!< 歩く
+					enAnim_run,		//!< 走る
+					enAnim_jupm,	//!< ジャンプ
+					enAnim_swingStart,	//!< スイングスタート
+					enAnim_swinging,	//!< スインギング
+					enAnim_swingToLand,	//!< スイングから着地
 					enAnim_num		//!< アニメーションクリップの数
 				};
 
-				//!< アイドル状態のアニメーションファイルパス
-				constexpr const char* const kAnimationFilePath_idle = "Assets/animData/idle.tka";
-				//!< 歩き状態のアニメーションファイルパス
-				constexpr const char* const kAnimationFilePath_walk = "Assets/animData/walk.tka";
+				//!< アニメーションのファイルパス
+				constexpr const char* const kAnimationFilePath[enAnim_num] =
+				{
+					"Assets/animData/sayaka_kunoichi_animation/idle.tka",
+					"Assets/animData/sayaka_kunoichi_animation/ninjaIdle.tka",
+					"Assets/animData/sayaka_kunoichi_animation/walk.tka",
+					"Assets/animData/sayaka_kunoichi_animation/run.tka",
+					"Assets/animData/sayaka_kunoichi_animation/jump.tka",
+					"Assets/animData/sayaka_kunoichi_animation/swingStart.tka",
+					"Assets/animData/sayaka_kunoichi_animation/swinging.tka",
+					"Assets/animData/sayaka_kunoichi_animation/swingToLand.tka",
+
+				};
 
 				constexpr float kDefaultAnimInterpolateTime = 0.2f;	//!< デフォルトのアニメーション補完時間
 
@@ -177,7 +194,7 @@ namespace nsMyGame
 				constexpr float kMinToCameraDirY = -0.5f;
 
 				//!< バネの減衰率。値が大きいほど、カメラが遅れて追従してくる
-				constexpr float kSpringDampingRate = 1.0f;
+				constexpr float kSpringDampingRate = 0.7f;
 
 				constexpr float kAutoTurnStartTime = 1.0f;	//!< 自動でカメラが回転し始めるタイム
 				//!< 自動でカメラが回転時始めるタイマーをリセットするタイム

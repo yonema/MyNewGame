@@ -488,6 +488,9 @@
     <ClCompile Include="PlayerWallRun.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
+    <ClCompile Include="BSP.cpp">
+      <Filter>MyCode\Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -924,6 +927,9 @@
     </ClInclude>
     <ClInclude Include="PlayerWallRun.h">
       <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="BSP.h">
+      <Filter>MyCode\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

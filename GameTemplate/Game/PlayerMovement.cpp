@@ -69,21 +69,44 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief 加算移動ベクトルに制限をかける
+			 * @param[in] limit 制限
+			*/
+			void CPlayerMovement::LimitMoveVec(const float limit)
+			{
+				if (m_moveVec.Length() <= limit)
+				{
+					// 加算移動ベクトルが制限より小さかったら、制限を掛けない。早期リターン。
+					return;
+				}
+
+				// 制限いっぱいの大きさのベクトルに直す
+				m_moveVec.Normalize();
+				m_moveVec.Scale(limit);
+
+				return;
+			}
+
+			/**
 			 * @brief 重力をかける
 			*/
 			void CPlayerMovement::ApplyGravity()
 			{
 				if (m_useGravity != true)
 				{
+					// 重力をかけない。早期リターン
 					return;
 				}
 
+				// 重力をかける
 				m_moveVec.y -= nsPlayerConstData::nsPlayerMoveConstData::kGravityScale *
 					nsTimer::GameTime().GetFrameDeltaTime();
-				if (m_moveVec.y < -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed)
-				{
-					m_moveVec.y = -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed;
-				}
+
+				// 重力の制限
+				//if (m_moveVec.y < -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed)
+				//{
+				//	m_moveVec.y = -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed;
+				//}
 
 				return;
 			}

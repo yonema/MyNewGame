@@ -68,6 +68,11 @@ namespace nsMyGame
 				m_cameraPositionOffsetUp = cameraPosUp;
 			}
 
+			void SetToCameraDistance(const float distance)
+			{
+				m_toCameraDistance = distance;
+			}
+
 		private:	// privateなメンバ関数
 
 			/**
@@ -107,6 +112,7 @@ namespace nsMyGame
 			float m_autoTurnStartTimerResetTimer = 0.0f;	//!< 自動でカメラを回転し始めるタイマーをリセットするタイマー
 			float m_targetOffsetUp = 0.0f;
 			float m_cameraPositionOffsetUp = 0.0f;
+			float m_toCameraDistance = 0.0f;
 		};
 
 	}
