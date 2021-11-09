@@ -13,9 +13,9 @@ namespace nsMyGame
 		*/
 		namespace nsBuildingConstData 
 		{
-			constexpr UINT kDefaultWidthSegments = 5;				//!< デフォルトの幅セグメント
-			constexpr UINT kDefaultHeightSegments = 5;				//!< デフォルトの高さセグメント
-			constexpr UINT kDefaultLengthSegments = 5;				//!< デフォルトの長さセグメント
+			constexpr UINT kDefaultWidthSegments = 10;				//!< デフォルトの幅セグメント
+			constexpr UINT kDefaultHeightSegments = 20;				//!< デフォルトの高さセグメント
+			constexpr UINT kDefaultLengthSegments = 10;				//!< デフォルトの長さセグメント
 			constexpr float kDefaultHeightLowerLimit = 1000.0f;		//!< デフォルトの高さの下限
 			//constexpr float kDefaultHeightLowerLimit = -10.0f;
 			//constexpr float kDefaultHeightLowerLimit = 0.0f;
@@ -34,7 +34,8 @@ namespace nsMyGame
 			*/
 			constexpr const char* const kBuildingModelFilePath[enBuildingTypeNum]
 			{
-				"Assets/modelData/levelSource/testBuilding.tkm"
+				//"Assets/modelData/levelSource/testBuilding.tkm"
+				"Assets/modelData/building/Bulding_L_01a.tkm"
 			};
 
 		}

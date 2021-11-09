@@ -94,6 +94,16 @@ namespace nsMyGame
 					return;
 				}
 
+				// 地面についてしまったか？
+				if (m_playerMovementRef->IsAir() != true)
+				{
+					// スイングアクションを終了する
+					m_swingActionState = EnSwingActionState::enEnd;
+
+					// 早期リターン
+					return;
+				}
+
 				// スイングアクションをやめたか？
 				if (m_playerRef->GetInputData().actionSwing != true)
 				{
@@ -116,16 +126,6 @@ namespace nsMyGame
 					return;
 				}
 
-				// 地面についてしまったか？
-				if (m_playerMovementRef->IsAir() != true)
-				{
-					// スイングアクションを終了する
-					m_swingActionState = EnSwingActionState::enEnd;
-
-					// 早期リターン
-					return;
-				}
-
 
 				return;
 			}
@@ -142,13 +142,35 @@ namespace nsMyGame
 				// スイングターゲットを初期化
 				m_swingTargetPos = nullptr;
 
+				// スイングターゲットを探すベクトルを回す回転
+				Quaternion swingRotationQRot = Quaternion::Identity;
+
+				// 糸を出す方向を決める
+				if (m_playerRef->GetInputData().inputMoveAxis)
+				{
+					// 移動の入力があったら移動入力の方向に糸を出す。
+					Vector3 inputDir = m_playerRef->GetCamera().GetCameraForward() * m_playerRef->GetInputData().axisMoveForward;
+					inputDir += m_playerRef->GetCamera().GetCameraRight() * m_playerRef->GetInputData().axisMoveRight;
+					inputDir.y = 0.0f;
+					inputDir.Normalize();
+					swingRotationQRot.SetRotation(Vector3::Front, inputDir);
+				}
+				else
+				{
+					// 入力がなかったらカメラの前方向に糸を出す。
+					Vector3 cameraDir = m_playerRef->GetCamera().GetCameraForward();
+					cameraDir.y = 0.0f;
+					cameraDir.Normalize();
+					swingRotationQRot.SetRotation(Vector3::Front, cameraDir);
+				}
+
 				// 複数の座標から、スイングターゲットを探す
 				for (int i = 0; i < kFindSwintTargetNum; i++)
 				{
 					// スイングターゲットを探す座標へのベクトル
 					Vector3 toFindSwingTargetVec = kToFindSwingTargetVecs[i];
-					// プレイヤーのモデルの向きに回転させる
-					m_playerRef->GetRotation().Apply(toFindSwingTargetVec);
+					// 糸を出す方向に回転させる
+					swingRotationQRot.Apply(toFindSwingTargetVec);
 
 					// 一番近いスイングターゲットのポイントの座標を探す処理のデータ
 					nsStringActionTarget::SFindNearestSwingTargetPointData findData;
@@ -269,21 +291,8 @@ namespace nsMyGame
 				m_startDecelerateSwingSpeed = kStartDecelerateSwingSpeedInitialValue;
 				// 入力によって生じたXZ平面での移動方向を初期化する
 				m_inputMoveDirXZ = Vector3::Zero;
-				m_swingDonwCounter = 0;
-				//m_playerRef->GetCamera().SetTargetOffsetUp(
-				//	nsPlayerConstData::nsPlayerCameraConstData::kTargetOffsetUp + kMaxCameraOffsetUp);
-				//m_playerRef->GetCamera().SetCameraPositionOffsetUp(kMaxCameraOffsetUp);
 
-				if (m_playerRef->GetPosition().y < m_swingTargetPos->y)
-				{
-					m_swingStartYPos = m_playerRef->GetPosition().y;
-				}
-				else
-				{
-					m_swingStartYPos = m_swingTargetPos->y;
-				}
-				m_swingMinYPos = max(100.0f, m_swingStartYPos - 500.0f);
-				m_swingStringLen = m_playerRef->GetStringLength();
+				m_counter = 0;
 
 				//////// スイングスピードの初期速度の計算 ////////
 				// スイングスピードが初期速度より遅いか？
@@ -307,32 +316,6 @@ namespace nsMyGame
 					m_g = maxG;
 				}
 				return;
-				// やっぱ加速しない、この下通らない。
-				//////// スイングスピードの加速したスピードを計算 ////////
-
-				// 前回のスイングスピードからの加速
-				float acceleration = m_playerMovementRef->GetVelocity() - m_swingSpeed;
-				// 前回から、加速があるか？
-				if (acceleration >= 0.0f)
-				{
-					// 加速がある。加速の一部を引き継いで加算する
-					m_swingSpeed += acceleration * kTakeOverSwingAccelerationRate;
-				}
-				else
-				{
-					// 減速している
-					// 現在の速度をスイングスピードにする
-					m_swingSpeed = m_playerMovementRef->GetVelocity();
-				}
-
-				// スイングスピードが最大速度を超えているか？
-				if (m_swingSpeed > kMaxSwingSpeed)
-				{
-					// 超えている。最大速度に設定する。
-					m_swingSpeed = kMaxSwingSpeed;
-				}
-
-				return;
 			}
 
 			/**
@@ -342,7 +325,14 @@ namespace nsMyGame
 			{
 				nsDebug::DrawTextPanel(L"SwingAction");
 
-				Vector3 addSwingForwardVec = Vector3::Zero;
+				const int counterMax = 60;
+				if (m_counter < counterMax)
+					m_counter++;
+				m_playerRef->GetCamera().SetToCameraDistance(
+					nsPlayerConstData::nsPlayerCameraConstData::kDefaultToCameraDistance *
+					(2.0f - (m_counter / counterMax)));
+
+				//////// 1.必要なベクトルを用意 ////////
 				
 				// プレイヤーからスイングターゲットまでのXZ平面でのベクトル
 				Vector3 playerToTargetVecXZ = *m_swingTargetPos - m_playerRef->GetPosition();
@@ -385,7 +375,7 @@ namespace nsMyGame
 					Dot(forwardDirXZ, targetUptoPlayerDir);
 
 				// 加算移動方向ベクトル
-				Vector3 addMoveDir = targetUptoPlayerDir;
+				Vector3 addMoveDir = Vector3::Zero;
 
 				// 加算移動方向ベクトルを回転させる回転クォータニオン
 				Quaternion qRotForAddMoveDir;
@@ -404,29 +394,40 @@ namespace nsMyGame
 				rotAxisForAddMoveDir.Normalize();
 
 
+				//////// 2.スイングの角度を計算 ////////
+
 				// 内積が負か？、つまり、スイングターゲットより手前側にいるか？
 				if (dotFowardDirXZAndToPlayerDir < 0.0f)
 				{
 					// 手前側
 
-					float rate = dotFowardDirXZAndToPlayerDir + 1.0f;
-					rate = pow(rate, 5.0f);
-/*					if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
+					// プレイヤーが最低スイング高度より上にいるか？
+					if (m_playerRef->GetPosition().y > 100.0f)
 					{
-						addMoveDir = forwardDirXZ;
-						addMoveDir.y -= 10.0f;
+						// 上にいる
 
-					}
-					else */if (m_playerRef->GetPosition().y > 100.0f)
-					{
-						//// 回転クォータニオンを90度回転させる
-						//qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, 3.14f * 0.5f);
-						//// 加算移動方向ベクトルを回転させる
-						//qRotForAddMoveDir.Apply(addMoveDir);
+						// 0.0f～1.0fに変化するレート
+						float rate = dotFowardDirXZAndToPlayerDir + 1.0f;
 
+						// pattern1
+						// 指数関数的な変化にする
+						//rate = pow(rate, 5.0f);
+						// 1.0f～0.0fに変化するようにする
+						//rate = 1.0f - rate;
+						//float radAngle = 3.14f * 0.1f * -rate;
+
+						// pattern2
+						// 二次関数的な変化にする
+						rate = pow(rate - 0.5f, 3.0f);
+						// 上に凸にする
+						rate *= -1.0f;
+						// rateが最低値と最高値で0.0fになるような切片にする
+						rate += pow(0.5f, 3.0f);
+						// 90度にレートをかける
+						float radAngle = 3.14f * 0.5f * -rate;
+
+						// 進む方向をまっすぐ前にする
 						addMoveDir = forwardDirXZ;
-						rate = 1.0f - rate;
-						float radAngle = 3.14f * 0.1f * -rate;
 						// 回転クォータニオンを90度回転させる
 						qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, radAngle/*3.14f * 0.5f*/);
 						// 加算移動方向ベクトルを回転させる
@@ -434,6 +435,7 @@ namespace nsMyGame
 					}
 					else
 					{
+						// 最低高度にいるため、まっすぐ進む。
 						addMoveDir = forwardDirXZ;
 					}
 
@@ -443,71 +445,56 @@ namespace nsMyGame
 					// 奥側
 
 					float radAngle = 3.14f * 0.5f;
-					Vector3 to = m_playerRef->GetPosition() - toTargetForwardPosXZ;
-					//float rate = to.Length() / toTargetForwardUpToPlayerVec.Length();
-					//float rate = toTargetFowardVecXZ.Length() / m_swingStringLen;
-					//rate = min(rate, 1.0f);
-					//rate = pow(rate, 4.0f);
-					//rate = min(rate, 3.14f * 0.5f);
-					addSwingForwardVec = targetUptoPlayerDir;
 
+					// プレイヤーの高さがスイングターゲットより高くなったら。
 					if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
 					{
+						// 初回ループだけ減速し始めるスピードを設定
 						if (m_startDecelerateSwingSpeed <= -50.0f)
 						{
 							m_startDecelerateSwingSpeed = m_swingSpeed;
 						}
-						float dot = Dot(forwardDirXZ, targetUptoPlayerDir);
-						float rad = acosf(dot);
+						float rad = acosf(dotFowardDirXZAndToPlayerDir);
 						float angleRate = rad / (3.14f * 0.1f);
-						//m_swingSpeed = Math::Lerp<float>(min(1.0f,angleRate), m_startDecelerateSwingSpeed, 0.0f);
 						addMoveDir = forwardDirXZ;
-						radAngle = 3.14f * 0.5f * min(1.0f, angleRate);
+						// radAngle = 3.14f * 0.5f * min(1.0f, angleRate);
 						radAngle = Math::Lerp<float>(min(1.0f, angleRate), 3.14f * 0.4f, 3.14f * 0.5f);
 
 
 					}
-					else
-					{
 
-						//addMoveDir = forwardDirXZ;
-						//radAngle = 3.14f * 0.4f * rate;
-						radAngle = 3.14f * 0.5f;
-
-					}
-
+					addMoveDir = targetUptoPlayerDir;
 					// 回転クォータニオンを90度回転させる
 					qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, radAngle);
 					// 加算移動方向ベクトルを回転させる
 					qRotForAddMoveDir.Apply(addMoveDir);
-
-					float cameraOffsetUpRate = Dot(targetUptoPlayerDir, Vector3::Down);
-					cameraOffsetUpRate = pow(cameraOffsetUpRate, 4.0f);
-					/*m_playerRef->GetCamera().SetTargetOffsetUp((kMaxCameraOffsetUp * cameraOffsetUpRate)
-						+ nsPlayerConstData::nsPlayerCameraConstData::kTargetOffsetUp);
-					m_playerRef->GetCamera().SetCameraPositionOffsetUp(kMaxCameraOffsetUp * cameraOffsetUpRate);*/
+					
 				}
-				if (m_swingDonwCounter <= 30)
-				{
-					m_swingDonwCounter++;
-					//m_swingSpeed += pow(static_cast<float>(m_swingDonwCounter), 2.0f) * 0.1f;
-				}
-				Vector3 backDirXZ = forwardDirXZ;
-				backDirXZ.Scale(-1.0f);
-				m_swingSpeed = Dot(targetUptoPlayerDir, Vector3::Down);
 
-				m_swingSpeed -= 0.0f;
+				//////// 3.スイングスピードを計算 ////////
+
+				// 任意の位置での振り子の速度
+				// g = 重力加速度、l = 振り子の長さ、v任 = 任意の場所での振り子の速度、
+				// cosΘ任 = 任意の場所の角度、cosΘ上 = 一番上の時の角度
+				// v任 = √2gl(cosΘ任 - cosΘ上)
+
+				// cosΘ任 = 任意の場所の角度
+				float anyCos = Dot(targetUptoPlayerDir, Vector3::Down);
+				// cosΘ上 = 一番上の時の角度（一番上の時の角度は90度）
+				float highestCos = 0.0f;
+				// g = 重力加速度
 				m_g += 980.0f * nsTimer::CGameTime().GetFrameDeltaTime() * 0.25f;
 				const float maxG = 1200.0f;
 				if (m_g > maxG)
 				{
 					m_g = maxG;
 				}
-				m_swingSpeed *= 2.0f * m_g * toTargetForwardUpToPlayerVec.Length();
+				// l = 振り子の長さ
+				const float l = toTargetForwardUpToPlayerVec.Length();
+				// v任 = √2gl(cosΘ任 - cosΘ上)
+				m_swingSpeed = 2.0f * m_g * l * (anyCos - highestCos);
 				m_swingSpeed = std::sqrtf(m_swingSpeed);
-				addSwingForwardVec.Scale(pow(fabsf(m_swingDonwCounter - 30.0f) / 30.0f,2.0f) * 1000.0f);
 
-				nsDebug::DrawTextPanel(m_g, L"G");
 
 				Vector3 rightDirXZ = m_playerRef->GetCamera().GetCameraRight();
 				rightDirXZ.y = 0.0f;
@@ -523,15 +510,11 @@ namespace nsMyGame
 				// 加算移動ベクトル
 				Vector3 addMoveVec = addMoveDir;
 				addMoveVec.Scale(m_swingSpeed);
-				addMoveVec += addSwingForwardVec;
 
 
 				// 移動ベクトルに、加算移動ベクトルを加算する
 				m_playerMovementRef->AddMoveVec(addMoveVec);
 				m_playerMovementRef->LimitMoveVec(m_swingSpeed);
-
-				Vector3 dist = m_playerRef->GetPosition() - *m_swingTargetPos;
-				nsDebug::DrawTextPanel(std::to_wstring(dist.Length()), L"toSwintTargetLen:");
 
 				return;
 			}

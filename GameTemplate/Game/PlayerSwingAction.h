@@ -122,11 +122,8 @@ namespace nsMyGame
 				Vector3 m_inputMoveDirXZ = Vector3::Zero;			//!< 入力によって生じたXZ平面での移動方向
 				float m_velocityAfterSwing = 0.0f;					//!< スイング後の速度
 				float m_accelerationAfterSwing = 0.0f;				//!< スイング後の加速
-				float m_swingStartYPos = 0.0f;						//!< スイング開始時のY座標
-				float m_swingMinYPos = 0.0f;						//!< スイング中の最低Y座標
-				float m_swingStringLen = 0.0f;						//!< スイングの糸の長さ
-				int m_swingDonwCounter = 0;
 				float m_g = 0.0f;
+				int m_counter = 0;
 			};
 		}
 	}

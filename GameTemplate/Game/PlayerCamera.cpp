@@ -141,7 +141,7 @@ namespace nsMyGame
 			// Œü‚«‚ğ³‹K‰»‚µ‚Ä‚©‚ç
 			m_toCameraVec.Normalize();
 			// L‚Î‚·
-			m_toCameraVec.Scale(kDefaultToCameraDistance);
+			m_toCameraVec.Scale(m_toCameraDistance);
 
 			return;
 		}

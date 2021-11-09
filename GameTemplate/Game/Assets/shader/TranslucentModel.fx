@@ -219,15 +219,15 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 
 	// IBLを行うか？
-	if (isIBL == 1)
-	{
-		// 行う
-		// 視線からの反射ベクトルを求める。
-		float3 v = reflect(toEye * -1.0f, normal);
-		int level = lerp(0, 12, 1 - smooth);
-		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * IBLLuminance;
-	}
-	else
+	//if (isIBL == 1)
+	//{
+	//	// 行う
+	//	// 視線からの反射ベクトルを求める。
+	//	float3 v = reflect(toEye * -1.0f, normal);
+	//	int level = lerp(0, 12, 1/* - smooth*/);
+	//	lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * IBLLuminance;
+	//}
+	//else
 	{
 		// 行わない
 		// 環境光による底上げ

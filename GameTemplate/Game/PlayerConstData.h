@@ -31,9 +31,9 @@ namespace nsMyGame
 			*/
 			namespace nsPlayerMoveConstData
 			{
-				constexpr float kGravityScale = 980.0f * 2.0f;	//!< 重力の強さ
+				constexpr float kGravityScale = 980.0f * 3.0f;	//!< 重力の強さ
 				constexpr float kMaxFallSpeed = 2000.0f;		//!< 最高落下速度
-				constexpr float kJumpForce = 700.0f;	//!< ジャンプ力
+				constexpr float kJumpForce = 1000.0f;	//!< ジャンプ力
 				constexpr float kModelRotRate = 0.3f;	//!< モデルの回転の補間率
 				constexpr float kMoveVecMin = 0.001f;	//!< 移動ベクトルの最小値
 			}
@@ -109,10 +109,8 @@ namespace nsMyGame
 			namespace nsPlayerModelRenderConstData
 			{
 				//!< プレイヤーのモデルデータのファイスパス
-				constexpr const char* const kPlayerModelFilePath = "Assets/modelData/sayaka_kunoichi/sayaka_kunoichi.tkm";
-				//!< プレイヤーの透明部分がないモデルデータのファイルパス
-				constexpr const char* const kPlayerNoTransparentModelFilePath =
-					"Assets/modelData/sayaka_kunoichi_noTransparent/sayaka_kunoichi_noTransparent.tkm";
+				constexpr const char* const kPlayerModelFilePath = 
+					"Assets/modelData/kunoichi_ver2.1/kunoichi_ver2.1.tkm";
 
 				/**
 				 * @brief アニメーションクリップス
@@ -120,27 +118,32 @@ namespace nsMyGame
 				enum EnAnimationClips
 				{
 					enAnim_idle,	//!< アイドル
-					enAnim_ninjaIdle,	//!< 忍者アイドル
+					//enAnim_ninjaIdle,	//!< 忍者アイドル
 					enAnim_walk,	//!< 歩く
 					enAnim_run,		//!< 走る
-					enAnim_jupm,	//!< ジャンプ
+					enAnim_jump,	//!< ジャンプ
 					enAnim_swingStart,	//!< スイングスタート
-					enAnim_swinging,	//!< スインギング
-					enAnim_swingToLand,	//!< スイングから着地
+					//enAnim_swinging,	//!< スインギング
+					//enAnim_swingToLand,	//!< スイングから着地
 					enAnim_num		//!< アニメーションクリップの数
 				};
 
 				//!< アニメーションのファイルパス
 				constexpr const char* const kAnimationFilePath[enAnim_num] =
 				{
-					"Assets/animData/sayaka_kunoichi_animation/idle.tka",
-					"Assets/animData/sayaka_kunoichi_animation/ninjaIdle.tka",
-					"Assets/animData/sayaka_kunoichi_animation/walk.tka",
-					"Assets/animData/sayaka_kunoichi_animation/run.tka",
-					"Assets/animData/sayaka_kunoichi_animation/jump.tka",
-					"Assets/animData/sayaka_kunoichi_animation/swingStart.tka",
-					"Assets/animData/sayaka_kunoichi_animation/swinging.tka",
-					"Assets/animData/sayaka_kunoichi_animation/swingToLand.tka",
+					"Assets/animData/kunoichi/idle.tka",
+					"Assets/animData/kunoichi/walk.tka",
+					"Assets/animData/kunoichi/run.tka",
+					"Assets/animData/kunoichi/jump.tka",
+					"Assets/animData/kunoichi/swingStart.tka",
+
+					//"Assets/animData/sayaka_kunoichi_animation/ninjaIdle.tka",
+					//"Assets/animData/sayaka_kunoichi_animation/walk.tka",
+					//"Assets/animData/sayaka_kunoichi_animation/run.tka",
+					//"Assets/animData/sayaka_kunoichi_animation/jump.tka",
+					//"Assets/animData/sayaka_kunoichi_animation/swingStart.tka",
+					//"Assets/animData/sayaka_kunoichi_animation/swinging.tka",
+					//"Assets/animData/sayaka_kunoichi_animation/swingToLand.tka",
 
 				};
 

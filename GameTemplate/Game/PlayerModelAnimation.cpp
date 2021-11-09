@@ -70,7 +70,7 @@ namespace nsMyGame
 			{
 				// アニメーションのロード
 				m_animationClips[i].Load(kAnimationFilePath[i]);
-
+				//m_animationClips[i].SetLoopFlag(true);
 				// ループフラグを設定
 				switch (i)
 				{
@@ -95,7 +95,6 @@ namespace nsMyGame
 		*/
 		void CPlayerModelAnimation::InitModel()
 		{
-			m_playerNoTransparentModel = NewGO<nsGraphic::nsModel::CModelRender>(enPriorityFirst);
 
 			// プレイヤーモデルレンダラーの生成
 			m_playerModel = NewGO<nsGraphic::nsModel::CModelRender>(enPriorityFirst);
@@ -103,24 +102,17 @@ namespace nsMyGame
 			// 座標と回転を設定
 			m_playerModel->SetPosition(m_playerRef->GetPosition());
 			m_playerModel->SetRotation(m_playerRef->GetRotation());
-			m_playerNoTransparentModel->SetPosition(m_playerRef->GetPosition());
-			m_playerNoTransparentModel->SetRotation(m_playerRef->GetRotation());
-
-			m_playerNoTransparentModel->IniTranslucent(
-				"Assets/modelData/sayaka_kunoichi_noTransparent/sayaka_kunoichi_noTransparent.tkm",
-				m_animationClips,
-				enAnim_num
-				);
 
 			// プレイヤーモデルレンダラーの初期化
 			//m_playerModel->Init(kPlayerModelFilePath, m_animationClips, enAnim_num, enModelUpAxisY);
 			m_playerModel->IniTranslucent(
-				"Assets/modelData/sayaka_kunoichi/sayaka_kunoichi.tkm",
+				kPlayerModelFilePath,
 				m_animationClips,
 				enAnim_num
 				);
 			// シャドウキャスターを有効にする
 			m_playerModel->SetIsShadowCaster(true);
+			m_playerModel->SetAnimationSpeed(2.0f);
 
 			return;
 		}
@@ -139,7 +131,6 @@ namespace nsMyGame
 			}
 
 			// プレイヤーモデルレンダラーの破棄
-			DeleteGO(m_playerNoTransparentModel);
 			DeleteGO(m_playerModel);
 
 			return;
@@ -151,8 +142,6 @@ namespace nsMyGame
 		void CPlayerModelAnimation::UpdateTransform()
 		{
 			// 座標と回転を更新
-			m_playerNoTransparentModel->SetPosition(m_playerRef->GetPosition());
-			m_playerNoTransparentModel->SetRotation(m_playerRef->GetRotation());
 			m_playerModel->SetPosition(m_playerRef->GetPosition());
 			m_playerModel->SetRotation(m_playerRef->GetRotation());
 			return;
@@ -164,9 +153,33 @@ namespace nsMyGame
 		*/
 		void CPlayerModelAnimation::UpdateAnimationTransition()
 		{
+			m_animState = enAnim_idle;
+
+			//switch (m_playerRef->GetState())
+			{
+				//case nsPlayerConstData::enWalkAndRun:
+
+					if (m_playerRef->GetPlayerMovement().GetVelocity() <= 10.0f)
+						m_animState = enAnim_idle;
+					else if (m_playerRef->GetPlayerMovement().GetVelocity() <= 800.0f)
+						m_animState = enAnim_walk;
+					else
+						m_animState = enAnim_run;
+
+					//if (m_playerRef->GetPlayerMovement().IsAir())
+					//	m_animState = enAnim_jump;
+
+
+				//	break;
+				//case nsPlayerConstData::enSwing:
+					//m_animState = enAnim_swingStart;
+
+				//	break;
+			}
+
+
 			// アニメーション再生
 			// 前フレームと同じアニメーションをPlayした場合、なにもしない
-			m_playerNoTransparentModel->PlayAnimation(m_animState, m_AnimInterpolateTime);
 			m_playerModel->PlayAnimation(m_animState, m_AnimInterpolateTime);
 
 			return;

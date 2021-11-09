@@ -48,6 +48,11 @@ namespace nsMyGame
 			*/
 			void ExecuteUpdate();
 
+			void SetAnimState(nsPlayerConstData::nsPlayerModelRenderConstData::EnAnimationClips animState)
+			{
+				m_animState = animState;
+			}
+
 
 		private:	// privateなメンバ関数
 
@@ -76,10 +81,11 @@ namespace nsMyGame
 			*/
 			void UpdateAnimationTransition();
 
+
+
 		private:	// データメンバ
 			const CPlayer* m_playerRef = nullptr;						//!< プレイヤーの参照
 			nsGraphic::nsModel::CModelRender* m_playerModel = nullptr;	//!< プレイヤーのモデルレンダラー
-			nsGraphic::nsModel::CModelRender* m_playerNoTransparentModel = nullptr;	//!< プレイヤーのモデルレンダラー
 
 			//!< アニメーションクリップスクラス
 			AnimationClip m_animationClips[nsPlayerConstData::nsPlayerModelRenderConstData::enAnim_num];
@@ -89,6 +95,11 @@ namespace nsMyGame
 			//!< アニメーション補完時間
 			float m_AnimInterpolateTime = 
 				nsPlayerConstData::nsPlayerModelRenderConstData::kDefaultAnimInterpolateTime;
+
+			bool m_walkFlag = false;
+			bool m_runFlag = false;
+			bool m_jumpFlag = false;
+			bool m_swingFlag = false;
 
 		};
 

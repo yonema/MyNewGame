@@ -40,7 +40,7 @@ namespace nsMyGame
 
 				// ƒŒƒxƒ‹‚Ì¶¬
 				m_level3D.Init(
-					kLevelFilePath[enLevelProto2],
+					kLevelFilePath[enLevelProto3],
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
 						// Œš•¨‚Ì¶¬
