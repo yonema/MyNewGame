@@ -107,15 +107,6 @@ namespace nsMyGame
 			}
 
 			/**
- * @brief プレイヤーのカメラを得る
- * @return プレイヤーのカメラ
-*/
-			CPlayerCamera& GetCamera()
-			{
-				return m_playerCamera;
-			}
-
-			/**
 			 * @brief プレイヤーの移動クラスの参照を得る
 			 * @return プレイヤーの移動クラスの参照
 			*/

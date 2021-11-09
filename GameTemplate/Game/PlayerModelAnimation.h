@@ -48,10 +48,15 @@ namespace nsMyGame
 			*/
 			void ExecuteUpdate();
 
-			void SetAnimState(nsPlayerConstData::nsPlayerModelRenderConstData::EnAnimationClips animState)
+			/**
+			 * @brief スイング中のアニメーションステートを設定
+			 * @param[in] state ステート
+			*/
+			void SetSwingAnimState(const nsPlayerConstData::nsModelAnimationConstData::EnSwingAnimState state)
 			{
-				m_animState = animState;
+				m_swingAnimSate = state;
 			}
+
 
 
 		private:	// privateなメンバ関数
@@ -81,6 +86,16 @@ namespace nsMyGame
 			*/
 			void UpdateAnimationTransition();
 
+			/**
+			 * @brief アニメーションステートを更新
+			*/
+			void UpdateAnimationState();
+
+			/**
+			 * @brief スイング中のアニメーションステートを更新
+			*/
+			void UpdateSwingAnimationState();
+
 
 
 		private:	// データメンバ
@@ -88,19 +103,22 @@ namespace nsMyGame
 			nsGraphic::nsModel::CModelRender* m_playerModel = nullptr;	//!< プレイヤーのモデルレンダラー
 
 			//!< アニメーションクリップスクラス
-			AnimationClip m_animationClips[nsPlayerConstData::nsPlayerModelRenderConstData::enAnim_num];
+			AnimationClip m_animationClips[nsPlayerConstData::nsModelAnimationConstData::enAnim_num];
 			//!< アニメーションステート
-			nsPlayerConstData::nsPlayerModelRenderConstData::EnAnimationClips m_animState =
-				nsPlayerConstData::nsPlayerModelRenderConstData::enAnim_idle;
+			nsPlayerConstData::nsModelAnimationConstData::EnAnimationClips m_animState =
+				nsPlayerConstData::nsModelAnimationConstData::enAnim_idle;
 			//!< アニメーション補完時間
 			float m_AnimInterpolateTime = 
-				nsPlayerConstData::nsPlayerModelRenderConstData::kDefaultAnimInterpolateTime;
+				nsPlayerConstData::nsModelAnimationConstData::kDefaultAnimInterpolateTime;
 
 			bool m_walkFlag = false;
 			bool m_runFlag = false;
 			bool m_jumpFlag = false;
 			bool m_swingFlag = false;
 
+			//!< スイング中のアニメーションステート
+			nsPlayerConstData::nsModelAnimationConstData::EnSwingAnimState m_swingAnimSate =
+				nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swing;
 		};
 
 	}

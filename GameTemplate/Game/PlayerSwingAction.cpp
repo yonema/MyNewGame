@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "PlayerMovement.h"
 #include "StringActionTargetManager.h"
+#include "PlayerCamera.h"
 
 namespace nsMyGame
 {
@@ -17,24 +18,28 @@ namespace nsMyGame
 		namespace nsPlayerMovenent
 		{
 			// プレイヤーのスイングアクションクラスの定数データを使用可能にする
-			using namespace nsPlayerConstData::nsPlayerSwingActionConstData;
+			using namespace nsPlayerConstData::nsSwingActionConstData;
 
 
 			/**
 			 * @brief 初期化
 			 * @param[in,out] player プレイヤー
 			 * @param[in,out] playerMovement プレイヤー移動クラスの参照
+			 * @param[in,out] playerCamera プレイヤーカメラクラスの参照
+			 * @param[in.out] playerModelAnimation プレイヤーモデルアニメーションの参照
 			*/
 			void CPlayerSwingAction::Init(
 				CPlayer* player,
-				CPlayerMovement* playerMovement
+				CPlayerMovement* playerMovement,
+				CPlayerCamera* playerCamera,
+				CPlayerModelAnimation* playerModelAnimation
 			)
 			{
-				// プレイヤーの参照をセット
+				// 各参照をセット
 				m_playerRef = player;
-				// 加算移動ベクトルの参照をセット
 				m_playerMovementRef = playerMovement;
-
+				m_playerCameraRef = playerCamera;
+				m_playerModelAnimationRef = playerModelAnimation;
 				return;
 			}
 
@@ -104,9 +109,14 @@ namespace nsMyGame
 					return;
 				}
 
-				// スイングアクションをやめたか？
-				if (m_playerRef->GetInputData().actionSwing != true)
+				// スイングアクションをやめたか？かつ
+				// スイング後の空中状態ではないか？
+				if (m_playerRef->GetInputData().actionSwing != true &&
+					m_swingActionState != EnSwingActionState::enIsAirAfterSwing)
 				{
+						m_playerModelAnimationRef->SetSwingAnimState(
+						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_airAfterSwing
+					);
 					// スイング中にスイングをやめたか？
 					if (m_swingActionState == EnSwingActionState::enIsSwinging)
 					{
@@ -116,6 +126,9 @@ namespace nsMyGame
 						m_velocityAfterSwing = m_playerMovementRef->GetVelocity();
 						// 入力によって生じたXZ平面での移動方向をリセット
 						m_inputMoveDirXZ = Vector3::Zero;
+						m_playerModelAnimationRef->SetSwingAnimState(
+							nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingRoll
+						);
 					}
 					// ステートをスイング後の空中状態に遷移する
 					m_swingActionState = EnSwingActionState::enIsAirAfterSwing;
@@ -149,8 +162,8 @@ namespace nsMyGame
 				if (m_playerRef->GetInputData().inputMoveAxis)
 				{
 					// 移動の入力があったら移動入力の方向に糸を出す。
-					Vector3 inputDir = m_playerRef->GetCamera().GetCameraForward() * m_playerRef->GetInputData().axisMoveForward;
-					inputDir += m_playerRef->GetCamera().GetCameraRight() * m_playerRef->GetInputData().axisMoveRight;
+					Vector3 inputDir = m_playerCameraRef->GetCameraForward() * m_playerRef->GetInputData().axisMoveForward;
+					inputDir += m_playerCameraRef->GetCameraRight() * m_playerRef->GetInputData().axisMoveRight;
 					inputDir.y = 0.0f;
 					inputDir.Normalize();
 					swingRotationQRot.SetRotation(Vector3::Front, inputDir);
@@ -256,6 +269,9 @@ namespace nsMyGame
 					m_playerRef->StartStringStretchToPos(*m_swingTargetPos);
 					// ステートを糸を伸ばし中へ遷移する
 					m_swingActionState = EnSwingActionState::enIsStringStretching;
+					m_playerModelAnimationRef->SetSwingAnimState(
+						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingStart
+					);
 				}
 				else
 				{
@@ -325,13 +341,10 @@ namespace nsMyGame
 			{
 				nsDebug::DrawTextPanel(L"SwingAction");
 
-				const int counterMax = 60;
+				const int counterMax = 30;
 				if (m_counter < counterMax)
 					m_counter++;
-				m_playerRef->GetCamera().SetToCameraDistance(
-					nsPlayerConstData::nsPlayerCameraConstData::kDefaultToCameraDistance *
-					(2.0f - (m_counter / counterMax)));
-
+				m_playerCameraRef->LerpDampingRate(/*0.5f - 0.5f*/1.0f - 1.0f * m_counter / counterMax);
 				//////// 1.必要なベクトルを用意 ////////
 				
 				// プレイヤーからスイングターゲットまでのXZ平面でのベクトル
@@ -496,7 +509,7 @@ namespace nsMyGame
 				m_swingSpeed = std::sqrtf(m_swingSpeed);
 
 
-				Vector3 rightDirXZ = m_playerRef->GetCamera().GetCameraRight();
+				Vector3 rightDirXZ = m_playerCameraRef->GetCameraRight();
 				rightDirXZ.y = 0.0f;
 				rightDirXZ.Normalize();
 				float rightPower = m_playerRef->GetInputData().axisMoveRight / 7.0f;
@@ -530,9 +543,8 @@ namespace nsMyGame
 				{
 					m_swingActionState = enFindSwingTarget;
 				}
-				//m_playerRef->GetCamera().SetTargetOffsetUp(
-				//	nsPlayerConstData::nsPlayerCameraConstData::kTargetOffsetUp);
-				//m_playerRef->GetCamera().SetCameraPositionOffsetUp(0.0f);
+				m_playerCameraRef->LerpDampingRate(1.0f);
+
 
 
 				Vector3 addVec = Vector3::Zero;
@@ -549,15 +561,15 @@ namespace nsMyGame
 				float velocity = m_velocityAfterSwing + m_accelerationAfterSwing;
 
 
-				if (velocity < nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed)
+				if (velocity < nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed)
 				{
-					velocity = nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed;
+					velocity = nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed;
 				}
 
 				if (m_playerRef->GetInputData().inputMoveAxis)
 				{
 
-					Vector3 rightDirXZ = m_playerRef->GetCamera().GetCameraRight();
+					Vector3 rightDirXZ = m_playerCameraRef->GetCameraRight();
 					rightDirXZ.y = 0.0f;
 					rightDirXZ.Normalize();
 					float rightPower = m_playerRef->GetInputData().axisMoveRight / 7.0f;

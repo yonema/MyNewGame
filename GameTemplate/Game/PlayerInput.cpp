@@ -11,7 +11,7 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// プレイヤー入力クラスの定数データを使用可能にする
-		using namespace nsPlayerConstData::nsPlayerInputConstData;
+		using namespace nsPlayerConstData::nsInputConstData;
 
 		/**
 		 * @brief 初期化

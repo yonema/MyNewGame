@@ -29,7 +29,7 @@ namespace nsMyGame
 			/**
 			 * @brief プレイヤー移動クラスの定数データ
 			*/
-			namespace nsPlayerMoveConstData
+			namespace nsMovementConstData
 			{
 				constexpr float kGravityScale = 980.0f * 3.0f;	//!< 重力の強さ
 				constexpr float kMaxFallSpeed = 2000.0f;		//!< 最高落下速度
@@ -41,7 +41,7 @@ namespace nsMyGame
 			/**
 			 * @brief プレイヤーの歩きと走りクラスの定数データ
 			*/
-			namespace nsPlayerWalkAndRunConstData
+			namespace nsWalkAndRunConstData
 			{
 				constexpr float kWalkAcceleration = 50.0f;	//!< 歩き時の加速度
 				constexpr float kRunAcceleration = 100.0f;	//!< 走り時の加速度
@@ -57,7 +57,7 @@ namespace nsMyGame
 			/**
 			 * @brief プレイヤーのスイングアクションクラスの定数データ
 			*/
-			namespace nsPlayerSwingActionConstData
+			namespace nsSwingActionConstData
 			{
 				/**
 				 * @brief スイングアクションのステート
@@ -77,13 +77,13 @@ namespace nsMyGame
 				{
 					{ 0.0f,2000.0f,2000.0f },		// 前上
 					{ 500.0f,2000.0f,2000.0f },		// 前上
-					{ -500.0f,2000.0f,2000.0f },		// 前上
+					{ -500.0f,2000.0f,2000.0f },	// 前上
 					{ 0.0f,0.0f,0.0f }				// 中心
 				};
 				//!< 優先度が高いスイングターゲットの数
 				constexpr int kHighPriorityFindSwintTargetNum = 3;
 				//!< スイングターゲットを探す有効範囲の半径
-				constexpr float kFindSwingTargetScope = 2000.0f;
+				constexpr float kFindSwingTargetScope = 4000.0f;
 
 				// 減速し始めるスピードの初期値
 				constexpr float kStartDecelerateSwingSpeedInitialValue = -100.0f;
@@ -106,7 +106,7 @@ namespace nsMyGame
 			/**
 			 * @brief プレイヤーモデルクラスの定数データ
 			*/
-			namespace nsPlayerModelRenderConstData
+			namespace nsModelAnimationConstData
 			{
 				//!< プレイヤーのモデルデータのファイスパス
 				constexpr const char* const kPlayerModelFilePath = 
@@ -122,9 +122,10 @@ namespace nsMyGame
 					enAnim_walk,	//!< 歩く
 					enAnim_run,		//!< 走る
 					enAnim_jump,	//!< ジャンプ
+					enAnim_airIdle,	//!< 空中アイドル
 					enAnim_swingStart,	//!< スイングスタート
-					//enAnim_swinging,	//!< スインギング
-					//enAnim_swingToLand,	//!< スイングから着地
+					enAnim_swinging,	//!< スインギング
+					enAnim_swingRoll,	//!< スイングロール
 					enAnim_num		//!< アニメーションクリップの数
 				};
 
@@ -135,36 +136,41 @@ namespace nsMyGame
 					"Assets/animData/kunoichi/walk.tka",
 					"Assets/animData/kunoichi/run.tka",
 					"Assets/animData/kunoichi/jump.tka",
+					"Assets/animData/kunoichi/airIdle.tka",
 					"Assets/animData/kunoichi/swingStart.tka",
-
-					//"Assets/animData/sayaka_kunoichi_animation/ninjaIdle.tka",
-					//"Assets/animData/sayaka_kunoichi_animation/walk.tka",
-					//"Assets/animData/sayaka_kunoichi_animation/run.tka",
-					//"Assets/animData/sayaka_kunoichi_animation/jump.tka",
-					//"Assets/animData/sayaka_kunoichi_animation/swingStart.tka",
-					//"Assets/animData/sayaka_kunoichi_animation/swinging.tka",
-					//"Assets/animData/sayaka_kunoichi_animation/swingToLand.tka",
+					"Assets/animData/kunoichi/swinging.tka",
+					"Assets/animData/kunoichi/airAfterSwing.tka",
 
 				};
 
 				constexpr float kDefaultAnimInterpolateTime = 0.2f;	//!< デフォルトのアニメーション補完時間
+
+				//!< スイング中のアニメーションステート
+				enum EnSwingAnimState
+				{
+					enSwingAnim_swingStart,		//!< スイング開始
+					enSwingAnim_swing,			//!< スイング中
+					enSwingAnim_swingRoll,		//!< スイングロール
+					enSwingAnim_airAfterSwing,	//!< スイング後の空中状態
+				};
 
 			}
 
 			/**
 			 * @brief プレイヤーの糸のモデルクラスの定数データ
 			*/
-			namespace nsPlayerStringModelConstData
+			namespace nsStringModelConstData
 			{
 				//!< 糸のモデルファイルパス
 				constexpr const char* const kStringModelFilePath = "Assets/modelData/testString.tkm";
-				constexpr float kStretchedTime = 0.1f;	//!< 糸が伸びきるまでの時間
+				constexpr float kStretchedTime = 0.3f;	//!< 糸が伸びきるまでの時間
+				constexpr float kStartStretchHeight = 150.0f;	//!< 糸が伸びる開始座標の高さ
 			}
 
 			/**
 			 * @brief プレイヤー入力クラスの定数データ
 			*/
-			namespace nsPlayerInputConstData
+			namespace nsInputConstData
 			{
 				constexpr float kDPadInputPower = 1.0f;					//!< 十字キー入力の移動量
 				static const float kSquareRootOfTwo = std::sqrtf(2.0f);	//!< ルート2の値
@@ -174,21 +180,23 @@ namespace nsMyGame
 			/**
 			 * @brief プレイヤーカメラの定数データ
 			*/
-			namespace nsPlayerCameraConstData
+			namespace nsCameraConstData
 			{
 				constexpr float kCameraMaxSpeed = 10000.0f;	//!< カメラの最大速度
 				constexpr float kCameraRadius = 5.0f;		//!< カメラのコリジョンの半径
 
-				constexpr float kTargetOffsetUp = 40.0f;		//!< 注視点の上下のオフセット
+				constexpr float kTargetOffsetUp = 140.0f;		//!< 注視点の上下のオフセット
+				constexpr float kNearTargetOffsetUp = 80.0f;		//!< 注視点の上下のオフセット
 				constexpr float kTargetOffsetForward = 20.0f;	//!< 注視点の前後のオフセット
 
 				constexpr float kDefaultCameraFar = 100000.0f;	//!< デフォルトの遠平面
 
 				//!< デフォルトの注視点から視点へのベクトル
-				static const Vector3 kDefaultToCameraVec = { 0.0f,50.0f,-400.0f };
+				static const Vector3 kDefaultToCameraVec = { 0.0f,1.0f,-10.0f };
 
 				//!< デフォルトの注視点から視点への距離
-				constexpr float kDefaultToCameraDistance = 400.0f;
+				constexpr float kDefaultToCameraDistance = 300.0f;
+				constexpr float kNearToCameraDistance = 190.0f;
 
 				constexpr float kCameraRotSpeed = 3.0f;		//!< カメラの回転するスピード
 				//!< 注視点から視点への方向ベクトルのYの最大値。カメラの下向きの上限。
@@ -198,6 +206,8 @@ namespace nsMyGame
 
 				//!< バネの減衰率。値が大きいほど、カメラが遅れて追従してくる
 				constexpr float kSpringDampingRate = 0.7f;
+				constexpr float kHighSpringDampingRate = 1.0f;
+				constexpr float kLowSpringDampingRate = 0.3f;
 
 				constexpr float kAutoTurnStartTime = 1.0f;	//!< 自動でカメラが回転し始めるタイム
 				//!< 自動でカメラが回転時始めるタイマーをリセットするタイム

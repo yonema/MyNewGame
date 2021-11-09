@@ -14,7 +14,7 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// プレイヤーの糸クラスの定数データを使用可能にする
-		using namespace nsPlayerConstData::nsPlayerStringModelConstData;
+		using namespace nsPlayerConstData::nsStringModelConstData;
 
 		/**
 		 * @brief Updateの直前で呼ばれる開始処理
@@ -48,6 +48,9 @@ namespace nsMyGame
 		*/
 		void CPlayerStringModel::Update()
 		{
+			// 伸びる開始座標の計算
+			m_startStretchPos = m_playerRef->GetPosition();
+			m_startStretchPos.y += kStartStretchHeight;
 
 			// モデルを回転させる処理
 			ModelRotation();
@@ -59,7 +62,7 @@ namespace nsMyGame
 			// Z方向（前方向）に拡大する
 			scale.z += m_stretchSpeed;
 			// 伸びる先への距離ベクトル
-			const Vector3 distVec = m_toStretchPos - m_playerRef->GetPosition();
+			const Vector3 distVec = m_toStretchPos - m_startStretchPos;
 			// 伸びる先への距離の大きさ
 			const float distLen = distVec.Length();
 			// 拡大率が、伸びる先への距離の大きさより大きいか？
@@ -74,7 +77,7 @@ namespace nsMyGame
 
 			// モデルの拡大率と座標を設定する
 			m_modelRender->SetScale(scale);
-			m_modelRender->SetPosition(m_playerRef->GetPosition());
+			m_modelRender->SetPosition(m_startStretchPos);
 						
 			return;
 		}
@@ -92,7 +95,7 @@ namespace nsMyGame
 			m_toStretchPos = pos;
 
 			// 伸びる先へのベクトル
-			Vector3 toStretchVec = m_toStretchPos - m_playerRef->GetPosition();
+			Vector3 toStretchVec = m_toStretchPos - m_startStretchPos;
 			// 伸びる速度を設定する
 			m_stretchSpeed =
 				toStretchVec.Length() * nsTimer::CGameTime().GetFrameDeltaTime() / kStretchedTime;
@@ -109,7 +112,7 @@ namespace nsMyGame
 			// モデルの拡大率を初期化
 			m_modelRender->SetScale(Vector3::One);
 			// モデルの座標を設定する
-			m_modelRender->SetPosition(m_playerRef->GetPosition());
+			m_modelRender->SetPosition(m_startStretchPos);
 
 			return;
 		}
@@ -137,7 +140,7 @@ namespace nsMyGame
 		void CPlayerStringModel::ModelRotation()
 		{
 			// 伸ばす先への方向
-			Vector3 toStretchPosDir = m_toStretchPos - m_playerRef->GetPosition();
+			Vector3 toStretchPosDir = m_toStretchPos - m_startStretchPos;
 			// 正規化する
 			toStretchPosDir.Normalize();
 

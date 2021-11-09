@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "PlayerCamera.h"
 #include "Player.h"
-#include "PlayerConstData.h"
 
 namespace nsMyGame
 {
@@ -11,7 +10,7 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// プレイヤーカメラの定数データを使用可能にする
-		using namespace nsPlayerConstData::nsPlayerCameraConstData;
+		using namespace nsPlayerConstData::nsCameraConstData;
 
 		/**
 		 * @brief 初期化
@@ -229,9 +228,9 @@ namespace nsMyGame
 			// 回転速度の計算。プレイヤーの速度が速いほど、早く回転する。
 
 			// 最低補間率の速度
-			const float minRateSpeed = nsPlayerConstData::nsPlayerWalkAndRunConstData::kWalkMaxSpeed;
+			const float minRateSpeed = nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed;
 			// 最高補完率の速度
-			const float maxRateSpeed = nsPlayerConstData::nsPlayerSwingActionConstData::kInitialSwingSpeed;
+			const float maxRateSpeed = nsPlayerConstData::nsSwingActionConstData::kInitialSwingSpeed;
 			// 回転スピードの補完率。プレイヤーの速度に応じて、0.0f～1.0fの値に正規化する。
 			float turnSpeedRate = max(0.0f, m_playerRef->GetPlayerMovement().GetVelocity() - minRateSpeed);
 			turnSpeedRate = min(1.0f,turnSpeedRate / (maxRateSpeed - minRateSpeed));

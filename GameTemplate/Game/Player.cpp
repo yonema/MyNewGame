@@ -32,7 +32,9 @@ namespace nsMyGame
 			m_playerMove.Init(
 				kCapsuleRadius,
 				kDapsuleHeight,
-				this
+				this,
+				&m_playerCamera,
+				&m_playerModelAnimation
 				);
 
 			// プレイヤーの糸のモデルクラスの生成と初期化

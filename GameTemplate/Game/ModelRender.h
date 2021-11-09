@@ -171,6 +171,15 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief アニメーションが再生中か？を得る
+				 * @return アニメーションが再生中か？
+				*/
+				bool IsAnimationPlaying() const
+				{
+					return m_animationPtr->IsPlaying();
+				}
+
+				/**
 				 * @brief アニメーションのスピードを設定
 				 * @param[in] animSpeed アニメーションのスピード
 				*/

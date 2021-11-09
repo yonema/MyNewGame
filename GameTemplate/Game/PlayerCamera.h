@@ -1,6 +1,8 @@
 #pragma once
 #include "Noncopyable.h"
 #include "SpringCamera.h"
+#include "PlayerConstData.h"
+
 
 namespace nsMyGame
 {
@@ -58,20 +60,29 @@ namespace nsMyGame
 				return m_camera->GetRight();
 			}
 
-			void SetTargetOffsetUp(const float offsetUp)
+			/**
+			 * @brief バネカメラの減衰率を線形補完する。
+			 * 0.5fがデフォルトの減衰率。0.0fが最小の減衰率。1.0fが最大の減衰率。
+			 * 減衰率が高いほどカメラが遅れて付いてくる。
+			 * @param[in] rate 減衰率の線形補完率
+			*/
+			void LerpDampingRate(const float rate)
 			{
-				m_targetOffsetUp = offsetUp;
+				m_springCamera.SetDampingRate(Math::Lerp<float>(rate,0.7f,0.9f));
 			}
 
-			void SetCameraPositionOffsetUp(const float cameraPosUp)
+			/**
+			 * @brief 注視点の上下のオフセットを線形補完する。
+			 * 0.0fがデフォルトで最大のオフセット。1.0fが最小のオフセット。
+			 * オフセットが大きいほどキャラクターが画面の下に映る。
+			 * @param[in] rate 注視点の上下のオフセットの線形補完率
+			*/
+			void LerpTargetOffsetUp(const float rate)
 			{
-				m_cameraPositionOffsetUp = cameraPosUp;
+				m_targetOffsetUp = Math::Lerp<float>(rate, 120.0f,40.0f);
 			}
 
-			void SetToCameraDistance(const float distance)
-			{
-				m_toCameraDistance = distance;
-			}
+
 
 		private:	// privateなメンバ関数
 

@@ -14,7 +14,7 @@ namespace nsMyGame
 		// 共通データを使用可能にする
 		using namespace nsCommonData;
 		// プレイヤーの定数データを使用可能にする
-		using namespace nsPlayerConstData::nsPlayerModelRenderConstData;
+		using namespace nsPlayerConstData::nsModelAnimationConstData;
 
 		/**
 		* @brief デストラクタ
@@ -78,6 +78,8 @@ namespace nsMyGame
 				case enAnim_idle:
 				case enAnim_walk:
 				case enAnim_run:
+				case enAnim_airIdle:
+				case enAnim_swinging:
 					m_animationClips[i].SetLoopFlag(true);
 					break;
 				// ループしないアニメーション
@@ -153,30 +155,8 @@ namespace nsMyGame
 		*/
 		void CPlayerModelAnimation::UpdateAnimationTransition()
 		{
-			m_animState = enAnim_idle;
-
-			//switch (m_playerRef->GetState())
-			{
-				//case nsPlayerConstData::enWalkAndRun:
-
-					if (m_playerRef->GetPlayerMovement().GetVelocity() <= 10.0f)
-						m_animState = enAnim_idle;
-					else if (m_playerRef->GetPlayerMovement().GetVelocity() <= 800.0f)
-						m_animState = enAnim_walk;
-					else
-						m_animState = enAnim_run;
-
-					//if (m_playerRef->GetPlayerMovement().IsAir())
-					//	m_animState = enAnim_jump;
-
-
-				//	break;
-				//case nsPlayerConstData::enSwing:
-					//m_animState = enAnim_swingStart;
-
-				//	break;
-			}
-
+			// アニメーションステートを更新
+			UpdateAnimationState();
 
 			// アニメーション再生
 			// 前フレームと同じアニメーションをPlayした場合、なにもしない
@@ -185,6 +165,61 @@ namespace nsMyGame
 			return;
 		}
 
+		/**
+		 * @brief アニメーションステートを更新
+		*/
+		void CPlayerModelAnimation::UpdateAnimationState()
+		{
+			m_animState = enAnim_idle;
+
+			if (m_playerRef->GetState() == nsPlayerConstData::enSwing)
+			{
+				// スイング中のアニメーションステートを更新
+				UpdateSwingAnimationState();
+				return;
+			}
+
+			if (m_playerRef->GetPlayerMovement().GetVelocity() <= 10.0f)
+				m_animState = enAnim_idle;
+			else if (m_playerRef->GetPlayerMovement().GetVelocity() <= 800.0f)
+				m_animState = enAnim_walk;
+			else
+				m_animState = enAnim_run;
+
+			return;
+		}
+
+		/**
+		 * @brief スイング中のアニメーションステートを更新
+		*/
+		void CPlayerModelAnimation::UpdateSwingAnimationState()
+		{
+			switch (m_swingAnimSate)
+			{
+			case enSwingAnim_swingStart:
+				m_animState = enAnim_swingStart;
+				if (m_playerModel->IsAnimationPlaying() != true)
+				{
+					m_swingAnimSate = enSwingAnim_swing;
+				}
+				break;
+			case enSwingAnim_swing:
+				m_animState = enAnim_swinging;
+				break;
+			case enSwingAnim_swingRoll:
+				m_animState = enAnim_swingRoll;
+				if (m_playerModel->IsAnimationPlaying() != true)
+				{
+					m_swingAnimSate = enSwingAnim_airAfterSwing;
+				}
+				break;
+			case enSwingAnim_airAfterSwing:
+				m_animState = enAnim_airIdle;
+				break;
+			}
+
+			return;
+		}
 
 	}
 }

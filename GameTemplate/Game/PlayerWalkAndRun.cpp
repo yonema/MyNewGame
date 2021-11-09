@@ -17,9 +17,9 @@ namespace nsMyGame
 		namespace nsPlayerMovenent
 		{
 			// プレイヤーの歩きと走りクラスの定数データを使用可能にする
-			using namespace nsPlayerConstData::nsPlayerWalkAndRunConstData;
+			using namespace nsPlayerConstData::nsWalkAndRunConstData;
 			// ジャンプ力を使用可能にする
-			using nsPlayerConstData::nsPlayerMoveConstData::kJumpForce;
+			using nsPlayerConstData::nsMovementConstData::kJumpForce;
 
 			/**
 			 * @brief 初期化

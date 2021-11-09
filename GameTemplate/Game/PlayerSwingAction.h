@@ -12,6 +12,8 @@ namespace nsMyGame
 	{
 		// 前方宣言
 		class CPlayer;			// プレイヤークラス
+		class CPlayerCamera;	// プレイヤーのカメラクラス
+		class CPlayerModelAnimation; // プレイヤーモデルアニメーションクラス
 
 		/**
 		 * @brief プレイヤーの動き関連のネームスペース
@@ -28,7 +30,7 @@ namespace nsMyGame
 			{
 			private:	// エイリアス宣言
 				// スイングアクションのステート
-				using EnSwingActionState = nsPlayerConstData::nsPlayerSwingActionConstData::EnSwingActionState;
+				using EnSwingActionState = nsPlayerConstData::nsSwingActionConstData::EnSwingActionState;
 
 			public:		// コンストラクタとデストラクタ
 				/**
@@ -46,10 +48,14 @@ namespace nsMyGame
 				 * @brief 初期化
 				 * @param[in.out] player プレイヤー
 				 * @param[in,out] playerMovement プレイヤー移動クラスの参照
+				 * @param[in,out] playerCamera プレイヤーカメラクラスの参照
+				 * @param[in.out] playerModelAnimation プレイヤーモデルアニメーションの参照
 				*/
 				void Init(
 					CPlayer* player,
-					CPlayerMovement* playerMovement
+					CPlayerMovement* playerMovement,
+					CPlayerCamera* playerCamera,
+					CPlayerModelAnimation* playerModelAnimation
 				);
 
 				/**
@@ -110,15 +116,17 @@ namespace nsMyGame
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;					//!< プレイヤークラスの参照
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< プレイヤー移動クラスの参照
+				CPlayerCamera* m_playerCameraRef = nullptr;		//!< プレイヤーカメラクラスの参照
+				CPlayerModelAnimation* m_playerModelAnimationRef = nullptr;	//!< プレイヤーのモデルアニメーションの参照
 				const Vector3* m_swingTargetPos = nullptr;		//!< スイングターゲットの座標
 				//!< スイングアクションのステート
 				EnSwingActionState m_swingActionState = 
-					nsPlayerConstData::nsPlayerSwingActionConstData::enFindSwingTarget;
+					nsPlayerConstData::nsSwingActionConstData::enFindSwingTarget;
 				float m_swingRadAngle = 0.0f;						//!< スイングのラジアン角度
 				float m_swingSpeed = 0.0f;							//!< スイングスピード
 				//!< 減速し始めるスイングスピード
 				float m_startDecelerateSwingSpeed = 
-					nsPlayerConstData::nsPlayerSwingActionConstData::kStartDecelerateSwingSpeedInitialValue;
+					nsPlayerConstData::nsSwingActionConstData::kStartDecelerateSwingSpeedInitialValue;
 				Vector3 m_inputMoveDirXZ = Vector3::Zero;			//!< 入力によって生じたXZ平面での移動方向
 				float m_velocityAfterSwing = 0.0f;					//!< スイング後の速度
 				float m_accelerationAfterSwing = 0.0f;				//!< スイング後の加速

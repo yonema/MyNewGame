@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "PlayerMovement.h"
 #include "Player.h"
+#include "PlayerCamera.h"
+#include "PlayerModelAnimation.h"
+
 
 namespace nsMyGame
 {
@@ -16,18 +19,22 @@ namespace nsMyGame
 		namespace nsPlayerMovenent
 		{
 			// プレイヤー移動クラスの定数データを使用可能にする
-			using namespace nsPlayerConstData::nsPlayerMoveConstData;
+			using namespace nsPlayerConstData::nsMovementConstData;
 
 			/**
 			 * @brief 初期化
 			 * @param[in] radius カプセルコライダーの半径
 			 * @param[in] height カプセルコライダーの高さ
 			 * @param[in,out] player プレイヤーの参照
+			 * @param[in,out] playerCamera プレイヤーカメラの参照
+			 * @param[in.out] playerModelAnimation プレイヤーモデルアニメーションの参照
 			*/
 			void CPlayerMovement::Init(
 				const float radius,
 				const float height,
-				CPlayer* player
+				CPlayer* player,
+				CPlayerCamera* playerCamera,
+				CPlayerModelAnimation* playerModelAnimation
 			)
 			{
 				// プレイヤーの参照をセットする
@@ -40,7 +47,7 @@ namespace nsMyGame
 				m_playerWalkAndRun.Init(*m_playerRef, this);
 
 				// プレイヤーのスイングアクションクラスの初期化
-				m_playerSwingAction.Init(m_playerRef, this);
+				m_playerSwingAction.Init(m_playerRef, this, playerCamera, playerModelAnimation);
 
 				// プレイヤーの壁を走る処理クラスの初期化
 				m_playerWallRun.Init(m_playerRef, this);
@@ -99,13 +106,13 @@ namespace nsMyGame
 				}
 
 				// 重力をかける
-				m_moveVec.y -= nsPlayerConstData::nsPlayerMoveConstData::kGravityScale *
+				m_moveVec.y -= nsPlayerConstData::nsMovementConstData::kGravityScale *
 					nsTimer::GameTime().GetFrameDeltaTime();
 
 				// 重力の制限
-				//if (m_moveVec.y < -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed)
+				//if (m_moveVec.y < -nsPlayerConstData::nsMovementConstData::kMaxFallSpeed)
 				//{
-				//	m_moveVec.y = -nsPlayerConstData::nsPlayerMoveConstData::kMaxFallSpeed;
+				//	m_moveVec.y = -nsPlayerConstData::nsMovementConstData::kMaxFallSpeed;
 				//}
 
 				return;

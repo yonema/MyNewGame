@@ -14,7 +14,9 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		// 前方宣言
-		class CPlayer;	// プレイヤークラス
+		class CPlayer;			// プレイヤークラス
+		class CPlayerCamera;	// プレイヤーカメラクラス
+		class CPlayerModelAnimation; // プレイヤーモデルアニメーションクラス
 
 		/**
 		 * @brief プレイヤーの動き関連のネームスペース
@@ -43,11 +45,15 @@ namespace nsMyGame
 				 * @param[in] radius カプセルコライダーの半径
 				 * @param[in] height カプセルコライダーの高さ
 				 * @param[in,out] player プレイヤーの参照
+				 * @param[in,out] playerCamera プレイヤーカメラの参照
+				 * @param[in.out] playerModelAnimation プレイヤーモデルアニメーションの参照
 				*/
 				void Init(
 					const float radius,
 					const float height,
-					CPlayer* player
+					CPlayer* player,
+					CPlayerCamera* playerCamera,
+					CPlayerModelAnimation* playerModelAnimation
 				);
 
 				/**
