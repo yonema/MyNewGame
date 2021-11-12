@@ -103,39 +103,34 @@ namespace nsMyGame
 				if (m_playerMovementRef->IsAir() != true)
 				{
 					// スイングアクションを終了する
-					m_swingActionState = EnSwingActionState::enEnd;
+					ChangeState(enEnd);
 
 					// 早期リターン
 					return;
 				}
 
 
+				// ジャンプ入力があるか？、かつ
+				// スイング中か？
+				if (m_playerRef->GetInputData().actionJump &&
+					m_swingActionState == enIsSwinging)
+				{
+					m_swingRollFlag = true;
+
+					// ステートをスイング後の空中状態に遷移する
+					ChangeState(enIsAirAfterSwing);
+
+					// 早期リターン
+					return;
+				}
+
 				// スイングアクションをやめたか？かつ
 				// スイング後の空中状態ではないか？
 				if (m_playerRef->GetInputData().actionSwing != true &&
 					m_swingActionState != EnSwingActionState::enIsAirAfterSwing)
 				{
-						m_playerModelAnimationRef->SetSwingAnimState(
-						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_airAfterSwing
-					);
-					// スイング中にスイングをやめたか？
-					if (m_swingActionState == EnSwingActionState::enIsSwinging)
-					{
-						// スイング後の加速の初速をリセット
-						m_accelerationAfterSwing = kInitialVelocityOfAterSwingAcceleration;
-						// スイング後の速度を保持
-						m_velocityAfterSwing = m_playerMovementRef->GetVelocity();
-						// 入力によって生じたXZ平面での移動方向をリセット
-						m_inputMoveDirXZ = Vector3::Zero;
-						m_playerModelAnimationRef->SetSwingAnimState(
-							nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingRoll
-						);
-
-					}
 					// ステートをスイング後の空中状態に遷移する
-					m_swingActionState = EnSwingActionState::enIsAirAfterSwing;
-					// 糸に終了を知らせる
-					m_playerRef->EndStringStretchToPos();
+					ChangeState(enIsAirAfterSwing);
 
 					// 早期リターン
 					return;
@@ -267,19 +262,15 @@ namespace nsMyGame
 				if (m_swingTargetPos != nullptr)
 				{
 					// 見つかった
-					// 糸をスイングターゲットに向かって伸ばし始める
-					m_playerRef->StartStringStretchToPos(*m_swingTargetPos);
 					// ステートを糸を伸ばし中へ遷移する
-					m_swingActionState = EnSwingActionState::enIsStringStretching;
-					m_playerModelAnimationRef->SetSwingAnimState(
-						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingStart
-					);
+					ChangeState(enIsStringStretching);
+
 				}
 				else
 				{
 					// 見つからなかった
 					// ステートをスイング後の空中に遷移
-					m_swingActionState = EnSwingActionState::enIsAirAfterSwing;
+					ChangeState(enIsAirAfterSwing);
 				}
 
 				return;
@@ -298,41 +289,9 @@ namespace nsMyGame
 					return;
 				}
 
-				//////// 糸が伸びきった。スイングをする準備をする ////////
-
-				//////// ステート遷移 ////////
 				// 伸ばし切ったから、ステートをスイング中に遷移
-				m_swingActionState = EnSwingActionState::enIsSwinging;
+				ChangeState(enIsSwinging);
 
-				//////// パラメータのリセット ////////
-				// 減速し始めるスイングスピードを初期化する
-				m_startDecelerateSwingSpeed = kStartDecelerateSwingSpeedInitialValue;
-				// 入力によって生じたXZ平面での移動方向を初期化する
-				m_inputMoveDirXZ = Vector3::Zero;
-
-				m_counter = 0;
-				m_afterSwing = true;
-				//////// スイングスピードの初期速度の計算 ////////
-				// スイングスピードが初期速度より遅いか？
-				if (m_swingSpeed <= kInitialSwingSpeed)
-				{
-					// 遅い。初期速度のスイングスピードを設定する。落下速度が速いとスイングスピードも速くなる。
-					//m_swingSpeed = kInitialSwingSpeed +
-					//	fabsf(m_playerMovementRef->GetMoveVec().y) * kFallImpactRateForInitialSwingSpeed;
-					m_swingSpeed = 2000.0f;
-					m_g = 700.0f;
-
-					// 早期リターン
-					return;
-				}
-				m_g = m_playerMovementRef->GetVelocity();
-				// スイングスピードが最大速度を超えているか？
-				const float maxG = 1000.0f;
-				if (m_g > maxG)
-				{
-					// 超えている。最大速度に設定する。
-					m_g = maxG;
-				}
 				return;
 			}
 
@@ -343,10 +302,12 @@ namespace nsMyGame
 			{
 				nsDebug::DrawTextPanel(L"SwingAction");
 
-				const int counterMax = 30;
-				if (m_counter < counterMax)
-					m_counter++;
-				m_playerCameraRef->LerpDampingRate(/*0.5f - 0.5f*/1.0f - 1.0f * m_counter / counterMax);
+				const float counterTimer = 0.5f;
+				if (m_timer < counterTimer)
+					m_timer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				m_playerCameraRef->LerpDampingRate(/*0.5f - 0.5f*/1.0f - 1.0f * m_timer / counterTimer);
+
 				//////// 1.必要なベクトルを用意 ////////
 				
 				// プレイヤーからスイングターゲットまでのXZ平面でのベクトル
@@ -549,10 +510,13 @@ namespace nsMyGame
 				// 次のスイングへの遷移処理
 				if (m_playerRef->GetInputData().actionSwing == true)
 				{
-					// 下降中ならスイングへ移行できる
-					if (m_playerMovementRef->GetMoveVec().y < 0.0f)
+					// 下降中か？、かつ
+					// アニメーションが空中アイドル状態か？
+					if (m_playerMovementRef->GetMoveVec().y < 0.0f && 
+						m_playerRef->GetPlayerModelAnimation().GetAnimationState() ==
+						nsPlayerConstData::nsModelAnimationConstData::enAnim_airIdle)
 					{
-						m_swingActionState = enFindSwingTarget;
+						ChangeState(enFindSwingTarget);
 					}
 				}
 
@@ -577,6 +541,11 @@ namespace nsMyGame
 				if (m_afterSwing)
 				{
 					m_afterSwing = false;
+					if (m_swingRollFlag)
+					{
+						m_swingRollFlag = false;
+						addMoveVec.y += nsPlayerConstData::nsMovementConstData::kJumpForce;
+					}
 				}
 				else
 				{
@@ -616,13 +585,146 @@ namespace nsMyGame
 			void CPlayerSwingAction::EndSwing()
 			{
 				// ステートをスイングターゲットを探す状態に戻しておく
-				m_swingActionState = enFindSwingTarget;
+				ChangeState(enFindSwingTarget);
 				// 糸に終了を知らせる
 				m_playerRef->EndStringStretchToPos();
 				// プレイヤーのステートを歩きと走りにする
 				m_playerRef->ChangeWalkAndRunState();
 				// スイングスピードをリセット
 				m_swingSpeed = 0.0f;
+
+				return;
+			}
+
+			/**
+			 * @brief スイングアクションステートを変更する
+			 * @param swingActionState
+			*/
+			void CPlayerSwingAction::ChangeState(const EnSwingActionState swingActionState)
+			{
+				if (m_swingActionState == swingActionState)
+				{
+					// 同じなら変更する必要なし。早期リターン。
+					return;
+				}
+
+				// スイングアクションステートを変更
+				m_swingActionState = swingActionState;
+
+				//////// 変更した時一度だけ呼ばれる処理 ////////
+
+				// タイマーをリセットする
+				m_timer = 0.0f;
+
+				// 各種、変更した時一度だけ呼ばれるイベント
+				switch (m_swingActionState)
+				{
+				case enFindSwingTarget:
+					break;
+				case enIsStringStretching:
+					IsStringStretchingEvent();
+					break;
+				case enIsSwinging:
+					IsSwingingEvent();
+					break;
+				case enIsAirAfterSwing:
+					IsAirAfterSwingEvent();
+					break;
+				case enEnd:
+					break;
+				}
+
+				return;
+			}
+
+			/**
+			 * @brief 糸を伸ばし中に遷移するときに一度だけ呼ばれる関数
+			*/
+			void CPlayerSwingAction::IsStringStretchingEvent()
+			{
+				// 糸をスイングターゲットに向かって伸ばし始める
+				m_playerRef->StartStringStretchToPos(*m_swingTargetPos);
+				// 糸を伸ばし始めるアニメーションを再生する
+				m_playerModelAnimationRef->SetSwingAnimState(
+					nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingStart
+				);
+
+				return;
+			}
+
+			/**
+			 * @brief スイング中に遷移するときに一度だけ呼ばれる関数
+			*/
+			void CPlayerSwingAction::IsSwingingEvent()
+			{
+				// 減速し始めるスイングスピードを初期化する
+				m_startDecelerateSwingSpeed = kStartDecelerateSwingSpeedInitialValue;
+				// 入力によって生じたXZ平面での移動方向を初期化する
+				m_inputMoveDirXZ = Vector3::Zero;
+
+				m_afterSwing = true;
+
+
+				// スイングスピードが初期速度より遅いか？
+				if (m_swingSpeed <= kInitialSwingSpeed)
+				{
+					// 遅い。初期速度のスイングスピードを設定する。落下速度が速いとスイングスピードも速くなる。
+					//m_swingSpeed = kInitialSwingSpeed +
+					//	fabsf(m_playerMovementRef->GetMoveVec().y) * kFallImpactRateForInitialSwingSpeed;
+					m_swingSpeed = 2000.0f;
+					m_g = 700.0f;
+
+					// 早期リターン
+					return;
+				}
+				m_g = m_playerMovementRef->GetVelocity();
+				// スイングスピードが最大速度を超えているか？
+				const float maxG = 1000.0f;
+				if (m_g > maxG)
+				{
+					// 超えている。最大速度に設定する。
+					m_g = maxG;
+				}
+
+				return;
+			}
+
+			/**
+			 * @brief スイング後の空中に遷移するときに一度だけ呼ばれるイベント
+			*/
+			void CPlayerSwingAction::IsAirAfterSwingEvent()
+			{
+				// 糸に終了を知らせる
+				m_playerRef->EndStringStretchToPos();
+
+				if (m_swingRollFlag)
+				{
+					// スイングロールを行う
+					// スイング後の空中状態のアニメーションを再生する
+					m_playerModelAnimationRef->SetSwingAnimState(
+						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingRoll
+					);
+				}
+				else
+				{
+					// スイングロールを行わない
+					// スイング後の空中状態のアニメーションを再生する
+					m_playerModelAnimationRef->SetSwingAnimState(
+						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_airAfterSwing
+					);
+				}
+
+
+				// スイング中にスイングをやめたか？
+				if (m_afterSwing)
+				{
+					// スイング後の加速の初速をリセット
+					m_accelerationAfterSwing = kInitialVelocityOfAterSwingAcceleration;
+					// スイング後の速度を保持
+					m_velocityAfterSwing = m_playerMovementRef->GetVelocity();
+					// 入力によって生じたXZ平面での移動方向をリセット
+					m_inputMoveDirXZ = Vector3::Zero;
+				}
 
 				return;
 			}

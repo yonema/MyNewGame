@@ -113,6 +113,27 @@ namespace nsMyGame
 				*/
 				void EndSwing();
 
+				/**
+				 * @brief スイングアクションステートを変更する
+				 * @param swingActionState
+				*/
+				void ChangeState(const EnSwingActionState swingActionState);
+
+				/**
+				 * @brief 糸を伸ばし中に遷移するときに一度だけ呼ばれるイベント
+				*/
+				void IsStringStretchingEvent();
+
+				/**
+				 * @brief スイング中に遷移するときに一度だけ呼ばれるイベント
+				*/
+				void IsSwingingEvent();
+
+				/**
+				 * @brief スイング後の空中に遷移するときに一度だけ呼ばれるイベント
+				*/
+				void IsAirAfterSwingEvent();
+
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;					//!< プレイヤークラスの参照
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< プレイヤー移動クラスの参照
@@ -131,8 +152,9 @@ namespace nsMyGame
 				float m_velocityAfterSwing = 0.0f;					//!< スイング後の速度
 				float m_accelerationAfterSwing = 0.0f;				//!< スイング後の加速
 				float m_g = 0.0f;
-				int m_counter = 0;
-				bool m_afterSwing = false;
+				float m_timer = 0.0f;								//!< タイマー
+				bool m_afterSwing = false;							//!< スイングを行ったか？
+				bool m_swingRollFlag = false;						//!< スイングロールを行うか？
 			};
 		}
 	}

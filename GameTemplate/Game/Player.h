@@ -116,6 +116,15 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief プレイヤーモデルアニメーションクラスの参照を得る
+			 * @return プレイヤーモデルアニメーションクラスの参照
+			*/
+			const CPlayerModelAnimation& GetPlayerModelAnimation() const
+			{
+				return m_playerModelAnimation;
+			}
+
+			/**
 			 * @brief 歩きと走り状態へ遷移する
 			*/
 			void ChangeWalkAndRunState();

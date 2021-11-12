@@ -57,6 +57,15 @@ namespace nsMyGame
 				m_swingAnimSate = state;
 			}
 
+			/**
+			 * @brief アニメーションステートを得る
+			 * @return アニメーションステート
+			*/
+			nsPlayerConstData::nsModelAnimationConstData::EnAnimationClips GetAnimationState() const
+			{
+				return m_animState;
+			}
+
 
 
 		private:	// privateなメンバ関数
