@@ -33,7 +33,7 @@ namespace nsMyGame
 			{
 				constexpr float kGravityScale = 980.0f * 3.0f;	//!< 重力の強さ
 				constexpr float kMaxFallSpeed = 2000.0f;		//!< 最高落下速度
-				constexpr float kJumpForce = 1000.0f;	//!< ジャンプ力
+				constexpr float kJumpForce = 1500.0f;	//!< ジャンプ力
 				constexpr float kModelRotRate = 0.3f;	//!< モデルの回転の補間率
 				constexpr float kMoveVecMin = 0.001f;	//!< 移動ベクトルの最小値
 			}
@@ -121,10 +121,11 @@ namespace nsMyGame
 					//enAnim_ninjaIdle,	//!< 忍者アイドル
 					enAnim_walk,	//!< 歩く
 					enAnim_run,		//!< 走る
-					enAnim_jump,	//!< ジャンプ
+					enAnim_jumpUp,	//!< ジャンプ
 					enAnim_airIdle,	//!< 空中アイドル
 					enAnim_swingStart,	//!< スイングスタート
 					enAnim_swinging,	//!< スインギング
+					enAnim_swingRaiseLeg,	//!< 足を上げるスイング
 					enAnim_swingRoll,	//!< スイングロール
 					enAnim_num		//!< アニメーションクリップの数
 				};
@@ -135,11 +136,12 @@ namespace nsMyGame
 					"Assets/animData/kunoichi/idle.tka",
 					"Assets/animData/kunoichi/walk.tka",
 					"Assets/animData/kunoichi/run.tka",
-					"Assets/animData/kunoichi/jump.tka",
+					"Assets/animData/kunoichi/jumpUp.tka",
 					"Assets/animData/kunoichi/airIdle.tka",
 					"Assets/animData/kunoichi/swingStart.tka",
 					"Assets/animData/kunoichi/swinging.tka",
-					"Assets/animData/kunoichi/airAfterSwing.tka",
+					"Assets/animData/kunoichi/swingRaiseLeg.tka",
+					"Assets/animData/kunoichi/swingRoll.tka",
 
 				};
 
@@ -150,6 +152,7 @@ namespace nsMyGame
 				{
 					enSwingAnim_swingStart,		//!< スイング開始
 					enSwingAnim_swing,			//!< スイング中
+					enSwingAnim_swingRaiseLeg,	//!< 足を上げるスイング中
 					enSwingAnim_swingRoll,		//!< スイングロール
 					enSwingAnim_airAfterSwing,	//!< スイング後の空中状態
 				};

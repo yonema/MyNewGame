@@ -196,4 +196,17 @@ private:
 	Vector3 m_footstepDeltaValue = g_vec3Zero;					//footstepボーンの移動量。
 	bool m_isInited = false;
 	float m_deltaTimeOnUpdate = 0.0f;							//Update関数を実行したときのデルタタイム。
+
+	// 変更。追加。
+	public:
+
+		/**
+		 * @brief アニメーションの残り時間（比率）を得る
+		 * @return アニメーションの残り時間（比率）
+		*/
+		float GetTimeRemaining() const
+		{
+			int lastIndex = GetLastAnimationControllerIndex();
+			return m_animationPlayController[lastIndex].GetTimeRemaining();
+		}
 };

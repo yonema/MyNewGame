@@ -138,4 +138,18 @@ private:
 	Vector3					m_footstepDeltaValue = g_vec3Zero;	//フットステップの移動ベクトル。
 	Vector3					m_footstepPos = g_vec3Zero;			//フットステップボーンの座標。
 	int						m_footstepBoneNo = -1;				//フットステップのボーンの番号。
+
+	// 変更。追加。
+	float m_timeRemaining = 1.0f;	//!< アニメーションの残り時間（比率）
+
+	public:		// メンバ関数
+
+		/**
+		 * @brief アニメーションの残り時間（比率）を得る
+		 * @return アニメーションの残り時間（比率）
+		*/
+		float GetTimeRemaining() const
+		{
+			return m_timeRemaining;
+		}
 };

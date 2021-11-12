@@ -132,6 +132,7 @@ namespace nsMyGame
 				float m_accelerationAfterSwing = 0.0f;				//!< ƒXƒCƒ“ƒOŒã‚Ì‰Á‘¬
 				float m_g = 0.0f;
 				int m_counter = 0;
+				bool m_afterSwing = false;
 			};
 		}
 	}

@@ -180,6 +180,15 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief アニメーションの残り時間（比率）を得る
+				 * @return アニメーションの残り時間（比率）
+				*/
+				float GetAnimationTimeRemaining() const
+				{
+					return m_animationPtr->GetTimeRemaining();
+				}
+
+				/**
 				 * @brief アニメーションのスピードを設定
 				 * @param[in] animSpeed アニメーションのスピード
 				*/

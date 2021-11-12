@@ -109,6 +109,7 @@ namespace nsMyGame
 					return;
 				}
 
+
 				// スイングアクションをやめたか？かつ
 				// スイング後の空中状態ではないか？
 				if (m_playerRef->GetInputData().actionSwing != true &&
@@ -129,6 +130,7 @@ namespace nsMyGame
 						m_playerModelAnimationRef->SetSwingAnimState(
 							nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingRoll
 						);
+
 					}
 					// ステートをスイング後の空中状態に遷移する
 					m_swingActionState = EnSwingActionState::enIsAirAfterSwing;
@@ -276,7 +278,7 @@ namespace nsMyGame
 				else
 				{
 					// 見つからなかった
-					// ステートを終了へ遷移する
+					// ステートをスイング後の空中に遷移
 					m_swingActionState = EnSwingActionState::enIsAirAfterSwing;
 				}
 
@@ -309,7 +311,7 @@ namespace nsMyGame
 				m_inputMoveDirXZ = Vector3::Zero;
 
 				m_counter = 0;
-
+				m_afterSwing = true;
 				//////// スイングスピードの初期速度の計算 ////////
 				// スイングスピードが初期速度より遅いか？
 				if (m_swingSpeed <= kInitialSwingSpeed)
@@ -458,6 +460,9 @@ namespace nsMyGame
 					// 奥側
 
 					float radAngle = 3.14f * 0.5f;
+					m_playerModelAnimationRef->SetSwingAnimState(
+						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingRaiseLeg
+					);
 
 					// プレイヤーの高さがスイングターゲットより高くなったら。
 					if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
@@ -509,6 +514,7 @@ namespace nsMyGame
 				m_swingSpeed = std::sqrtf(m_swingSpeed);
 
 
+				//////// 4.スイング中の左右への方向転換 ////////
 				Vector3 rightDirXZ = m_playerCameraRef->GetCameraRight();
 				rightDirXZ.y = 0.0f;
 				rightDirXZ.Normalize();
@@ -539,20 +545,20 @@ namespace nsMyGame
 			void CPlayerSwingAction::AirAfterSwing()
 			{
 				nsDebug::DrawTextPanel(L"AirAfterSwing");
+
+				// 次のスイングへの遷移処理
 				if (m_playerRef->GetInputData().actionSwing == true)
 				{
-					m_swingActionState = enFindSwingTarget;
+					// 下降中ならスイングへ移行できる
+					if (m_playerMovementRef->GetMoveVec().y < 0.0f)
+					{
+						m_swingActionState = enFindSwingTarget;
+					}
 				}
+
+
 				m_playerCameraRef->LerpDampingRate(1.0f);
 
-
-
-				Vector3 addVec = Vector3::Zero;
-				Vector3 moveVec = m_playerMovementRef->GetMoveVec();
-				Vector3 moveVecXZ = moveVec;
-				moveVecXZ.y = 0.0f;
-				Vector3 addMoveDir = moveVecXZ;
-				addMoveDir.Normalize();
 				m_accelerationAfterSwing *= 0.99f;
 				if (m_accelerationAfterSwing < kMinVelocityOfAfterSwingAcceleration)
 				{
@@ -566,33 +572,41 @@ namespace nsMyGame
 					velocity = nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed;
 				}
 
-				if (m_playerRef->GetInputData().inputMoveAxis)
+				Vector3 addMoveVec = m_playerMovementRef->GetMoveVec();
+
+				if (m_afterSwing)
 				{
-
-					Vector3 rightDirXZ = m_playerCameraRef->GetCameraRight();
-					rightDirXZ.y = 0.0f;
-					rightDirXZ.Normalize();
-					float rightPower = m_playerRef->GetInputData().axisMoveRight / 7.0f;
-					rightDirXZ.Scale(rightPower);
-					m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, rightDirXZ);
-					addMoveDir += m_inputMoveDirXZ;
-
-					addMoveDir.Normalize();
-					addVec = addMoveDir;
-					addVec.Scale(velocity);
+					m_afterSwing = false;
 				}
 				else
 				{
-					Vector3 moveDirXZ = moveVecXZ;
-					moveDirXZ.Normalize();
-					moveDirXZ.Scale(velocity);
-					addVec = moveDirXZ;
+					addMoveVec.y = 0.0f;
 				}
+
+				addMoveVec.Normalize();
+				addMoveVec.Scale(velocity);
+
+				if (m_playerRef->GetInputData().inputMoveAxis)
+				{
+
+					//Vector3 rightDirXZ = m_playerCameraRef->GetCameraRight();
+					//rightDirXZ.y = 0.0f;
+					//rightDirXZ.Normalize();
+					//float rightPower = m_playerRef->GetInputData().axisMoveRight / 7.0f;
+					//rightDirXZ.Scale(rightPower);
+					//m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, rightDirXZ);
+					//addMoveDir += m_inputMoveDirXZ;
+
+					//addMoveDir.Normalize();
+					//addVec = addMoveDir;
+					//addVec.Scale(velocity);
+				}
+
 
 				m_playerMovementRef->ResetMoveVecX();
 				m_playerMovementRef->ResetMoveVecZ();
 
-				m_playerMovementRef->AddMoveVec(addVec);
+				m_playerMovementRef->AddMoveVec(addMoveVec);
 				return;
 			}
 

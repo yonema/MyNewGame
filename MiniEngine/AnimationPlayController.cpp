@@ -144,6 +144,9 @@ void AnimationPlayController::ProgressKeyframeNo(float deltaTime)
 	//補完時間も進めていく。
 	m_interpolateTime = min(1.0f, m_interpolateTime + deltaTime);
 	while (true) {
+		// 変更。追加。
+		m_timeRemaining = 1.0f - static_cast<float>(m_currentKeyFrameNo) / static_cast<float>(topBoneKeyFrameList.size());
+		// 変更ここまで。
 		if (m_currentKeyFrameNo >= (int)topBoneKeyFrameList.size()) {
 			//終端まで行った。
 			if (m_animationClip->IsLoop()) {

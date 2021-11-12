@@ -114,7 +114,6 @@ namespace nsMyGame
 				);
 			// シャドウキャスターを有効にする
 			m_playerModel->SetIsShadowCaster(true);
-			m_playerModel->SetAnimationSpeed(2.0f);
 
 			return;
 		}
@@ -170,8 +169,7 @@ namespace nsMyGame
 		*/
 		void CPlayerModelAnimation::UpdateAnimationState()
 		{
-			m_animState = enAnim_idle;
-
+			m_AnimInterpolateTime = 0.2f;
 			if (m_playerRef->GetState() == nsPlayerConstData::enSwing)
 			{
 				// スイング中のアニメーションステートを更新
@@ -179,12 +177,47 @@ namespace nsMyGame
 				return;
 			}
 
-			if (m_playerRef->GetPlayerMovement().GetVelocity() <= 10.0f)
+			// プレイヤーの速度
+
+			if (m_playerRef->GetPlayerMovement().IsAir())
+			{
+				if (m_animState != enAnim_airIdle)
+				{
+					m_playerModel->SetAnimationSpeed(2.0f);
+					if (m_playerModel->IsAnimationPlaying() == true)
+					{
+						m_AnimInterpolateTime = 0.0f;
+						m_animState = enAnim_jumpUp;
+					}
+					else
+					{
+						m_animState = enAnim_airIdle;
+					}
+				}
+
+				return;
+			}
+			const float playerVelocity = m_playerRef->GetPlayerMovement().GetVelocity();
+
+			if (playerVelocity <= 10.0f)
+			{
 				m_animState = enAnim_idle;
-			else if (m_playerRef->GetPlayerMovement().GetVelocity() <= 800.0f)
+				m_playerModel->SetAnimationSpeed(2.0f);
+			}
+			else if (playerVelocity <= nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed + 50.0f)
+			{
 				m_animState = enAnim_walk;
+				m_playerModel->SetAnimationSpeed(
+					1.0f + 1.0f * playerVelocity / nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed
+				);
+			}
 			else
+			{
 				m_animState = enAnim_run;
+				m_playerModel->SetAnimationSpeed(
+					2.0f * playerVelocity / nsPlayerConstData::nsWalkAndRunConstData::kRunMaxSpeed
+				);
+			}
 
 			return;
 		}
@@ -197,24 +230,34 @@ namespace nsMyGame
 			switch (m_swingAnimSate)
 			{
 			case enSwingAnim_swingStart:
-				m_animState = enAnim_swingStart;
-				if (m_playerModel->IsAnimationPlaying() != true)
+				if (m_playerModel->IsAnimationPlaying() != true && m_animState == enAnim_swingStart)
 				{
 					m_swingAnimSate = enSwingAnim_swing;
 				}
+				m_animState = enAnim_swingStart;
+				m_playerModel->SetAnimationSpeed(1.0f);
+
 				break;
 			case enSwingAnim_swing:
+				m_playerModel->SetAnimationSpeed(1.0f);
 				m_animState = enAnim_swinging;
 				break;
+			case enSwingAnim_swingRaiseLeg:
+				m_playerModel->SetAnimationSpeed(1.5f);
+				m_animState = enAnim_swingRaiseLeg;
+				break;
 			case enSwingAnim_swingRoll:
-				m_animState = enAnim_swingRoll;
-				if (m_playerModel->IsAnimationPlaying() != true)
+				if (m_playerModel->IsAnimationPlaying() != true && m_animState == enAnim_swingRoll)
 				{
 					m_swingAnimSate = enSwingAnim_airAfterSwing;
 				}
+				m_animState = enAnim_swingRoll;
+				m_AnimInterpolateTime = 0.0f;
+				m_playerModel->SetAnimationSpeed(2.0f);
 				break;
 			case enSwingAnim_airAfterSwing:
 				m_animState = enAnim_airIdle;
+				m_playerModel->SetAnimationSpeed(1.0f);
 				break;
 			}
 
