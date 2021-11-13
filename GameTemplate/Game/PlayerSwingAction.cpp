@@ -146,16 +146,12 @@ namespace nsMyGame
 			*/
 			void CPlayerSwingAction::FindSwingTarget()
 			{
-				// スイングターゲットへの距離
-				float dist = FLT_MAX;
+				//////// 1.糸を出す方向を決める ////////
 
-				// スイングターゲットを初期化
-				m_swingTargetPos = nullptr;
-
-				// スイングターゲットを探すベクトルを回す回転
+				// 糸を出す方向への回転クォータニオン
 				Quaternion swingRotationQRot = Quaternion::Identity;
 
-				// 糸を出す方向を決める
+				// 移動入力方向かカメラの前方向から糸を出す方向を決める
 				if (m_playerRef->GetInputData().inputMoveAxis)
 				{
 					// 移動の入力があったら移動入力の方向に糸を出す。
@@ -173,6 +169,29 @@ namespace nsMyGame
 					cameraDir.Normalize();
 					swingRotationQRot.SetRotation(Vector3::Front, cameraDir);
 				}
+				// 回転から糸を出す方向を求める
+				m_swingForwardDir = Vector3::Front;
+				swingRotationQRot.Apply(m_swingForwardDir);
+				m_swingForwardDir.Normalize();
+
+				//////// 2.スイングターゲットを探す ////////
+
+				// スイングターゲットへの距離
+				float dist = FLT_MAX;
+				// スイングターゲットを初期化
+				m_swingTargetPos = nullptr;
+				// 一番近いスイングターゲットのポイントの座標を探す処理のデータ
+				nsStringActionTarget::SFindNearestSwingTargetPointData findData;
+				// 共通のデータを設定する
+				// 有効範囲を設定
+				findData.findSwingTargetScopeRadius = kFindSwingTargetScope;
+				findData.findSwingTargetPointScopeRadius = kFindSwingTargetScope;
+				// スイングターゲットのポイントを探す下限を設定
+				findData.heightLowerLimit = m_playerRef->GetPosition().y + 500.0f;
+				// 前方向の制限の方向ベクトルを設定
+				findData.forwardLimitDir = m_swingForwardDir;
+				// 前方向の制限の原点を設定
+				findData.forwardLimitOrigin = m_playerRef->GetPosition();
 
 				// 複数の座標から、スイングターゲットを探す
 				for (int i = 0; i < kFindSwintTargetNum; i++)
@@ -182,19 +201,11 @@ namespace nsMyGame
 					// 糸を出す方向に回転させる
 					swingRotationQRot.Apply(toFindSwingTargetVec);
 
-					// 一番近いスイングターゲットのポイントの座標を探す処理のデータ
-					nsStringActionTarget::SFindNearestSwingTargetPointData findData;
+					// 個別のデータを設定する
 					// スイングターゲットを探すデータを設定
 					findData.findSwingTargetOrigin = m_playerRef->GetPosition() + toFindSwingTargetVec;
-					findData.findSwingTargetScopeRadius = kFindSwingTargetScope;
 					// スイングターゲットのポイントを探すデータを設定
 					findData.findSwingTargetPointOrigin = m_playerRef->GetPosition() + toFindSwingTargetVec;
-					findData.findSwingTargetPointScopeRadius = kFindSwingTargetScope;
-					// スイングターゲットのポイントを探す下限を設定
-					findData.heightLowerLimit = m_playerRef->GetPosition().y + 500.0f;
-					findData.forwardLimitDir = Vector3::Front;
-					m_playerRef->GetRotation().Apply(findData.forwardLimitDir);
-					findData.forwardLimitOrigin = m_playerRef->GetPosition();
 
 					// 指定された座標から有効範囲内にあるスイングターゲットの座標の中で一番近い座標を得る
 					const Vector3* swingTargetPos =
@@ -204,25 +215,6 @@ namespace nsMyGame
 					if (swingTargetPos == nullptr)
 					{
 						// 見つからなかった。次へ。
-						continue;
-					}
-
-					// プレイヤーからスイングターゲットへのベクトル
-					Vector3 toSwingTargetVec = *swingTargetPos - m_playerRef->GetPosition();
-					// プレイヤーからスイングターゲットへの方向ベクトル
-					Vector3 toSwingTargetDir = toSwingTargetVec;
-					toSwingTargetDir.Normalize();	// 正規化する
-
-					// 前方向ベクトル
-					Vector3 forward = Vector3::Front;
-					// プレイヤーのモデルの向きに回転させる
-					m_playerRef->GetRotation().Apply(forward);
-					forward.Normalize();	// 正規化する
-
-					// スイングターゲットへの方向ベクトルと、前方向ベクトルの内積が負か？
-					if (Dot(toSwingTargetDir, forward) <= 0.0f)
-					{
-						// 負。スイングターゲットがプレイヤーの後ろにあるからパス。次へ。
 						continue;
 					}
 
@@ -257,6 +249,8 @@ namespace nsMyGame
 					}
 
 				}
+
+				//////// 3.スイングターゲットが見つかったかどうかで処理を振り分ける ////////
 
 				// スイングターゲットが見つかったか？
 				if (m_swingTargetPos != nullptr)
@@ -315,20 +309,13 @@ namespace nsMyGame
 				// Y成分を消去
 				playerToTargetVecXZ.y = 0.0f;
 
-				// XZ平面での前方向
-				Vector3 forwardDirXZ = Vector3::Front;
-				// モデルの向きに回す
-				m_playerRef->GetRotation().Apply(forwardDirXZ);
-				// 正規化する
-				forwardDirXZ.Normalize();				
-
 				// XZ平面の前方向に、プレイヤーからスイングターゲットへのXZ平面のベクトルを射影する
-				float projectToTargetVecXZToForwardDirXZ = Dot(forwardDirXZ, playerToTargetVecXZ);
+				float projectToTargetVecXZToSwingForwardDir = Dot(m_swingForwardDir, playerToTargetVecXZ);
 
 				// XZ平面での、前方向のみの、スイングターゲットへのベクトル
-				Vector3 toTargetFowardVecXZ = forwardDirXZ;
+				Vector3 toTargetFowardVecXZ = m_swingForwardDir;
 				// 射影して求めた長さまで伸ばす
-				toTargetFowardVecXZ.Scale(projectToTargetVecXZToForwardDirXZ);
+				toTargetFowardVecXZ.Scale(projectToTargetVecXZToSwingForwardDir);
 
 				// XZ平面での、前方向のみの、スイングターゲットの座標
 				const Vector3 toTargetForwardPosXZ = m_playerRef->GetPosition() + toTargetFowardVecXZ;
@@ -347,8 +334,8 @@ namespace nsMyGame
 				targetUptoPlayerDir.Normalize();
 
 				// XZ平面での前方向と、スイングターゲットからプレイヤーへの方向の内積
-				float dotFowardDirXZAndToPlayerDir = 
-					Dot(forwardDirXZ, targetUptoPlayerDir);
+				float doSwingForwardDirAndToPlayerDir = 
+					Dot(m_swingForwardDir, targetUptoPlayerDir);
 
 				// 加算移動方向ベクトル
 				Vector3 addMoveDir = Vector3::Zero;
@@ -357,13 +344,13 @@ namespace nsMyGame
 				Quaternion qRotForAddMoveDir;
 
 				// 加算移動方向ベクトルを回転させる回転軸。
-				Vector3 rotAxisForAddMoveDir = Cross(targetUptoPlayerDir, forwardDirXZ);
+				Vector3 rotAxisForAddMoveDir = Cross(targetUptoPlayerDir, m_swingForwardDir);
 
 				// プレイヤーがスイングターゲットより上にいるか？
 				if (m_playerRef->GetPosition().y >= m_swingTargetPos->y)
 				{
 					// 上にいるとき、回転軸の求め方を変える
-					rotAxisForAddMoveDir = Cross(Vector3::Down, forwardDirXZ);
+					rotAxisForAddMoveDir = Cross(Vector3::Down, m_swingForwardDir);
 				}
 
 				// 求めた回転軸を正規化する
@@ -373,7 +360,7 @@ namespace nsMyGame
 				//////// 2.スイングの角度を計算 ////////
 
 				// 内積が負か？、つまり、スイングターゲットより手前側にいるか？
-				if (dotFowardDirXZAndToPlayerDir < 0.0f)
+				if (doSwingForwardDirAndToPlayerDir < 0.0f)
 				{
 					// 手前側
 
@@ -383,7 +370,7 @@ namespace nsMyGame
 						// 上にいる
 
 						// 0.0f～1.0fに変化するレート
-						float rate = dotFowardDirXZAndToPlayerDir + 1.0f;
+						float rate = doSwingForwardDirAndToPlayerDir + 1.0f;
 
 						// pattern1
 						// 指数関数的な変化にする
@@ -403,7 +390,7 @@ namespace nsMyGame
 						float radAngle = 3.14f * 0.5f * -rate;
 
 						// 進む方向をまっすぐ前にする
-						addMoveDir = forwardDirXZ;
+						addMoveDir = m_swingForwardDir;
 						// 回転クォータニオンを90度回転させる
 						qRotForAddMoveDir.SetRotation(rotAxisForAddMoveDir, radAngle/*3.14f * 0.5f*/);
 						// 加算移動方向ベクトルを回転させる
@@ -412,7 +399,7 @@ namespace nsMyGame
 					else
 					{
 						// 最低高度にいるため、まっすぐ進む。
-						addMoveDir = forwardDirXZ;
+						addMoveDir = m_swingForwardDir;
 					}
 
 				}
@@ -433,9 +420,9 @@ namespace nsMyGame
 						{
 							m_startDecelerateSwingSpeed = m_swingSpeed;
 						}
-						float rad = acosf(dotFowardDirXZAndToPlayerDir);
+						float rad = acosf(doSwingForwardDirAndToPlayerDir);
 						float angleRate = rad / (3.14f * 0.1f);
-						addMoveDir = forwardDirXZ;
+						addMoveDir = m_swingForwardDir;
 						// radAngle = 3.14f * 0.5f * min(1.0f, angleRate);
 						radAngle = Math::Lerp<float>(min(1.0f, angleRate), 3.14f * 0.4f, 3.14f * 0.5f);
 
@@ -491,10 +478,24 @@ namespace nsMyGame
 				Vector3 addMoveVec = addMoveDir;
 				addMoveVec.Scale(m_swingSpeed);
 
+				Vector3 moveDir = m_playerMovementRef->GetMoveVec();
+				moveDir.Normalize();
+				if (Dot(addMoveDir, moveDir) <= 0.0f)
+				{
+					m_playerMovementRef->ResetMoveVecX();
+					m_playerMovementRef->ResetMoveVecZ();
+				}
+
 
 				// 移動ベクトルに、加算移動ベクトルを加算する
 				m_playerMovementRef->AddMoveVec(addMoveVec);
 				m_playerMovementRef->LimitMoveVec(m_swingSpeed);
+
+				// スイングの前方向を更新
+				m_swingForwardDir = m_playerMovementRef->GetMoveVec();
+				// Y成分はなくす
+				m_swingForwardDir.y = 0.0f;
+				m_swingForwardDir.Normalize();
 
 				return;
 			}

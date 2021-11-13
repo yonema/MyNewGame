@@ -155,6 +155,7 @@ namespace nsMyGame
 				float m_timer = 0.0f;								//!< タイマー
 				bool m_afterSwing = false;							//!< スイングを行ったか？
 				bool m_swingRollFlag = false;						//!< スイングロールを行うか？
+				Vector3 m_swingForwardDir = Vector3::Front;			//!< スイングの前方向
 			};
 		}
 	}
