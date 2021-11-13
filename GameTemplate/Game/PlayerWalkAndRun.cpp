@@ -249,12 +249,12 @@ namespace nsMyGame
 				// ‹ó’†‚©H
 				if (m_playerMovementRef->IsAir())
 				{
-					// ‹ó’†‚Ì–€ŽC—Í
+					// ‹ó’†‚Ì–€ŽC
 					friction = kAirFriction;
 				}
 				else
 				{
-					// ’n–Êã‚Ì–€ŽC—Í
+					// ’n–Êã‚Ì–€ŽC
 					friction = kGroundFriction;
 				}
 

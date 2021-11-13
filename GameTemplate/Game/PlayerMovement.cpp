@@ -60,6 +60,9 @@ namespace nsMyGame
 			*/
 			void CPlayerMovement::ExecuteUpdate()
 			{
+				nsDebug::DrawTextPanel(L"CPlayerMovement::ExecuteUpdate()");
+				nsDebug::DrawTextPanel(std::to_wstring(GetXZSpeed()), L"XZSpeed");
+
 				// ステートを更新
 				UpdateState();
 
@@ -70,7 +73,6 @@ namespace nsMyGame
 				UpdateTurnPlayer();
 
 				nsDebug::DrawVector(m_playerRef->GetPosition(), m_moveVec, "playerVec");
-				nsDebug::DrawTextPanel(std::to_wstring(GetVelocity()), L"speed");
 
 				return;
 			}

@@ -13,7 +13,6 @@ namespace nsMyGame
 		namespace nsMapConstData
 		{
 			constexpr const char* const kPlayerName = "player";				//!< プレイヤーの名前
-			constexpr const char* const kBuildingName = "building";		//!< 建物の名前
 			constexpr const char* const kGoalName = "goal";					//!< ゴールの名前
 
 			/**

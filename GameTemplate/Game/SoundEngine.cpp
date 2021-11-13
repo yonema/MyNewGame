@@ -319,7 +319,7 @@ namespace nsMyGame
 				emitter.DopplerScaler = 1.0f;
 
 				soundSource->GetPosition().CopyTo(emitter.Position);
-				soundSource->GetVelocity().CopyTo(emitter.Velocity);
+				soundSource->GetXZSpeed().CopyTo(emitter.Velocity);
 
 				if (m_fUseInnerRadius) {
 					emitter.InnerRadius = 2.0f;

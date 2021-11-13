@@ -54,7 +54,7 @@ namespace nsMyGame
 							nsBuilding::CBuilding* building = 
 								NewGO<nsBuilding::CBuilding>(nsCommonData::enPriorityFirst, m_kBuildingName);
 							building->Init(
-								nsBuilding::nsBuildingConstData::enTestBuilding,
+								nsBuilding::nsBuildingConstData::enBuilding_L_01a,
 								objData.position,
 								objData.rotation
 							);

@@ -17,8 +17,10 @@ namespace nsMyGame
 		*/
 		namespace nsPlayerMovenent
 		{
+			// プレイヤーの定数データを使用可能にする
+			using namespace nsPlayerConstData;
 			// プレイヤーのスイングアクションクラスの定数データを使用可能にする
-			using namespace nsPlayerConstData::nsSwingActionConstData;
+			using namespace nsSwingActionConstData;
 
 
 			/**
@@ -275,8 +277,6 @@ namespace nsMyGame
 			*/
 			void CPlayerSwingAction::StringStretching()
 			{
-				nsDebug::DrawTextPanel(L"StringStretching");
-
 				// カメラの値を線形変化させる
 				CameraChangeLinearly();
 
@@ -298,8 +298,6 @@ namespace nsMyGame
 			*/
 			void CPlayerSwingAction::SwingAction()
 			{
-				nsDebug::DrawTextPanel(L"SwingAction");
-
 				// カメラの値を線形変化させる
 				// StringStretching()でも呼んでるが、変化しきる前に糸が伸びきってしまうかも
 				// しれないため、こちらでも呼ぶ
@@ -412,7 +410,7 @@ namespace nsMyGame
 
 					float radAngle = 3.14f * 0.5f;
 					m_playerModelAnimationRef->SetSwingAnimState(
-						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingRaiseLeg
+						nsModelAnimationConstData::enSwingAnim_swingRaiseLeg
 					);
 
 					// プレイヤーの高さがスイングターゲットより高くなったら。
@@ -509,23 +507,19 @@ namespace nsMyGame
 			*/
 			void CPlayerSwingAction::AirAfterSwing()
 			{
-				nsDebug::DrawTextPanel(L"AirAfterSwing");
-
 				// 次のスイングへの遷移処理
 				if (m_playerRef->GetInputData().actionSwing == true)
 				{
 					// 下降中か？、かつ
 					// アニメーションが空中アイドル状態か？
-					if (m_playerMovementRef->GetMoveVec().y < 0.0f && 
+					if (m_playerMovementRef->GetMoveVec().y < 0.0f &&
 						m_playerRef->GetPlayerModelAnimation().GetAnimationState() ==
-						nsPlayerConstData::nsModelAnimationConstData::enAnim_airIdle)
+						nsModelAnimationConstData::enAnim_airIdle)
 					{
 						ChangeState(enFindSwingTarget);
 					}
 				}
 
-				m_playerCameraRef->LerpDampingRate(1.0f);
-				m_playerCameraRef->LerpTargetOffsetUp(0.0f);
 
 				m_accelerationAfterSwing *= 0.99f;
 				if (m_accelerationAfterSwing < kMinVelocityOfAfterSwingAcceleration)
@@ -535,11 +529,6 @@ namespace nsMyGame
 				float velocity = m_velocityAfterSwing + m_accelerationAfterSwing;
 
 
-				if (velocity < nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed)
-				{
-					velocity = nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed;
-				}
-
 				Vector3 addMoveVec = m_playerMovementRef->GetMoveVec();
 
 				if (m_afterSwing)
@@ -548,7 +537,7 @@ namespace nsMyGame
 					if (m_swingRollFlag)
 					{
 						m_swingRollFlag = false;
-						addMoveVec.y += nsPlayerConstData::nsMovementConstData::kJumpForce;
+						addMoveVec.y += nsMovementConstData::kJumpForce;
 					}
 				}
 				else
@@ -561,10 +550,19 @@ namespace nsMyGame
 
 				if (m_playerRef->GetInputData().inputMoveAxis)
 				{
-
-					//Vector3 rightDirXZ = m_playerCameraRef->GetCameraRight();
-					//rightDirXZ.y = 0.0f;
-					//rightDirXZ.Normalize();
+					Vector3 forwardDirXZ = m_playerCameraRef->GetCameraForward();
+					forwardDirXZ.y = 0.0f;
+					forwardDirXZ.Normalize();
+					Vector3 rightDirXZ = m_playerCameraRef->GetCameraRight();
+					rightDirXZ.y = 0.0f;
+					rightDirXZ.Normalize();
+					Vector3 inputDirXZ = forwardDirXZ * m_playerRef->GetInputData().axisMoveForward;
+					inputDirXZ += rightDirXZ * m_playerRef->GetInputData().axisMoveRight;
+					//if (Dot(inputDirXZ,))
+					inputDirXZ *= nsWalkAndRunConstData::kWalkMaxSpeed / 5.0f;
+					m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, inputDirXZ);
+					//m_inputMoveDirXZ = inputDirXZ;
+					addMoveVec += m_inputMoveDirXZ;
 					//float rightPower = m_playerRef->GetInputData().axisMoveRight / 7.0f;
 					//rightDirXZ.Scale(rightPower);
 					//m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, rightDirXZ);
@@ -649,7 +647,7 @@ namespace nsMyGame
 				m_playerRef->StartStringStretchToPos(*m_swingTargetPos);
 				// 糸を伸ばし始めるアニメーションを再生する
 				m_playerModelAnimationRef->SetSwingAnimState(
-					nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingStart
+					nsModelAnimationConstData::enSwingAnim_swingStart
 				);
 				// カメラの値を線形変化させるタイマーをリセットする
 				m_cameraChangeLinearlyTimer = 0.0f;
@@ -682,7 +680,7 @@ namespace nsMyGame
 					// 早期リターン
 					return;
 				}
-				m_g = m_playerMovementRef->GetVelocity();
+				m_g = m_playerMovementRef->GetXZSpeed();
 				// スイングスピードが最大速度を超えているか？
 				const float maxG = 1000.0f;
 				if (m_g > maxG)
@@ -705,9 +703,9 @@ namespace nsMyGame
 				if (m_swingRollFlag)
 				{
 					// スイングロールを行う
-					// スイング後の空中状態のアニメーションを再生する
+					// スイングロールのアニメーションを再生する
 					m_playerModelAnimationRef->SetSwingAnimState(
-						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingRoll
+						nsModelAnimationConstData::enSwingAnim_swingRoll
 					);
 				}
 				else
@@ -715,7 +713,7 @@ namespace nsMyGame
 					// スイングロールを行わない
 					// スイング後の空中状態のアニメーションを再生する
 					m_playerModelAnimationRef->SetSwingAnimState(
-						nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_airAfterSwing
+						nsModelAnimationConstData::enSwingAnim_airAfterSwing
 					);
 				}
 
@@ -726,9 +724,19 @@ namespace nsMyGame
 					// スイング後の加速の初速をリセット
 					m_accelerationAfterSwing = kInitialVelocityOfAterSwingAcceleration;
 					// スイング後の速度を保持
-					m_velocityAfterSwing = m_playerMovementRef->GetVelocity();
+					m_velocityAfterSwing = m_playerMovementRef->GetXZSpeed();
 					// 入力によって生じたXZ平面での移動方向をリセット
 					m_inputMoveDirXZ = Vector3::Zero;
+					// カメラの値をリセット
+					m_playerCameraRef->LerpDampingRate(1.0f);
+					m_playerCameraRef->LerpTargetOffsetUp(0.0f);
+				}
+				else
+				{
+					// スイング中ではない
+					m_accelerationAfterSwing = 0.0f;
+					m_velocityAfterSwing = 0.0f;
+					ChangeState(enEnd);
 				}
 
 				return;

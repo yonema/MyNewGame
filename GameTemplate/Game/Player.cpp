@@ -60,14 +60,16 @@ namespace nsMyGame
 		*/
 		void CPlayer::Update()
 		{
+			nsDebug::DrawTextPanel(L"[CPlayer::Update()]");
+
 			switch (m_playerState)
 			{
 			case enWalkAndRun:
-				nsDebug::DrawTextPanel(L"[PlayerState:WalkAndRun]");
+				nsDebug::DrawTextPanel(L"PlayerState:WalkAndRun");
 				break;
 
 			case enSwing:
-				nsDebug::DrawTextPanel(L"[PlayerState:Swing]");
+				nsDebug::DrawTextPanel(L"PlayerState:Swing");
 
 				break;
 			}

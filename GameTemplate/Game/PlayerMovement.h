@@ -89,7 +89,7 @@ namespace nsMyGame
 				 * @brief ˆÚ“®‘¬“x‚ð“¾‚é
 				 * @return ˆÚ“®‘¬“x
 				*/
-				float GetVelocity() const
+				float GetXZSpeed() const
 				{
 					Vector3 moveVecXZ = m_moveVec;
 					moveVecXZ.y = 0.0f;

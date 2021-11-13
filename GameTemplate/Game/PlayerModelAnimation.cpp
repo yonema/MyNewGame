@@ -197,7 +197,7 @@ namespace nsMyGame
 
 				return;
 			}
-			const float playerVelocity = m_playerRef->GetPlayerMovement().GetVelocity();
+			const float playerVelocity = m_playerRef->GetPlayerMovement().GetXZSpeed();
 
 			if (playerVelocity <= 10.0f)
 			{

@@ -44,17 +44,28 @@ namespace nsMyGame
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
 						// 建物の生成
-						if (objData.EqualObjectName(kBuildingName))
+						if (objData.ForwardMatchName(nsBuilding::nsBuildingConstData::kBuildingForwardName))
 						{
+							for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
+							{
+								if (objData.EqualObjectName(
+									nsBuilding::nsBuildingConstData::kBuildingNames[i]) != true
+									)
+								{
+									continue;
+								}
+								nsBuilding::CBuilding* building =NewGO<nsBuilding::CBuilding>(
+									nsCommonData::enPriorityFirst,
+									nsBuilding::nsBuildingConstData::kBuildingNames[i]
+									);
+								building->Init(
+									static_cast<nsBuilding::nsBuildingConstData::EnBuildingType>(i),
+									objData.position,
+									objData.rotation
+								);
+								return true;
+							}
 
-							nsBuilding::CBuilding* building =
-								NewGO<nsBuilding::CBuilding>(nsCommonData::enPriorityFirst, kBuildingName);
-							building->Init(
-								nsBuilding::nsBuildingConstData::enTestBuilding,
-								objData.position,
-								objData.rotation
-							);
-							return true;
 						}
 						// プレイヤーの生成
 						else if (objData.EqualObjectName(kPlayerName))
@@ -94,15 +105,18 @@ namespace nsMyGame
 				DeleteGO(m_player);		// プレイヤークラスの破棄
 				DeleteGO(m_goal);		// ゴールを破棄
 
-				// 建物をすべて破棄
-				QueryGOs<nsBuilding::CBuilding>(
-					kBuildingName,
-					[&](nsBuilding::CBuilding* building)->bool
-					{
-						DeleteGO(building);
-						return true;
-					}
-				);
+				for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
+				{
+					// 建物をすべて破棄
+					QueryGOs<nsBuilding::CBuilding>(
+						nsBuilding::nsBuildingConstData::kBuildingNames[i],
+						[&](nsBuilding::CBuilding* building)->bool
+						{
+							DeleteGO(building);
+							return true;
+						}
+					);
+				}
 
 				DeleteGO(m_gameState);
 

@@ -181,7 +181,7 @@ namespace nsMyGame
 			/*!
 			* @brief	‰¹Œ¹‚ÌˆÚ“®‘¬“x‚ğæ“¾B
 			*/
-			const Vector3& GetVelocity() const
+			const Vector3& GetXZSpeed() const
 			{
 				return m_velocity;
 			}

@@ -52,8 +52,6 @@ namespace nsMyGame
 		*/
 		void CPlayerCamera::ExecuteUpdate()
 		{
-			nsDebug::DrawTextPanel(L"[Camera:Execute]");
-
 			// カメラの回転を計算する
 			CalcCameraRotation();
 
@@ -71,7 +69,6 @@ namespace nsMyGame
 			// バネカメラを更新する
 			UpdateSpringCamera(cameraPos, camereTargetPos);
 
-			nsDebug::DrawTextPanel(std::to_wstring(m_toCameraVec.Length()), L"m_toCameraVec");
 
 			return;
 		}
@@ -151,7 +148,6 @@ namespace nsMyGame
 		*/
 		void CPlayerCamera::AutoTurnToPlayerDestination()
 		{
-			nsDebug::DrawTextPanel(m_autoTurnStartTimerResetTimer, L"resetTimer");
 
 			// カメラの軸入力があるか？か、
 			// 移動の軸入力がないか？
@@ -232,14 +228,13 @@ namespace nsMyGame
 			// 最高補完率の速度
 			const float maxRateSpeed = nsPlayerConstData::nsSwingActionConstData::kInitialSwingSpeed;
 			// 回転スピードの補完率。プレイヤーの速度に応じて、0.0f～1.0fの値に正規化する。
-			float turnSpeedRate = max(0.0f, m_playerRef->GetPlayerMovement().GetVelocity() - minRateSpeed);
+			float turnSpeedRate = max(0.0f, m_playerRef->GetPlayerMovement().GetXZSpeed() - minRateSpeed);
 			turnSpeedRate = min(1.0f,turnSpeedRate / (maxRateSpeed - minRateSpeed));
 			// スピードの変化を指数関数的にする
 			turnSpeedRate = pow(turnSpeedRate, kAutoTurnSpeedRatePowPower);
 			// 回転するスピード
 			float turnSpeed = Math::Lerp(turnSpeedRate, kAutoTurnSpeedMin, kAutoTurnSpeedMax);
 
-			nsDebug::DrawTextPanel(std::to_wstring(turnSpeedRate), L"turnSpeedRate:");
 
 			// 現在のベクトルが、目標のベクトルの右側にあるか？
 			if (dotRightAndToCamDirXZ >= 0.0f)
@@ -247,13 +242,8 @@ namespace nsMyGame
 				// 現在のベクトルが右側、目標のベクトルが左側にあるから、左向きに回す
 				// 反対向きに回す
 				turnSpeed = -turnSpeed;
-				nsDebug::DrawTextPanel(L"CameraAutoTurn:Left");
 			}
-			else
-			{
-				// 現在のベクトルが左側、目標のベクトルが右側にあるから、右向きに回す
-				nsDebug::DrawTextPanel(L"CameraAutoTurn:Right");
-			}
+
 
 			// 回転クォータニオン
 			Quaternion qRot;
