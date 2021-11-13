@@ -115,7 +115,7 @@ namespace nsMyGame
 
 				/**
 				 * @brief スイングアクションステートを変更する
-				 * @param swingActionState
+				 * @param[in] swingActionState スイングアクションのステート
 				*/
 				void ChangeState(const EnSwingActionState swingActionState);
 
@@ -133,6 +133,11 @@ namespace nsMyGame
 				 * @brief スイング後の空中に遷移するときに一度だけ呼ばれるイベント
 				*/
 				void IsAirAfterSwingEvent();
+
+				/**
+				 * @brief カメラの値を線形変化させる
+				*/
+				void CameraChangeLinearly();
 
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;					//!< プレイヤークラスの参照
@@ -152,7 +157,7 @@ namespace nsMyGame
 				float m_velocityAfterSwing = 0.0f;					//!< スイング後の速度
 				float m_accelerationAfterSwing = 0.0f;				//!< スイング後の加速
 				float m_g = 0.0f;
-				float m_timer = 0.0f;								//!< タイマー
+				float m_cameraChangeLinearlyTimer = 0.0f;			//!< カメラの値の線形変化用のタイマー
 				bool m_afterSwing = false;							//!< スイングを行ったか？
 				bool m_swingRollFlag = false;						//!< スイングロールを行うか？
 				Vector3 m_swingForwardDir = Vector3::Front;			//!< スイングの前方向

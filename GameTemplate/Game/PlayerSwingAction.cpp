@@ -276,6 +276,10 @@ namespace nsMyGame
 			void CPlayerSwingAction::StringStretching()
 			{
 				nsDebug::DrawTextPanel(L"StringStretching");
+
+				// カメラの値を線形変化させる
+				CameraChangeLinearly();
+
 				// 伸びきってないか？
 				if (m_playerRef->IsStringStretched() != true)
 				{
@@ -296,11 +300,10 @@ namespace nsMyGame
 			{
 				nsDebug::DrawTextPanel(L"SwingAction");
 
-				const float counterTimer = 0.5f;
-				if (m_timer < counterTimer)
-					m_timer += nsTimer::GameTime().GetFrameDeltaTime();
-
-				m_playerCameraRef->LerpDampingRate(/*0.5f - 0.5f*/1.0f - 1.0f * m_timer / counterTimer);
+				// カメラの値を線形変化させる
+				// StringStretching()でも呼んでるが、変化しきる前に糸が伸びきってしまうかも
+				// しれないため、こちらでも呼ぶ
+				CameraChangeLinearly();
 
 				//////// 1.必要なベクトルを用意 ////////
 				
@@ -493,7 +496,7 @@ namespace nsMyGame
 
 				// スイングの前方向を更新
 				m_swingForwardDir = m_playerMovementRef->GetMoveVec();
-				// Y成分はなくす
+				// Y成分を消去
 				m_swingForwardDir.y = 0.0f;
 				m_swingForwardDir.Normalize();
 
@@ -521,8 +524,8 @@ namespace nsMyGame
 					}
 				}
 
-
 				m_playerCameraRef->LerpDampingRate(1.0f);
+				m_playerCameraRef->LerpTargetOffsetUp(0.0f);
 
 				m_accelerationAfterSwing *= 0.99f;
 				if (m_accelerationAfterSwing < kMinVelocityOfAfterSwingAcceleration)
@@ -593,6 +596,8 @@ namespace nsMyGame
 				m_playerRef->ChangeWalkAndRunState();
 				// スイングスピードをリセット
 				m_swingSpeed = 0.0f;
+				// カメラの減衰率をデフォルトに戻す
+				m_playerCameraRef->LerpDampingRate(0.0f);
 
 				return;
 			}
@@ -613,9 +618,6 @@ namespace nsMyGame
 				m_swingActionState = swingActionState;
 
 				//////// 変更した時一度だけ呼ばれる処理 ////////
-
-				// タイマーをリセットする
-				m_timer = 0.0f;
 
 				// 各種、変更した時一度だけ呼ばれるイベント
 				switch (m_swingActionState)
@@ -649,6 +651,8 @@ namespace nsMyGame
 				m_playerModelAnimationRef->SetSwingAnimState(
 					nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swingStart
 				);
+				// カメラの値を線形変化させるタイマーをリセットする
+				m_cameraChangeLinearlyTimer = 0.0f;
 
 				return;
 			}
@@ -726,6 +730,27 @@ namespace nsMyGame
 					// 入力によって生じたXZ平面での移動方向をリセット
 					m_inputMoveDirXZ = Vector3::Zero;
 				}
+
+				return;
+			}
+
+			/**
+			 * @brief カメラの値を線形変化させる
+			*/
+			void CPlayerSwingAction::CameraChangeLinearly()
+			{
+				if (m_cameraChangeLinearlyTimer >= kCameraLerpTime)
+				{
+					// タイマーが規定値を超えていたら、早期リターン。
+					return;
+				}
+
+				// タイマーを進める
+				m_cameraChangeLinearlyTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				// カメラの値を線形補完して変化させる
+				m_playerCameraRef->LerpDampingRate(1.0f - 1.0f * m_cameraChangeLinearlyTimer / kCameraLerpTime);
+				m_playerCameraRef->LerpTargetOffsetUp(1.0f * m_cameraChangeLinearlyTimer / kCameraLerpTime);
 
 				return;
 			}

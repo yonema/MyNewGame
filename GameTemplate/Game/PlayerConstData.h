@@ -101,7 +101,8 @@ namespace nsMyGame
 				constexpr float kMinVelocityOfAfterSwingAcceleration = 
 					kInitialVelocityOfAterSwingAcceleration * 0.1f;
 
-				constexpr float kMaxCameraOffsetUp = 40.0f;
+				// カメラの値を線形補完するタイム
+				constexpr float kCameraLerpTime = 0.25f;
 			}
 			/**
 			 * @brief プレイヤーモデルクラスの定数データ
@@ -188,8 +189,8 @@ namespace nsMyGame
 				constexpr float kCameraMaxSpeed = 10000.0f;	//!< カメラの最大速度
 				constexpr float kCameraRadius = 5.0f;		//!< カメラのコリジョンの半径
 
-				constexpr float kTargetOffsetUp = 140.0f;		//!< 注視点の上下のオフセット
-				constexpr float kNearTargetOffsetUp = 80.0f;		//!< 注視点の上下のオフセット
+				constexpr float kTargetOffsetUp = 120.0f;		//!< 注視点の上下のオフセット
+				constexpr float kNearTargetOffsetUp = 180.0f;	//!< 注視点の上下のオフセット
 				constexpr float kTargetOffsetForward = 20.0f;	//!< 注視点の前後のオフセット
 
 				constexpr float kDefaultCameraFar = 100000.0f;	//!< デフォルトの遠平面
@@ -207,10 +208,10 @@ namespace nsMyGame
 				//!< 注視点から視点への方向ベクトルのYの最小値。カメラの上向きの上限。
 				constexpr float kMinToCameraDirY = -0.5f;
 
-				//!< バネの減衰率。値が大きいほど、カメラが遅れて追従してくる
+				//!< バネの減衰率。値が大きいほど、カメラが遅れて追従してくる。
 				constexpr float kSpringDampingRate = 0.7f;
-				constexpr float kHighSpringDampingRate = 1.0f;
-				constexpr float kLowSpringDampingRate = 0.3f;
+				//!< 最大のばねの減衰率。通常より遅れてカメラが追従してくる。
+				constexpr float kMaxSpringDampingRate = 0.9f;
 
 				constexpr float kAutoTurnStartTime = 1.0f;	//!< 自動でカメラが回転し始めるタイム
 				//!< 自動でカメラが回転時始めるタイマーをリセットするタイム
