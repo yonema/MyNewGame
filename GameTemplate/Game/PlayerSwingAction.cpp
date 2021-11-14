@@ -51,6 +51,9 @@ namespace nsMyGame
 			void CPlayerSwingAction::Execute()
 			{
 				nsDebug::DrawTextPanel(L"[SwingAction:Execute]");
+				nsDebug::DrawTextPanel(m_g,L"m_g");
+				nsDebug::DrawTextPanel(m_swingSpeed,L"m_swingSpeed");
+
 
 				// スイングアクションの前に行う処理
 				PreSwingAction();
@@ -451,7 +454,7 @@ namespace nsMyGame
 				float highestCos = 0.0f;
 				// g = 重力加速度
 				m_g += 980.0f * nsTimer::CGameTime().GetFrameDeltaTime() * 0.25f;
-				const float maxG = 1200.0f;
+				const float maxG = 1500.0f;
 				if (m_g > maxG)
 				{
 					m_g = maxG;
@@ -470,15 +473,17 @@ namespace nsMyGame
 				float rightPower = m_playerRef->GetInputData().axisMoveRight / 7.0f;
 				rightDirXZ.Scale(rightPower);
 				m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, rightDirXZ);
-
 				addMoveDir += m_inputMoveDirXZ;
 
+				// 正規化して方向ベクトルにする
 				addMoveDir.Normalize();
 
 				// 加算移動ベクトル
 				Vector3 addMoveVec = addMoveDir;
 				addMoveVec.Scale(m_swingSpeed);
 
+				// 現在の移動方向と、スイングの加算移動方向が逆向きなら
+				// 現在の移動ベクトルをリセットする。
 				Vector3 moveDir = m_playerMovementRef->GetMoveVec();
 				moveDir.Normalize();
 				if (Dot(addMoveDir, moveDir) <= 0.0f)
@@ -520,34 +525,44 @@ namespace nsMyGame
 					}
 				}
 
-
+				// スイング後の加速の減衰
 				m_accelerationAfterSwing *= 0.99f;
 				if (m_accelerationAfterSwing < kMinVelocityOfAfterSwingAcceleration)
 				{
 					m_accelerationAfterSwing = kMinVelocityOfAfterSwingAcceleration;
 				}
+
+				// スイング後の速度どスイング後の加速を合わせて速度とする
 				float velocity = m_velocityAfterSwing + m_accelerationAfterSwing;
 
-
+				// 加算移動ベクトル
 				Vector3 addMoveVec = m_playerMovementRef->GetMoveVec();
 
+				// スイングの直後か？
 				if (m_afterSwing)
 				{
+					// スイングの直後ではなくする
 					m_afterSwing = false;
+					// スイングロールをするか？
 					if (m_swingRollFlag)
 					{
+						// スイングロールを行った
 						m_swingRollFlag = false;
+						// Y成分にジャンプを加える
 						addMoveVec.y += nsMovementConstData::kJumpForce;
 					}
 				}
 				else
 				{
+					// 最初以外はY成分は加えない
 					addMoveVec.y = 0.0f;
 				}
 
+				// 速度で伸ばす
 				addMoveVec.Normalize();
 				addMoveVec.Scale(velocity);
 
+				// 移動入力処理
 				if (m_playerRef->GetInputData().inputMoveAxis)
 				{
 					Vector3 forwardDirXZ = m_playerCameraRef->GetCameraForward();
@@ -558,19 +573,26 @@ namespace nsMyGame
 					rightDirXZ.Normalize();
 					Vector3 inputDirXZ = forwardDirXZ * m_playerRef->GetInputData().axisMoveForward;
 					inputDirXZ += rightDirXZ * m_playerRef->GetInputData().axisMoveRight;
-					//if (Dot(inputDirXZ,))
-					inputDirXZ *= nsWalkAndRunConstData::kWalkMaxSpeed / 5.0f;
-					m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, inputDirXZ);
-					//m_inputMoveDirXZ = inputDirXZ;
-					addMoveVec += m_inputMoveDirXZ;
-					//float rightPower = m_playerRef->GetInputData().axisMoveRight / 7.0f;
-					//rightDirXZ.Scale(rightPower);
-					//m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, rightDirXZ);
-					//addMoveDir += m_inputMoveDirXZ;
+					float radAngle = acosf(Dot(inputDirXZ, m_swingForwardDir));
+					if (radAngle <= 3.14f * 0.25f || radAngle >= 3.14f * 0.7f)
+					{
+						if (radAngle >= 3.14f * 0.7f)
+						{
+							m_velocityAfterSwing -= nsWalkAndRunConstData::kWalkAcceleration;
+							if (m_velocityAfterSwing <= nsWalkAndRunConstData::kWalkMaxSpeed)
+							{
+								ChangeState(enEnd);
+							}
+						}
+					}
+					else
+					{
+						inputDirXZ *= nsWalkAndRunConstData::kWalkMaxSpeed / 5.0f;
+						m_inputMoveDirXZ.Lerp(0.2f, m_inputMoveDirXZ, inputDirXZ);
+					}
 
-					//addMoveDir.Normalize();
-					//addVec = addMoveDir;
-					//addVec.Scale(velocity);
+					addMoveVec += m_inputMoveDirXZ;
+
 				}
 
 
@@ -672,17 +694,19 @@ namespace nsMyGame
 				if (m_swingSpeed <= kInitialSwingSpeed)
 				{
 					// 遅い。初期速度のスイングスピードを設定する。落下速度が速いとスイングスピードも速くなる。
-					//m_swingSpeed = kInitialSwingSpeed +
-					//	fabsf(m_playerMovementRef->GetMoveVec().y) * kFallImpactRateForInitialSwingSpeed;
-					m_swingSpeed = 2000.0f;
-					m_g = 700.0f;
+					m_g = Math::Lerp<float>(
+							min(1.0f, fabsf(m_playerMovementRef->GetMoveVec().y) / 5000.0f),
+							700.0f,
+							1200.0f
+							);
+					//m_g = 700.0f;
 
 					// 早期リターン
 					return;
 				}
 				m_g = m_playerMovementRef->GetXZSpeed();
 				// スイングスピードが最大速度を超えているか？
-				const float maxG = 1000.0f;
+				const float maxG = 1200.0f;
 				if (m_g > maxG)
 				{
 					// 超えている。最大速度に設定する。
@@ -730,6 +754,9 @@ namespace nsMyGame
 					// カメラの値をリセット
 					m_playerCameraRef->LerpDampingRate(1.0f);
 					m_playerCameraRef->LerpTargetOffsetUp(0.0f);
+					m_swingForwardDir = m_playerMovementRef->GetMoveVec();
+					m_swingForwardDir.y = 0.0f;
+					m_swingForwardDir.Normalize();
 				}
 				else
 				{

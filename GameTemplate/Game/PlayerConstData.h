@@ -88,7 +88,7 @@ namespace nsMyGame
 				// 減速し始めるスピードの初期値
 				constexpr float kStartDecelerateSwingSpeedInitialValue = -100.0f;
 
-				constexpr float kInitialSwingSpeed = 1500.0f;	//!< 最初のスイングスピード
+				constexpr float kInitialSwingSpeed = 2000.0f;	//!< 最初のスイングスピード
 				//!< 落下速度が最初のスイングスピードに与える影響率
 				constexpr float kFallImpactRateForInitialSwingSpeed = 0.5f;
 				constexpr float kMaxSwingSpeed = 4000.0f;	//!< 最大スイングスピード
