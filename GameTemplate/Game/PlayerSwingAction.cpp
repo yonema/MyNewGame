@@ -699,7 +699,6 @@ namespace nsMyGame
 							700.0f,
 							1200.0f
 							);
-					//m_g = 700.0f;
 
 					// ‘ŠúƒŠƒ^[ƒ“
 					return;

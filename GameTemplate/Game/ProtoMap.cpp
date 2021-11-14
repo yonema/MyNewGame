@@ -46,18 +46,23 @@ namespace nsMyGame
 						// 建物の生成
 						if (objData.ForwardMatchName(nsBuilding::nsBuildingConstData::kBuildingForwardName))
 						{
+							// 建物のタイプの数の分、当たるまで全部調べる
 							for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
 							{
 								if (objData.EqualObjectName(
 									nsBuilding::nsBuildingConstData::kBuildingNames[i]) != true
 									)
 								{
+									// 名前が一致しなければ次へ
 									continue;
 								}
+
+								// 名前が一致したら建物を生成する
 								nsBuilding::CBuilding* building =NewGO<nsBuilding::CBuilding>(
 									nsCommonData::enPriorityFirst,
 									nsBuilding::nsBuildingConstData::kBuildingNames[i]
 									);
+								// 建物のタイプを指定して初期化
 								building->Init(
 									static_cast<nsBuilding::nsBuildingConstData::EnBuildingType>(i),
 									objData.position,
@@ -105,6 +110,7 @@ namespace nsMyGame
 				DeleteGO(m_player);		// プレイヤークラスの破棄
 				DeleteGO(m_goal);		// ゴールを破棄
 
+				// 全てのタイプの建物を破棄
 				for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
 				{
 					// 建物をすべて破棄
