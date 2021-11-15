@@ -295,6 +295,7 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="AABB.cpp" />
+    <ClCompile Include="AlphaMap.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="BSP.cpp" />
     <ClCompile Include="Building.cpp" />
@@ -428,6 +429,7 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="AlphaMap.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="BSP.h" />
     <ClInclude Include="Building.h" />

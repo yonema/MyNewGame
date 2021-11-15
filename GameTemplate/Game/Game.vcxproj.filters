@@ -147,6 +147,9 @@
     <Filter Include="MyCode\Debug">
       <UniqueIdentifier>{4b8ba549-984e-4d14-a0e0-7a7d49c34520}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Maps\alphaMaps">
+      <UniqueIdentifier>{c48984b4-053c-49c7-9b77-21200d341d90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -490,6 +493,9 @@
     </ClCompile>
     <ClCompile Include="BSP.cpp">
       <Filter>MyCode\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="AlphaMap.cpp">
+      <Filter>MyCode\Maps\alphaMaps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -930,6 +936,9 @@
     </ClInclude>
     <ClInclude Include="BSP.h">
       <Filter>MyCode\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaMap.h">
+      <Filter>MyCode\Maps\alphaMaps</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

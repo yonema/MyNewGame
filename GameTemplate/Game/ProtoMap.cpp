@@ -37,6 +37,8 @@ namespace nsMyGame
 				m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
 				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day);
 
+				// プレイヤーの生成
+				m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPriorityFirst);
 
 				// レベルの生成
 				m_level3D.Init(
@@ -75,7 +77,6 @@ namespace nsMyGame
 						// プレイヤーの生成
 						else if (objData.EqualObjectName(kPlayerName))
 						{
-							m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPriorityFirst);
 							m_player->SetPosition(objData.position);
 							m_player->SetRotation(objData.rotation);
 
@@ -87,6 +88,16 @@ namespace nsMyGame
 							m_goal = NewGO <nsGoal::CGoal>(nsCommonData::enPriorityFirst);
 							m_goal->Init(objData.position, objData.rotation, objData.scale, *m_player);
 
+							return true;
+						}
+						else if (objData.EqualObjectName("StreetTree"))
+						{
+							nsGraphic::nsModel::CModelRender* treeModel = 
+								NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFinal,"StreetTree");
+							treeModel->SetPosition(objData.position);
+							treeModel->SetRotation(objData.rotation);
+							treeModel->SetScale(objData.scale);
+							treeModel->IniTranslucent("Assets/modelData/streetElements/StreetTree.tkm");
 							return true;
 						}
 
@@ -123,6 +134,15 @@ namespace nsMyGame
 						}
 					);
 				}
+
+				QueryGOs<nsGraphic::nsModel::CModelRender>(
+					"StreetTree",
+					[](nsGraphic::nsModel::CModelRender* treeModel)->bool
+					{
+						DeleteGO(treeModel);
+						return true;
+					}
+				);
 
 				DeleteGO(m_gameState);
 

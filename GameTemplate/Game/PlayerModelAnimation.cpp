@@ -106,12 +106,12 @@ namespace nsMyGame
 			m_playerModel->SetRotation(m_playerRef->GetRotation());
 
 			// プレイヤーモデルレンダラーの初期化
-			//m_playerModel->Init(kPlayerModelFilePath, m_animationClips, enAnim_num, enModelUpAxisY);
-			m_playerModel->IniTranslucent(
-				kPlayerModelFilePath,
-				m_animationClips,
-				enAnim_num
-				);
+			m_playerModel->Init(kPlayerModelFilePath, m_animationClips, enAnim_num);
+			//m_playerModel->IniTranslucent(
+			//	kPlayerModelFilePath,
+			//	m_animationClips,
+			//	enAnim_num
+			//	);
 			// シャドウキャスターを有効にする
 			m_playerModel->SetIsShadowCaster(true);
 

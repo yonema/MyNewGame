@@ -6,6 +6,7 @@
 #include "TestMapForLevel3D.h"
 #include "TestMapForPlayerMove.h"
 #include "ProtoMap.h"
+#include "AlphaMap.h"
 #include "DirectionalLight.h"
 
 /**
@@ -31,7 +32,7 @@ namespace nsMyGame
 			//m_gameDirectionalLight->SetDirection(dir);
 			//m_gameDirectionalLight->SetColor({ 2.0f,2.0f,2.0f,1.0f });
 
-			m_mapNum = 5;
+			m_mapNum = 6;
 
 			// ˆê”Ô–Ú‚Ì—Dæ“x
 			using nsCommonData::enPriorityFirst;
@@ -55,6 +56,9 @@ namespace nsMyGame
 				break;
 			case 5:
 				NewGO<nsMaps::nsProtoMaps::CProtoMap>(enPriorityFirst, m_mapName);
+				break;
+			case 6:
+				NewGO<nsMaps::nsAlphaMaps::CAlphaMap>(enPriorityFirst, m_mapName);
 				break;
 			default:
 				break;
@@ -91,6 +95,9 @@ namespace nsMyGame
 				break;
 			case 5:
 				DeleteGO(FindGO<nsMaps::nsProtoMaps::CProtoMap>(m_mapName));
+				break;
+			case 6:
+				DeleteGO(FindGO<nsMaps::nsAlphaMaps::CAlphaMap>(m_mapName));
 				break;
 			default:
 				break;

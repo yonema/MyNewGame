@@ -454,7 +454,7 @@ namespace nsMyGame
 				float highestCos = 0.0f;
 				// g = 重力加速度
 				m_g += 980.0f * nsTimer::CGameTime().GetFrameDeltaTime() * 0.25f;
-				const float maxG = 1500.0f;
+				const float maxG = 2500.0f;
 				if (m_g > maxG)
 				{
 					m_g = maxG;
@@ -462,7 +462,16 @@ namespace nsMyGame
 				// l = 振り子の長さ
 				const float l = toTargetForwardUpToPlayerVec.Length();
 				// v任 = √2gl(cosΘ任 - cosΘ上)
-				m_swingSpeed = 2.0f * m_g * l * (anyCos - highestCos);
+				if (doSwingForwardDirAndToPlayerDir < 0.0f)
+				{
+					// 手前側なら角度による減速しない
+					m_swingSpeed = 2.0f * m_g * l;
+				}
+				else
+				{
+					// 奥側なら、上に上がるほど減速する
+					m_swingSpeed = 2.0f * m_g * l * (anyCos - highestCos);
+				}
 				m_swingSpeed = std::sqrtf(m_swingSpeed);
 
 
@@ -705,7 +714,7 @@ namespace nsMyGame
 				}
 				m_g = m_playerMovementRef->GetXZSpeed();
 				// スイングスピードが最大速度を超えているか？
-				const float maxG = 1200.0f;
+				const float maxG = 2000.0f;
 				if (m_g > maxG)
 				{
 					// 超えている。最大速度に設定する。

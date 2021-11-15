@@ -22,7 +22,8 @@ namespace nsMyGame
 			{
 				enLevelProto,	//!< プロト用レベル
 				enLevelProto2,	//!< プロト用レベル2
-				enLevelProto3,	//!< プロト用レベル2
+				enLevelProto3,	//!< プロト用レベル3
+				enLevelAlpha,	//!< アルファ用レベル
 				enLevelTypeNum	//!< レベルの種類の数
 			};
 
@@ -33,7 +34,8 @@ namespace nsMyGame
 			{
 				"Assets/levelData/level_proto.tkl",
 				"Assets/levelData/level_proto2.tkl",
-				"Assets/levelData/level_proto3.tkl"
+				"Assets/levelData/level_proto3.tkl",
+				"Assets/levelData/level_alpha.tkl"
 			};
 
 		}

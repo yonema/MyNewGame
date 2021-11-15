@@ -193,7 +193,7 @@ namespace nsMyGame
 				constexpr float kNearTargetOffsetUp = 180.0f;	//!< 注視点の上下のオフセット
 				constexpr float kTargetOffsetForward = 20.0f;	//!< 注視点の前後のオフセット
 
-				constexpr float kDefaultCameraFar = 100000.0f;	//!< デフォルトの遠平面
+				constexpr float kDefaultCameraFar = 250000.0f;	//!< デフォルトの遠平面
 
 				//!< デフォルトの注視点から視点へのベクトル
 				static const Vector3 kDefaultToCameraVec = { 0.0f,1.0f,-10.0f };
