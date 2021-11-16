@@ -371,7 +371,7 @@ void TkmFile::Load(const char* filePath)
 			auto& vertex = meshParts.vertexBuffer[vertNo];
 			vertex.pos.Set(vertexTmp.pos[0], vertexTmp.pos[1], vertexTmp.pos[2]);
 			//vertex.pos.Set(-vertexTmp.pos[0], -vertexTmp.pos[1], vertexTmp.pos[2]);
-			//vertex.pos.Set(-vertexTmp.pos[0], -vertexTmp.pos[1], vertexTmp.pos[2]);
+			//vertex.pos.Set(-vertexTmp.pos[0], vertexTmp.pos[1], vertexTmp.pos[2]);
 		//	vertex.normal.Set(vertexTmp.normal[0], vertexTmp.normal[1], vertexTmp.normal[2]);
 			vertex.normal = g_vec3Zero;
 			vertex.tangent = g_vec3Zero;

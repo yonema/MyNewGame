@@ -100,10 +100,12 @@ namespace nsMyGame
 		private:	// データメンバ
 			const CPlayer* m_playerRef = nullptr;						//!< プレイヤーの参照
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
+			nsGraphic::nsModel::CModelRender* m_tipModelRender = nullptr;	//!< モデルレンダラー
 			bool m_isStretched = true;									//!< 伸びきっているか？
 			Vector3 m_startStretchPos = Vector3::Zero;					//!< 伸びる開始座標
 			Vector3 m_toStretchPos = Vector3::Zero;						//!< 伸びる先の座標
 			float m_stretchSpeed = 0.0f;								//!< 伸びる速度
+			float m_stretchRate = 0.0f;
 		};
 
 	}

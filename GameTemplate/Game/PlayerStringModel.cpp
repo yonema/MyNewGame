@@ -26,9 +26,15 @@ namespace nsMyGame
 			m_modelRender = NewGO <nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 			// 初期化
 			m_modelRender->Init(kStringModelFilePath);
-
 			// 無効化する
 			m_modelRender->Deactivate();
+
+			// モデルレンダラーの生成
+			m_tipModelRender = NewGO <nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
+			// 初期化
+			m_tipModelRender->Init(kStringModelFilePath);
+			// 無効化する
+			m_tipModelRender->Deactivate();
 
 			return true;
 		}
@@ -39,6 +45,7 @@ namespace nsMyGame
 		void CPlayerStringModel::OnDestroy()
 		{
 			DeleteGO(m_modelRender);
+			DeleteGO(m_tipModelRender);
 
 			return;
 		}
@@ -57,26 +64,49 @@ namespace nsMyGame
 			
 			// 伸ばす処理
 
-			// 拡大率を取得
-			Vector3 scale = m_modelRender->GetScale();
-			// Z方向（前方向）に拡大する
-			scale.z += m_stretchSpeed;
-			// 伸びる先への距離ベクトル
-			const Vector3 distVec = m_toStretchPos - m_startStretchPos;
-			// 伸びる先への距離の大きさ
-			const float distLen = distVec.Length();
-			// 拡大率が、伸びる先への距離の大きさより大きいか？
-			if (scale.z > distLen)
+			// 伸ばす率を増やす
+			m_stretchRate += nsTimer::GameTime().GetFrameDeltaTime() / kStretchedTime;
+
+			if (m_stretchRate >= 1.0f)
 			{
-				// 大きい
-				// 拡大率を距離に合わせる
-				scale.z = distLen;
 				// 伸びきった
 				m_isStretched = true;
+				// 最大率を上限にする
+				m_stretchRate = 1.0f;
+			}
+
+			// 伸ばす座標へのベクトル
+			const Vector3 toStretchPosVec = m_toStretchPos - m_startStretchPos;
+			// 伸ばす座標への距離
+			const float toStretchPosDist = toStretchPosVec.Length();
+			// 伸ばす率で、伸ばす長さを決める
+			float stretchLength = Math::Lerp<float>(m_stretchRate, 0.0f, toStretchPosDist);
+
+			// 手元側のモデルの拡大率
+			float atHandModelScale = stretchLength;
+
+			// 手元側のモデルの拡大率が最大値より大きいか？
+			if (atHandModelScale > 500.0f)
+			{
+				// 最大値に固定する
+				atHandModelScale = 500.0f;
+
+				// 先端側のモデルを有効化する
+				m_tipModelRender->Activate();
+
+				// 先端側のモデルの拡大率を計算
+				float tipModelScale = stretchLength - atHandModelScale;
+				m_tipModelRender->SetScale({ 1.0f,1.0f,tipModelScale });
+
+				Vector3 toTipVec = Vector3::Front;
+				m_tipModelRender->GetRotation().Apply(toTipVec);
+				toTipVec.Normalize();
+				toTipVec.Scale(500.0f - 60.0f);
+				m_tipModelRender->SetPosition(m_startStretchPos + toTipVec);
 			}
 
 			// モデルの拡大率と座標を設定する
-			m_modelRender->SetScale(scale);
+			m_modelRender->SetScale({1.0f,1.0f,atHandModelScale });
 			m_modelRender->SetPosition(m_startStretchPos);
 						
 			return;
@@ -131,6 +161,10 @@ namespace nsMyGame
 			// モデルを無効化する
 			m_modelRender->Deactivate();
 
+			m_tipModelRender->Deactivate();
+
+			m_stretchRate = 0.0f;
+
 			return;
 		}
 
@@ -161,6 +195,8 @@ namespace nsMyGame
 
 			// モデルに回転を設定する
 			m_modelRender->SetRotation(qRot);
+
+			m_tipModelRender->SetRotation(qRot);
 
 			return;
 		}
