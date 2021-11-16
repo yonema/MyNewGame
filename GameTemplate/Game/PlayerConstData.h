@@ -166,7 +166,7 @@ namespace nsMyGame
 			namespace nsStringModelConstData
 			{
 				//!< 糸のモデルファイルパス
-				constexpr const char* const kStringModelFilePath = "Assets/modelData/Props/chain.tkm";
+				constexpr const char* const kStringModelFilePath = "Assets/modelData/props/chain.tkm";
 				constexpr float kStretchedTime = 0.3f;	//!< 糸が伸びきるまでの時間
 				constexpr float kStartStretchHeight = 150.0f;	//!< 糸が伸びる開始座標の高さ
 			}

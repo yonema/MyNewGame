@@ -39,16 +39,11 @@ namespace nsMyGame
 		*/
 		void CGoal::Update()
 		{
-			// プレイヤーへのベクトル
-			Vector3 toPlayerVec = m_player->GetPosition() - m_goalMR->GetPosition();
+			// クルクル回転し続ける
+			Rotationg();
 
-			// プレイヤーとの距離がゴールのしきい値以下か？
-			if (toPlayerVec.Length() <= kGoalThreshold)
-			{
-				// ゴールのしきい値以下
-				// ゴール
-				nsGameState::GameMainState()->Goal();
-			}
+			// ゴールしているかを調べる
+			CheckIsGoal();
 
 			return;
 		}
@@ -83,5 +78,44 @@ namespace nsMyGame
 			return;
 		}
 
+		/**
+		 * @brief クルクル回転し続ける
+		*/
+		void CGoal::Rotationg()
+		{
+			m_rotateAngle += kRotateSpeed;
+			if (m_rotateAngle > 360.0f)
+			{
+				m_rotateAngle -= 360.0f;
+			}
+
+			Quaternion rotatingQRot = Quaternion::Identity;
+			rotatingQRot.SetRotationDegY(m_rotateAngle);
+			Quaternion tiltQRot = Quaternion::Identity;
+			tiltQRot.SetRotationDegZ(kTiltAngle);
+
+			m_goalMR->SetRotation(rotatingQRot * tiltQRot);
+
+			return;
+		}
+
+		/**
+		 * @brief ゴールしているかを調べる
+		*/
+		void CGoal::CheckIsGoal()
+		{
+			// プレイヤーへのベクトル
+			Vector3 toPlayerVec = m_player->GetPosition() - m_goalMR->GetPosition();
+
+			// プレイヤーとの距離がゴールのしきい値以下か？
+			if (toPlayerVec.Length() <= kGoalThreshold)
+			{
+				// ゴールのしきい値以下
+				// ゴール
+				nsGameState::GameMainState()->Goal();
+			}
+
+			return;
+		}
 	}
 }

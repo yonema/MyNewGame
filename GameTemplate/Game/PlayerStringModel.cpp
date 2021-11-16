@@ -65,7 +65,10 @@ namespace nsMyGame
 			// L‚Î‚·ˆ—
 
 			// L‚Î‚·—¦‚ð‘‚â‚·
-			m_stretchRate += nsTimer::GameTime().GetFrameDeltaTime() / kStretchedTime;
+			if (m_isStretched != true)
+			{
+				m_stretchRate += nsTimer::GameTime().GetFrameDeltaTime() / kStretchedTime;
+			}
 
 			if (m_stretchRate >= 1.0f)
 			{

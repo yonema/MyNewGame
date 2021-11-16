@@ -59,9 +59,22 @@ namespace nsMyGame
 				nsPlayer::CPlayer& player
 				);
 
+		private:
+
+			/**
+			 * @brief クルクル回転し続ける
+			*/
+			void Rotationg();
+
+			/**
+			 * @brief ゴールしているかを調べる
+			*/
+			void CheckIsGoal();
+
 		private:	// データメンバ
 			nsGraphic::nsModel::CModelRender* m_goalMR = nullptr;	//!< ゴールのモデルレンダラー
 			const nsPlayer::CPlayer* m_player = nullptr;			//!< プレイヤー
+			float m_rotateAngle = 0.0f;
 		};
 
 	}
