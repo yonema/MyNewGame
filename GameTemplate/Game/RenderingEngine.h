@@ -121,6 +121,26 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief ddsファイルのリソースをリソースバンクから取得。未登録の場合はnullptrを戻す。
+			 * @param[in] filePath ファイルパス
+			 * @return ddsファイルのリソース
+			*/
+			char* GetDdsFileFromBank(const char* filePath)
+			{
+				return m_ddsFileBank.Get(filePath);
+			}
+
+			/**
+			 * @brief ddsファイルのリソースをリソースバンクに登録
+			 * @param[in] filePath ファイルパス
+			 * @param[in] ddsFile ddsファイル
+			*/
+			void RegistDdsFileToBank(const char* filePath, char* ddsFile)
+			{
+				m_ddsFileBank.Regist(filePath, ddsFile);
+			}
+
+			/**
 			 * @brief 指定したGBufferのカラーフォーマットを取得
 			 * @param[in] enGBufferNo GBufferの番号
 			 * @return カラーフォーマット
@@ -283,6 +303,7 @@ namespace nsMyGame
 
 			nsUtil::TResourceBank<TkmFile> m_tkmFileBank;	//!< tkmファイルバンク
 			nsUtil::TResourceBank<Shader> m_shaderBank;		//!< シェーダーバンク
+			nsUtil::TResourceBank<char> m_ddsFileBank;	//!< ddsファイルバンク
 
 		private:	// staticなデータメンバ
 			static CRenderingEngine* m_instance;		//!< 唯一のインスタンス
