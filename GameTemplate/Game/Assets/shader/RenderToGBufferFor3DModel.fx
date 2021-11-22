@@ -102,7 +102,6 @@ SPSOut PSMainCore( SPSIn psIn/*, int isShadowReciever*/)
     psOut.normal.xyz = GetNormalFromNormalMap( 
         psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv ) ;
     psOut.normal.w = 1.0f;
-    psOut.normal.xyz = float3(-1.0f, 0.0f, 0.0f);
     // MSAOを出力。
     psOut.MSAO = g_spacular.Sample(g_sampler, psIn.uv);
 

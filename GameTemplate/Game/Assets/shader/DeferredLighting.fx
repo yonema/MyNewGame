@@ -122,8 +122,10 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float3 msao = g_msaoMap.SampleLevel(g_sampler, psIn.uv, 0);
 	//金属度をサンプリング。
 	float metaric = msao.r;
+	metaric = 0.5f;
 	//スムース
 	float smooth = msao.g;
+	smooth = 0.5f;
 	// アンビエントオクルージョンマップ
 	float ambientOcclusion = msao.b;
 
