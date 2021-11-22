@@ -43,7 +43,7 @@ public:
 	/// <returns></returns>
 	const std::unique_ptr<char[]>& GetSpecularMap() const
 	{
-		return m_zeroValueMap;
+		return m_specMap;
 	}
 	/// <summary>
 	/// スペキュラマップのサイズを取得。
@@ -51,7 +51,7 @@ public:
 	/// <returns></returns>
 	unsigned int GetSpecularMapSize() const
 	{
-		return m_zeroValueMapSize;
+		return m_specMapSize;
 	}
 	/// <summary>
 	/// アルベドマップを取得。
@@ -108,4 +108,55 @@ private:
 	unsigned int m_normalMapSize = 0;		//法線マップのサイズ。
 	std::unique_ptr<char[]> m_zeroValueMap;	//0の値を格納しているマップ。
 	unsigned int m_zeroValueMapSize = 0;	//0の値を格納しているマップのサイズ。
+
+	// 変更。追加。
+public:
+	/**
+	 * @brief アルベドマップのファイルパスを取得
+	 * @return アルベドマップのファイルパス
+	*/
+	const char* GetAlbedoMapFilePath() const
+	{
+		return m_albedoMapFilePath;
+	}
+	/**
+	 * @brief 法線マップのファイルパスを取得
+	 * @return 法線マップのファイルパス
+	*/
+	const char* GetNormalMapFilePath() const
+	{
+		return m_normalMapFilePath;
+	}
+	/**
+	 * @brief スペキュラマップのファイルパスを取得
+	 * @return スペキュラマップのファイルパス
+	*/
+	const char* GetSpecularMapFilePath() const
+	{
+		return m_specMapFilePath;
+	}
+	/**
+	 * @brief 反射マップのファイルパスを取得
+	 * @return 反射マップのファイルパス
+	*/
+	const char* GetReflectionMapFilePath() const
+	{
+		return m_zeroValueMapFilePath;
+	}
+	/**
+	 * @brief 屈折マップのファイルパスを取得
+	 * @return 屈折マップのファイルパス
+	*/
+	const char* GetRefractionMapFilePath() const
+	{
+		return m_zeroValueMapFilePath;
+	}
+private:
+	std::unique_ptr<char[]>	m_specMap;		//スペキュラマップ。
+	unsigned int m_specMapSize = 0;			//スペキュラマップのサイズ。
+
+	const char* m_albedoMapFilePath;
+	const char* m_normalMapFilePath;
+	const char* m_specMapFilePath;
+	const char* m_zeroValueMapFilePath;
 };

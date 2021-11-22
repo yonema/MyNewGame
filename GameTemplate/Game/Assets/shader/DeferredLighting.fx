@@ -63,7 +63,7 @@ cbuffer IBLCb : register (b3)
 ///////////////////////////////////////
 Texture2D<float4> albedoTexture : register(t0);     // アルベド
 Texture2D<float4> normalTexture : register(t1);     // 法線
-Texture2D<float4> metallicShadowSmoothTexture : register(t2);   // メタリック、シャドウ、スムーステクスチャ。rに金属度、gに影パラメータ、aに滑らかさ。
+Texture2D<float4> g_msaoMap : register(t2);		//Metaaric,Smooth,AmbientOcclusionマップ
 Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t3);  //シャドウマップ。
 TextureCube<float4> g_skyCubeMap : register(t15);
 // タイルごとのポイントライトのインデックスのリスト
@@ -118,17 +118,19 @@ float4 PSMain(SPSIn psIn) : SV_Target0
     float3 worldPos = CalcWorldPosFromUVZ(psIn.uv, albedoColor.w, mViewProjInv);
     //スペキュラカラーをサンプリング。
     float3 specColor = albedoColor.xyz;
-    //金属度をサンプリング。
-    float metaric = metallicShadowSmoothTexture.SampleLevel(g_sampler, psIn.uv, 0).r;
-    //スムース
-    float smooth = metallicShadowSmoothTexture.SampleLevel(g_sampler, psIn.uv, 0).a;
-    if (smooth >= 1.0f)
-        smooth = 0.0f;
-	smooth = 0.5f;
+	//MSAOマップをサンプリング
+	float3 msao = g_msaoMap.SampleLevel(g_sampler, psIn.uv, 0);
+	//金属度をサンプリング。
+	float metaric = msao.r;
+	//スムース
+	float smooth = msao.g;
+	// アンビエントオクルージョンマップ
+	float ambientOcclusion = msao.b;
+
 
 
     //影生成用のパラメータ。
-    float shadowParam = metallicShadowSmoothTexture.Sample(g_sampler, psIn.uv).g;
+	float shadowParam = 0.0f;//normalTexture.Sample(g_sampler, psIn.uv).w;
 
     // 視線に向かって伸びるベクトルを計算する
     float3 toEye = normalize(eyePos - worldPos);

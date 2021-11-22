@@ -11,49 +11,213 @@ enum {
 	
 void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 {
+	// テクスチャが貼られてないとき用のヌルテクスチャ
 	const auto& nullTextureMaps = g_graphicsEngine->GetNullTextureMaps();
-	if (tkmMat.albedoMap != nullptr) {
-		m_albedoMap.InitFromMemory(tkmMat.albedoMap, tkmMat.albedoMapSize);
+
+	// テクスチャ初期化用のデータ
+	const char* filePath = nullptr;
+	char* map = nullptr;
+	unsigned int mapSize;
+	Texture* textureMap = nullptr;
+
+	//////// アルベドマップ ////////
+
+	// 初期化データを設定する
+	if (tkmMat.albedoMap != nullptr)
+	{
+		// アルベドマップが貼られている
+
+		// テクスチャ初期化用のデータを取得
+		filePath = tkmMat.albedoMapFilePath.c_str();
+		map = tkmMat.albedoMap;
+		mapSize = tkmMat.albedoMapSize;
 	}
-	else {
-		m_albedoMap.InitFromMemory(
-			nullTextureMaps.GetAlbedoMap().get(), 
-			nullTextureMaps.GetAlbedoMapSize());
-	}
-	if (tkmMat.normalMap != nullptr) {
-		m_normalMap.InitFromMemory(tkmMat.normalMap, tkmMat.normalMapSize);
-	}
-	else {
-		m_normalMap.InitFromMemory(
-			nullTextureMaps.GetNormalMap().get(), 
-			nullTextureMaps.GetNormalMapSize());
-	}
-	if (tkmMat.specularMap != nullptr) {
-		m_specularMap.InitFromMemory(tkmMat.specularMap, tkmMat.specularMapSize);
-	}
-	else {
-		m_specularMap.InitFromMemory(
-			nullTextureMaps.GetSpecularMap().get(),
-			nullTextureMaps.GetSpecularMapSize());
+	else
+	{
+		// アルベドマップが貼られていない
+
+		// ヌルテクスチャのデータを取得
+		filePath = nullTextureMaps.GetAlbedoMapFilePath();
+		map = nullTextureMaps.GetAlbedoMap().get();
+		mapSize = nullTextureMaps.GetAlbedoMapSize();
 	}
 
-	if (tkmMat.reflectionMap != nullptr) {
-		m_reflectionMap.InitFromMemory(tkmMat.reflectionMap, tkmMat.reflectionMapSize);
-	}
-	else {
-		m_reflectionMap.InitFromMemory(
-			nullTextureMaps.GetReflectionMap().get(),
-			nullTextureMaps.GetReflectionMapSize());
+	// テクスチャバンクからリソースを探して取ってくる
+	textureMap = nsMyGame::nsMyEngine::
+		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
+
+	if (textureMap == nullptr)
+	{
+		// リソースがなかったら新しく生成する
+		textureMap = new Texture();
+		textureMap->InitFromMemory(map, mapSize);
+		// リソースを登録する
+		nsMyGame::nsMyEngine::
+			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
 	}
 
-	if (tkmMat.refractionMap != nullptr) {
-		m_refractionMap.InitFromMemory(tkmMat.refractionMap, tkmMat.refractionMapSize);
+	// アルベドマップにテクスチャリソースを設定する
+	m_albedoMap = textureMap;
+
+
+	//////// 法線マップ ////////
+
+	// 初期化データを設定する
+	if (tkmMat.normalMap != nullptr)
+	{
+		// 法線マップが貼られている
+
+		// テクスチャ初期化用のデータを取得
+		filePath = tkmMat.normalMapFilePath.c_str();
+		map = tkmMat.normalMap;
+		mapSize = tkmMat.normalMapSize;
 	}
-	else {
-		m_refractionMap.InitFromMemory(
-			nullTextureMaps.GetRefractionMap().get(),
-			nullTextureMaps.GetRefractionMapSize());
+	else
+	{
+		// 法線マップが貼られていない
+
+		// ヌルテクスチャのデータを取得
+		filePath = nullTextureMaps.GetNormalMapFilePath();
+		map = nullTextureMaps.GetNormalMap().get();
+		mapSize = nullTextureMaps.GetNormalMapSize();
 	}
+
+	// テクスチャバンクからリソースを探して取ってくる
+	textureMap = nsMyGame::nsMyEngine::
+		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
+
+	if (textureMap == nullptr)
+	{
+		// リソースがなかったら新しく生成する
+		textureMap = new Texture();
+		textureMap->InitFromMemory(map, mapSize);
+		// リソースを登録する
+		nsMyGame::nsMyEngine::
+			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
+	}
+
+	// 法線マップにテクスチャリソースを設定する
+	m_normalMap = textureMap;
+
+	//////// スペキュラマップ ////////
+
+	// 初期化データを設定する
+	if (tkmMat.specularMap != nullptr)
+	{
+		// スペキュラマップが貼られている
+
+		// テクスチャ初期化用のデータを取得
+		filePath = tkmMat.specularMapFilePath.c_str();
+		map = tkmMat.specularMap;
+		mapSize = tkmMat.specularMapSize;
+	}
+	else
+	{
+		// スペキュラマップが貼られていない
+
+		// ヌルテクスチャのデータを取得
+		filePath = nullTextureMaps.GetSpecularMapFilePath();
+		map = nullTextureMaps.GetSpecularMap().get();
+		mapSize = nullTextureMaps.GetSpecularMapSize();
+	}
+
+	// テクスチャバンクからリソースを探して取ってくる
+	textureMap = nsMyGame::nsMyEngine::
+		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
+
+	if (textureMap == nullptr)
+	{
+		// リソースがなかったら新しく生成する
+		textureMap = new Texture();
+		textureMap->InitFromMemory(map, mapSize);
+		// リソースを登録する
+		nsMyGame::nsMyEngine::
+			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
+	}
+
+	// スペキュラマップにテクスチャリソースを設定する
+	m_specularMap = textureMap;
+
+
+	//////// 反射マップ ////////
+
+	// 初期化データを設定する
+	if (tkmMat.reflectionMap != nullptr)
+	{
+		// 反射マップが貼られている
+
+		// テクスチャ初期化用のデータを取得
+		filePath = tkmMat.reflectionMapFilePath.c_str();
+		map = tkmMat.reflectionMap;
+		mapSize = tkmMat.reflectionMapSize;
+	}
+	else
+	{
+		// 反射マップが貼られていない
+
+		// ヌルテクスチャのデータを取得
+		filePath = nullTextureMaps.GetReflectionMapFilePath();
+		map = nullTextureMaps.GetReflectionMap().get();
+		mapSize = nullTextureMaps.GetReflectionMapSize();
+	}
+
+	// テクスチャバンクからリソースを探して取ってくる
+	textureMap = nsMyGame::nsMyEngine::
+		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
+
+	if (textureMap == nullptr)
+	{
+		// リソースがなかったら新しく生成する
+		textureMap = new Texture();
+		textureMap->InitFromMemory(map, mapSize);
+		// リソースを登録する
+		nsMyGame::nsMyEngine::
+			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
+	}
+
+	// 反射にテクスチャリソースを設定する
+	m_reflectionMap = textureMap;
+
+
+	//////// 屈折マップ ////////
+
+	// 初期化データを設定する
+	if (tkmMat.refractionMap != nullptr)
+	{
+		// 屈折マップが貼られている
+
+		// テクスチャ初期化用のデータを取得
+		filePath = tkmMat.refractionMapFilePath.c_str();
+		map = tkmMat.refractionMap;
+		mapSize = tkmMat.refractionMapSize;
+	}
+	else
+	{
+		// 屈折マップが貼られていない
+
+		// ヌルテクスチャのデータを取得
+		filePath = nullTextureMaps.GetRefractionMapFilePath();
+		map = nullTextureMaps.GetRefractionMap().get();
+		mapSize = nullTextureMaps.GetRefractionMapSize();
+	}
+
+	// テクスチャバンクからリソースを探して取ってくる
+	textureMap = nsMyGame::nsMyEngine::
+		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
+
+	if (textureMap == nullptr)
+	{
+		// リソースがなかったら新しく生成する
+		textureMap = new Texture();
+		textureMap->InitFromMemory(map, mapSize);
+		// リソースを登録する
+		nsMyGame::nsMyEngine::
+			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
+	}
+
+	// 屈折にテクスチャリソースを設定する
+	m_refractionMap = textureMap;
+
 }
 void Material::InitFromTkmMaterila(
 	const TkmFile::SMaterial& tkmMat,
@@ -69,8 +233,8 @@ void Material::InitFromTkmMaterila(
 	
 	//定数バッファを作成。
 	SMaterialParam matParam;
-	matParam.hasNormalMap = m_normalMap.IsValid() ? 1 : 0;
-	matParam.hasSpecMap = m_specularMap.IsValid() ? 1 : 0;
+	matParam.hasNormalMap = m_normalMap->IsValid() ? 1 : 0;
+	matParam.hasSpecMap = m_specularMap->IsValid() ? 1 : 0;
 	m_constantBuffer.Init(sizeof(SMaterialParam), &matParam);
 
 	//ルートシグネチャを初期化。

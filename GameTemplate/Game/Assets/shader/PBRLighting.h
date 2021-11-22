@@ -136,13 +136,13 @@ float SpcFresnel(float f0, float u)
 /// <param name="V">視点に向かうベクトル</param>
 /// <param name="N">法線ベクトル</param>
 /// <param name="smooth">滑らかさ</param>
-float CookTorranceSpecular(float3 L, float3 V, float3 N, float smooth)
+float CookTorranceSpecular(float3 L, float3 V, float3 N, float smooth, float metaric)
 {
     float microfacet = 1.0f - smooth;
 
     // 金属度を垂直入射の時のフレネル反射率として扱う
     // 金属度が高いほどフレネル反射は大きくなる
-    float f0 = smooth;
+    float f0 = metaric;
 
     // ライトに向かうベクトルと視線に向かうベクトルのハーフベクトルを求める
     float3 H = normalize(L + V);
@@ -245,7 +245,7 @@ float3 CalcLighting(
     // クックトランスモデルを利用した鏡面反射率を計算する
     // クックトランスモデルの鏡面反射率を計算する
     float3 spec = CookTorranceSpecular(
-        -ligDir, toEye, normal, smooth)
+        -ligDir, toEye, normal, smooth, metaric)
         * ligColor;
 
     // 金属度が高ければ、鏡面反射はスペキュラカラー、低ければ白

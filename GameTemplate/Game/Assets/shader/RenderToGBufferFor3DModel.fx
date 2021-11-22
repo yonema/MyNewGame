@@ -24,7 +24,8 @@ struct SPSOut
 {
     float4 albedo : SV_Target0;         // アルベド
     float4 normal : SV_Target1;         // 法線
-    float4 metaricShadowSmooth : SV_Target2;  // メタリック、影パラメータ、スムース。rにメタリック、gに影パラメータ、aにスムース。
+    //float4 metaricShadowSmooth : SV_Target2;  // メタリック、影パラメータ、スムース。rにメタリック、gに影パラメータ、bにスムース。
+    float4 MSAO : SV_Target2;  // R:Metaric,G:Smooth,B:AmbientOcclusion
 };
 
 ///////////////////////////////////////
@@ -101,10 +102,10 @@ SPSOut PSMainCore( SPSIn psIn/*, int isShadowReciever*/)
     psOut.normal.xyz = GetNormalFromNormalMap( 
         psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv ) ;
     psOut.normal.w = 1.0f;
-    // メタリックスムースを出力。
-    psOut.metaricShadowSmooth = g_spacular.Sample(g_sampler, psIn.uv);
-    // 影パラメータ。
-    psOut.metaricShadowSmooth.g = 255.0f * isShadowReciever;
+    psOut.normal.xyz = float3(-1.0f, 0.0f, 0.0f);
+    // MSAOを出力。
+    psOut.MSAO = g_spacular.Sample(g_sampler, psIn.uv);
+
     return psOut;
 }
 // モデル用のピクセルシェーダーのエントリーポイント

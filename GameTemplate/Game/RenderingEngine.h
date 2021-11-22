@@ -141,6 +141,26 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief テクスチャのリソースをリソースバンクから取得。未登録の場合はnullptrを戻す。
+			 * @param[in] filePath ファイルパス
+			 * @return テクスチャのリソース
+			*/
+			Texture* GetTextureFileFromBank(const char* filePath)
+			{
+				return m_textureFileBank.Get(filePath);
+			}
+
+			/**
+			 * @brief テクスチャのリソースをリソースバンクに登録
+			 * @param[in] filePath ファイルパス
+			 * @param[in] texture テクスチャのリソース
+			*/
+			void RegistTextureFileToBank(const char* filePath, Texture* texture)
+			{
+				m_textureFileBank.Regist(filePath, texture);
+			}
+
+			/**
 			 * @brief 指定したGBufferのカラーフォーマットを取得
 			 * @param[in] enGBufferNo GBufferの番号
 			 * @return カラーフォーマット
@@ -304,6 +324,7 @@ namespace nsMyGame
 			nsUtil::TResourceBank<TkmFile> m_tkmFileBank;	//!< tkmファイルバンク
 			nsUtil::TResourceBank<Shader> m_shaderBank;		//!< シェーダーバンク
 			nsUtil::TResourceBank<char> m_ddsFileBank;	//!< ddsファイルバンク
+			nsUtil::TResourceBank<Texture> m_textureFileBank;	//!< テクスチャバンク
 
 		private:	// staticなデータメンバ
 			static CRenderingEngine* m_instance;		//!< 唯一のインスタンス

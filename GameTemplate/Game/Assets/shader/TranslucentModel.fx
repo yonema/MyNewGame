@@ -50,7 +50,7 @@ struct SPSIn{
 ////////////////////////////////////////////////
 Texture2D<float4> g_albedoMap	: register(t0);		// アルベドマップ
 Texture2D<float4> g_normalMap	: register(t1);		// 法線
-Texture2D<float4> g_spacularMap : register(t2);		//スペキュラマップ
+Texture2D<float4> g_msaoMap : register(t2);		//Metaaric,Smooth,AmbientOcclusionマップ
 Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t10);  //シャドウマップ。
 TextureCube<float4> g_skyCubeMap : register(t22);
 
@@ -116,12 +116,15 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float3 worldPos = psIn.worldPos;
 	//スペキュラカラーをサンプリング。
 	float3 specColor = albedoColor.xyz;
+	//MSAOマップをサンプリング
+	float3 msao = g_msaoMap.SampleLevel(g_sampler, psIn.uv, 0);
 	//金属度をサンプリング。
-	float metaric = g_spacularMap.SampleLevel(g_sampler, psIn.uv, 0).r;
+	float metaric = msao.r;
 	//スムース
-	float smooth = g_spacularMap.SampleLevel(g_sampler, psIn.uv, 0).a;
-	if (smooth >= 1.0f)
-		smooth = 0.0f;
+	float smooth = msao.g;
+	// アンビエントオクルージョンマップ
+	float ambientOcclusion = msao.b;
+
 	//影生成用のパラメータ。
 	float shadowParam = isShadowReciever;
 

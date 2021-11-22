@@ -277,7 +277,8 @@ void TkmFile::BuildMaterial(SMaterial& tkmMat, FILE* fp, const char* filePath)
 	auto loadTexture = [&](
 		std::string& texFileName, 
 		char** ddsFileMemory,
-		unsigned int& fileSize
+		unsigned int& fileSize,
+		std::string& filePath
 	) {
 		int filePathLength = static_cast<int>(texFilePath.length());
 		if (texFileName.length() > 0) {
@@ -303,6 +304,9 @@ void TkmFile::BuildMaterial(SMaterial& tkmMat, FILE* fp, const char* filePath)
 			//テクスチャをロード。
 			FILE* texFileFp = fopen(texFilePath.c_str(), "rb");
 			if (texFileFp != nullptr) {
+
+				// ファイルパスを保持
+				filePath = texFilePath;
 				//ファイルサイズを取得。
 				fseek(texFileFp, 0L, SEEK_END);
 				fileSize = ftell(texFileFp);
@@ -333,11 +337,11 @@ void TkmFile::BuildMaterial(SMaterial& tkmMat, FILE* fp, const char* filePath)
 		}
 	};
 	//テクスチャをロード。
-	loadTexture( tkmMat.albedoMapFileName, &tkmMat.albedoMap, tkmMat.albedoMapSize );
-	loadTexture( tkmMat.normalMapFileName, &tkmMat.normalMap, tkmMat.normalMapSize );
-	loadTexture( tkmMat.specularMapFileName, &tkmMat.specularMap, tkmMat.specularMapSize );
-	loadTexture( tkmMat.reflectionMapFileName, &tkmMat.reflectionMap, tkmMat.reflectionMapSize );
-	loadTexture( tkmMat.refractionMapFileName, &tkmMat.refractionMap, tkmMat.refractionMapSize) ;
+	loadTexture( tkmMat.albedoMapFileName, &tkmMat.albedoMap, tkmMat.albedoMapSize ,tkmMat.albedoMapFilePath);
+	loadTexture( tkmMat.normalMapFileName, &tkmMat.normalMap, tkmMat.normalMapSize, tkmMat.normalMapFilePath);
+	loadTexture( tkmMat.specularMapFileName, &tkmMat.specularMap, tkmMat.specularMapSize, tkmMat.specularMapFilePath);
+	loadTexture( tkmMat.reflectionMapFileName, &tkmMat.reflectionMap, tkmMat.reflectionMapSize, tkmMat.reflectionMapFilePath);
+	loadTexture( tkmMat.refractionMapFileName, &tkmMat.refractionMap, tkmMat.refractionMapSize, tkmMat.refractionMapFilePath) ;
 }
 void TkmFile::BuildTangentAndBiNormal()
 {

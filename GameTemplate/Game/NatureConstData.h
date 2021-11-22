@@ -47,7 +47,8 @@ namespace nsMyGame
 				switch (skyCubeType)
 				{
 				case enSkyCubeType_day:		// ’‹ŠÔ
-					return L"Assets/modelData/sky/skyCubeMap.dds";
+					//return L"Assets/modelData/sky/skyCubeMap.dds";
+					return L"Assets/modelData/sky/T_Roomtex_6500K.dds";
 					break;
 				case enSkyCubeType_night:	// –éŠÔ
 					return L"Assets/modelData/sky/skyCubeMapNight.dds";
