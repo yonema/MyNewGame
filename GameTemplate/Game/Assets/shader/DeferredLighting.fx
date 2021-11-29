@@ -122,10 +122,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float3 msao = g_msaoMap.SampleLevel(g_sampler, psIn.uv, 0);
 	//金属度をサンプリング。
 	float metaric = msao.r;
-	metaric = 0.5f;
 	//スムース
 	float smooth = msao.g;
-	smooth = 0.5f;
 	// アンビエントオクルージョンマップ
 	float ambientOcclusion = msao.b;
 
@@ -226,21 +224,31 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		) * affectOfDistance * affectOfAngle;
 	}
 
+	// アンビエントライト率
+	float ambientRate = 1.0f;
+
 	// IBLを行うか？
 	if (isIBL == 1)
 	{
 		// 行う
+		// IBL率
+		float iblRate = 0.5f;
 		// 視線からの反射ベクトルを求める。
 		float3 v = reflect(toEye * -1.0f, normal);
+		// スムース具合によってミップマップのレベルを変更する。
+		// スムースが大きいほど高解像度のミップマップが使用されるため、くっきりIBLが映る。
 		int level = lerp(0, 12, 1 - smooth);
-		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * IBLLuminance;
+		// IBL率によってIBLの影響率を調節
+		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * IBLLuminance * ambientOcclusion * iblRate;
+
+		// アンビエント率をIBL率から計算する
+		ambientRate = 1.0f - iblRate;
 	}
-	else
-	{
-		// 行わない
-		// 環境光による底上げ
-		lig += ambientLight * albedoColor;
-	}
+
+	// 環境光による底上げ
+	// AOマップによるアンビエントライトの影響度を調節
+	// アンビエント率によるアンビエントライトの影響度を調節
+	lig += ambientLight * albedoColor * ambientOcclusion *  ambientRate;
 
 
 	float4 finalColor = 1.0f;
