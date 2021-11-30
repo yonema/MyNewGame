@@ -21,7 +21,10 @@ namespace nsMyGame
 			const wchar_t* name;	//!< 名前。
 			int number;
 			bool isTranslucent = false;	//!< 半透明か？
-			int priority = nsCommonData::enPriorityFirst;
+			int priority = nsCommonData::enPriorityFirst;	//!< 優先度
+			int numMapChipReserve = 1;	//!< マップチップの予約数
+			//!< ユーザー定義のコリジョン属性
+			EnCollisionAttr userIndex = EnCollisionAttr::enCollisionAttr_None;
 
 			/// <summary>
 			/// 引数で渡したオブジェクト名のオブジェクトか調べる。
@@ -95,8 +98,6 @@ namespace nsMyGame
 			/**
 			 * @brief レベルを初期化。
 			 * @param[in] filePath tklファイルのファイルパス
-			 * @param[in] numMapChipReserve マップチップの予約数
-			 * @param[in] userIndex ユーザー定義のコリジョン属性
 			 * @param[in] hookFunc オブジェクトを作成する時の処理をフックするための関数オブジェクト
 			 * @details フックしないならnullptrを指定すればよい。
 			 * この関数オブジェクトがfalseを返すと、オブジェクトの情報から、
@@ -107,13 +108,6 @@ namespace nsMyGame
 			 * 例えば、フック関数の中で、渡されたオブジェクトデータの名前のモデルを描画するクラスの
 			 * インスタンスを生成したときに、falseを返してしまうと、同じモデルが二つ描画されることになります。
 			*/
-			void Init(
-				const char* filePath,
-				const int numMapChipReserve,
-				const EnCollisionAttr userIndex,
-				std::function<bool(SLevelObjectData& objData)> hookFunc				
-			);
-
 			void Init(
 				const char* filePath,
 				std::function<bool(SLevelObjectData& objData)> hookFunc
@@ -137,15 +131,8 @@ namespace nsMyGame
 			 * @brief マップチップを作成。
 			 * @param[in] objData レベルオブジェクトデータ
 			 * @param[in] filePath ファイルパス
-			 * @param[in] numMapChipReserve マップチップの予約数
-			 * @param[in] userIndex ユーザー定義のコリジョン属性
 			*/
-			void CreateMapChip(
-				const SLevelObjectData& objData,
-				const char* filePath,
-				const int numMapChipReserve,
-				const EnCollisionAttr userIndex
-			);
+			void CreateMapChip(const SLevelObjectData& objData, const char* filePath);
 
 			/**
 			 * @brief Tklファイルの行列を変換する。

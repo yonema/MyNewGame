@@ -452,9 +452,6 @@
     <ClCompile Include="StringActionTargetManager.cpp">
       <Filter>MyCode\StringActionTarget</Filter>
     </ClCompile>
-    <ClCompile Include="Building.cpp">
-      <Filter>MyCode\Building</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerSwingAction.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
@@ -496,6 +493,9 @@
     </ClCompile>
     <ClCompile Include="AlphaMap.cpp">
       <Filter>MyCode\Maps\alphaMaps</Filter>
+    </ClCompile>
+    <ClCompile Include="Buildings.cpp">
+      <Filter>MyCode\Building</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -880,9 +880,6 @@
     <ClInclude Include="StringActionTargetManager.h">
       <Filter>MyCode\StringActionTarget</Filter>
     </ClInclude>
-    <ClInclude Include="Building.h">
-      <Filter>MyCode\Building</Filter>
-    </ClInclude>
     <ClInclude Include="BuildingConstData.h">
       <Filter>MyCode\Building</Filter>
     </ClInclude>
@@ -939,6 +936,9 @@
     </ClInclude>
     <ClInclude Include="AlphaMap.h">
       <Filter>MyCode\Maps\alphaMaps</Filter>
+    </ClInclude>
+    <ClInclude Include="Buildings.h">
+      <Filter>MyCode\Building</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

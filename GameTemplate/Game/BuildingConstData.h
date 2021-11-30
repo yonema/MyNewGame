@@ -42,9 +42,6 @@ namespace nsMyGame
 				enBuilding_S_10,
 				enBuilding_S_11,
 
-				enBuilding_M_09,
-				enBuilding_M_11,
-
 				enBuilding_L_01a,
 				enBuilding_L_01b,
 				enBuilding_L_02a,
@@ -62,6 +59,7 @@ namespace nsMyGame
 			};
 
 			constexpr const wchar_t* const kBuildingForwardName = L"Building";	//!< 建物の先頭の名前
+			constexpr const char* const kBuildingObjectName = "Building";	//!< 建物のオブジェクトの名前
 
 			//constexpr std::map< const EnBuildingType, const char* const> kBuildingNamesMap =
 			//{
@@ -89,9 +87,6 @@ namespace nsMyGame
 				"Building_S_09",
 				"Building_S_10",
 				"Building_S_11",
-
-				"Building_M_09",
-				"Building_M_11",
 
 				"Building_L_01a",
 				"Building_L_01b",
@@ -129,9 +124,6 @@ namespace nsMyGame
 				"Assets/modelData/buildings/Building_S_09.tkm",
 				"Assets/modelData/buildings/Building_S_10.tkm",
 				"Assets/modelData/buildings/Building_S_11.tkm",
-
-				"Assets/modelData/buildings/Building_M_09.tkm",
-				"Assets/modelData/buildings/Building_M_11.tkm",
 
 				"Assets/modelData/buildings/Building_L_01a.tkm",
 				"Assets/modelData/buildings/Building_L_01b.tkm",

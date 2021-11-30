@@ -2,7 +2,7 @@
 #include "TestMapForPlayerMove.h"
 #include "SkyCube.h"
 #include "Player.h"
-#include "Building.h"
+#include "Buildings.h"
 #include "BuildingConstData.h"
 
 namespace nsMyGame
@@ -51,13 +51,13 @@ namespace nsMyGame
 								a++;
 								return false;
 							}
-							nsBuilding::CBuilding* building = 
-								NewGO<nsBuilding::CBuilding>(nsCommonData::enPriorityFirst, m_kBuildingName);
-							building->Init(
-								nsBuilding::nsBuildingConstData::enBuilding_L_01a,
-								objData.position,
-								objData.rotation
-							);
+							nsBuilding::CBuildings* building = 
+								NewGO<nsBuilding::CBuildings>(nsCommonData::enPriorityFirst, m_kBuildingName);
+							//building->Init(
+							//	nsBuilding::nsBuildingConstData::enBuilding_L_01a,
+							//	objData.position,
+							//	objData.rotation
+							//);
 							a++;
 							return true;
 						}
@@ -82,9 +82,9 @@ namespace nsMyGame
 				DeleteGO(m_player);		// プレイヤークラスの破棄
 
 				// 建物をすべて破棄
-				QueryGOs<nsBuilding::CBuilding>(
+				QueryGOs<nsBuilding::CBuildings>(
 					m_kBuildingName,
-					[&](nsBuilding::CBuilding* building)->bool
+					[&](nsBuilding::CBuildings* building)->bool
 					{
 						DeleteGO(building);
 						return true;

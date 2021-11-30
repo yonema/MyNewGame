@@ -27,15 +27,12 @@ namespace nsMyGame
 			}
 			/**
 			 * @brief 初期化
-			 * @param[in] modelRender モデルレンダラー
+			 * @param[in] tkmFile tkmファイル
 			*/
-			void CSwingTarget::Init(const nsGraphic::nsModel::CModelRender& modelRender)
+			void CSwingTarget::Init(const TkmFile& tkmFile)
 			{
-				// モデルレンダラーの参照をセットする
-				m_modelRender = &modelRender;
-
 				// tkmファイルからAABBを初期化
-				m_aabb.InitFromTkmFile(*m_modelRender->GetModel().GetTkmFile());
+				m_aabb.InitFromTkmFile(tkmFile);
 
 				// マネージャーに自身を登録する
 				CStringActionTargetManager::GetInstance()->AddSwingTarget(this);
@@ -47,12 +44,14 @@ namespace nsMyGame
 			/**
 			 * @brief スイングのターゲット達の座標を計算する
 			 * derails 引数が (1, 1, 1) でターゲットの数は8つ（8頂点分）
+			 * @param[in] worldMatrix ワールドマトリクス
 			 * @param[in] widthSegments 幅セグメント ( X )
 			 * @param[in] heightSegments 高さセグメント ( Y )
 			 * @param[in] lenghtSegments 長さセグメント ( Z )
 			 * @param[in] heightLowerLimit 高さの制限。指定した高さ以下のターゲットは作られません。
 			*/
 			void CSwingTarget::CalcSwingingTargetPositions(
+				const Matrix& worldMatrix,
 				const UINT widthSegments,
 				const UINT heightSegments,
 				const UINT lengthSegments,
@@ -70,7 +69,10 @@ namespace nsMyGame
 				// AABBの8頂点の座標
 				Vector3 vertexPos[CAABB::enVertNum];
 				// AABBの8頂点のワールド座標を計算
-				m_aabb.CalcVertexPositions(vertexPos, m_modelRender->GetModel().GetWorldMatrix());
+				m_aabb.CalcVertexPositions(vertexPos, worldMatrix);
+
+				// 座標も計算
+				worldMatrix.Apply(m_position);
 
 				//////// 2.セグメント一つ当たりのベクトルを計算する ////////
 

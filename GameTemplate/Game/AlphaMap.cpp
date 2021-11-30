@@ -2,9 +2,8 @@
 #include "AlphaMap.h"
 #include "SkyCube.h"
 #include "Player.h"
-#include "Building.h"
+#include "Buildings.h"
 #include "BuildingConstData.h"
-#include "MapConstDatah.h"
 #include "GameMainState.h"
 #include "Goal.h"
 
@@ -40,6 +39,9 @@ namespace nsMyGame
 				// プレイヤーの生成
 				m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPriorityFirst);
 
+				// 建物の生成
+				m_buildings = NewGO<nsBuilding::CBuildings>(nsCommonData::enPriorityFirst);
+
 				// レベルの生成
 				m_level3D.Init(
 					kLevelFilePath[enLevelAlpha2],
@@ -59,16 +61,12 @@ namespace nsMyGame
 									continue;
 								}
 
-								// 名前が一致したら建物を生成する
-								nsBuilding::CBuilding* building = NewGO<nsBuilding::CBuilding>(
-									nsCommonData::enPriorityFirst,
-									nsBuilding::nsBuildingConstData::kBuildingNames[i]
-									);
-								// 建物のタイプを指定して初期化
-								building->Init(
+								// 建物のタイプを指定して追加
+								m_buildings->AddBuliding(
 									static_cast<nsBuilding::nsBuildingConstData::EnBuildingType>(i),
 									objData.position,
-									objData.rotation
+									objData.rotation,
+									objData.scale
 								);
 								return true;
 							}
@@ -95,58 +93,48 @@ namespace nsMyGame
 					}
 				);
 
-				// 電灯
-				m_level3D_streetLight.Init(
-					kLevelFilePath[enLevelmStreetLight],
-					kNumMapChipReserveTbl[enReserveStreetLight],
-					EnCollisionAttr::enCollisionAttr_Props,
-					[&](nsLevel3D::SLevelObjectData& objData)
-					{
-						return false;
-					}
-					);
-				// 信号
-				m_level3D_trafficLight.Init(
-					kLevelFilePath[enLevelTrafficLight],
-					kNumMapChipReserveTbl[enReserveTrafficLight],
-					EnCollisionAttr::enCollisionAttr_Props,
-					[&](nsLevel3D::SLevelObjectData& objData)
-					{
-						return false;
-					}
-				);
-				// 歩行者信号
-				m_level3D_pedestrianLight.Init(
-					kLevelFilePath[enLevelPedestrianLight],
-					kNumMapChipReserveTbl[enReservePedestrianLight],
-					EnCollisionAttr::enCollisionAttr_Props,
-					[&](nsLevel3D::SLevelObjectData& objData)
-					{
-						return true;
-					}
-				);
-				// 木
-				m_level3D_streetTree.Init(
-					kLevelFilePath[enLevelStreetTree],
-					kNumMapChipReserveTbl[enReserveStreetTree],
-					EnCollisionAttr::enCollisionAttr_Props,
-					[&](nsLevel3D::SLevelObjectData& objData)
-					{
-						return true;
-					}
-				);
-				// 木の枝
-				m_level3D_streetTreeBranch.Init(
-					kLevelFilePath[enLevelStreetTreeBranch],
-					kNumMapChipReserveTbl[enReserveStreetTree],
-					EnCollisionAttr::enCollisionAttr_Props,
-					[&](nsLevel3D::SLevelObjectData& objData)
-					{
-						objData.isTranslucent = true;
-						objData.priority = nsCommonData::enPrioritySecond;
-						return true;
-					}
-				);
+				// 建物を初期化
+				m_buildings->Init();
+
+				// 小物をレベルから生成
+				for (int propsType = 0; propsType < enPropsTypeNum; propsType++)
+				{
+					// 小物用のレベルを初期化
+					m_propsLevel3D[propsType].Init(
+						kPropsLevelFilePath[propsType],
+						[&](nsLevel3D::SLevelObjectData& objData)
+						{
+							// マップチップの予約数を設定する
+							objData.numMapChipReserve = kNumMapChipReserveTbl[propsType];
+							// ユーザー定義のコリジョン属性を小物用の属性に設定する
+							objData.userIndex = EnCollisionAttr::enCollisionAttr_Props;
+
+							switch (propsType)
+							{
+							// ココで指定したものが生成される
+							case enPropsStreetLight:		// 街灯
+							case enPropsTrafficLight:		// 信号機
+							//case enPropsPedestrianLight:	// 歩行者用信号機
+							//case enPropsStreetTree:			// 街路樹
+								return false;
+								break;
+
+							// 街路樹の枝は半透明で描画する
+							//case enPropsStreetTreeBranch:
+								objData.isTranslucent = true;
+								objData.priority = nsCommonData::enPrioritySecond;
+								return false;
+								break;
+
+							// 指定しなかったら生成されない
+							default:
+								return true;
+								break;
+							}
+						}
+					);					
+
+				}
 
 				// タイマーの計測を始める
 				m_gameState->StartTimingGame();
@@ -162,22 +150,8 @@ namespace nsMyGame
 				DeleteGO(m_skyCube);	// スカイキューブクラスの破棄
 				DeleteGO(m_player);		// プレイヤークラスの破棄
 				DeleteGO(m_goal);		// ゴールを破棄
-
-				// 全てのタイプの建物を破棄
-				for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
-				{
-					// 建物をすべて破棄
-					QueryGOs<nsBuilding::CBuilding>(
-						nsBuilding::nsBuildingConstData::kBuildingNames[i],
-						[&](nsBuilding::CBuilding* building)->bool
-						{
-							DeleteGO(building);
-							return true;
-						}
-					);
-				}
-
-				DeleteGO(m_gameState);
+				DeleteGO(m_gameState);	// ゲームステートを破棄
+				DeleteGO(m_buildings);	// 建物を破棄
 
 				return;
 			}

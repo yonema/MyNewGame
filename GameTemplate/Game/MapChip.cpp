@@ -9,15 +9,10 @@ namespace nsMyGame
 	*/
 	namespace nsLevel3D
 	{
-		CMapChip::CMapChip(
-			const SLevelObjectData& objData,
-			const char* filePath,
-			const int numMapChipReserve,
-			const EnCollisionAttr userIndex
-		)
+		CMapChip::CMapChip(const SLevelObjectData& objData,const char* filePath)
 		{
-			m_mapChipDataVector.reserve(numMapChipReserve);
-			m_physicsStaticObjectPtrVector.reserve(numMapChipReserve);
+			m_mapChipDataVector.reserve(objData.numMapChipReserve);
+			m_physicsStaticObjectPtrVector.reserve(objData.numMapChipReserve);
 
 			// モデルのファイルパスを取得
 			m_filePath = std::make_unique<const char*>(filePath);
@@ -26,7 +21,7 @@ namespace nsMyGame
 			// 優先度を取得
 			m_priority = objData.priority;
 			// ユーザー定義のコリジョン属性を取得
-			m_userIndex = userIndex;
+			m_userIndex = objData.userIndex;
 
 			// マップチップデータを追加する
 			AddMapChipData(objData);
@@ -85,6 +80,11 @@ namespace nsMyGame
 		*/
 		void CMapChip::InitModel()
 		{
+			// モデルの初期化
+			m_modelRender->SetPosition(m_mapChipDataVector[0]->position);
+			m_modelRender->SetRotation(m_mapChipDataVector[0]->rotation);
+			m_modelRender->SetScale(m_mapChipDataVector[0]->scale);
+
 			if (m_isTranslucent != true)
 			{
 				// モデルレンダラーの初期化
@@ -95,12 +95,6 @@ namespace nsMyGame
 				// 半透明描画でモデルレンダラーの初期化
 				m_modelRender->IniTranslucent(*m_filePath.get());
 			}
-
-			// モデルの初期化
-			m_modelRender->SetPosition(m_mapChipDataVector[0]->position);
-			m_modelRender->SetRotation(m_mapChipDataVector[0]->rotation);
-			m_modelRender->SetScale(m_mapChipDataVector[0]->scale);
-			m_modelRender->Init(*m_filePath.get());
 
 			auto p = std::make_unique<PhysicsStaticObject>();
 			//静的物理オブジェクトを作成。

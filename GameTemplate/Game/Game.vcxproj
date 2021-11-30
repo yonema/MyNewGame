@@ -298,7 +298,7 @@
     <ClCompile Include="AlphaMap.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="BSP.cpp" />
-    <ClCompile Include="Building.cpp" />
+    <ClCompile Include="Buildings.cpp" />
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
@@ -432,7 +432,7 @@
     <ClInclude Include="AlphaMap.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="BSP.h" />
-    <ClInclude Include="Building.h" />
+    <ClInclude Include="Buildings.h" />
     <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />

@@ -37,20 +37,22 @@ namespace nsMyGame
 
 				/**
 				 * @brief 初期化
-				 * @param[in] modelRender モデルレンダラー
+				 * @param[in] tkmFile tkmファイル
 				*/
-				void Init(const nsGraphic::nsModel::CModelRender& modelRender);
+				void Init(const TkmFile& tkmFile);
 
 
 				/**
 				 * @brief スイングのターゲットの座標を計算する
 				 * @derails 引数が (1, 1, 1) でターゲットの数は8つ（8頂点分）
+				 * @param[in] worldMatrix ワールドマトリクス
 				 * @param[in] widthSegments 幅セグメント ( X )
 				 * @param[in] heightSegments 高さセグメント ( Y )
 				 * @param[in] lenghtSegments 長さセグメント ( Z )
 				 * @param[in] heightLowerLimit 高さの制限。指定した高さ以下のターゲットは作られません。
 				*/
 				void CalcSwingingTargetPositions(
+					const Matrix& worldMatrix,
 					const UINT widthSegments,
 					const UINT heightSegments,
 					const UINT lengthSegments,
@@ -72,7 +74,7 @@ namespace nsMyGame
 				*/
 				const Vector3& GetPosition() const
 				{
-					return m_modelRender->GetPosition();
+					return m_position;
 				}
 
 			private:	// privateなメンバ関数
@@ -92,7 +94,7 @@ namespace nsMyGame
 			private:	// データメンバ
 				nsGeometry::CAABB m_aabb;							//!< AABBクラス
 				std::vector<Vector3> m_swingTargetPositions;		//!< スイングのターゲットの座標コンテナ
-				const nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
+				Vector3 m_position = Vector3::Zero;					//!< 座標
 			};
 
 		}

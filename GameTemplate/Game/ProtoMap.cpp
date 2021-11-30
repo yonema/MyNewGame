@@ -2,7 +2,7 @@
 #include "ProtoMap.h"
 #include "SkyCube.h"
 #include "Player.h"
-#include "Building.h"
+#include "Buildings.h"
 #include "BuildingConstData.h"
 #include "MapConstDatah.h"
 #include "GameMainState.h"
@@ -60,16 +60,16 @@ namespace nsMyGame
 								}
 
 								// 名前が一致したら建物を生成する
-								nsBuilding::CBuilding* building =NewGO<nsBuilding::CBuilding>(
+								nsBuilding::CBuildings* building =NewGO<nsBuilding::CBuildings>(
 									nsCommonData::enPriorityFirst,
 									nsBuilding::nsBuildingConstData::kBuildingNames[i]
 									);
 								// 建物のタイプを指定して初期化
-								building->Init(
-									static_cast<nsBuilding::nsBuildingConstData::EnBuildingType>(i),
-									objData.position,
-									objData.rotation
-								);
+								//building->Init(
+								//	static_cast<nsBuilding::nsBuildingConstData::EnBuildingType>(i),
+								//	objData.position,
+								//	objData.rotation
+								//);
 								return true;
 							}
 
@@ -125,9 +125,9 @@ namespace nsMyGame
 				for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
 				{
 					// 建物をすべて破棄
-					QueryGOs<nsBuilding::CBuilding>(
+					QueryGOs<nsBuilding::CBuildings>(
 						nsBuilding::nsBuildingConstData::kBuildingNames[i],
-						[&](nsBuilding::CBuilding* building)->bool
+						[&](nsBuilding::CBuildings* building)->bool
 						{
 							DeleteGO(building);
 							return true;

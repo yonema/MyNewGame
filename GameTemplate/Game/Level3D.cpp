@@ -27,29 +27,10 @@ namespace nsMyGame
 		/**
 		 * @brief レベルを初期化。
 		 * @param[in] filePath tklファイルのファイルパス
-		 * @param[in] numMapChipReserve マップチップの予約数
 		 * @param[in] hookFunc オブジェクトを作成する時の処理をフックするための関数オブジェクト
 		*/
 		void CLevel3D::Init(
 			const char* filePath,
-			std::function<bool(SLevelObjectData& objData)> hookFunc
-		)
-		{
-			Init(filePath, 1, EnCollisionAttr::enCollisionAttr_None, hookFunc);
-			return;
-		}
-
-		/**
-		 * @brief レベルを初期化。
-		 * @param[in] filePath tklファイルのファイルパス
-		 * @param[in] numMapChipReserve マップチップの予約数
-		 * @param[in] userIndex ユーザー定義のコリジョン属性
-		 * @param[in] hookFunc オブジェクトを作成する時の処理をフックするための関数オブジェクト
-		*/
-		void CLevel3D::Init(
-			const char* filePath,
-			const int numMapChipReserve,
-			const EnCollisionAttr userIndex,
 			std::function<bool(SLevelObjectData& objData)> hookFunc
 		)
 		{
@@ -137,7 +118,7 @@ namespace nsMyGame
 					//hookがfalseなままならば。
 					if (isHooked == false) {
 						//マップチップレンダーを作成。
-						CreateMapChip(levelObjData, cFilePath, numMapChipReserve, userIndex);
+						CreateMapChip(levelObjData, cFilePath);
 					}
 
 				}
@@ -156,22 +137,15 @@ namespace nsMyGame
 		 * @brief マップチップを作成。
 		 * @param[in] objData レベルオブジェクトデータ
 		 * @param[in] filePath ファイルパス
-		 * @param[in] numMapChipReserve マップチップの予約数
-		 * @param[in] userIndex ユーザー定義のコリジョン属性
 		*/
-		void CLevel3D::CreateMapChip(
-			const SLevelObjectData& objData,
-			const char* filePath,
-			const int numMapChipReserve,
-			const EnCollisionAttr userIndex
-		)
+		void CLevel3D::CreateMapChip(const SLevelObjectData& objData, const char* filePath)
 		{
 			std::string key = filePath;
 			//マップチップレンダーにまだフックされていなかったら。
 			if (m_mapChipPtrs.count(key) == 0)
 			{
 				//フックされなかったので、マップチップを作成する。
-				auto mapChipRender = std::make_shared<CMapChip>(objData, filePath, numMapChipReserve, userIndex);
+				auto mapChipRender = std::make_shared<CMapChip>(objData, filePath);
 				m_mapChipPtrs[key] = mapChipRender;
 			}
 			else

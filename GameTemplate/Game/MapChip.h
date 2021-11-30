@@ -39,15 +39,8 @@ namespace nsMyGame
 			 * @brief コンストラクタ
 			 * @param[in] objData レベルオブジェクトデータ
 			 * @param[in] filePath ファイルパス
-			 * @param[in] numMapChipReserve マップチップの予約数
-			 * @param[in] userIndex ユーザー定義のコリジョン属性
 			*/
-			CMapChip(
-				const SLevelObjectData& objData,
-				const char* filePath,
-				const int numMapChipReserve,
-				const EnCollisionAttr userIndex
-			);
+			CMapChip(const SLevelObjectData& objData, const char* filePath);
 			/**
 			 * @brief デストラクタ
 			*/
