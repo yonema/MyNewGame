@@ -168,11 +168,15 @@ namespace nsMyGame
 				case nsPlayerConstData::enWalkAndRun:
 					// 歩きと走りを実行
 					m_playerWalkAndRun.Execute();
+					// Propsと衝突する
+					m_charaCon.SetIsIgnoreProps(false);
 					break;
 				// スイング
 				case nsPlayerConstData::enSwing:
 					// スイングアクションを実行
 					m_playerSwingAction.Execute();
+					// Propsと衝突しない
+					m_charaCon.SetIsIgnoreProps(true);
 					break;
 				// 壁走り
 				case nsPlayerConstData::enWallRun:

@@ -40,8 +40,14 @@ namespace nsMyGame
 			 * @param[in] objData レベルオブジェクトデータ
 			 * @param[in] filePath ファイルパス
 			 * @param[in] numMapChipReserve マップチップの予約数
+			 * @param[in] userIndex ユーザー定義のコリジョン属性
 			*/
-			CMapChip(const SLevelObjectData& objData, const char* filePath, const int numMapChipReserve);
+			CMapChip(
+				const SLevelObjectData& objData,
+				const char* filePath,
+				const int numMapChipReserve,
+				const EnCollisionAttr userIndex
+			);
 			/**
 			 * @brief デストラクタ
 			*/
@@ -85,6 +91,9 @@ namespace nsMyGame
 			std::vector<std::unique_ptr<PhysicsStaticObject>> m_physicsStaticObjectPtrVector;
 			bool m_isTranslucent = false;								//!< 半透明描画か？
 			int m_priority = nsCommonData::enPriorityFirst;				//!< 優先度
+			//!< ユーザー定義のコリジョン属性
+			EnCollisionAttr m_userIndex = EnCollisionAttr::enCollisionAttr_None;
+
 		};
 
 	}

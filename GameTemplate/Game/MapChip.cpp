@@ -9,7 +9,12 @@ namespace nsMyGame
 	*/
 	namespace nsLevel3D
 	{
-		CMapChip::CMapChip(const SLevelObjectData& objData, const char* filePath, const int numMapChipReserve)
+		CMapChip::CMapChip(
+			const SLevelObjectData& objData,
+			const char* filePath,
+			const int numMapChipReserve,
+			const EnCollisionAttr userIndex
+		)
 		{
 			m_mapChipDataVector.reserve(numMapChipReserve);
 			m_physicsStaticObjectPtrVector.reserve(numMapChipReserve);
@@ -20,6 +25,9 @@ namespace nsMyGame
 			m_isTranslucent = objData.isTranslucent;
 			// 優先度を取得
 			m_priority = objData.priority;
+			// ユーザー定義のコリジョン属性を取得
+			m_userIndex = userIndex;
+
 			// マップチップデータを追加する
 			AddMapChipData(objData);
 
@@ -96,7 +104,7 @@ namespace nsMyGame
 
 			auto p = std::make_unique<PhysicsStaticObject>();
 			//静的物理オブジェクトを作成。
-			p->CreateFromModel(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix());
+			p->CreateFromModel(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix(), m_userIndex);
 			m_physicsStaticObjectPtrVector.emplace_back(std::move(p));
 
 			return;
@@ -132,7 +140,7 @@ namespace nsMyGame
 				);
 				auto p = std::make_unique<PhysicsStaticObject>();
 				//静的物理オブジェクトを作成。
-				p->CreateFromModel(m_modelRender->GetModel(), worldMatrix);
+				p->CreateFromModel(m_modelRender->GetModel(), worldMatrix, m_userIndex);
 				m_physicsStaticObjectPtrVector.emplace_back(std::move(p));
 			}
 

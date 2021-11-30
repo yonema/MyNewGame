@@ -107,7 +107,18 @@ public:		// メンバ関数
 		return m_isOnWall;
 	}
 
+
+	/**
+	 * @brief Propsとの衝突を無視するか？を設定
+	 * @param[in] isIgnoreProps Propsとの衝突を無視するか？
+	*/
+	void SetIsIgnoreProps(const bool isIgnoreProps)
+	{
+		m_isIgnoreProps = isIgnoreProps;
+	}
+
 private:	// データメンバ
 	bool m_isOnWall = false;							//!< 壁に触れている？
+	bool m_isIgnoreProps = false;						//!< Propsとの衝突を無視するか？
 
 };

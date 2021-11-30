@@ -96,6 +96,7 @@ namespace nsMyGame
 			 * @brief レベルを初期化。
 			 * @param[in] filePath tklファイルのファイルパス
 			 * @param[in] numMapChipReserve マップチップの予約数
+			 * @param[in] userIndex ユーザー定義のコリジョン属性
 			 * @param[in] hookFunc オブジェクトを作成する時の処理をフックするための関数オブジェクト
 			 * @details フックしないならnullptrを指定すればよい。
 			 * この関数オブジェクトがfalseを返すと、オブジェクトの情報から、
@@ -109,6 +110,7 @@ namespace nsMyGame
 			void Init(
 				const char* filePath,
 				const int numMapChipReserve,
+				const EnCollisionAttr userIndex,
 				std::function<bool(SLevelObjectData& objData)> hookFunc				
 			);
 
@@ -136,11 +138,13 @@ namespace nsMyGame
 			 * @param[in] objData レベルオブジェクトデータ
 			 * @param[in] filePath ファイルパス
 			 * @param[in] numMapChipReserve マップチップの予約数
+			 * @param[in] userIndex ユーザー定義のコリジョン属性
 			*/
 			void CreateMapChip(
 				const SLevelObjectData& objData,
 				const char* filePath,
-				const int numMapChipReserve
+				const int numMapChipReserve,
+				const EnCollisionAttr userIndex
 			);
 
 			/**

@@ -23,6 +23,8 @@ namespace {
 		btCollisionObject* me = nullptr;					//自分自身。自分自身との衝突を除外するためのメンバ。
 		float dist = FLT_MAX;								//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
 
+		bool isIgnoreProps = false;		// Propsとの衝突判定を無視するか？
+
 															//衝突したときに呼ばれるコールバック関数。
 		virtual	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
@@ -33,6 +35,14 @@ namespace {
 				//自分に衝突した。or キャラクタ属性のコリジョンと衝突した。
 				return 0.0f;
 			}
+
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Props &&
+				isIgnoreProps)
+			{
+				// フラグが立っていたら、Propsとの衝突を無視する。
+				return 0.0f;
+			}
+
 			//衝突点の法線を引っ張ってくる。
 			Vector3 hitNormalTmp = *(Vector3*)&convexResult.m_hitNormalLocal;
 			//上方向と法線のなす角度を求める。
@@ -67,6 +77,10 @@ namespace {
 		float dist = FLT_MAX;					//衝突点までの距離。一番近い衝突点を求めるため。FLT_MAXは単精度の浮動小数点が取りうる最大の値。
 		Vector3 hitNormal;						//衝突点の法線。
 		btCollisionObject* me = nullptr;		//自分自身。自分自身との衝突を除外するためのメンバ。
+
+		bool isIgnoreProps = false;		// Propsとの衝突判定を無視するか？
+
+
 												//衝突したときに呼ばれるコールバック関数。
 		virtual	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace)
 		{
@@ -76,6 +90,14 @@ namespace {
 				//自分に衝突した。or 地面に衝突した。
 				return 0.0f;
 			}
+
+			if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Props &&
+				isIgnoreProps)
+			{
+				// フラグが立っていたら、Propsとの衝突を無視する。
+				return 0.0f;
+			}
+
 			//衝突点の法線を引っ張ってくる。
 			Vector3 hitNormalTmp;
 			Vector3CopyFrom(hitNormalTmp, convexResult.m_hitNormalLocal);
@@ -180,6 +202,7 @@ const Vector3& CharacterController::Execute(Vector3& moveSpeed, float deltaTime 
 			SweepResultWall callback;
 			callback.me = m_rigidBody.GetBody();
 			callback.startPos = posTmp;
+			callback.isIgnoreProps = m_isIgnoreProps;
 			//衝突検出。
 			PhysicsWorld::GetInstance()->ConvexSweepTest((const btConvexShape*)m_collider.GetBody(), start, end, callback);
 
@@ -273,6 +296,8 @@ const Vector3& CharacterController::Execute(Vector3& moveSpeed, float deltaTime 
 		SweepResultGround callback;
 		callback.me = m_rigidBody.GetBody();
 		Vector3CopyFrom(callback.startPos, start.getOrigin());
+		callback.isIgnoreProps = m_isIgnoreProps;
+
 		
 		//衝突検出。
 		if(fabsf(endPos.y - callback.startPos.y) > FLT_EPSILON){

@@ -99,6 +99,7 @@ namespace nsMyGame
 				m_level3D_streetLight.Init(
 					kLevelFilePath[enLevelmStreetLight],
 					kNumMapChipReserveTbl[enReserveStreetLight],
+					EnCollisionAttr::enCollisionAttr_Props,
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
 						return false;
@@ -108,15 +109,17 @@ namespace nsMyGame
 				m_level3D_trafficLight.Init(
 					kLevelFilePath[enLevelTrafficLight],
 					kNumMapChipReserveTbl[enReserveTrafficLight],
+					EnCollisionAttr::enCollisionAttr_Props,
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
-						return true;
+						return false;
 					}
 				);
 				// ï‡çsé“êMçÜ
 				m_level3D_pedestrianLight.Init(
 					kLevelFilePath[enLevelPedestrianLight],
 					kNumMapChipReserveTbl[enReservePedestrianLight],
+					EnCollisionAttr::enCollisionAttr_Props,
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
 						return true;
@@ -126,6 +129,7 @@ namespace nsMyGame
 				m_level3D_streetTree.Init(
 					kLevelFilePath[enLevelStreetTree],
 					kNumMapChipReserveTbl[enReserveStreetTree],
+					EnCollisionAttr::enCollisionAttr_Props,
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
 						return true;
@@ -135,6 +139,7 @@ namespace nsMyGame
 				m_level3D_streetTreeBranch.Init(
 					kLevelFilePath[enLevelStreetTreeBranch],
 					kNumMapChipReserveTbl[enReserveStreetTree],
+					EnCollisionAttr::enCollisionAttr_Props,
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
 						objData.isTranslucent = true;

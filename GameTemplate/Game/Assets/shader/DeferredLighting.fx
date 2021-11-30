@@ -226,6 +226,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	// アンビエントライト率
 	float ambientRate = 1.0f;
+	float luminance = 1.5f;
 
 	// IBLを行うか？
 	if (isIBL == 1)
@@ -239,7 +240,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 		// スムースが大きいほど高解像度のミップマップが使用されるため、くっきりIBLが映る。
 		int level = lerp(0, 12, 1 - smooth);
 		// IBL率によってIBLの影響率を調節
-		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * IBLLuminance * ambientOcclusion * iblRate;
+		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * 
+			IBLLuminance * ambientOcclusion * iblRate * luminance;
 
 		// アンビエント率をIBL率から計算する
 		ambientRate = 1.0f - iblRate;
@@ -248,7 +250,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	// 環境光による底上げ
 	// AOマップによるアンビエントライトの影響度を調節
 	// アンビエント率によるアンビエントライトの影響度を調節
-	lig += ambientLight * albedoColor * ambientOcclusion *  ambientRate;
+	lig += ambientLight * albedoColor * ambientOcclusion *  ambientRate * luminance;
 
 
 	float4 finalColor = 1.0f;
