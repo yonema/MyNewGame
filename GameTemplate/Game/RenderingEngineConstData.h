@@ -13,7 +13,7 @@ namespace nsMyGame
 		*/
 		namespace nsRenderingEngineConstData
 		{
-			constexpr int m_kRenderObjectsCapacityNum = 255;	//!< 描画オブジェクトのキャパシティ
+			constexpr int m_kRenderObjectsCapacityNum = 512;	//!< 描画オブジェクトのキャパシティ
 
 			//!< スプライトのfxファイルパス
 			constexpr const char* const m_kSpriteFxFilePath = "Assets/shader/sprite.fx";

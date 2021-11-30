@@ -66,11 +66,12 @@ public:
 	/// <param name="scale">拡大率</param>
 	void UpdateWorldMatrix(Vector3 pos, Quaternion rot, Vector3 scale);
 
-	/// <summary>
-	/// 描画
-	/// </summary>
-	/// <param name="renderContext">レンダリングコンテキスト</param>
-	void Draw(RenderContext& renderContext);
+	/**
+	 * @brief 描画
+	 * @param[in] renderContext レンダリングコンテキスト
+	 * @param[in] numInstance インスタンス数
+	*/
+	void Draw(RenderContext& renderContext, const int numInstance = 1);
 	/// <summary>
 	/// ワールド行列を取得。
 	/// </summary>
@@ -130,7 +131,8 @@ public:		// メンバ関数
 	void Draw(
 		RenderContext& rc,
 		const Matrix& viewMatrix,
-		const Matrix& projMatrix
+		const Matrix& projMatrix,
+		const int numInstance = 1
 	);
 
 	/**
@@ -159,6 +161,15 @@ public:		// メンバ関数
 	{
 		m_mulColor.w = alphaValue;
 	}
+
+	/**
+	 * @brief Modelクラスの設定に基づいたワールド行列を計算し、計算されたワールド行列が戻り値として返す。
+	 * @param[in] pos 座標
+	 * @param[in] rot 回転
+	 * @param[in] scale 拡大率
+	 * @return ワールド行列
+	*/
+	Matrix CalcWorldMatrix(const Vector3& pos, const Quaternion& rot, const Vector3& scale) const;
 
 private:	// データメンバ
 	Vector4 m_emmisonColor = Vector4::Zero;		//!< 自己発光カラー

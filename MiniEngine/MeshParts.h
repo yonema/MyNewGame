@@ -69,7 +69,8 @@ public:
 		const Matrix& mView,
 		const Matrix& mProj,
 		const Vector4& emmisonColor,
-		const Vector4& mulColor
+		const Vector4& mulColor,
+		const int numInstance
 	);
 	/// <summary>
 	/// スケルトンを関連付ける。

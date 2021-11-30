@@ -20,6 +20,8 @@ namespace nsMyGame
 			Vector3 scale;			//!< 拡大率。
 			const wchar_t* name;	//!< 名前。
 			int number;
+			bool isTranslucent = false;	//!< 半透明か？
+			int priority = nsCommonData::enPriorityFirst;
 
 			/// <summary>
 			/// 引数で渡したオブジェクト名のオブジェクトか調べる。
@@ -93,6 +95,7 @@ namespace nsMyGame
 			/**
 			 * @brief レベルを初期化。
 			 * @param[in] filePath tklファイルのファイルパス
+			 * @param[in] numMapChipReserve マップチップの予約数
 			 * @param[in] hookFunc オブジェクトを作成する時の処理をフックするための関数オブジェクト
 			 * @details フックしないならnullptrを指定すればよい。
 			 * この関数オブジェクトがfalseを返すと、オブジェクトの情報から、
@@ -103,7 +106,16 @@ namespace nsMyGame
 			 * 例えば、フック関数の中で、渡されたオブジェクトデータの名前のモデルを描画するクラスの
 			 * インスタンスを生成したときに、falseを返してしまうと、同じモデルが二つ描画されることになります。
 			*/
-			void Init(const char* filePath, std::function<bool(SLevelObjectData& objData)> hookFunc);
+			void Init(
+				const char* filePath,
+				const int numMapChipReserve,
+				std::function<bool(SLevelObjectData& objData)> hookFunc				
+			);
+
+			void Init(
+				const char* filePath,
+				std::function<bool(SLevelObjectData& objData)> hookFunc
+			);
 
 			/**
 			 * @brief tklファイルがあるディレクトリのパスを設定
@@ -123,8 +135,13 @@ namespace nsMyGame
 			 * @brief マップチップを作成。
 			 * @param[in] objData レベルオブジェクトデータ
 			 * @param[in] filePath ファイルパス
+			 * @param[in] numMapChipReserve マップチップの予約数
 			*/
-			void CreateMapChip(const SLevelObjectData& objData, const char* filePath);
+			void CreateMapChip(
+				const SLevelObjectData& objData,
+				const char* filePath,
+				const int numMapChipReserve
+			);
 
 			/**
 			 * @brief Tklファイルの行列を変換する。
@@ -139,7 +156,7 @@ namespace nsMyGame
 			using BonePtr = std::unique_ptr<Bone>;		//!< ボーンPtr
 			std::vector<BonePtr> m_bonelist;			//!< ボーンのリスト
 			std::unique_ptr<Matrix[]> m_matrixlist;		//!< 行列のリスト
-			std::vector<MapChipPtr> m_mapChipPtrs;		//!< マップチップの可変長配列
+			std::map<std::string, MapChipPtr> m_mapChipPtrs;	//!< マップチップの可変長配列。
 			CTklFile m_tklFile;							//!< tklファイル
 			wchar_t m_directoryPath[m_kMaxPathSize] = {};	//!< tklファイルがあるディレクトリのパス
 

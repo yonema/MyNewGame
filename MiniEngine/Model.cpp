@@ -117,7 +117,7 @@ void Model::ChangeAlbedoMap(const char* materialName, Texture& albedoMap)
 	m_meshParts.CreateDescriptorHeaps();
 	
 }
-void Model::Draw(RenderContext& rc)
+void Model::Draw(RenderContext& rc, const int numInstance)
 {
 	m_meshParts.Draw(
 		rc, 
@@ -125,14 +125,16 @@ void Model::Draw(RenderContext& rc)
 		g_camera3D->GetViewMatrix(), 
 		g_camera3D->GetProjectionMatrix(),
 		m_emmisonColor,
-		m_mulColor
+		m_mulColor,
+		numInstance
 	);
 }
 
 void Model::Draw(
 	RenderContext& rc,
 	const Matrix& viewMatrix,
-	const Matrix& projMatrix
+	const Matrix& projMatrix,
+	const int numInstance
 )
 {
 
@@ -142,8 +144,32 @@ void Model::Draw(
 		viewMatrix,
 		projMatrix,
 		m_emmisonColor,
-		m_mulColor
+		m_mulColor,
+		numInstance
 	);
 
 	return;
+}
+
+
+/**
+ * @brief Modelクラスの設定に基づいたワールド行列を計算し、計算されたワールド行列が戻り値として返す。
+ * @param[in] pos 座標
+ * @param[in] rot 回転
+ * @param[in] scale 拡大率
+ * @return ワールド行列
+*/
+Matrix Model::CalcWorldMatrix(const Vector3& pos, const Quaternion& rot, const Vector3& scale) const
+{
+	Matrix mBias, mWorld;
+	if (m_modelUpAxis == enModelUpAxisZ) {
+		//Z-up
+		mBias.MakeRotationX(Math::PI * -0.5f);
+	}
+	Matrix mTrans, mRot, mScale;
+	mTrans.MakeTranslation(pos);
+	mRot.MakeRotationFromQuaternion(rot);
+	mScale.MakeScaling(scale);
+	mWorld = mBias * mScale * mRot * mTrans;
+	return mWorld;
 }

@@ -67,12 +67,14 @@ namespace nsMyGame
 				 * @param[in] filePath モデルのファイルパス
 				 * @param[in] animationClips アニメーションクリップ
 				 * @param[in] numAnimationClip アニメーションクリップの数
+				 * @param[in] インスタンスの最大数
 				 * @param[in] modelUpAxis モデルのUP軸
 				*/
 				void Init(
 					const char* filePath,
 					AnimationClip* animationClips = nullptr,
 					const int numAnimationClip = 0,
+					const int maxInstance = 1,
 					const EnModelUpAxis modelUpAxis = EnModelUpAxis::enModelUpAxisZ
 					);
 
@@ -81,12 +83,14 @@ namespace nsMyGame
 				 * @param[in] filePath モデルのファイルパス
 				 * @param[in] animationClips アニメーションクリップ
 				 * @param[in] numAnimationClip アニメーションクリップの数
+				 * @param[in] インスタンスの最大数
 				 * @param[in] modelUpAxis モデルのUP軸
 				*/
 				void IniTranslucent(
 					const char* filePath,
 					AnimationClip* animationClips = nullptr,
 					const int numAnimationClip = 0,
+					const int maxInstance = 1,
 					const EnModelUpAxis modelUpAxis = enModelUpAxisZ
 				);
 
@@ -248,6 +252,14 @@ namespace nsMyGame
 					return *m_model.get();
 				}
 
+				/**
+				 * @brief インスタンシングデータの更新
+				 * @param[in] pos 座標
+				 * @param[in] rot 回転
+				 * @param[in] scale 拡大率
+				*/
+				void UpdateInstancingData(const Vector3& pos, const Quaternion& rot, const Vector3& scale);
+
 
 			private:	// privateなメンバ関数
 
@@ -278,19 +290,15 @@ namespace nsMyGame
 				/**
 				 * @brief モデルの初期化データの共通部分の設定
 				 * @param[in] tkmFilePath モデルのtkmファイルパス
+				 * @param[in] maxInstance 最大インスタンス数
 				 * @param[in] fxFilePath シェーダーのfxファイルパス
 				 * @param[in] modelUpAxis モデルのUP軸
-				 * @param[in] vsEntryPointFunc 頂点シェーダーのエントリーポイント
-				 * @param[in] vsSkinEntryPointFunc スキンありの頂点シェーダーのエントリーポイント
-				 * @param[in] psEntryPointFunc ピクセルシェーダーのエントリーポイント
 				*/
 				void SetCommonModelInitData(
 					const char* tkmFilePath,
+					const int maxInstance,
 					const EnModelUpAxis modelUpAxis = enModelUpAxisZ,
-					const char* fxFilePath = nsModelConstData::kDefaultFxFilePath,
-					const char* vsEntryPointFunc = nsModelConstData::kVsEntryPointFunc,
-					const char* vsSkinEntryPointFunc = nsModelConstData::kVsSkinEntryPointFunc,
-					const char* psEntryPointFunc = nsModelConstData::kPsEntryPointFunc
+					const char* fxFilePath = nsModelConstData::kDefaultFxFilePath
 				);
 
 				/**
@@ -304,9 +312,14 @@ namespace nsMyGame
 				void SetTranslucentModelCB();
 
 				/**
-				 * @brief デフォルトのシェーダーリソースビューをセット
+				 * @brief GBufferに描画するモデルのシェーダーリソースビューをセット
 				*/
-				void SetDefaultShaderResourceView();
+				void SetRenderToGBufferShaderResourceView();
+
+				/**
+				 * @brief 半透明描画用モデルのシェーダーリソースビューをセット
+				*/
+				void SetTranslucentModelShaderResourceView();
 
 				/**
 				 * @brief レンダラーを初期化する
@@ -318,6 +331,12 @@ namespace nsMyGame
 				 * @brief シャドウマップに描画するモデルの初期化
 				*/
 				void InitShadowModel();
+
+				/**
+				 * @brief インスタンシング描画用の初期化処理
+				 * @param[in] maxInstance 最大インスタンス数
+				*/
+				void InitInstancingDraw(int maxInstance);
 
 				/**
 				 * @brief モデルを描画する
@@ -349,6 +368,13 @@ namespace nsMyGame
 				Vector3 m_position = Vector3::Zero;				//!< 座標
 				Quaternion m_rotation = Quaternion::Identity;	//!< 回転
 				Vector3 m_scale = Vector3::One;					//!< 拡大率
+
+				int	m_numInstance = 0;						//!< インスタンスの数。
+				int	m_maxInstance = 1;						//!< 最大インスタンス数。
+				int	m_fixNumInstanceOnFrame = 0;			//!< このフレームに描画するインスタンスの数の確定数。
+				bool m_isEnableInstancingDraw = false;		//!< インスタンシング描画が有効か？
+				std::unique_ptr<Matrix[]> m_worldMatrixArray;	//!< ワールド行列の配列。
+				StructuredBuffer m_worldMatrixArraySB;		//!< ワールド行列の配列のストラクチャードバッファ。
 
 				bool m_isInited = false;					//!< 初期化済みか？
 

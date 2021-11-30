@@ -42,7 +42,7 @@ namespace nsMyGame
 
 				// レベルの生成
 				m_level3D.Init(
-					kLevelFilePath[enLevelAlpha],
+					kLevelFilePath[enLevelAlpha2],
 					[&](nsLevel3D::SLevelObjectData& objData)
 					{
 						// 建物の生成
@@ -95,6 +95,53 @@ namespace nsMyGame
 					}
 				);
 
+				// 電灯
+				m_level3D_streetLight.Init(
+					kLevelFilePath[enLevelmStreetLight],
+					kNumMapChipReserveTbl[enReserveStreetLight],
+					[&](nsLevel3D::SLevelObjectData& objData)
+					{
+						return false;
+					}
+					);
+				// 信号
+				m_level3D_trafficLight.Init(
+					kLevelFilePath[enLevelTrafficLight],
+					kNumMapChipReserveTbl[enReserveTrafficLight],
+					[&](nsLevel3D::SLevelObjectData& objData)
+					{
+						return true;
+					}
+				);
+				// 歩行者信号
+				m_level3D_pedestrianLight.Init(
+					kLevelFilePath[enLevelPedestrianLight],
+					kNumMapChipReserveTbl[enReservePedestrianLight],
+					[&](nsLevel3D::SLevelObjectData& objData)
+					{
+						return true;
+					}
+				);
+				// 木
+				m_level3D_streetTree.Init(
+					kLevelFilePath[enLevelStreetTree],
+					kNumMapChipReserveTbl[enReserveStreetTree],
+					[&](nsLevel3D::SLevelObjectData& objData)
+					{
+						return true;
+					}
+				);
+				// 木の枝
+				m_level3D_streetTreeBranch.Init(
+					kLevelFilePath[enLevelStreetTreeBranch],
+					kNumMapChipReserveTbl[enReserveStreetTree],
+					[&](nsLevel3D::SLevelObjectData& objData)
+					{
+						objData.isTranslucent = true;
+						objData.priority = nsCommonData::enPrioritySecond;
+						return true;
+					}
+				);
 
 				// タイマーの計測を始める
 				m_gameState->StartTimingGame();

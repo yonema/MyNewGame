@@ -25,6 +25,10 @@ namespace nsMyGame
 				constexpr const char* const kVsEntryPointFunc = "VSMain";
 				//!< スキンありの頂点シェーダーのエントリーポイント
 				constexpr const char* const kVsSkinEntryPointFunc = "VSSkinMain";
+				//!< インスタンシング描画用の頂点シェーダーのエントリーポイント
+				constexpr const char* const kVsInstancingEntryPointFunc = "VSMainInstancing";
+				//!< スキンあり、インスタンシング描画用の頂点シェーダーのエントリーポイント
+				constexpr const char* const kVsSkinInstancingEntryPointFunc = "VSMainSkinInstancing";
 				//!< ピクセルシェーダのエントリーポイント
 				constexpr const char* const kPsEntryPointFunc = "PSMain";
 				//!< GBufferに描画するモデルのシェーダーファイルパス

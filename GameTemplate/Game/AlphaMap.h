@@ -57,6 +57,11 @@ namespace nsMyGame
 
 			private:	// データメンバ
 				nsLevel3D::CLevel3D m_level3D;				//!< 3Dレベルクラス
+				nsLevel3D::CLevel3D m_level3D_streetLight;	//!< 電灯用の3Dレベルクラス
+				nsLevel3D::CLevel3D m_level3D_trafficLight;	//!< 信号用の3Dレベルクラス
+				nsLevel3D::CLevel3D m_level3D_pedestrianLight;	//!< 歩行者信号用の3Dレベルクラス
+				nsLevel3D::CLevel3D m_level3D_streetTree;	//!< 木用の3Dレベルクラス
+				nsLevel3D::CLevel3D m_level3D_streetTreeBranch;	//!< 木の枝用の3Dレベルクラス
 				nsNature::CSkyCube* m_skyCube = nullptr;	//!< スカイキューブ
 				nsPlayer::CPlayer* m_player = nullptr;		//!< プレイヤークラス
 				nsGoal::CGoal* m_goal = nullptr;			//!< ゴールクラス

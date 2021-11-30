@@ -43,6 +43,16 @@ SPSIn VSSkinMain( SVSIn vsIn )
 {
 	return VSMainCore(vsIn, CalcSkinMatrix(vsIn));
 }
+SPSIn VSMainInstancing(SVSIn vsIn, uint instanceID : SV_InstanceID)
+{
+    return VSMainCore(vsIn, g_worldMatrixArray[instanceID]);
+}
+SPSIn VSMainSkinInstancing(SVSIn vsIn, uint instanceID : SV_InstanceID)
+{
+    float4x4 mWorldLocal = CalcSkinMatrix(vsIn);
+    mWorldLocal = mul(g_worldMatrixArray[instanceID], mWorldLocal);
+    return VSMainCore(vsIn, mWorldLocal);
+}
 
 /// <summary>
 /// シャドウマップ描画用のピクセルシェーダー

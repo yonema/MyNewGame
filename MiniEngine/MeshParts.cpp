@@ -203,7 +203,8 @@ void MeshParts::Draw(
 	const Matrix& mView,
 	const Matrix& mProj,
 	const Vector4& emmisonColor,
-	const Vector4& mulColor
+	const Vector4& mulColor,
+	const int numInstance
 )
 {
 	//メッシュごとにドロー
@@ -246,7 +247,7 @@ void MeshParts::Draw(
 			rc.SetIndexBuffer(*ib);
 
 			//4. ドローコールを実行。
-			rc.DrawIndexed(ib->GetCount());
+			rc.DrawIndexedInstance(ib->GetCount(), numInstance);
 			descriptorHeapNo++;
 		}
 	}

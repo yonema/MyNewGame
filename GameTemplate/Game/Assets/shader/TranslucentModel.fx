@@ -51,8 +51,8 @@ struct SPSIn{
 Texture2D<float4> g_albedoMap	: register(t0);		// アルベドマップ
 Texture2D<float4> g_normalMap	: register(t1);		// 法線
 Texture2D<float4> g_msaoMap : register(t2);		//Metaaric,Smooth,AmbientOcclusionマップ
-Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t10);  //シャドウマップ。
-TextureCube<float4> g_skyCubeMap : register(t22);
+TextureCube<float4> g_skyCubeMap : register(t11);
+Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t12);  //シャドウマップ。
 
 // PBRのライティングのヘッダー
 #include "PBRLighting.h"
@@ -90,6 +90,16 @@ SPSIn VSMain(SVSIn vsIn)
 SPSIn VSSkinMain(SVSIn vsIn)
 {
 	return VSMainCore(vsIn, CalcSkinMatrix(vsIn));
+}
+SPSIn VSMainInstancing(SVSIn vsIn, uint instanceID : SV_InstanceID)
+{
+	return VSMainCore(vsIn, g_worldMatrixArray[instanceID]);
+}
+SPSIn VSMainSkinInstancing(SVSIn vsIn, uint instanceID : SV_InstanceID)
+{
+	float4x4 mWorldLocal = CalcSkinMatrix(vsIn);
+	mWorldLocal = mul(g_worldMatrixArray[instanceID], mWorldLocal);
+	return VSMainCore(vsIn, mWorldLocal);
 }
 
 //法線マップから法線を得る

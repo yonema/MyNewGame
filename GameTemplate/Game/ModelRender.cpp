@@ -40,8 +40,23 @@ namespace nsMyGame
 
 				// スケルトンが初期化されているか？
 				if (m_skeletonPtr)
+				{
 					// スケルトンが初期化されていたら、スケルトンを更新。
-					m_skeletonPtr->Update(m_model->GetWorldMatrix());
+
+					if (m_isEnableInstancingDraw)
+					{
+						// インスタンシング描画時
+						// 各インスタンスのワールド空間への変換は、
+						// インスタンスごとに行う必要があるので、頂点シェーダーで行う。
+						// なので、単位行列を渡して、モデル空間でボーン行列を構築する。
+						m_skeletonPtr->Update(g_matIdentity);
+					}
+					else
+					{
+						// 通常描画時
+						m_skeletonPtr->Update(m_model->GetWorldMatrix());
+					}
+				}
 				// アニメーションが初期化されているか？
 				if (m_animationPtr)	// アニメーションが初期化されていたら、アニメーションを進める。
 					m_animationPtr->Progress(nsTimer::GameTime().GetFrameDeltaTime() * m_animationSpeed);
@@ -83,20 +98,22 @@ namespace nsMyGame
 
 			/**
 			 * @brief 初期化関数
-			 * @param filePath モデルのファイルパス
-			 * @param animationClips アニメーションクリップ
-			 * @param numAnimationClip アニメーションクリップの数
-			 * @param modelUpAxis モデルのUP軸
+			 * @param[in] filePath モデルのファイルパス
+			 * @param[in] animationClips アニメーションクリップ
+			 * @param[in] numAnimationClip アニメーションクリップの数
+			 * @param[in] インスタンスの最大数
+			 * @param[in] modelUpAxis モデルのUP軸
 			*/
 			void CModelRender::Init(
 				const char* filePath,
 				AnimationClip* animationClips,
 				const int numAnimationClip,
+				const int maxInstance,
 				const EnModelUpAxis modelUpAxis
 			)
 			{
 				// モデルの初期化データの共通部分の設定
-				SetCommonModelInitData(filePath, modelUpAxis);
+				SetCommonModelInitData(filePath, maxInstance, modelUpAxis);
 
 				// GBufferのカラーフォーマットに合わせる
 				for (int i = 0; i < nsMyEngine::nsRenderingEngineConstData::enGBufferNum; i++)
@@ -110,6 +127,9 @@ namespace nsMyGame
 				// GBufferに描画するモデルの定数バッファをセット
 				SetRenderToGBufferModelCB();
 
+				// GBufferに描画するモデルのシェーダーリソースビューをセット
+				SetRenderToGBufferShaderResourceView();
+
 				// 初期化処理のメインコア
 				InitMainCore(animationClips, numAnimationClip);
 
@@ -120,19 +140,21 @@ namespace nsMyGame
 			 * @param[in] filePath モデルのファイルパス
 			 * @param[in] animationClips アニメーションクリップ
 			 * @param[in] numAnimationClip アニメーションクリップの数
+			 * @param[in] インスタンスの最大数
 			 * @param[in] modelUpAxis モデルのUP軸
 			*/
 			void CModelRender::IniTranslucent(
 				const char* filePath,
 				AnimationClip* animationClips,
 				const int numAnimationClip,
+				const int maxInstance,
 				const EnModelUpAxis modelUpAxis
 			)
 			{
 
 				// モデルの初期化データの共通部分の設定
 				// 半透明描画用のシェーダーを指定する
-				SetCommonModelInitData(filePath, modelUpAxis, kTranslucentModelFxFilePath);
+				SetCommonModelInitData(filePath, maxInstance, modelUpAxis, kTranslucentModelFxFilePath);
 
 				// メインレンダリングターゲットのからフォーマットに合わせる
 				m_modelInitData.m_colorBufferFormat[0] =
@@ -141,8 +163,8 @@ namespace nsMyGame
 				// 半透明描画用モデルの定数バッファをセット
 				SetTranslucentModelCB();
 
-				// デフォルトのシェーダーリソースビューをセット
-				SetDefaultShaderResourceView();
+				// 半透明描画用モデルのシェーダーリソースビューをセット
+				SetTranslucentModelShaderResourceView();
 
 				// 初期化処理のメインコア
 				// ディファ―ドではなく、フォワードレンダリングで描画するように指定する
@@ -264,35 +286,47 @@ namespace nsMyGame
 			/**
 			 * @brief モデルの初期化データの共通部分の設定
 			 * @param[in] tkmFilePath モデルのtkmファイルパス
-			 * @param[in] fxFilePath シェーダーのfxファイルパス
+			 * @param[in] maxInstance 最大インスタンス数
 			 * @param[in] modelUpAxis モデルのUP軸
-			 * @param[in] vsEntryPointFunc 頂点シェーダーのエントリーポイント
-			 * @param[in] vsSkinEntryPointFunc スキンありの頂点シェーダーのエントリーポイント
-			 * @param[in] psEntryPointFunc ピクセルシェーダーのエントリーポイント
+			 * @param[in] fxFilePath シェーダーのfxファイルパス
 			*/
 			void CModelRender::SetCommonModelInitData(
 				const char* tkmFilePath,
+				const int maxInstance,
 				const EnModelUpAxis modelUpAxis,
-				const char* fxFilePath,
-				const char* vsEntryPointFunc,
-				const char* vsSkinEntryPointFunc,
-				const char* psEntryPointFunc
+				const char* fxFilePath
 			)
 			{
 				// モデルのファイルパスの設定
 				m_modelInitData.m_tkmFilePath = tkmFilePath;
-
-				// モデルのUP軸の設定
-				m_modelInitData.m_modelUpAxis = modelUpAxis;
-
 				// シェーダーのファイルパスの設定
 				m_modelInitData.m_fxFilePath = fxFilePath;
-				// 頂点シェーダーのエントリーポイントの設定
-				m_modelInitData.m_vsEntryPointFunc = vsEntryPointFunc;
-				// スキンありの頂点シェーダーのエントリーポイントの設定
-				m_modelInitData.m_vsSkinEntryPointFunc = vsSkinEntryPointFunc;
+				// モデルのUP軸の設定
+				m_modelInitData.m_modelUpAxis = modelUpAxis;
 				// ピクセルシェーダーのエントリーポイントの設定
-				m_modelInitData.m_psEntryPointFunc = psEntryPointFunc;
+				m_modelInitData.m_psEntryPointFunc = kPsEntryPointFunc;
+
+				// インスタンシング描画用の初期化処理
+				InitInstancingDraw(maxInstance);
+
+				if (m_isEnableInstancingDraw)
+				{
+					// インスタンシング描画用
+					
+					// インスタンシング描画用の頂点シェーダーのエントリーポイントの設定
+					m_modelInitData.m_vsEntryPointFunc = kVsInstancingEntryPointFunc;
+					//スキンあり、インスタンシング描画用の頂点シェーダーのエントリーポイントの設定
+					m_modelInitData.m_vsSkinEntryPointFunc = kVsSkinInstancingEntryPointFunc;
+				}
+				else
+				{
+					// 通常描画用
+					
+					// 頂点シェーダーのエントリーポイントの設定
+					m_modelInitData.m_vsEntryPointFunc = kVsEntryPointFunc;
+					// スキンありの頂点シェーダーのエントリーポイントの設定
+					m_modelInitData.m_vsSkinEntryPointFunc = kVsSkinEntryPointFunc;
+				}
 
 				return;
 
@@ -326,7 +360,7 @@ namespace nsMyGame
 				m_modelInitData.m_expandConstantBuffer[1] = &m_modelExCB;
 				m_modelInitData.m_expandConstantBufferSize[1] = sizeof(m_modelExCB);
 
-				// フォワードレンダリングだけど、ディファ―ド用の定数バッファを持ってくる。
+				// IBL用のデータを設定
 				m_modelInitData.m_expandConstantBuffer[2] =
 					&nsMyEngine::CRenderingEngine::GetInstance()->GetIBLCB();
 				m_modelInitData.m_expandConstantBufferSize[2] =
@@ -336,12 +370,38 @@ namespace nsMyGame
 			}
 
 			/**
-			 * @brief デフォルトのシェーダーリソースビューをセット
+			 * @brief GBufferに描画するモデルのシェーダーリソースビューをセット
 			*/
-			void CModelRender::SetDefaultShaderResourceView()
+			void CModelRender::SetRenderToGBufferShaderResourceView()
+			{
+				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
+				if (m_isEnableInstancingDraw)
+				{
+					m_modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+				}
+
+				return;
+			}
+
+			/**
+			 * @brief 半透明描画用モデルのシェーダーリソースビューをセット
+			*/
+			void CModelRender::SetTranslucentModelShaderResourceView()
 			{
 				// シェーダーリソースビューの番号
 				int SRVNo = 0;
+
+				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
+				if (m_isEnableInstancingDraw)
+				{
+					m_modelInitData.m_expandShaderResoruceView[SRVNo] = &m_worldMatrixArraySB;
+				}
+				SRVNo++;
+
+				// IBL用のデータを設定
+				m_modelInitData.m_expandShaderResoruceView[SRVNo++] =
+					&nsMyEngine::CRenderingEngine::GetInstance()->GetIBLTexture();
+
 				// シャドウマップのテクスチャを設定する
 				for (int i = 0; i < nsLight::nsLightConstData::kMaxDirectionalLightNum; i++)
 				{
@@ -352,9 +412,6 @@ namespace nsMyGame
 							GetShadowMapRenderTargetTexture(i, areaNo);
 					}
 				}
-				// シェーダーリソースビューの設定
-				m_modelInitData.m_expandShaderResoruceView[SRVNo++] =
-					&nsMyEngine::CRenderingEngine::GetInstance()->GetIBLTexture();
 
 				return;
 			}
@@ -437,6 +494,33 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief インスタンシングデータの更新
+			 * @param[in] pos 座標
+			 * @param[in] rot 回転
+			 * @param[in] scale 拡大率
+			*/
+			void CModelRender::UpdateInstancingData(const Vector3& pos, const Quaternion& rot, const Vector3& scale)
+			{
+				if (m_numInstance > m_maxInstance)
+				{
+					MessageBoxA(nullptr, "インスタンスの数が多すぎです", "警告", MB_OK);
+				}
+
+				if (!m_isEnableInstancingDraw) {
+					return;
+				}
+
+				Matrix worldMatrix = m_model->CalcWorldMatrix(pos, rot, scale);
+
+				// インスタンシング描画を行う。
+				m_worldMatrixArray[m_numInstance] = worldMatrix;
+
+				m_numInstance++;
+
+				return;
+			}
+
+			/**
 			 * @brief シャドウマップに描画するモデルの初期化
 			*/
 			void CModelRender::InitShadowModel()
@@ -454,6 +538,12 @@ namespace nsMyGame
 				// カラーフォーマットを設定する
 				shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
 
+				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
+				if (m_isEnableInstancingDraw)
+				{
+					m_modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+				}
+
 				// シャドウマップ描画用のモデルを生成して初期化する
 				for (auto& shadowModels : m_shadowModels)
 				{
@@ -468,6 +558,28 @@ namespace nsMyGame
 				return;
 			}
 
+			/**
+			 * @brief インスタンシング描画用の初期化処理
+			 * @param[in] maxInstance 最大インスタンス数
+			*/
+			void CModelRender::InitInstancingDraw(int maxInstance)
+			{
+				m_maxInstance = maxInstance;
+				if (m_maxInstance > 1) {
+					//インスタンシング描画を行うので
+					//それ用のデータを構築する
+					//ワールド行列の配列のメモリを確保する
+					m_worldMatrixArray = std::make_unique<Matrix[]>(m_maxInstance);
+					//ワールド行列をGPUに転送するためのストラクチャードバッファを確保
+					m_worldMatrixArraySB.Init(
+						sizeof(Matrix),
+						m_maxInstance,
+						nullptr
+					);
+					m_isEnableInstancingDraw = true;
+				}
+			}
+
 
 			/**
 			 * @brief モデルを描画する
@@ -475,8 +587,36 @@ namespace nsMyGame
 			*/
 			void CModelRender::ModelRender(RenderContext& rc)
 			{
-				// モデルを描画
-				m_model->Draw(rc);
+				if (m_isEnableInstancingDraw)
+				{
+					// インスタンシング描画時
+
+					// そのうち、フラスタムカリング入れるから、その時の処理はここに入れる
+					m_fixNumInstanceOnFrame = m_numInstance;
+					//// ビューフラスタムに含まれているインスタンスのみ描画する。
+					//for (int instanceId = 0; instanceId < m_numInstance; instanceId++) {
+					//	if (m_geometryDatas[instanceId].IsInViewFrustum()) {
+					//		// ビューフラスタムに含まれている。
+					//		m_worldMatrixArray[m_fixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
+					//		m_fixNumInstanceOnFrame++;
+					//	}
+					//}
+
+					if (m_fixNumInstanceOnFrame != 0)
+					{
+						// ストラクチャードバッファを更新
+						m_worldMatrixArraySB.Update(m_worldMatrixArray.get());
+						// モデルを描画
+						m_model->Draw(rc, m_fixNumInstanceOnFrame);
+					}
+
+				}
+				else
+				{
+					// 通常描画時
+					// モデルを描画
+					m_model->Draw(rc);
+				}
 
 				return;
 			}
@@ -502,7 +642,7 @@ namespace nsMyGame
 						return;
 
 					// シャドウマップに描画するモデルを描画
-					m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix);
+					m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix, m_fixNumInstanceOnFrame);
 				}
 
 				return;

@@ -27,10 +27,27 @@ namespace nsMyGame
 		/**
 		 * @brief レベルを初期化。
 		 * @param[in] filePath tklファイルのファイルパス
+		 * @param[in] numMapChipReserve マップチップの予約数
 		 * @param[in] hookFunc オブジェクトを作成する時の処理をフックするための関数オブジェクト
 		*/
 		void CLevel3D::Init(
 			const char* filePath,
+			std::function<bool(SLevelObjectData& objData)> hookFunc
+		)
+		{
+			Init(filePath, 1, hookFunc);
+			return;
+		}
+
+		/**
+		 * @brief レベルを初期化。
+		 * @param[in] filePath tklファイルのファイルパス
+		 * @param[in] numMapChipReserve マップチップの予約数
+		 * @param[in] hookFunc オブジェクトを作成する時の処理をフックするための関数オブジェクト
+		*/
+		void CLevel3D::Init(
+			const char* filePath,
+			const int numMapChipReserve,
 			std::function<bool(SLevelObjectData& objData)> hookFunc
 		)
 		{
@@ -118,10 +135,16 @@ namespace nsMyGame
 					//hookがfalseなままならば。
 					if (isHooked == false) {
 						//マップチップレンダーを作成。
-						CreateMapChip(levelObjData, cFilePath);
+						CreateMapChip(levelObjData, cFilePath, numMapChipReserve);
 					}
 
 				}
+			}
+
+			for (auto& mapChipRender : m_mapChipPtrs)
+			{
+				//マップチップレンダーを初期化。
+				mapChipRender.second->Init();
 			}
 
 			return;
@@ -131,12 +154,24 @@ namespace nsMyGame
 		 * @brief マップチップを作成。
 		 * @param[in] objData レベルオブジェクトデータ
 		 * @param[in] filePath ファイルパス
+		 * @param[in] numMapChipReserve マップチップの予約数
 		*/
-		void CLevel3D::CreateMapChip(const SLevelObjectData& objData, const char* filePath)
+		void CLevel3D::CreateMapChip(const SLevelObjectData& objData, const char* filePath, const int numMapChipReserve)
 		{
-			//フックされなかったので、マップチップを作成する。
-			auto mapChipRender = std::make_shared<CMapChip>(objData, filePath);
-			m_mapChipPtrs.push_back(mapChipRender);
+			std::string key = filePath;
+			//マップチップレンダーにまだフックされていなかったら。
+			if (m_mapChipPtrs.count(key) == 0)
+			{
+				//フックされなかったので、マップチップを作成する。
+				auto mapChipRender = std::make_shared<CMapChip>(objData, filePath, numMapChipReserve);
+				m_mapChipPtrs[key] = mapChipRender;
+			}
+			else
+			{
+				auto& mapChipRender = m_mapChipPtrs[key];
+				//マップチップデータを追加する。
+				mapChipRender->AddMapChipData(objData);
+			}
 
 			return;
 		}
