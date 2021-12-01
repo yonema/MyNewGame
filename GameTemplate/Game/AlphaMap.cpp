@@ -71,6 +71,9 @@ namespace nsMyGame
 								return true;
 							}
 
+							MessageBoxA(nullptr, "Buildingの名前がない", "警告", MB_OK);
+
+							return true;
 						}
 						// プレイヤーの生成
 						else if (objData.EqualObjectName(kPlayerName))

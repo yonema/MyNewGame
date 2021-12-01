@@ -55,6 +55,11 @@ namespace nsMyGame
 				enBuilding_L_06a,
 				enBuilding_L_06b,
 
+				enBuilding_highrise_01,
+				enBuilding_highrise_02,
+				enBuilding_highrise_03,
+				enBuilding_highrise_04,
+
 				enBuildingTypeNum	//!< Œš•¨‚Ìƒ^ƒCƒv‚Ì”
 			};
 
@@ -99,7 +104,12 @@ namespace nsMyGame
 				"Building_L_05a",
 				"Building_L_05b",
 				"Building_L_06a",
-				"Building_L_06b"
+				"Building_L_06b",
+
+				"Building_highrise_01",
+				"Building_highrise_02",
+				"Building_highrise_03",
+				"Building_highrise_04",
 			};
 
 			/**
@@ -136,7 +146,12 @@ namespace nsMyGame
 				"Assets/modelData/buildings/Building_L_05a.tkm",
 				"Assets/modelData/buildings/Building_L_05b.tkm",
 				"Assets/modelData/buildings/Building_L_06a.tkm",
-				"Assets/modelData/buildings/Building_L_06b.tkm"
+				"Assets/modelData/buildings/Building_L_06b.tkm",
+
+				"Assets/modelData/buileings_highrise/Building_highrise_01.tkm",
+				"Assets/modelData/buileings_highrise/Building_highrise_02.tkm",
+				"Assets/modelData/buileings_highrise/Building_highrise_03.tkm",
+				"Assets/modelData/buileings_highrise/Building_highrise_04.tkm"
 			};
 
 		}

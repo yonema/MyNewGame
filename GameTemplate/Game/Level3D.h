@@ -51,7 +51,9 @@ namespace nsMyGame
 			bool EqualObjectName(const char* objName)
 			{
 				wchar_t objNameW[256];
-				mbstowcs(objNameW, objName, sizeof(objName) * 2);
+				// sizeof(objName)だとポインタのサイズが戻ってくるんだぜ。
+				// 日本語上手くいかないんだぜ
+				mbstowcs(objNameW, objName, std::strlen(objName) + 1);
 				return wcscmp(objNameW, name) == 0;
 			}
 
