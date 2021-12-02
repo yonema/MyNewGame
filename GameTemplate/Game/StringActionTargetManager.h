@@ -118,7 +118,7 @@ namespace nsMyGame
 
 		private:	// 定数
 
-			static const int m_kSwingTargetNum = 256;	// スイングのターゲット
+			static const int m_kSwingTargetNum = 512;	// スイングのターゲット
 
 		private:	// データメンバ
 			std::vector<nsSwingTarget::CSwingTarget*> m_swingTargets;	// スイングのターゲットのコンテナ
