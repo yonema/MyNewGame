@@ -60,6 +60,10 @@ namespace nsMyGame
 				enBuilding_highrise_03,
 				enBuilding_highrise_04,
 
+				enBuilding_highrise_S_01,
+				enBuilding_highrise_S_02,
+				enBuilding_highrise_S_03,
+
 				enBuildingTypeNum	//!< Œš•¨‚Ìƒ^ƒCƒv‚Ì”
 			};
 
@@ -110,6 +114,10 @@ namespace nsMyGame
 				"Building_highrise_02",
 				"Building_highrise_03",
 				"Building_highrise_04",
+
+				"Building_highrise_S_01",
+				"Building_highrise_S_02",
+				"Building_highrise_S_03"
 			};
 
 			/**
@@ -151,7 +159,11 @@ namespace nsMyGame
 				"Assets/modelData/buileings_highrise/Building_highrise_01.tkm",
 				"Assets/modelData/buileings_highrise/Building_highrise_02.tkm",
 				"Assets/modelData/buileings_highrise/Building_highrise_03.tkm",
-				"Assets/modelData/buileings_highrise/Building_highrise_04.tkm"
+				"Assets/modelData/buileings_highrise/Building_highrise_04.tkm",
+
+				"Assets/modelData/buileings_highrise/Building_highrise_S_01.tkm",
+				"Assets/modelData/buileings_highrise/Building_highrise_S_02.tkm",
+				"Assets/modelData/buileings_highrise/Building_highrise_S_03.tkm"
 			};
 
 		}

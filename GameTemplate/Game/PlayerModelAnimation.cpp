@@ -183,10 +183,10 @@ namespace nsMyGame
 			{
 				if (m_animState != enAnim_airIdle)
 				{
-					m_playerModel->SetAnimationSpeed(2.0f);
+					m_playerModel->SetAnimationSpeed(1.0f);
 					if (m_playerModel->IsAnimationPlaying() == true)
 					{
-						m_AnimInterpolateTime = 0.0f;
+						//m_AnimInterpolateTime = 0.0f;
 						m_animState = enAnim_jumpUp;
 					}
 					else
@@ -199,23 +199,23 @@ namespace nsMyGame
 			}
 			const float playerVelocity = m_playerRef->GetPlayerMovement().GetXZSpeed();
 
-			if (playerVelocity <= 10.0f)
+			if (playerVelocity <= nsPlayerConstData::nsWalkAndRunConstData::kMinSpeed + 10.0f)
 			{
 				m_animState = enAnim_idle;
-				m_playerModel->SetAnimationSpeed(2.0f);
+				m_playerModel->SetAnimationSpeed(1.0f);
 			}
 			else if (playerVelocity <= nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed + 50.0f)
 			{
 				m_animState = enAnim_walk;
 				m_playerModel->SetAnimationSpeed(
-					1.0f + 1.0f * playerVelocity / nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed
+					1.0f//0.5f + 0.5f * playerVelocity / nsPlayerConstData::nsWalkAndRunConstData::kWalkMaxSpeed
 				);
 			}
 			else
 			{
 				m_animState = enAnim_run;
 				m_playerModel->SetAnimationSpeed(
-					2.0f * playerVelocity / nsPlayerConstData::nsWalkAndRunConstData::kRunMaxSpeed
+					1.0f + 0.5f * playerVelocity / nsPlayerConstData::nsWalkAndRunConstData::kRunMaxSpeed
 				);
 			}
 

@@ -89,8 +89,7 @@ namespace nsMyGame
 		*/
 		void CMyEngine::ExecuteGameLoop()
 		{
-			//ストップウォッチ計測開始
-			m_stopWatch->Start();
+
 
 			// tkEngineのフレームの最初の処理
 			m_tkEngine->BeginFrame();
@@ -108,6 +107,9 @@ namespace nsMyGame
 			m_stopWatch->Stop();
 			//デルタタイムをストップウォッチの計測時間から、計算する
 			nsTimer::GameTime().PushFrameDeltaTime(static_cast<float>(m_stopWatch->GetElapsed()));
+
+			//ストップウォッチ計測開始
+			m_stopWatch->Start();
 
 			// tkEngineのフレームの最後の処理
 			m_tkEngine->EndFrame();

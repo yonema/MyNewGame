@@ -129,6 +129,7 @@ namespace nsMyGame
 				m_playerRef->SetPosition(
 					m_charaCon.Execute(m_moveVec, nsTimer::GameTime().GetFrameDeltaTime())
 				);
+				//m_playerRef->SetPosition(m_playerRef->GetPosition() + m_moveVec / 100.0f);
 
 				return;
 			}

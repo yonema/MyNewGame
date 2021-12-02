@@ -117,7 +117,7 @@ namespace nsMyGame
 							// ココで指定したものが生成される
 							case enPropsStreetLight:		// 街灯
 							case enPropsTrafficLight:		// 信号機
-							//case enPropsPedestrianLight:	// 歩行者用信号機
+							case enPropsPedestrianLight:	// 歩行者用信号機
 							//case enPropsStreetTree:			// 街路樹
 								return false;
 								break;

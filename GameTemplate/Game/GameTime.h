@@ -47,6 +47,8 @@ namespace nsMyGame
 
 			void PushFrameDeltaTime(float deltaTime)
 			{
+				float a = max(1.0f / 144.0f, deltaTime);
+				float b = min(a, 1.0f / 30.0f);
 				m_frameDeltaTimeQue.push_back(min(max(1.0f / 144.0f, deltaTime), 1.0f / 30.0f));
 				if (m_frameDeltaTimeQue.size() > 30.0f) {
 					float totalTime = 0.0f;
