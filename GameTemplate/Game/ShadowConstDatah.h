@@ -28,6 +28,14 @@ namespace nsMyGame
 					enShadowMapArea_num		//!< シャドウマップのエリアの数
 				};
 
+				//!< シャドウマップのサイズ
+				constexpr int kShadowMapSizes[enShadowMapArea_num]
+				{
+					2048,
+					1024,
+					512
+				};
+
 				//!< デフォルトのカスケードシャドウのエリア率
 				constexpr float kDefaultCascadeAreaRateArray[enShadowMapArea_num] = { 0.05f,0.3f, 1.0f };
 
@@ -37,7 +45,7 @@ namespace nsMyGame
 				constexpr float kBlurPower = 1.0f;	//!< ブラーの強さ
 
 				const Vector3 kLightTargetPos = Vector3::Zero;	//!< ライトのターゲットの座標
-				constexpr float kLightMaxHeight = 5000.0f;		//!< ライトの最大の高さ
+				constexpr float kLightMaxHeight = 10000.0f;		//!< ライトの最大の高さ
 				constexpr float kLightMinFar = 1.0f;	//!< ライトの最小ファー
 				constexpr float kLightMaxFar = 15000.0f;	//!< ライトの最大ファー
 

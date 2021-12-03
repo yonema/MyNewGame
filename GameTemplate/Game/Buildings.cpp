@@ -114,11 +114,14 @@ namespace nsMyGame
 				{
 					// 一個だけなら、通常のモデルの初期化をして、次へスキップ。
 					InitModel(bType);
-					continue;
+				}
+				else
+				{
+					// 複数あるなら、インスタンシング描画のモデルの初期化。
+					InitModelInstance(bType, numBuilding);
 				}
 
-				// 複数あるなら、インスタンシング描画のモデルの初期化。
-				InitModelInstance(bType, numBuilding);
+				m_modelRenderMap[bType]->SetIsShadowCaster(true);
 			}
 
 

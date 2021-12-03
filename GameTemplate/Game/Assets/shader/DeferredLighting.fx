@@ -127,10 +127,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	// アンビエントオクルージョンマップ
 	float ambientOcclusion = msao.b;
 
-
-
     //影生成用のパラメータ。
-	float shadowParam = 0.0f;//normalTexture.Sample(g_sampler, psIn.uv).w;
+	float shadowParam = 1.0f;//normalTexture.Sample(g_sampler, psIn.uv).w;
 
     // 視線に向かって伸びるベクトルを計算する
     float3 toEye = normalize(eyePos - worldPos);
@@ -146,6 +144,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 			//影を生成するなら。
 			shadow = CalcShadowRate(ligNo, worldPos) * shadowParam;
 		}
+
         // PBRのライティングを計算
         lig += CalcLighting(
             directionalLightData[ligNo].direction,
@@ -158,6 +157,8 @@ float4 PSMain(SPSIn psIn) : SV_Target0
             specColor
         ) * (1.0f - shadow);
     }
+
+	//return float4(lig, 1.0f);
 
 	// ポイントライトのライティングの計算
 	for (int ligNo = 0; ligNo < pointLightNum; ligNo++)
@@ -226,14 +227,14 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	// アンビエントライト率
 	float ambientRate = 1.0f;
-	float luminance = 1.5f;
+	float luminance = 1.0f;
 
 	// IBLを行うか？
 	if (isIBL == 1)
 	{
 		// 行う
 		// IBL率
-		float iblRate = 0.5f;
+		float iblRate = 0.9f;
 		// 視線からの反射ベクトルを求める。
 		float3 v = reflect(toEye * -1.0f, normal);
 		// スムース具合によってミップマップのレベルを変更する。

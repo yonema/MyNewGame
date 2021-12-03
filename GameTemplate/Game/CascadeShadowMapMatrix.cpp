@@ -115,7 +115,8 @@ namespace nsMyGame
 				// ビュー行列を計算する
 				Matrix viewMatrix;
 				// ライトのターゲット
-				const Vector3 lightTarget = kLightTargetPos;
+				//const Vector3 lightTarget = kLightTargetPos;
+				const Vector3 lightTarget = g_camera3D->GetTarget();//kLightTargetPos;
 				// ライトのポジション
 				Vector3 lightPos = lightTarget;
 				// ライトターゲットからライトの方向に応じた距離をとる
@@ -142,7 +143,9 @@ namespace nsMyGame
 				Matrix projMatrix;
 				// 並行投影行列で計算する
 				projMatrix.MakeOrthoProjectionMatrix(
+					//1280,
 					5000.0f,
+					//720,
 					5000.0f,
 					kLightMinFar,
 					kLightMaxFar

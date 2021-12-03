@@ -41,41 +41,23 @@ namespace nsMyGame
 					clearColor[i] = kDefaultClearColor[i];
 				}
 
-				// 近景用のシャドウマップの生成
-				m_shadowMaps[enShadowMapArea_near].Create(
-					2048,
-					2048,
-					1,
-					1,
-					colorFormat,
-					depthFormat,
-					clearColor
-				);
-				// 中景用のシャドウマップの生成
-				m_shadowMaps[enShadowMapArea_middle].Create(
-					1024,
-					1024,
-					1,
-					1,
-					colorFormat,
-					depthFormat,
-					clearColor
-				);
-				// 遠景用のシャドウマップの生成
-				m_shadowMaps[enShadowMapArea_far].Create(
-					512,
-					512,
-					1,
-					1,
-					colorFormat,
-					depthFormat,
-					clearColor
-				);
+				for (int shadowMapNo = 0; shadowMapNo < enShadowMapArea_num; shadowMapNo++)
+				{
+					// シャドウマップの初期化
+					m_shadowMaps[shadowMapNo].Create(
+						kShadowMapSizes[shadowMapNo],
+						kShadowMapSizes[shadowMapNo],
+						1,
+						1,
+						colorFormat,
+						depthFormat,
+						clearColor
+					);
 
-				// ガウシアンブラーの初期化
-				m_blur[0].Init(&m_shadowMaps[enShadowMapArea_near].GetRenderTargetTexture());
-				m_blur[1].Init(&m_shadowMaps[enShadowMapArea_middle].GetRenderTargetTexture());
-				m_blur[2].Init(&m_shadowMaps[enShadowMapArea_far].GetRenderTargetTexture());
+					// ガウシアンブラーの初期化
+					m_blur[shadowMapNo].Init(&m_shadowMaps[shadowMapNo].GetRenderTargetTexture());
+
+				};
 
 				return;
 			}

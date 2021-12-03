@@ -541,7 +541,7 @@ namespace nsMyGame
 				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
 				if (m_isEnableInstancingDraw)
 				{
-					m_modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+					shadowModelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
 				}
 
 				// シャドウマップ描画用のモデルを生成して初期化する
@@ -635,14 +635,25 @@ namespace nsMyGame
 				const Matrix& lvpMatrix
 			)
 			{
-				if (m_shadowModels[0][0])
+				if (m_isEnableInstancingDraw)
 				{
-					//@todoディレクションライトの数だけシャドウモデルを作ったら重かったので、インスタンス描画を入れるまではライト1個分のみ
-					if (ligNo != 0)
-						return;
+					// インスタンシング描画時
+					if (m_shadowModels[0][0])
+					{
+						//@todoディレクションライトの数だけシャドウモデルを作ったら重かったので、インスタンス描画を入れるまではライト1個分のみ
+						if (ligNo != 0)
+							return;
 
-					// シャドウマップに描画するモデルを描画
-					m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix, m_fixNumInstanceOnFrame);
+						// シャドウマップに描画するモデルを描画
+						m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix, m_fixNumInstanceOnFrame);
+					}
+				}
+				else
+				{
+					// 通常描画時
+
+					m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix);
+
 				}
 
 				return;
