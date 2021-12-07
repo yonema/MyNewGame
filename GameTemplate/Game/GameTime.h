@@ -22,7 +22,10 @@ namespace nsMyGame
 		class CGameTime : private nsUtil::Noncopyable
 		{
 		public:
-			CGameTime() = default;
+			CGameTime()
+			{
+				m_font.SetShadowParam(true, 2.0f, Vector4::Black);
+			}
 			~CGameTime() = default;
 		public:  //ƒƒ“ƒoŠÖ”
 
