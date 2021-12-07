@@ -112,20 +112,27 @@ namespace nsMyGame
 							// ユーザー定義のコリジョン属性を小物用の属性に設定する
 							objData.userIndex = EnCollisionAttr::enCollisionAttr_Props;
 
+
 							switch (propsType)
 							{
 							// ココで指定したものが生成される
 							case enPropsStreetLight:		// 街灯
 							case enPropsTrafficLight:		// 信号機
 							case enPropsPedestrianLight:	// 歩行者用信号機
+								return false;
+								break;
 							case enPropsStreetTree:			// 街路樹
+
+								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_LOD.tkm";
 								return false;
 								break;
 
 							// 街路樹の枝は半透明で描画する
 							case enPropsStreetTreeBranch:
+
 								objData.isTranslucent = true;
 								objData.priority = nsCommonData::enPrioritySecond;
+								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_Branch_LOD.tkm";
 								return false;
 								break;
 

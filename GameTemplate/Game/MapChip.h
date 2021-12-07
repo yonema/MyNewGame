@@ -86,6 +86,7 @@ namespace nsMyGame
 			int m_priority = nsCommonData::enPriorityFirst;				//!< 優先度
 			//!< ユーザー定義のコリジョン属性
 			EnCollisionAttr m_userIndex = EnCollisionAttr::enCollisionAttr_None;
+			std::unique_ptr<const char*> m_lodModelFilePath = nullptr;	//!< LOD用のモデルのファイルパス
 
 		};
 

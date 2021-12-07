@@ -23,6 +23,12 @@ namespace nsMyGame
 			// ユーザー定義のコリジョン属性を取得
 			m_userIndex = objData.userIndex;
 
+			// LOD用のモデルのファイルパスが指定されていたら、ファイルパスを取得
+			if (objData.lodModelFilePath)
+			{
+				m_lodModelFilePath = std::make_unique<const char*>(objData.lodModelFilePath);
+			}
+
 			// マップチップデータを追加する
 			AddMapChipData(objData);
 
@@ -96,6 +102,15 @@ namespace nsMyGame
 				m_modelRender->IniTranslucent(*m_filePath.get());
 			}
 
+			// LOD用のモデルが指定されているか？
+			if (m_lodModelFilePath)
+			{
+				// LOD用のモデルの初期化
+				m_modelRender->InitLODModel(*m_lodModelFilePath);
+				// LODを有効化
+				m_modelRender->SetIsEnableLOD(true);
+			}
+
 			auto p = std::make_unique<PhysicsStaticObject>();
 			//静的物理オブジェクトを作成。
 			p->CreateFromModel(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix(), m_userIndex);
@@ -121,6 +136,15 @@ namespace nsMyGame
 			{
 				// 半透明描画でモデルレンダラーの初期化
 				m_modelRender->IniTranslucent(*m_filePath.get(), nullptr, 0, numInstance);
+			}
+
+			// LOD用のモデルが指定されているか？
+			if (m_lodModelFilePath)
+			{
+				// LOD用のモデルの初期化
+				m_modelRender->InitLODModel(*m_lodModelFilePath);
+				// LODを有効化
+				m_modelRender->SetIsEnableLOD(true);
 			}
 
 			for (auto& mapChipData : m_mapChipDataVector)

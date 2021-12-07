@@ -27,7 +27,8 @@ void MeshParts::InitFromTkmFile(
 	void* const* expandData,
 	const int* expandDataSize,
 	IShaderResource* const* expandShaderResourceView,
-	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat,
+	const D3D12_CULL_MODE cullMode
 )
 {
 	m_meshs.resize(tkmFile.GetNumMesh());
@@ -40,7 +41,8 @@ void MeshParts::InitFromTkmFile(
 			vsEntryPointFunc,
 			vsSkinEntryPointFunc,
 			psEntryPointFunc,
-			colorBufferFormat
+			colorBufferFormat,
+			cullMode
 		);
 		meshNo++;
 	});
@@ -118,7 +120,8 @@ void MeshParts::CreateMeshFromTkmMesh(
 	const char* vsEntryPointFunc,
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
-	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat,
+	const D3D12_CULL_MODE cullMode
 )
 {
 	//1. 頂点バッファを作成。
@@ -178,7 +181,8 @@ void MeshParts::CreateMeshFromTkmMesh(
 			vsEntryPointFunc,
 			vsSkinEntryPointFunc,
 			psEntryPointFunc,
-			colorBufferFormat
+			colorBufferFormat,
+			cullMode
 		);
 		mesh->m_materials.push_back(mat);
 	}

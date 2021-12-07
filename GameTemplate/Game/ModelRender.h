@@ -300,6 +300,30 @@ namespace nsMyGame
 				*/
 				void UpdateInstancingData(const Vector3& pos, const Quaternion& rot, const Vector3& scale);
 
+				/**
+				 * @brief LOD用のモデルの初期化
+				 * @param[in] filePath LOD用のモデルのファイルパス
+				*/
+				void InitLODModel(const char* filePath);
+
+				/**
+				 * @brief LODは有効か？を設定する
+				 * @param[in] isEnableLOD LODは有効か？
+				*/
+				void SetIsEnableLOD(const bool isEnableLOD)
+				{
+					m_isEnableLOD = isEnableLOD;
+				}
+
+				/**
+				 * @brief LODの距離を設定
+				 * @param[in] distanceLOD LODの距離
+				*/
+				void SetDistanceLOD(float distanceLOD)
+				{
+					m_distanceLOD = distanceLOD;
+				}
+
 
 			private:	// privateなメンバ関数
 
@@ -409,12 +433,20 @@ namespace nsMyGame
 				*/
 				void PlayerShadowModelRender(RenderContext& rc,const int ligNo, const Matrix& lvpMatrix);
 
+				/**
+				 * @brief インスタンシング描画時の描画関数
+				 * @param[in] rc レンダリングコンテキスト
+				*/
+				void InstancingModelRender(RenderContext& rc);
+
 			private:	// データメンバ
 				ModelPtr m_model;							//!< モデルクラス
 				//@todoディレクションライトの数だけシャドウモデルを作ったら重かったので、インスタンス描画を入れるまではライト1個分のみ
 				//!< シャドウマップ描画用モデルクラス
 				ModelPtr m_shadowModels[1/*nsLight::nsLightConstData::kMaxDirectionalLightNum*/][nsShadow::nsShadowConstData::enShadowMapArea_num];
+				ModelPtr m_lodModel;						//!< LOD用のモデル
 				ModelInitData m_modelInitData;				//!< モデルの初期化データ
+
 				CRender m_render;							//!< レンダラークラス
 				SkeletonPtr m_skeletonPtr;					//!< スケルトンクラス
 				AnimPtr m_animationPtr;						//!< アニメーションクラス
@@ -428,16 +460,20 @@ namespace nsMyGame
 				int	m_numInstance = 0;						//!< インスタンスの数。
 				int	m_maxInstance = 1;						//!< 最大インスタンス数。
 				int	m_fixNumInstanceOnFrame = 0;			//!< このフレームに描画するインスタンスの数の確定数。
-				bool m_isEnableInstancingDraw = false;		//!< インスタンシング描画が有効か？
+				int	m_fixNumInstanceOnFrameLOD = 0;			//!< LOD用のこのフレームに描画するインスタンスの数の確定数。
 				std::unique_ptr<Matrix[]> m_worldMatrixArray;	//!< ワールド行列の配列。
 				std::unique_ptr<Matrix[]> m_worldMatrixArrayBuffer;	//!< カリング後のワールド行列の配列。
+				std::unique_ptr<Matrix[]> m_worldMatrixArrayBufferLOD;	//!< LOD用のカリング後のワールド行列の配列。
 				StructuredBuffer m_worldMatrixArraySB;		//!< ワールド行列の配列のストラクチャードバッファ。
+				StructuredBuffer m_worldMatrixArraySBLOD;	//!< LOD用のールド行列の配列のストラクチャードバッファ。
 
 				std::vector<GeometryDataPtr> m_geometryDatas;	//!< ジオメトリ情報のコンテナ
+				float m_distanceLOD = nsModelConstData::kDefaultDistanceLOD;	//!< LODの距離
 
+				bool m_isEnableInstancingDraw = false;		//!< インスタンシング描画が有効か？
 				bool m_isInited = false;					//!< 初期化済みか？
 				bool m_isShadowCaster = false;				//!< シャドウキャスターか？
-
+				bool m_isEnableLOD = false;					//!< LODは有効か？
 			};
 
 		}

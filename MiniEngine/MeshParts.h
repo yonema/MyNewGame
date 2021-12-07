@@ -51,7 +51,8 @@ public:
 		void* const* expandData,
 		const int* expandDataSize,
 		IShaderResource* const* expandShaderResourceView,
-		const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+		const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat,
+		const D3D12_CULL_MODE cullMode
 	);
 
 	// í«â¡ÅBïœçXÅB
@@ -114,7 +115,8 @@ private:
 		const char* vsEntryPointFunc,
 		const char* vsSkinEntryPointFunc,
 		const char* psEntryPointFunc,
-		const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+		const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat,
+		const D3D12_CULL_MODE cullMode
 	);
 
 	

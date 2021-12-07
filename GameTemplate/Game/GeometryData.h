@@ -75,8 +75,18 @@ namespace nsMyGame
 			*/
 			bool IsShadowCaster() const;
 
+			/**
+			 * @brief カメラからの距離を取得
+			 * @return カメラからの距離
+			*/
+			float GetDistanceFromCamera() const
+			{
+				return m_distanceFromCamera;
+			}
+
 		private:	// データメンバ
 			bool m_isInViewFrustum = false;			//!< ビューフラスタムに含まれているか？
+			float m_distanceFromCamera = 0.0f;		//!< カメラからの距離
 			CAABB m_aabb;							//!< AABB
 			Vector3 m_aabbWorldVertexPositions[8];	//!< AABBのワールド空間での8頂点。
 			Vector3 m_aabbMax = Vector3::MinV;		//!< AABBのワールド空間での最大頂点

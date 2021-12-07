@@ -27,6 +27,8 @@ struct ModelInitData {
 	EnModelUpAxis m_modelUpAxis = enModelUpAxisZ;					//モデルの上方向。
 
 	// 変更。追加。
+	D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK;
+
 	// <カラーバッファーフォーマット, レンダリングターゲットの最大数>
 	std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT> m_colorBufferFormat = {
 	DXGI_FORMAT_R8G8B8A8_UNORM,

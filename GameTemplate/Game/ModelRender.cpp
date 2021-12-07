@@ -78,6 +78,12 @@ namespace nsMyGame
 					}
 				}
 
+				if (m_lodModel)
+				{
+					// LODモデルが有効なら更新
+					m_lodModel->UpdateWorldMatrix(m_position, m_rotation, m_scale);
+				}
+
 				// モデルの座標更新
 				m_model->UpdateWorldMatrix(m_position, m_rotation, m_scale);
 
@@ -155,6 +161,9 @@ namespace nsMyGame
 				const EnModelUpAxis modelUpAxis
 			)
 			{
+				// 一時的な処理、気になれば後で変える
+				// 半透明描画のオブジェクトは裏面カリングしない
+				m_modelInitData.m_cullMode = D3D12_CULL_MODE_NONE;
 
 				// モデルの初期化データの共通部分の設定
 				// 半透明描画用のシェーダーを指定する
@@ -633,6 +642,34 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief LOD用のモデルの初期化
+			 * @param[in] filePath LOD用のモデルのファイルパス
+			*/
+			void CModelRender::InitLODModel(const char* filePath)
+			{
+
+				if (m_isEnableInstancingDraw)
+				{
+					// LOD用のインスタンシング用の設定
+					m_worldMatrixArrayBufferLOD = std::make_unique<Matrix[]>(m_maxInstance);
+					m_worldMatrixArraySBLOD.Init(
+						sizeof(Matrix),
+						m_maxInstance,
+						nullptr
+					);
+
+					m_modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySBLOD;
+				}
+
+				// LOD用のモデルの初期化
+				m_modelInitData.m_tkmFilePath = filePath;
+				m_lodModel = std::make_unique<Model>();
+				m_lodModel->Init(m_modelInitData);
+
+				return;
+			}
+
+			/**
 			 * @brief シャドウマップに描画するモデルの初期化
 			*/
 			void CModelRender::InitShadowModel()
@@ -705,33 +742,23 @@ namespace nsMyGame
 				{
 					// インスタンシング描画時
 
-					// そのうち、フラスタムカリング入れるから、その時の処理はここに入れる
-					m_fixNumInstanceOnFrame = 0;
-					// ビューフラスタムに含まれているインスタンスのみ描画する。
-					for (int instanceId = 0; instanceId < m_numInstance; instanceId++)
-					{
-						if (m_geometryDatas[instanceId]->IsInViewFrustum()) 
-						{
-							// ビューフラスタムに含まれている。
-							m_worldMatrixArrayBuffer[m_fixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
-							m_fixNumInstanceOnFrame++;
-						}
-					}
-
-					if (m_fixNumInstanceOnFrame != 0)
-					{
-						// ストラクチャードバッファを更新
-						m_worldMatrixArraySB.Update(m_worldMatrixArrayBuffer.get());
-						// モデルを描画
-						m_model->Draw(rc, m_fixNumInstanceOnFrame);
-					}
+					InstancingModelRender(rc);
 
 				}
 				else
 				{
 					// 通常描画時
-					// モデルを描画
-					m_model->Draw(rc);
+					// LODチェック
+					if (m_isEnableLOD != true || m_geometryDatas[0]->GetDistanceFromCamera() < m_distanceLOD)
+					{
+						// 通常のモデルを描画
+						m_model->Draw(rc);
+					}
+					else
+					{
+						// LODのモデルを描画
+						m_lodModel->Draw(rc);
+					}
 				}
 
 				return;
@@ -803,6 +830,65 @@ namespace nsMyGame
 					m_shadowModels[ligNo][0]->Draw(rc, Matrix::Identity, lvpMatrix);
 
 				}
+			}
+
+			/**
+			 * @brief インスタンシング描画時の描画関数
+			 * @param[in] rc レンダリングコンテキスト
+			*/
+			void CModelRender::InstancingModelRender(RenderContext& rc)
+			{
+				// インスタンスの確定数をリセット
+				m_fixNumInstanceOnFrame = 0;
+				m_fixNumInstanceOnFrameLOD = 0;
+
+				// ビューフラスタムに含まれているインスタンスのみ描画する。
+				for (int instanceId = 0; instanceId < m_numInstance; instanceId++)
+				{
+					if (m_geometryDatas[instanceId]->IsInViewFrustum() != true)
+					{
+						// ビューフラスタムに含まれていない。
+						continue;
+					}
+
+					// ビューフラスタムに含まれている。
+
+					// LODチェック
+					if (m_isEnableLOD != true || m_geometryDatas[instanceId]->GetDistanceFromCamera() < m_distanceLOD)
+					{
+						// 普通のモデル用
+						m_worldMatrixArrayBuffer[m_fixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
+						m_fixNumInstanceOnFrame++;
+					}
+					else
+					{
+						// LOD用のモデル用
+						m_worldMatrixArrayBufferLOD[m_fixNumInstanceOnFrameLOD] = m_worldMatrixArray[instanceId];
+						m_fixNumInstanceOnFrameLOD++;
+					}
+				}
+
+				if (m_fixNumInstanceOnFrame == 0 && m_fixNumInstanceOnFrameLOD == 0)
+				{
+					// 描画するインスタンスがなければ描画しない
+					return;
+				}
+
+				// ストラクチャードバッファを更新
+				m_worldMatrixArraySB.Update(m_worldMatrixArrayBuffer.get());
+				// モデルを描画
+				m_model->Draw(rc, m_fixNumInstanceOnFrame);
+
+				if (m_isEnableLOD)
+				{
+					// LODが有効なら
+					// ストラクチャードバッファを更新
+					m_worldMatrixArraySBLOD.Update(m_worldMatrixArrayBufferLOD.get());
+					// モデルを描画
+					m_lodModel->Draw(rc, m_fixNumInstanceOnFrameLOD);
+				}
+
+				return;
 			}
 		}
 	}

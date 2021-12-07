@@ -25,6 +25,7 @@ namespace nsMyGame
 			int numMapChipReserve = 1;	//!< マップチップの予約数
 			//!< ユーザー定義のコリジョン属性
 			EnCollisionAttr userIndex = EnCollisionAttr::enCollisionAttr_None;
+			const char* lodModelFilePath = nullptr;		//!< LOD用のモデルのファイルパス
 
 			/// <summary>
 			/// 引数で渡したオブジェクト名のオブジェクトか調べる。

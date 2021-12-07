@@ -225,7 +225,8 @@ void Material::InitFromTkmMaterila(
 	const char* vsEntryPointFunc,
 	const char* vsSkinEntryPointFunc,
 	const char* psEntryPointFunc,
-	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat,
+	const D3D12_CULL_MODE cullMode
 )
 {
 	//テクスチャをロード。
@@ -248,11 +249,12 @@ void Material::InitFromTkmMaterila(
 		//シェーダーを初期化。
 		InitShaders(fxFilePath, vsEntryPointFunc, vsSkinEntryPointFunc, psEntryPointFunc);
 		//パイプラインステートを初期化。
-		InitPipelineState(colorBufferFormat);
+		InitPipelineState(colorBufferFormat, cullMode);
 	}
 }
 void Material::InitPipelineState(
-	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat
+	const std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT>& colorBufferFormat,
+	const D3D12_CULL_MODE cullMode
 )
 {
 	// 頂点レイアウトを定義する。
@@ -281,6 +283,10 @@ void Material::InitPipelineState(
 	psoDesc.DepthStencilState.StencilEnable = FALSE;
 	psoDesc.SampleMask = UINT_MAX;
 	psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+
+	// 追加。変更。
+	psoDesc.RasterizerState.CullMode = cullMode;	//カリング設定
+
 
 	int numRenderTarget = 0;
 	for (auto& format : colorBufferFormat) {

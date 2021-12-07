@@ -42,6 +42,8 @@ namespace nsMyGame
 
 				constexpr float kAnimationInterpolateTime = 0.2f;	//!< アニメーション保管時間
 
+				constexpr float kDefaultDistanceLOD = 10000.0f;		//!< デフォルトのLODの距離
+
 			}
 		}
 	}
