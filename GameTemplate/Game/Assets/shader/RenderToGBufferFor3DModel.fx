@@ -108,10 +108,10 @@ SPSOut PSMainCore( SPSIn psIn/*, int isShadowReciever*/)
     // アルベドカラーと深度値を出力
     psOut.albedo = g_albedo.Sample(g_sampler, psIn.uv);
     psOut.albedo.w = psIn.pos.z;
-    // 法線を出力
+    // 法線とシャドウレシーバーフラグを出力
     psOut.normal.xyz = GetNormalFromNormalMap( 
         psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv ) ;
-    psOut.normal.w = 1.0f;
+    psOut.normal.w = isShadowReciever;
     // MSAOを出力。
     psOut.MSAO = g_spacular.Sample(g_sampler, psIn.uv);
 

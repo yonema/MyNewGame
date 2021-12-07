@@ -497,6 +497,9 @@
     <ClCompile Include="Buildings.cpp">
       <Filter>MyCode\Building</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerShadowMap.cpp">
+      <Filter>MyCode\Graphic\Shadow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -939,6 +942,9 @@
     </ClInclude>
     <ClInclude Include="Buildings.h">
       <Filter>MyCode\Building</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerShadowMap.h">
+      <Filter>MyCode\Graphic\Shadow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

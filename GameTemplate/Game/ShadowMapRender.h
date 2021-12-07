@@ -3,6 +3,8 @@
 #include "ShadowConstDatah.h"
 #include "CascadeShadowMapMatrix.h"
 #include "GaussianBlur.h"
+#include "PlayerShadowMap.h"
+
 
 namespace nsMyGame
 {
@@ -13,12 +15,15 @@ namespace nsMyGame
 	{
 		// 前方宣言
 		class CRender;
+		namespace nsShadow { class CPlayerShadowMap; }
 
 		/**
 		 * @brief シャドウ関連のネームスペース
 		*/
 		namespace nsShadow
 		{
+
+
 			/**
 			 * @brief シャドウマップレンダラークラス
 			*/
@@ -76,6 +81,15 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief プレイヤー専用のライトビュープロジェクション行列を取得
+				 * @return プレイヤー専用のライトビュープロジェクション行列
+				*/
+				const Matrix& GetPlayerLVPMatrix() const
+				{
+					return m_playerShadowMapPtr->GetLVPMatrix();
+				}
+
+				/**
 				 * @brief カスケードシャドウのエリア率を設定。
 				 * @details ゲームカメラの近平面から遠平面までのエリアの、何%の範囲を近距離用の高解像度
 				 * のシャドウマップに、何%を中距離用のシャドウマップに、何%を遠距離用のシャドウマップに
@@ -100,6 +114,24 @@ namespace nsMyGame
 					m_cascadeAreaRateArray[nsShadowConstData::enShadowMapArea_far] = newFarArea;
 				}
 
+				/**
+				 * @brief プレイヤーのレンダラーを設定
+				 * @param[in] playerRender プレイヤーのレンダラー
+				*/
+				void SetPlayerRender(CRender* playerRender)
+				{
+					m_playerShadowMapPtr->SetPlayerRender(playerRender);
+				}
+
+				/**
+				 * @brief プレイヤー専用のシャドウマップを取得
+				 * @return シャドウマップのテクスチャの参照
+				*/
+				Texture& GetPlayerShadowMap()
+				{
+					return m_playerShadowMapPtr->GetShadowMap();
+				}
+
 			private:	// データメンバ
 
 				//!< カスケードシャドウマップで使用するマトリクスクラス
@@ -111,6 +143,9 @@ namespace nsMyGame
 				float m_cascadeAreaRateArray[nsShadowConstData::enShadowMapArea_num] = {};
 				//!< シャドウマップにかけるガウシアンブラークラス
 				CGaussianBlur m_blur[nsShadowConstData::enShadowMapArea_num];
+
+				//!< プレイヤー専用のシャドウマップ
+				std::unique_ptr<CPlayerShadowMap> m_playerShadowMapPtr;
 
 			};
 		}

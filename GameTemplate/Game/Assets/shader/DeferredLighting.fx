@@ -65,11 +65,14 @@ Texture2D<float4> albedoTexture : register(t0);     // アルベド
 Texture2D<float4> normalTexture : register(t1);     // 法線
 Texture2D<float4> g_msaoMap : register(t2);		//Metaaric,Smooth,AmbientOcclusionマップ
 Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t3);  //シャドウマップ。
-TextureCube<float4> g_skyCubeMap : register(t15);
+Texture2D<float4> g_playerShadowMap[kMaxDirectionalLightNum] : register(t15);  //シャドウマップ。
+TextureCube<float4> g_skyCubeMap : register(t19);
 // タイルごとのポイントライトのインデックスのリスト
 //StructuredBuffer<uint> pointLightListInTile : register(t20);
 
+// PBRのライティングのヘッダー
 #include "PBRLighting.h"
+// ポイントライトとスポットライトのライティングの計算に使用する関数ヘッダー
 #include "PointAndSpotLightFunc.h"
 
 ///////////////////////////////////////
@@ -128,7 +131,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	float ambientOcclusion = msao.b;
 
     //影生成用のパラメータ。
-	float shadowParam = 1.0f;//normalTexture.Sample(g_sampler, psIn.uv).w;
+	float shadowParam = normalTexture.Sample(g_sampler, psIn.uv).w;
 
     // 視線に向かって伸びるベクトルを計算する
     float3 toEye = normalize(eyePos - worldPos);
@@ -140,9 +143,11 @@ float4 PSMain(SPSIn psIn) : SV_Target0
     {
 		// 影の落ち具合を計算する。
 		float shadow = 0.0f;
+		float playerShadow = 0.0f;
 		if (directionalLightData[ligNo].castShadow == 1) {
 			//影を生成するなら。
 			shadow = CalcShadowRate(ligNo, worldPos) * shadowParam;
+			playerShadow = CalcPlayerShadowRate(ligNo, worldPos) * shadowParam;
 		}
 
         // PBRのライティングを計算
@@ -155,10 +160,10 @@ float4 PSMain(SPSIn psIn) : SV_Target0
             metaric,
             smooth,
             specColor
-        ) * (1.0f - shadow);
+        ) * (1.0f - shadow) * (1.0f - playerShadow);
+
     }
 
-	//return float4(lig, 1.0f);
 
 	// ポイントライトのライティングの計算
 	for (int ligNo = 0; ligNo < pointLightNum; ligNo++)

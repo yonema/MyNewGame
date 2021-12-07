@@ -190,6 +190,13 @@ namespace nsMyGame
 				}
 			}
 
+			// プレイヤー専用のシャドウマップのテクスチャを設定する
+			for (int i = 0; i < nsLight::nsLightConstData::kMaxDirectionalLightNum; i++)
+			{
+				spriteInitData.m_textures[texNo++] = &m_shadowMapRenders[i].GetPlayerShadowMap();
+			}
+
+
 			// IBLを行うか？、かつ
 			// IBLに使用するテクスチャが有効か？
 			if (m_IBLCB.isIBL == true && m_IBLTexture.IsValid())
@@ -369,6 +376,11 @@ namespace nsMyGame
 						m_shadowMapRenders[ligNo].GetLVPMatrix(areaNo)
 					);
 				}
+
+				nsLight::CLightManager::GetInstance()->SetPlayerLVPMatrix(
+					ligNo,
+					m_shadowMapRenders[ligNo].GetPlayerLVPMatrix()
+				);
 			}
 
 			// レンダリング先をメインレンダリングターゲットにする

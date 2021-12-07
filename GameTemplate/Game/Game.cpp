@@ -22,7 +22,7 @@ namespace nsMyGame
 	{
 
 		const char* const CGame::m_kMapObjName = "map";
-		const Vector3 CGame::m_kGameDirectionalLightDir = { -0.3f,-1.0f,-0.3f };
+		const Vector3 CGame::m_kGameDirectionalLightDir = { -0.3f,-1.0f,0.3f };
 		const Vector4 CGame::m_kGameDirectionalLightColor = { 4.0f,4.0f,4.0f,1.0f };
 
 		/**

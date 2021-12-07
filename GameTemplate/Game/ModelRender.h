@@ -244,6 +244,12 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief プレイヤー専用のシャドウキャスターを設定
+				 * @param[in] isPlayerShaodwCaster プレイヤー専用のシャドウキャスターか？
+				*/
+				void SetIsPlayerShadowCaster(bool isPlayerShaodwCaster);
+
+				/**
 				 * @brief モデルの参照を得る
 				 * @return モデルの参照
 				*/
@@ -352,6 +358,14 @@ namespace nsMyGame
 				 * @param[in] lvpMatrix ライトビュープロジェクション行列
 				*/
 				void ShadowModelRender(RenderContext& rc,const int ligNo, const int shadowMapNo, const Matrix& lvpMatrix);
+
+				/**
+				 * @brief プレイヤー専用のシャドウマップに描画するモデルを描画する
+				 * @param[in] rc レンダリングコンテキスト
+				 * @param[in] ligNo ライトの番号
+				 * @param[in] lvpMatrix ライトビュープロジェクション行列
+				*/
+				void PlayerShadowModelRender(RenderContext& rc,const int ligNo, const Matrix& lvpMatrix);
 
 			private:	// データメンバ
 				ModelPtr m_model;							//!< モデルクラス

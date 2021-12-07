@@ -93,6 +93,16 @@ namespace nsMyGame
 			{
 				m_lightData.mlvp[ligNo][areaNo] = mlvp;
 			}
+
+			/**
+			 * @brief プレイヤー専用のライトビュープロジェクション行列を設定
+			 * @param ligNo ライト番号
+			 * @param mlvp ライトビュープロジェクション行列を設定
+			*/
+			void SetPlayerLVPMatrix(const int ligNo, const Matrix& mlvp)
+			{
+				m_lightData.mPlayerLvp[ligNo] = mlvp;
+			}
 		
 
 		public:		// staticなメンバ関数

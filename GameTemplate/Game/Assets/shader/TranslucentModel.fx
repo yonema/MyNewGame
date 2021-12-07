@@ -53,6 +53,8 @@ Texture2D<float4> g_normalMap	: register(t1);		// 法線
 Texture2D<float4> g_msaoMap : register(t2);		//Metaaric,Smooth,AmbientOcclusionマップ
 TextureCube<float4> g_skyCubeMap : register(t11);
 Texture2D<float4> g_shadowMap[kMaxDirectionalLightNum][kMaxShadowMapNum] : register(t12);  //シャドウマップ。
+Texture2D<float4> g_playerShadowMap[kMaxDirectionalLightNum] : register(t24);  //シャドウマップ。
+
 
 // PBRのライティングのヘッダー
 #include "PBRLighting.h"
@@ -148,9 +150,11 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 	{
 		// 影の落ち具合を計算する。
 		float shadow = 0.0f;
+		float playerShadow = 0.0f;
 		if (directionalLightData[ligNo].castShadow == 1) {
 			//影を生成するなら。
 			shadow = CalcShadowRate(ligNo, worldPos) * shadowParam;
+			playerShadow = CalcPlayerShadowRate(ligNo, worldPos) * shadowParam;
 		}
 		// PBRのライティングを計算
 		lig += CalcLighting(
@@ -162,7 +166,7 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 			metaric,
 			smooth,
 			specColor
-		) * (1.0f - shadow);
+		) * (1.0f - shadow) * (1.0f - playerShadow);
 	}
 
 	// ポイントライトのライティングの計算
@@ -232,26 +236,31 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
 	// アンビエントライト率
 	float ambientRate = 1.0f;
+	float luminance = 1.0f;
 
 	// IBLを行うか？
 	if (isIBL == 1)
 	{
 		// 行う
 		// IBL率
-		float iblRate = 0.5f;
+		float iblRate = 0.9f;
 		// 視線からの反射ベクトルを求める。
 		float3 v = reflect(toEye * -1.0f, normal);
 		// スムース具合によってミップマップのレベルを変更する。
 		// スムースが大きいほど高解像度のミップマップが使用されるため、くっきりIBLが映る。
 		int level = lerp(0, 12, 1 - smooth);
-		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) * IBLLuminance * iblRate;
+		// IBL率によってIBLの影響率を調節
+		lig += albedoColor * g_skyCubeMap.SampleLevel(g_sampler, v, level) *
+			IBLLuminance * ambientOcclusion * iblRate * luminance;
 
 		// アンビエント率をIBL率から計算する
 		ambientRate = 1.0f - iblRate;
 	}
-	
+
 	// 環境光による底上げ
-	lig += ambientLight * albedoColor * ambientRate;
+	// AOマップによるアンビエントライトの影響度を調節
+	// アンビエント率によるアンビエントライトの影響度を調節
+	lig += ambientLight * albedoColor * ambientOcclusion * ambientRate * luminance;
 	
 
 

@@ -113,7 +113,7 @@ namespace nsMyGame
 				enAnim_num
 				);
 			// シャドウキャスターを有効にする
-			m_playerModel->SetIsShadowCaster(true);
+			m_playerModel->SetIsPlayerShadowCaster(true);
 
 			return;
 		}

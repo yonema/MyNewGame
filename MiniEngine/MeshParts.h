@@ -148,7 +148,7 @@ private:
 	// 追加
 	public:		// publicなデータメンバ
 		static const int m_kMaxExCBNum = 4;		//!< ユーザー拡張用の定数バッファの最大数
-		static const int m_kMaxExSRVNum = 16;	//!< ユーザー拡張用のシェーダーリソースビューの最大数
+		static const int m_kMaxExSRVNum = 32;	//!< ユーザー拡張用のシェーダーリソースビューの最大数
 
 	private:	// データメンバ
 		ConstantBuffer m_expandConstantBuffer[m_kMaxExCBNum];				//ユーザー拡張用の定数バッファ

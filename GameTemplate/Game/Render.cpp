@@ -29,6 +29,17 @@ namespace nsMyGame
 		}
 
 		/**
+		 * @brief プレイヤー専用のシャドウマップを描画する関数を実行
+		 * @param[in] rc レンダリングコンテキスト
+		 * @param[in] ligNo ライトの番号
+		 * @param[in] lvpMatrix ライトビュープロジェクション行列
+		*/
+		void CRender::OnRenderPlayerShadowMap(RenderContext& rc, const int ligNo, const Matrix& lvpMatrix)
+		{
+			m_onRenderPlayerShadowMapFunc(rc, ligNo, lvpMatrix);
+		}
+
+		/**
 		 * @brief GBufferに描画する関数を実行
 		 * @param[in] rc レンダリングコンテキスト
 		*/

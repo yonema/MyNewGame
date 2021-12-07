@@ -59,6 +59,10 @@ namespace nsMyGame
 
 				};
 
+
+				// プレイヤー用のシャドウマップの生成
+				m_playerShadowMapPtr = std::make_unique<CPlayerShadowMap>();
+
 				return;
 			}
 
@@ -115,6 +119,9 @@ namespace nsMyGame
 					blur.ExecuteOnGPU(rc, kBlurPower);
 				}
 
+
+				// プレイヤー専用のシャドウマップを描画
+				m_playerShadowMapPtr->Render(rc,ligNo, lightDirection);
 
 				return;
 			}

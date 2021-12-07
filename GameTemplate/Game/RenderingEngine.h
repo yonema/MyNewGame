@@ -191,12 +191,31 @@ namespace nsMyGame
 			};
 
 			/**
+			 * @brief プレイヤー専用のシャドウマップのレンダリングターゲットのテクスチャの参照を得る
+			 * @param ligNo ライトの番号
+			 * @return テクスチャの参照
+			*/
+			Texture& GetPlayerShadowMapRenderTargetTexture(const int ligNo)
+			{
+				return m_shadowMapRenders[ligNo].GetPlayerShadowMap();
+			};
+
+			/**
 			 * @brief IBLを再初期化する
 			 * @param[in] ddsFilePath IBLのテクスチャのddsファイルパス
 			 * @param[in] luminance IBLの明るさ
 			 * @param[in] isIBL IBLを行うか？
 			*/
 			void ReInitIBL(const wchar_t* ddsFilePath, const float luminance,const bool isIBL);
+
+			/**
+			 * @brief プレイヤーのレンダラーを設定する
+			 * @param[in] playerRender プレイヤーのレンダラー
+			*/
+			void SetPlayerRender(nsGraphic::CRender* playerRender)
+			{
+				m_shadowMapRenders->SetPlayerRender(playerRender);
+			}
 
 			/**
 			 * @brief レンダリングエンジンを実行

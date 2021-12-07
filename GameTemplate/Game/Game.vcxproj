@@ -302,6 +302,7 @@
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="PlayerShadowMap.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="PlayerWallRun.cpp" />
     <ClCompile Include="TextPanelRender.cpp" />
@@ -436,6 +437,7 @@
     <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
+    <ClInclude Include="PlayerShadowMap.h" />
     <ClInclude Include="DebugConstData.h" />
     <ClInclude Include="DebugManager.h" />
     <ClInclude Include="PlayerWallRun.h" />

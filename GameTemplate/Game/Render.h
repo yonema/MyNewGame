@@ -21,6 +21,12 @@ namespace nsMyGame
 				const int shadowMapNo,
 				const Matrix& lvpMatrix
 				)>;
+			// プレイヤー専用のシャドウマップ描画用の関数の方型
+			using RenderPlayerShadowMapFunc = std::function<void(
+				RenderContext&,
+				const int ligNo,
+				const Matrix& lvpMatrix
+				)>;
 
 		public:		// コンストラクタとデストラクタ
 			CRender() = default;	// コンストラクタ
@@ -30,11 +36,20 @@ namespace nsMyGame
 
 			/**
 			 * @brief シャドウマップに描画する関数を設定する
-			 * @param fundtion シャドウマップに描画する関数
+			 * @param[in] fundtion シャドウマップに描画する関数
 			*/
-			void SetOnShadwMapRender(const RenderShadowMapFunc& fundtion)
+			void SetOnShadowMapRender(const RenderShadowMapFunc& fundtion)
 			{
 				m_onRenderShadowMapFunc = fundtion;
+			}
+
+			/**
+			 * @brief プレイヤー専用のシャドウマップに描画する関数を設定する
+			 * @param[in] fundtion プレイヤー専用のシャドウマップに描画する関数
+			*/
+			void SetOnPlayerShadowMapRender(const RenderPlayerShadowMapFunc& fundtion)
+			{
+				m_onRenderPlayerShadowMapFunc = fundtion;
 			}
 
 			/**
@@ -71,7 +86,20 @@ namespace nsMyGame
 			 * @param[in] shadowMapNo シャドウマップの番号
 			 * @param[in] lvpMatrix ライトビュープロジェクション行列
 			*/
-			void OnRenderShadowMap(RenderContext& rc,const int ligNo, const int shadowMapNo, const Matrix& lvpMatrix);
+			void OnRenderShadowMap(
+				RenderContext& rc,
+				const int ligNo,
+				const int shadowMapNo,
+				const Matrix& lvpMatrix
+			);
+
+			/**
+			 * @brief プレイヤー専用のシャドウマップを描画する関数を実行
+			 * @param[in] rc レンダリングコンテキスト
+			 * @param[in] ligNo ライトの番号
+			 * @param[in] lvpMatrix ライトビュープロジェクション行列
+			*/
+			void OnRenderPlayerShadowMap(RenderContext& rc,const int ligNo, const Matrix& lvpMatrix);
 
 			/**
 			 * @brief GBufferに描画する関数を実行
@@ -94,6 +122,9 @@ namespace nsMyGame
 		private:
 			//!< シャドウマップを描画する関数
 			RenderShadowMapFunc m_onRenderShadowMapFunc = [](RenderContext&,const int, const int, const Matrix& ) {};
+			//!< プレイヤー専用のシャドウマップを描画する関数
+			RenderPlayerShadowMapFunc m_onRenderPlayerShadowMapFunc =
+				[](RenderContext&, const int, const Matrix&) {};
 			RenderFunc m_onRenderToGBufferFunc = [](RenderContext&) {};	//!< GBufferに描画する関数
 			RenderFunc m_onForwardRenderFunc = [](RenderContext&) {};	//!< フォワードレンダリングをする関数
 			RenderFunc m_onRender2DFunc = [](RenderContext&) {};		//!< 2Dを描画をする関数

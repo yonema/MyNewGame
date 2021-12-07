@@ -118,10 +118,10 @@ namespace nsMyGame
 				// GBufferのカラーフォーマットに合わせる
 				for (int i = 0; i < nsMyEngine::nsRenderingEngineConstData::enGBufferNum; i++)
 				{
-					m_modelInitData.m_colorBufferFormat[i] = 
+					m_modelInitData.m_colorBufferFormat[i] =
 						nsMyEngine::CRenderingEngine::GetInstance()->GetGBufferColorFormat(
-						static_cast<nsMyEngine::nsRenderingEngineConstData::EnGBuffer>(i)
-					);
+							static_cast<nsMyEngine::nsRenderingEngineConstData::EnGBuffer>(i)
+						);
 				}
 
 				// GBufferに描画するモデルの定数バッファをセット
@@ -312,7 +312,7 @@ namespace nsMyGame
 				if (m_isEnableInstancingDraw)
 				{
 					// インスタンシング描画用
-					
+
 					// インスタンシング描画用の頂点シェーダーのエントリーポイントの設定
 					m_modelInitData.m_vsEntryPointFunc = kVsInstancingEntryPointFunc;
 					//スキンあり、インスタンシング描画用の頂点シェーダーのエントリーポイントの設定
@@ -321,7 +321,7 @@ namespace nsMyGame
 				else
 				{
 					// 通常描画用
-					
+
 					// 頂点シェーダーのエントリーポイントの設定
 					m_modelInitData.m_vsEntryPointFunc = kVsEntryPointFunc;
 					// スキンありの頂点シェーダーのエントリーポイントの設定
@@ -413,6 +413,16 @@ namespace nsMyGame
 					}
 				}
 
+				// プレイヤー専用のシャドウマップのテクスチャを設定する
+				for (int i = 0; i < nsLight::nsLightConstData::kMaxDirectionalLightNum; i++)
+				{
+
+					m_modelInitData.m_expandShaderResoruceView[SRVNo++] =
+						&nsMyEngine::CRenderingEngine::GetInstance()->GetPlayerShadowMapRenderTargetTexture(i);
+
+				}
+
+
 				return;
 			}
 
@@ -455,8 +465,8 @@ namespace nsMyGame
 					// 無効なら初期化する
 					InitShadowModel();
 					// シャドウマップに描画する関数を設定する
-					m_render.SetOnShadwMapRender(
-						[&](RenderContext& rc,const int ligNo, const int shadowMapNo, const Matrix& vlpMatrix)
+					m_render.SetOnShadowMapRender(
+						[&](RenderContext& rc, const int ligNo, const int shadowMapNo, const Matrix& vlpMatrix)
 						{
 							this->ShadowModelRender(rc, ligNo, shadowMapNo, vlpMatrix);
 						}
@@ -482,12 +492,78 @@ namespace nsMyGame
 						}
 					}
 					// シャドウマップに描画する関数を、何もしないようにする
-					m_render.SetOnShadwMapRender(
+					m_render.SetOnShadowMapRender(
 						[&](RenderContext&, const int, const int, const Matrix&)
 						{
 							return;
 						}
-				);
+					);
+				}
+
+				return;
+			}
+
+			/**
+			 * @brief プレイヤー専用のシャドウキャスターを設定
+			 * @param[in] isPlayerShaodwCaster プレイヤー専用のシャドウキャスターか？
+			*/
+			void CModelRender::SetIsPlayerShadowCaster(bool isPlayerShaodwCaster)
+			{
+				// シャドウキャスターか？
+				if (isPlayerShaodwCaster)
+				{
+					// シャドウキャスター
+
+					// シャドウマップに描画するモデルが有効か？
+					if (m_shadowModels[0][0])
+					{
+						// 有効なら、早期リターン
+						return;
+					}
+
+					// 無効なら初期化する
+					InitShadowModel();
+					// シャドウマップに描画する関数を設定する
+					m_render.SetOnPlayerShadowMapRender(
+						[&](RenderContext& rc, const int ligNo, const Matrix& lvpMatrix)
+						{
+							this->PlayerShadowModelRender(rc, ligNo,lvpMatrix);
+						}
+					);
+
+					// レンダリングエンジンにプレイヤーのレンダラーを設定
+					nsMyEngine::CRenderingEngine::GetInstance()->SetPlayerRender(&m_render);
+
+				}
+				else
+				{
+					// シャドウキャスターではない
+
+					// シャドウマップに描画するモデルが無効か？
+					if (!m_shadowModels[0][0])
+					{
+						// 無効なら、早期リターン
+						return;
+					}
+
+					// 有効なら破棄する
+					for (auto& shadowModels : m_shadowModels)
+					{
+						for (auto& shadowModel : shadowModels)
+						{
+							shadowModel.reset();
+						}
+					}
+					// シャドウマップに描画する関数を、何もしないようにする
+					m_render.SetOnPlayerShadowMapRender(
+						[&](RenderContext&,const int ligNo, const Matrix&)
+						{
+							return;
+						}
+					);
+
+					// レンダリングエンジンに登録してあるプレイヤーのレンダラーを破棄
+					nsMyEngine::CRenderingEngine::GetInstance()->SetPlayerRender(nullptr);
 				}
 
 				return;
@@ -659,7 +735,35 @@ namespace nsMyGame
 				return;
 			}
 
+			/**
+			 * @brief プレイヤー専用のシャドウマップに描画するモデルを描画する
+			 * @param[in] rc レンダリングコンテキスト
+			 * @param[in] ligNo ライトの番号
+			 * @param[in] lvpMatrix ライトビュープロジェクション行列
+			*/
+			void CModelRender::PlayerShadowModelRender(
+				RenderContext& rc,
+				const int ligNo,
+				const Matrix& lvpMatrix
+			)
+			{
+				if (m_isEnableInstancingDraw)
+				{
+					// インスタンシング描画時
+					if (m_shadowModels[0][0])
+					{
+						// シャドウマップに描画するモデルを描画
+						m_shadowModels[ligNo][0]->Draw(rc, Matrix::Identity, lvpMatrix, m_fixNumInstanceOnFrame);
+					}
+				}
+				else
+				{
+					// 通常描画時
 
+					m_shadowModels[ligNo][0]->Draw(rc, Matrix::Identity, lvpMatrix);
+
+				}
+			}
 		}
 	}
 }

@@ -61,6 +61,8 @@ namespace nsMyGame
 				int pointLightNum = 0;								//!< ポイントライトの数
 				//!< ライトビュープロジェクション行列
 				Matrix mlvp[kMaxDirectionalLightNum][nsGraphic::nsShadow::nsShadowConstData::enShadowMapArea_num];
+				//!< プレイヤー専用のライトビュープロジェクション行列
+				Matrix mPlayerLvp[kMaxDirectionalLightNum];
 				int spotLightNum = 0;								//!< スポットライトの数
 			};
 		}

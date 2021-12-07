@@ -43,11 +43,14 @@ namespace nsMyGame
 				// 一番近いエリアの最小深度値はカメラのニアクリップ
 				float nearDepth = g_camera3D->GetNear();
 
+				// カスケードシャドウの最大深度
+				float maxDepth = kCascadeMaxDepth;
+
 				// 分割エリアの最大深度値を定義する
 				float cascadeAreaTbl[enShadowMapArea_num] = {
-					kLightMaxFar* cascadeAreaRateTbl[enShadowMapArea_near],     // 近影を映す最大深度値
-					kLightMaxFar* cascadeAreaRateTbl[enShadowMapArea_middle],   // 中影を映す最大深度値
-					kLightMaxFar* cascadeAreaRateTbl[enShadowMapArea_far] ,     // 遠影を映す最大深度値。
+					maxDepth* cascadeAreaRateTbl[enShadowMapArea_near],     // 近影を映す最大深度値
+					maxDepth* cascadeAreaRateTbl[enShadowMapArea_middle],   // 中影を映す最大深度値
+					maxDepth* cascadeAreaRateTbl[enShadowMapArea_far] ,     // 遠影を映す最大深度値。
 				};
 
 				// それぞれのシャドウマップのエリアを計算する
@@ -116,7 +119,9 @@ namespace nsMyGame
 				Matrix viewMatrix;
 				// ライトのターゲット
 				//const Vector3 lightTarget = kLightTargetPos;
-				const Vector3 lightTarget = g_camera3D->GetTarget();//kLightTargetPos;
+				Vector3 lightTarget = g_camera3D->GetTarget();//kLightTargetPos;
+				// 高さは固定
+				lightTarget.y = 0.0f;
 				// ライトのポジション
 				Vector3 lightPos = lightTarget;
 				// ライトターゲットからライトの方向に応じた距離をとる
