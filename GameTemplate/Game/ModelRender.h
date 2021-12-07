@@ -4,6 +4,7 @@
 #include "Render.h"
 #include "LightConstData.h"
 #include "ShadowConstDatah.h"
+#include "GeometryData.h"
 
 namespace nsMyGame
 {
@@ -23,9 +24,11 @@ namespace nsMyGame
 			class CModelRender : public IGameObject
 			{
 			private:	// エイリアス宣言
-				using ModelPtr = std::unique_ptr<Model>;		//!< モデルクラスのユニークポインタ
-				using SkeletonPtr = std::unique_ptr<Skeleton>;	//!< スケルトンクラスのユニークポインタ
-				using AnimPtr = std::unique_ptr<Animation>;		//!< アニメーションクラスにユニークポインタ
+				using ModelPtr = std::unique_ptr<Model>;		// モデルクラスのユニークポインタ
+				using SkeletonPtr = std::unique_ptr<Skeleton>;	// スケルトンクラスのユニークポインタ
+				using AnimPtr = std::unique_ptr<Animation>;		// アニメーションクラスにユニークポインタ
+				// ジオメトリデータのユニークポインタ
+				using GeometryDataPtr = std::unique_ptr <nsGeometry::CGeometryData>;
 
 			public:		// コンストラクタとデストラクタ
 				/**
@@ -250,12 +253,43 @@ namespace nsMyGame
 				void SetIsPlayerShadowCaster(bool isPlayerShaodwCaster);
 
 				/**
+				 * @brief シャドウキャスターか？を取得
+				 * @return シャドウキャスターか？
+				*/
+				bool IsShadowCaster() const
+				{
+					return m_isShadowCaster;
+				}
+
+				/**
+				 * @brief インスタンシング描画を行うか？を取得
+				 * @return インスタンシング描画を行うか？
+				*/
+				bool IsInstancingDraw() const
+				{
+					return m_isEnableInstancingDraw;
+				}
+
+				/**
 				 * @brief モデルの参照を得る
 				 * @return モデルの参照
 				*/
 				Model& GetModel() const
 				{
 					return *m_model.get();
+				}
+
+				/**
+				 * @brief インスタンスIDを指定して、ワールド行列を得る
+				 * @param instanceId インスタンスID
+				 * @return ワールド行列
+				*/
+				const Matrix& GetWorldMatrix(int instanceId) const
+				{
+					if (IsInstancingDraw()) {
+						return m_worldMatrixArray[instanceId];
+					}
+					return m_model->GetWorldMatrix();
 				}
 
 				/**
@@ -273,12 +307,14 @@ namespace nsMyGame
 				 * @brief 初期化処理のメインコア
 				 * @param[in] animationClips アニメーションクリップ
 				 * @param[in] numAnimationClips アニメーションクリップの数
+				 * @param[in] maxInstance インスタンス数
 				 * @param[in] isDefferdRender ディファードレンダリングで描画するか？
 				*/
 				void InitMainCore(
 					AnimationClip* animationClips,
 					const int numAnimationClips,
-					const bool isDefferdRender = true
+					const int maxInstance,
+					const bool isDefferdRender
 				);
 
 				/**
@@ -292,6 +328,12 @@ namespace nsMyGame
 				 * @param[in] numAnimationClips アニメーションクリップの数
 				*/
 				void InitAnimation(AnimationClip* animationClips, const int numAnimationClips);
+
+				/**
+				 * @brief ジオメトリ情報を初期化
+				 * @param maxInstance インスタンス数
+				*/
+				void InitGeometryDatas(const int maxInstance);
 
 				/**
 				 * @brief モデルの初期化データの共通部分の設定
@@ -388,10 +430,13 @@ namespace nsMyGame
 				int	m_fixNumInstanceOnFrame = 0;			//!< このフレームに描画するインスタンスの数の確定数。
 				bool m_isEnableInstancingDraw = false;		//!< インスタンシング描画が有効か？
 				std::unique_ptr<Matrix[]> m_worldMatrixArray;	//!< ワールド行列の配列。
+				std::unique_ptr<Matrix[]> m_worldMatrixArrayBuffer;	//!< カリング後のワールド行列の配列。
 				StructuredBuffer m_worldMatrixArraySB;		//!< ワールド行列の配列のストラクチャードバッファ。
 
-				bool m_isInited = false;					//!< 初期化済みか？
+				std::vector<GeometryDataPtr> m_geometryDatas;	//!< ジオメトリ情報のコンテナ
 
+				bool m_isInited = false;					//!< 初期化済みか？
+				bool m_isShadowCaster = false;				//!< シャドウキャスターか？
 
 			};
 

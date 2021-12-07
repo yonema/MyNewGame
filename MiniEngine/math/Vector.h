@@ -88,6 +88,9 @@ public:
 	static const Vector3 AxisY;
 	static const Vector3 AxisZ;
 	static const Vector3 One;
+
+	static const Vector3 MaxV;
+	static const Vector3 MinV;
 public:
 	/// <summary>
 	/// XMVECTORへの暗黙の変換。
@@ -645,6 +648,42 @@ public:
 		xmv = DirectX::XMVectorScale(xmv, s);
 		DirectX::XMStoreFloat4(&vec, xmv);
 	}
+
+	/// <summary>
+	/// 最大値を設定。
+	/// </summary>
+	/// <remarks>
+	/// 下記のような処理が行われています。
+	/// this->x = max( this->x, v.x );
+	/// this->y = max( this->y, v.y );
+	/// this->z = max( this->z, v.z );
+	/// this->w = max( this->w, v.w );
+	/// </remarks>
+	void Max(const Vector4& v)
+	{
+		DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat4(&vec);
+		DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat4(&v.vec);
+		DirectX::XMStoreFloat4(&vec, DirectX::XMVectorMax(xmv0, xmv1));
+	}
+
+	/// <summary>
+	/// 最小値を設定。
+	/// </summary>
+	/// <remarks>
+	/// 下記のような処理が行われています。
+	/// this->x = min( this->x, v.x );
+	/// this->y = min( this->y, v.y );
+	/// this->z = min( this->z, v.z );
+	/// this->w = min( this->w, v.w );
+	/// </remarks>
+	void Min(const Vector4& v)
+	{
+		DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat4(&vec);
+		DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat4(&v.vec);
+		DirectX::XMStoreFloat4(&vec, DirectX::XMVectorMin(xmv0, xmv1));
+	}
+
+
 };
 
 const Vector2 g_vec2Zero = { 0.0f, 0.0f };

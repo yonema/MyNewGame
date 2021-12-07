@@ -1,5 +1,6 @@
 #pragma once
 #include "GaussianBlur.h"
+#include "Noncopyable.h"
 
 namespace nsMyGame
 {
@@ -16,7 +17,7 @@ namespace nsMyGame
 			/**
 			 * @brief プレイヤー専用のシャドウマップ
 			*/
-			class CPlayerShadowMap
+			class CPlayerShadowMap : private nsUtil::Noncopyable
 			{
 			public:		// コンストラクタとデストラクタ
 				/**

@@ -4,6 +4,7 @@
 #include "PostEffect.h"
 #include "ShadowMapRender.h"
 #include "LightConstData.h"
+#include "SceneGeometryData.h"
 
 namespace nsMyGame
 {
@@ -218,6 +219,33 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief ビューカリングのためのビュープロジェクション行列を取得
+			 * @return ビューカリングのためのビュープロジェクション行列
+			*/
+			const Matrix& GetViewProjectionMatrixForViewCulling() const
+			{
+				return m_viewProjMatrixForViewCulling;
+			}
+
+			/**
+			 * @brief ジオメトリデータを登録
+			 * @param[in,out] geomData 登録するジオメトリデータ
+			*/
+			void RegisterGeometryData(nsGeometry::CGeometryData* geomData)
+			{
+				m_sceneGeometryData.RegisterGeometryData(geomData);
+			}
+
+			/**
+			 * @brief ジオメトリデータの登録を解除
+			 * @param[in] geomData 登録を解除するジオメトリデータ
+			*/
+			void UnregisterGeometryData(const nsGeometry::CGeometryData* geomData)
+			{
+				m_sceneGeometryData.UnregisterGeometryData(geomData);
+			}
+
+			/**
 			 * @brief レンダリングエンジンを実行
 			 * @param[in] stopWatch ストップウォッチ
 			*/
@@ -280,6 +308,11 @@ namespace nsMyGame
 			void InitDefferdLightingSprite();
 
 			/**
+			 * @brief パラメータの更新
+			*/
+			void ParametersUpdate();
+
+			/**
 			 * @brief シャドウマップに描画する
 			 * @param[in] rc レンダリングコンテキスト
 			*/
@@ -322,6 +355,11 @@ namespace nsMyGame
 			*/
 			void InitIBLData(const wchar_t* ddsFilePath, const float luminance);
 
+			/**
+			 * @brief ビューカリング用のビュープロジェクション行列を計算
+			*/
+			void CalcViewProjectionMatrixForViewCulling();
+
 		private:	// データメンバ
 			std::vector<nsGraphic::CRender*> m_renderObjects;	//!< 描画するオブジェクト
 
@@ -340,6 +378,11 @@ namespace nsMyGame
 			nsRenderingEngineConstData::SIBLCB m_IBLCB;	//!< IBL用の定数バッファ
 			Texture m_IBLTexture;	//!< IBLに使用するテクスチャ
 
+			Matrix m_viewProjMatrixForViewCulling;		//!< ビューカリング用のビュープロジェクション行列
+			nsGeometry::CSceneGeometryData m_sceneGeometryData;	//!< シーンのジオメトリ情報
+
+
+			//////// リソースバンク ////////
 			nsUtil::TResourceBank<TkmFile> m_tkmFileBank;	//!< tkmファイルバンク
 			nsUtil::TResourceBank<Shader> m_shaderBank;		//!< シェーダーバンク
 			nsUtil::TResourceBank<char> m_ddsFileBank;	//!< ddsファイルバンク

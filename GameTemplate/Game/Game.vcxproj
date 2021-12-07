@@ -302,9 +302,11 @@
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="GeometryData.cpp" />
     <ClCompile Include="PlayerShadowMap.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="PlayerWallRun.cpp" />
+    <ClCompile Include="SceneGeometryData.cpp" />
     <ClCompile Include="TextPanelRender.cpp" />
     <ClCompile Include="GameMainUI.cpp" />
     <ClCompile Include="GameMainState.cpp" />
@@ -437,10 +439,12 @@
     <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
+    <ClInclude Include="GeometryData.h" />
     <ClInclude Include="PlayerShadowMap.h" />
     <ClInclude Include="DebugConstData.h" />
     <ClInclude Include="DebugManager.h" />
     <ClInclude Include="PlayerWallRun.h" />
+    <ClInclude Include="SceneGeometryData.h" />
     <ClInclude Include="TextPanelRender.h" />
     <ClInclude Include="GameMainUI.h" />
     <ClInclude Include="CommonData.h" />

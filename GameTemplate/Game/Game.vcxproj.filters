@@ -500,6 +500,12 @@
     <ClCompile Include="PlayerShadowMap.cpp">
       <Filter>MyCode\Graphic\Shadow</Filter>
     </ClCompile>
+    <ClCompile Include="GeometryData.cpp">
+      <Filter>MyCode\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGeometryData.cpp">
+      <Filter>MyCode\Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -945,6 +951,12 @@
     </ClInclude>
     <ClInclude Include="PlayerShadowMap.h">
       <Filter>MyCode\Graphic\Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryData.h">
+      <Filter>MyCode\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGeometryData.h">
+      <Filter>MyCode\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

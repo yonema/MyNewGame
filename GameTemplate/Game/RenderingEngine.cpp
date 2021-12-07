@@ -238,6 +238,36 @@ namespace nsMyGame
 			return;
 		}
 
+		/**
+		 * @brief ビューカリング用のビュープロジェクション行列を計算
+		*/
+		void CRenderingEngine::CalcViewProjectionMatrixForViewCulling()
+		{
+			Matrix projMatrix;
+			projMatrix.MakeProjectionMatrix(
+				g_camera3D->GetViewAngle() * 1.5f,
+				g_camera3D->GetAspect(),
+				g_camera3D->GetNear(),
+				g_camera3D->GetFar()
+			);
+			m_viewProjMatrixForViewCulling.Multiply(g_camera3D->GetViewMatrix(), projMatrix);
+
+			return;
+		}
+
+		/**
+		 * @brief パラメータの更新
+		*/
+		void CRenderingEngine::ParametersUpdate()
+		{
+			// ビューカリング用のビュープロジェクション行列の計算。
+			CalcViewProjectionMatrixForViewCulling();
+			// シーンのジオメトリ情報の更新。
+			m_sceneGeometryData.Update();
+
+			return;
+		}
+
 
 		/**
 		 * @brief レンダリングエンジンを実行
@@ -250,6 +280,9 @@ namespace nsMyGame
 
 			// 描画オブジェクトの登録
 			GameObjectManager::GetInstance()->ExecuteAddRender();
+
+			// パラメータの更新
+			ParametersUpdate();
 
 			// シャドウマップに描画する
 			RenderToShadowMap(rc);
@@ -303,6 +336,12 @@ namespace nsMyGame
 		*/
 		void CRenderingEngine::RenderToShadowMap(RenderContext& rc)
 		{
+			if (m_sceneGeometryData.IsBuildshadowCasterGeometryData() == false)
+			{
+				// シャドウキャスターのジオメトリ情報が構築できていなかったら、早期リターン。
+				return;
+			}
+
 			// 現在のディレクションライトの数
 			const int ligNum = nsLight::CLightManager::GetInstance()->GetLightData().directionalLightNum;
 

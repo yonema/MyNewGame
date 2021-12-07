@@ -23,6 +23,9 @@ const Vector3 Vector3::Down	= {  0.0f, -1.0f,  0.0f };
 const Vector3 Vector3::Front	= { 0.0f,   0.0f,  1.0f };
 const Vector3 Vector3::Back	= { 0.0f,   0.0f, -1.0f };
 
+const Vector3 Vector3::MaxV = { FLT_MAX,  FLT_MAX,  FLT_MAX };
+const Vector3 Vector3::MinV = { -FLT_MIN, -FLT_MIN, -FLT_MIN };
+
 const Vector3 Vector3::AxisX	= { 1.0f,  0.0f,  0.0f };
 const Vector3 Vector3::AxisY	= { 0.0f,  1.0f,  0.0f };
 const Vector3 Vector3::AxisZ	= { 0.0f,  0.0f,  1.0f };

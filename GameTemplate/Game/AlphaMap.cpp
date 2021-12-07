@@ -118,12 +118,12 @@ namespace nsMyGame
 							case enPropsStreetLight:		// ŠX“”
 							case enPropsTrafficLight:		// M†‹@
 							case enPropsPedestrianLight:	// •àsÒ—pM†‹@
-							//case enPropsStreetTree:			// ŠX˜H÷
+							case enPropsStreetTree:			// ŠX˜H÷
 								return false;
 								break;
 
 							// ŠX˜H÷‚Ì}‚Í”¼“§–¾‚Å•`‰æ‚·‚é
-							//case enPropsStreetTreeBranch:
+							case enPropsStreetTreeBranch:
 								objData.isTranslucent = true;
 								objData.priority = nsCommonData::enPrioritySecond;
 								return false;

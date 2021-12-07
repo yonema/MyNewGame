@@ -1,5 +1,6 @@
 #pragma once
 #include "ShadowConstDatah.h"
+#include "Noncopyable.h"
 
 namespace nsMyGame
 {
@@ -16,7 +17,7 @@ namespace nsMyGame
 			/**
 			 * @brief カスケードシャドウマップで使用するマトリクスクラス
 			*/
-			class CCascadeShadowMapMatrix
+			class CCascadeShadowMapMatrix : private nsUtil::Noncopyable
 			{
 			public:		// コンストラクタとデストラクタ
 

@@ -25,7 +25,11 @@ namespace nsMyGame
 			*/
 			void CModelRender::OnDestroy()
 			{
-
+				// ジオメトリ情報をレンダリングエンジンから登録解除する
+				for (const auto& geomData : m_geometryDatas)
+				{
+					nsMyEngine::CRenderingEngine::GetInstance()->UnregisterGeometryData(geomData.get());
+				}
 				return;
 			}
 
@@ -131,7 +135,7 @@ namespace nsMyGame
 				SetRenderToGBufferShaderResourceView();
 
 				// 初期化処理のメインコア
-				InitMainCore(animationClips, numAnimationClip);
+				InitMainCore(animationClips, numAnimationClip, maxInstance, true);
 
 				return;
 			}
@@ -168,7 +172,7 @@ namespace nsMyGame
 
 				// 初期化処理のメインコア
 				// ディファ―ドではなく、フォワードレンダリングで描画するように指定する
-				InitMainCore(animationClips, numAnimationClip, false);
+				InitMainCore(animationClips, numAnimationClip, maxInstance, false);
 
 				return;
 			}
@@ -190,7 +194,7 @@ namespace nsMyGame
 
 				// 初期化処理のメインコア
 				// ディファ―ドではなく、フォワードレンダリングで描画するように指定する
-				InitMainCore(animationClips, numAnimationClip, false);
+				InitMainCore(animationClips, numAnimationClip,1, false);
 
 				return;
 			}
@@ -199,11 +203,13 @@ namespace nsMyGame
 			 * @brief 初期化処理のメインコア
 			 * @param[in] animationClips アニメーションクリップ
 			 * @param[in] numAnimationClips アニメーションクリップの数
+			 * @param[in] maxInstance インスタンス数
 			 * @param[in] isDefferdRender ディファードレンダリングで描画するか？
 			*/
 			void CModelRender::InitMainCore(
 				AnimationClip* animationClips,
 				const int numAnimationClips,
+				const int maxInstance,
 				const bool isDefferdRender
 			)
 			{
@@ -225,6 +231,9 @@ namespace nsMyGame
 
 				// レンダラーの初期化
 				InitRender(isDefferdRender);
+
+				// ジオメトリデータの初期化
+				InitGeometryDatas(maxInstance);
 
 				// 初期化完了
 				m_isInited = true;
@@ -279,6 +288,31 @@ namespace nsMyGame
 					animationClips,		// アニメーションクリップ。
 					numAnimationClips	// アニメーションの数。
 				);
+
+				return;
+			}
+
+			/**
+			 * @brief ジオメトリ情報を初期化
+			 * @param maxInstance インスタンス数
+			*/
+			void CModelRender::InitGeometryDatas(const int maxInstance)
+			{
+				// ジオメトリの情報をインスタンス分生成
+				m_geometryDatas.resize(maxInstance);
+				// インスタンスID
+				int instanceId = 0;
+
+				for (auto& geomData : m_geometryDatas)
+				{
+					geomData = std::make_unique<nsGeometry::CGeometryData>();
+					// ジオメトリの情報を初期化
+					geomData->Init(this, instanceId);
+					// レンダリングエンジンに登録。
+					nsMyEngine::CRenderingEngine::GetInstance()->RegisterGeometryData(geomData.get());
+					// インスタンスIDを進める
+					instanceId++;
+				}
 
 				return;
 			}
@@ -450,6 +484,8 @@ namespace nsMyGame
 			*/
 			void CModelRender::SetIsShadowCaster(const bool isShadowCaster)
 			{
+				m_isShadowCaster = isShadowCaster;
+
 				// シャドウキャスターか？
 				if (isShadowCaster)
 				{
@@ -642,11 +678,13 @@ namespace nsMyGame
 			{
 				m_maxInstance = maxInstance;
 				if (m_maxInstance > 1) {
-					//インスタンシング描画を行うので
-					//それ用のデータを構築する
-					//ワールド行列の配列のメモリを確保する
+					// インスタンシング描画を行うので
+					// それ用のデータを構築する
+					// ワールド行列の配列のメモリを確保する
 					m_worldMatrixArray = std::make_unique<Matrix[]>(m_maxInstance);
-					//ワールド行列をGPUに転送するためのストラクチャードバッファを確保
+					// カリング後のワールド行列の配列のメモリを確保
+					m_worldMatrixArrayBuffer = std::make_unique<Matrix[]>(m_maxInstance);
+					// ワールド行列をGPUに転送するためのストラクチャードバッファを確保
 					m_worldMatrixArraySB.Init(
 						sizeof(Matrix),
 						m_maxInstance,
@@ -668,20 +706,22 @@ namespace nsMyGame
 					// インスタンシング描画時
 
 					// そのうち、フラスタムカリング入れるから、その時の処理はここに入れる
-					m_fixNumInstanceOnFrame = m_numInstance;
-					//// ビューフラスタムに含まれているインスタンスのみ描画する。
-					//for (int instanceId = 0; instanceId < m_numInstance; instanceId++) {
-					//	if (m_geometryDatas[instanceId].IsInViewFrustum()) {
-					//		// ビューフラスタムに含まれている。
-					//		m_worldMatrixArray[m_fixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
-					//		m_fixNumInstanceOnFrame++;
-					//	}
-					//}
+					m_fixNumInstanceOnFrame = 0;
+					// ビューフラスタムに含まれているインスタンスのみ描画する。
+					for (int instanceId = 0; instanceId < m_numInstance; instanceId++)
+					{
+						if (m_geometryDatas[instanceId]->IsInViewFrustum()) 
+						{
+							// ビューフラスタムに含まれている。
+							m_worldMatrixArrayBuffer[m_fixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
+							m_fixNumInstanceOnFrame++;
+						}
+					}
 
 					if (m_fixNumInstanceOnFrame != 0)
 					{
 						// ストラクチャードバッファを更新
-						m_worldMatrixArraySB.Update(m_worldMatrixArray.get());
+						m_worldMatrixArraySB.Update(m_worldMatrixArrayBuffer.get());
 						// モデルを描画
 						m_model->Draw(rc, m_fixNumInstanceOnFrame);
 					}
