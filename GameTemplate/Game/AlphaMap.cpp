@@ -50,6 +50,7 @@ namespace nsMyGame
 						// 建物の生成
 						if (objData.ForwardMatchName(nsBuilding::nsBuildingConstData::kBuildingForwardName))
 						{
+							//return true;
 							// 建物のタイプの数の分、当たるまで全部調べる
 							for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
 							{
@@ -111,28 +112,28 @@ namespace nsMyGame
 							objData.numMapChipReserve = kNumMapChipReserveTbl[propsType];
 							// ユーザー定義のコリジョン属性を小物用の属性に設定する
 							objData.userIndex = EnCollisionAttr::enCollisionAttr_Props;
+							// シャドウキャスターにする
+							objData.shadowCaster = true;
 
 
 							switch (propsType)
 							{
 							// ココで指定したものが生成される
 							case enPropsStreetLight:		// 街灯
-							case enPropsTrafficLight:		// 信号機
 							case enPropsPedestrianLight:	// 歩行者用信号機
-								objData.shadowCaster = true;
+								return false;
+								break;
+							case enPropsTrafficLight:		// 信号機
+								objData.lodModelFilePath = "Assets/modelData/levelSource/TrafficLight_LOD.tkm";
 								return false;
 								break;
 							case enPropsStreetTree:			// 街路樹
-								objData.shadowCaster = true;
-
 								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_LOD.tkm";
 								return false;
 								break;
 
 							// 街路樹の枝は半透明で描画する
 							case enPropsStreetTreeBranch:
-								objData.shadowCaster = true;
-
 								objData.isTranslucent = true;
 								objData.priority = nsCommonData::enPrioritySecond;
 								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_Branch_LOD.tkm";
