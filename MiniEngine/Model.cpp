@@ -56,8 +56,14 @@ void Model::Init(const ModelInitData& initData)
 	// レンダリングエンジンクラス
 	using CRenderingEngine = nsMyGame::nsMyEngine::CRenderingEngine;
 
+	const char* tkmFilePath = initData.m_tkmFilePath;
+	if (initData.m_lodNum != 0)
+	{
+		tkmFilePath = initData.m_lodTkmFilePath;
+	}
+
 	// tkmファイルバンクからリソースを探して取ってくる
-	auto tkmFile = CRenderingEngine::GetInstance()->GetTkmFileFromBank(initData.m_tkmFilePath);
+	auto tkmFile = CRenderingEngine::GetInstance()->GetTkmFileFromBank(tkmFilePath);
 
 	// 未登録か？
 	if (tkmFile == nullptr)
@@ -65,9 +71,9 @@ void Model::Init(const ModelInitData& initData)
 		// 未登録なら
 		// 新しくリソースを生成
 		tkmFile = new TkmFile;
-		tkmFile->Load(initData.m_tkmFilePath);
+		tkmFile->Load(tkmFilePath);
 		// リソースをリソースバンクに登録する
-		CRenderingEngine::GetInstance()->RegistTkmFileToBank(initData.m_tkmFilePath, tkmFile);
+		CRenderingEngine::GetInstance()->RegistTkmFileToBank(tkmFilePath, tkmFile);
 	}
 
 	// tkmファイルのリソースを保持して

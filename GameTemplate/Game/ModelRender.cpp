@@ -229,6 +229,8 @@ namespace nsMyGame
 					// 存在する。スケルトンの設定
 					m_modelInitData.m_skeleton = m_skeletonPtr.get();
 
+				// LODのモデルではない
+				m_modelInitData.m_lodNum = 0;
 				// モデルの初期化
 				m_model.reset(new Model);
 				m_model->Init(m_modelInitData);
@@ -662,7 +664,8 @@ namespace nsMyGame
 				}
 
 				// LOD用のモデルの初期化
-				m_modelInitData.m_tkmFilePath = filePath;
+				m_modelInitData.m_lodTkmFilePath = filePath;
+				m_modelInitData.m_lodNum = 1;
 				m_lodModel = std::make_unique<Model>();
 				m_lodModel->Init(m_modelInitData);
 
@@ -686,6 +689,8 @@ namespace nsMyGame
 				shadowModelInitData.m_fxFilePath = kDrawShadowMapFxFilePath;
 				// カラーフォーマットを設定する
 				shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
+				// LODのモデルではない
+				shadowModelInitData.m_lodNum = 0;
 
 				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
 				if (m_isEnableInstancingDraw)
@@ -698,9 +703,32 @@ namespace nsMyGame
 				{
 					for (auto& shadowModel : shadowModels)
 					{
-						shadowModel.reset(new Model);
+						shadowModel = std::make_unique<Model>();
 						shadowModel->Init(shadowModelInitData);
 						shadowModel->UpdateWorldMatrix(m_position, m_rotation, m_scale);
+					}
+				}
+
+				if (m_isEnableLOD != true)
+				{
+					// LODが有効でなければ、早期リターン。
+					return;
+				}
+
+				// LOD用のシャドウモデルを生成して初期化する
+				for (auto& lodShadowModels : m_lodShadowModel)
+				{
+					for (auto& lodShadowModel : lodShadowModels)
+					{
+						shadowModelInitData.m_lodNum = 1;
+						shadowModelInitData.m_lodTkmFilePath = m_modelInitData.m_lodTkmFilePath;				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
+						if (m_isEnableInstancingDraw)
+						{
+							shadowModelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySBLOD;
+						}
+						lodShadowModel = std::make_unique<Model>();
+						lodShadowModel->Init(shadowModelInitData);
+						lodShadowModel->UpdateWorldMatrix(m_position, m_rotation, m_scale);
 					}
 				}
 
@@ -789,14 +817,28 @@ namespace nsMyGame
 
 						// シャドウマップに描画するモデルを描画
 						m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix, m_fixNumInstanceOnFrame);
+
+						if (m_isEnableLOD)
+						{
+							// LODが有効なら
+							// LOD用のモデルを描画
+							m_lodShadowModel[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix, m_fixNumInstanceOnFrameLOD);
+						}
 					}
 				}
 				else
 				{
 					// 通常描画時
-
-					m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix);
-
+					// LODチェック
+					if (m_isEnableLOD != true || m_geometryDatas[0]->GetDistanceFromCamera() < m_distanceLOD)
+					{
+						m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix);
+					}
+					else
+					{
+						// LOD用のモデルを描画
+						m_lodShadowModel[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix);
+					}
 				}
 
 				return;

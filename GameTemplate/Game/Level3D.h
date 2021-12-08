@@ -26,6 +26,7 @@ namespace nsMyGame
 			//!< ユーザー定義のコリジョン属性
 			EnCollisionAttr userIndex = EnCollisionAttr::enCollisionAttr_None;
 			const char* lodModelFilePath = nullptr;		//!< LOD用のモデルのファイルパス
+			bool shadowCaster = false;					//!< シャドウキャスターか？
 
 			/// <summary>
 			/// 引数で渡したオブジェクト名のオブジェクトか調べる。

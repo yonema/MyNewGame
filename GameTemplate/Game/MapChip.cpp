@@ -29,6 +29,9 @@ namespace nsMyGame
 				m_lodModelFilePath = std::make_unique<const char*>(objData.lodModelFilePath);
 			}
 
+			// シャドウキャスターか？を取得
+			m_shadowCaster = objData.shadowCaster;
+
 			// マップチップデータを追加する
 			AddMapChipData(objData);
 
@@ -146,6 +149,9 @@ namespace nsMyGame
 				// LODを有効化
 				m_modelRender->SetIsEnableLOD(true);
 			}
+
+			// シャドウキャスターか？を設定
+			m_modelRender->SetIsShadowCaster(m_shadowCaster);
 
 			for (auto& mapChipData : m_mapChipDataVector)
 			{

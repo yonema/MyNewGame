@@ -119,9 +119,11 @@ namespace nsMyGame
 							case enPropsStreetLight:		// ŠX“”
 							case enPropsTrafficLight:		// M†‹@
 							case enPropsPedestrianLight:	// •àsÒ—pM†‹@
+								objData.shadowCaster = true;
 								return false;
 								break;
 							case enPropsStreetTree:			// ŠX˜H÷
+								objData.shadowCaster = true;
 
 								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_LOD.tkm";
 								return false;
@@ -129,6 +131,7 @@ namespace nsMyGame
 
 							// ŠX˜H÷‚Ì}‚Í”¼“§–¾‚Å•`‰æ‚·‚é
 							case enPropsStreetTreeBranch:
+								objData.shadowCaster = true;
 
 								objData.isTranslucent = true;
 								objData.priority = nsCommonData::enPrioritySecond;

@@ -28,6 +28,8 @@ struct ModelInitData {
 
 	// 変更。追加。
 	D3D12_CULL_MODE m_cullMode = D3D12_CULL_MODE_BACK;
+	const char* m_lodTkmFilePath = nullptr;	// LOD用のtkmファイルパス
+	int m_lodNum = 0;						// LODの番号
 
 	// <カラーバッファーフォーマット, レンダリングターゲットの最大数>
 	std::array<DXGI_FORMAT, D3D12_SIMULTANEOUS_RENDER_TARGET_COUNT> m_colorBufferFormat = {

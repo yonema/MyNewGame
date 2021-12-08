@@ -79,11 +79,15 @@ namespace nsMyGame
 				// ビュープロジェクション空間での最大値と最小値を調べる
 				viewProjMatrix.Apply(v);
 
-				// ビュープロジェクション空間でのZ値をカメラからの距離とする
-				if (m_distanceFromCamera > v.z)
+				// カメラからの距離ベクトル
+				const Vector3 distanceFromCameraVec = { v.x,v.y,v.z };
+				// カメラからの距離ベクトルの長さ
+				const float distanceFromCameraLen = distanceFromCameraVec.Length();
+
+				if (m_distanceFromCamera > distanceFromCameraLen)
 				{
 					// 最小のカメラからの距離を取る
-					m_distanceFromCamera = v.z;
+					m_distanceFromCamera = distanceFromCameraLen;
 				}
 
 				// wで割って正規化する

@@ -445,6 +445,8 @@ namespace nsMyGame
 				//!< シャドウマップ描画用モデルクラス
 				ModelPtr m_shadowModels[1/*nsLight::nsLightConstData::kMaxDirectionalLightNum*/][nsShadow::nsShadowConstData::enShadowMapArea_num];
 				ModelPtr m_lodModel;						//!< LOD用のモデル
+				//!< LOD用のシャドウモデル
+				ModelPtr m_lodShadowModel[1/*nsLight::nsLightConstData::kMaxDirectionalLightNum*/][nsShadow::nsShadowConstData::enShadowMapArea_num];
 				ModelInitData m_modelInitData;				//!< モデルの初期化データ
 
 				CRender m_render;							//!< レンダラークラス
