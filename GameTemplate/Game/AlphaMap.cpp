@@ -122,16 +122,19 @@ namespace nsMyGame
 							case enPropsPedestrianLight:	// 歩行者用信号機
 								return false;
 								break;
+
 							case enPropsStreetLight:		// 街灯
 								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetLight_LOD.tkm";
 								objData.distanceLOD = 1000.0f;
 								return false;
 								break;
+
 							case enPropsTrafficLight:		// 信号機
 								objData.lodModelFilePath = "Assets/modelData/levelSource/TrafficLight_LOD.tkm";
 								objData.distanceLOD = 1000.0f;
 								return false;
 								break;
+
 							case enPropsStreetTree:			// 街路樹
 								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_LOD.tkm";
 								return false;

@@ -21,16 +21,24 @@ namespace nsMyGame
 			 * @brief ライトビュープロジェクションクロップ行列を計算する
 			 * @param[in] lightDirection ライトの方向
 			 * @param[in] cascadeAreaRateTbl カスケードシャドウのエリア率テーブル
+			 * @param[in] sceneMaxPosition ゲームシーンの最大座標
+			 * @param[in] sceneMinPosition ゲームシーンの最小座標
 			*/
 			void CCascadeShadowMapMatrix::CalcLightViewProjectionCropMatrix(
 				const Vector3& lightDirection,
-				const float cascadeAreaRateTbl[enShadowMapArea_num]
+				const float cascadeAreaRateTbl[enShadowMapArea_num],
+				const Vector3& sceneMaxPosition,
+				const Vector3& sceneMinPosition
 			)
 			{
 				// ライトビュープロジェクション
 				Matrix lvpMatrix;
 				// ライトビュープロジェクションを計算する
-				CalcAndGetLightViewProjectionMatrix(&lvpMatrix, lightDirection);
+				CalcAndGetLightViewProjectionMatrix(&lvpMatrix,
+					lightDirection,
+					sceneMaxPosition,
+					sceneMinPosition
+				);
 
 				// カメラの前方向
 				const Vector3& cameraForward = g_camera3D->GetForward();
@@ -109,18 +117,23 @@ namespace nsMyGame
 			 * @brief ライトビュープロジェクション行列を計算してから得る
 			 * @param[out] lvpMatrixOut ライトビュープロジェクション行列
 			 * @param[in] lightDirection ライトの方向
+			 * @param[in] sceneMaxPosition ゲームシーンの最大座標
+			 * @param[in] sceneMinPosition ゲームシーンの最小座標
 			*/
 			void CCascadeShadowMapMatrix::CalcAndGetLightViewProjectionMatrix(
 				Matrix* lvpMatrixOut,
-				const Vector3& lightDirection
+				const Vector3& lightDirection,
+				const Vector3& sceneMaxPosition,
+				const Vector3& sceneMinPosition
 			)
 			{
 				// ビュー行列を計算する
 				Matrix viewMatrix;
 				// ライトのターゲット
 				//const Vector3 lightTarget = kLightTargetPos;
-				Vector3 lightTarget = g_camera3D->GetTarget();//kLightTargetPos;
-				// 高さは固定
+				//Vector3 lightTarget = g_camera3D->GetTarget();
+				Vector3 lightTarget = (sceneMaxPosition + sceneMinPosition) * 0.5f;
+				//// 高さは固定
 				lightTarget.y = 0.0f;
 				// ライトのポジション
 				Vector3 lightPos = lightTarget;
@@ -128,6 +141,8 @@ namespace nsMyGame
 				Vector3 targetToLightPos = lightDirection;
 				targetToLightPos.Scale(-kLightMaxHeight);
 				lightPos += targetToLightPos;
+
+				//lightPos += (lightDirection) * (kLightMaxHeight / lightDirection.y);
 				//if (lightDirection.y != 0.0f)
 				//	lightPos += (lightDirection) * (kLightMaxHeight / lightDirection.y);
 				//else

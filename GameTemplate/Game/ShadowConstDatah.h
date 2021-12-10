@@ -42,7 +42,7 @@ namespace nsMyGame
 				//constexpr float kDefaultCascadeAreaRateArray[enShadowMapArea_num] = { 0.01f,0.3f, 1.0f };
 
 				//!< デフォルトのクリアカラー
-				constexpr float kDefaultClearColor[4] = { 1.0f,1.0f,1.0f,1.0f };
+				constexpr float kDefaultClearColor[4] = { -1.0f,-1.0f,-1.0f,1.0f };
 
 				constexpr float kBlurPower = 1.0f;	//!< ブラーの強さ
 

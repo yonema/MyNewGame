@@ -34,7 +34,11 @@ namespace nsMyGame
 			void CPlayerShadowMap::Init()
 			{
 				// シャドウマップのクリアカラー
-				float clearColor[4] = { 1.0f,1.0f,1.0f,1.0f };
+				float clearColor[4];
+				for (int i = 0; i < 4; i++)
+				{
+					clearColor[i] = kDefaultClearColor[i];
+				}
 
 				// シャドウマップの作製
 				m_shadowMap.Create

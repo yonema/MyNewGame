@@ -353,7 +353,14 @@ namespace nsMyGame
 					GetInstance()->GetLightData().directionalLightData[ligNo].direction;
 
 				// 該当のディレクションライトが生成するシャドウマップを描画
-				m_shadowMapRenders[ligNo].Render(rc, ligNo, ligDir, m_renderObjects);
+				m_shadowMapRenders[ligNo].Render(
+					rc,
+					ligNo,
+					ligDir,
+					m_renderObjects,
+					m_sceneGeometryData.GetShadowCasterMaxPositionInViewFrustum(),
+					m_sceneGeometryData.GetShadowCasterMinPositionInViewFrustum()
+					);
 			}
 
 			return;

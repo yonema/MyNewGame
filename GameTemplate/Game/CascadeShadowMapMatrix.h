@@ -27,10 +27,14 @@ namespace nsMyGame
 				 * @brief ライトビュープロジェクションクロップ行列を計算する
 				 * @param[in] lightDirection ライトの方向
 				 * @param[in] cascadeAreaRateTbl カスケードシャドウのエリア率テーブル
+				 * @param[in] sceneMaxPosition ゲームシーンの最大座標
+				 * @param[in] sceneMinPosition ゲームシーンの最小座標
 				*/
 				void CalcLightViewProjectionCropMatrix(
 					const Vector3& lightDirection,
-					const float cascadeAreaRateTbl[nsShadowConstData::enShadowMapArea_num]
+					const float cascadeAreaRateTbl[nsShadowConstData::enShadowMapArea_num],
+					const Vector3& sceneMaxPosition,
+					const Vector3& sceneMinPosition
 				);
 
 				/**
@@ -49,10 +53,14 @@ namespace nsMyGame
 				 * @brief ライトビュープロジェクション行列を計算してから得る
 				 * @param[out] lvpMatrixOut ライトビュープロジェクション行列
 				 * @param[in] lightDirection ライトの方向
+				 * @param[in] sceneMaxPosition ゲームシーンの最大座標
+				 * @param[in] sceneMinPosition ゲームシーンの最小座標
 				*/
 				void CalcAndGetLightViewProjectionMatrix(
 					Matrix* lvpMatrixOut,
-					const Vector3& lightDirection
+					const Vector3& lightDirection,
+					const Vector3& sceneMaxPosition,
+					const Vector3& sceneMinPosition
 				);
 
 				/**

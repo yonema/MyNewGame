@@ -125,11 +125,12 @@ float CalcShadowRate(int ligNo, float3 worldPos)
         float2 shadowMapUV = posInLVP.xy / posInLVP.w;
         float zInLVP = posInLVP.z / posInLVP.w;
 
+        // 旧バージョン
         // ライトカメラの遠平面より遠かったら、影を落とさない
-        if (zInLVP >= 1.0f)
-        {
-            return shadow;
-        }
+        //if (zInLVP >= 1.0f)
+        //{
+        //    return shadow;
+        //}
 
         shadowMapUV *= float2(0.5f, -0.5f);
         shadowMapUV += 0.5f;
@@ -140,12 +141,15 @@ float CalcShadowRate(int ligNo, float3 worldPos)
         {
             // シャドウマップから値をサンプリング
             float2 shadowValue = g_shadowMap[ligNo][cascadeIndex].Sample(g_sampler, shadowMapUV).xy;
+            if (shadowValue.r < 0.0f)
+                break;
 
-            //zInLVP -= 0.001f;
-            //float pos = exp(INFINITY * zInLVP);
-            //shadow = Chebyshev(shadowValue.xy, pos);
+            // EVSM
+            zInLVP -= 0.001f;
+            float pos = exp(INFINITY * zInLVP);
+            shadow = Chebyshev(shadowValue.xy, pos);
 
-            //break;
+            break;
 
             // 旧バージョン
 
@@ -174,11 +178,12 @@ float CalcPlayerShadowRate(int ligNo, float3 worldPos)
     float2 shadowMapUV = posInLVP.xy / posInLVP.w;
     float zInLVP = posInLVP.z / posInLVP.w;
 
+    // 旧バージョン
     // ライトカメラの遠平面より遠かったら、影を落とさない
-    if (zInLVP >= 1.0f)
-    {
-        return shadow;
-    }
+    //if (zInLVP >= 1.0f)
+    //{
+    //    return shadow;
+    //}
 
     shadowMapUV *= float2(0.5f, -0.5f);
     shadowMapUV += 0.5f;
@@ -188,11 +193,16 @@ float CalcPlayerShadowRate(int ligNo, float3 worldPos)
     {
         // シャドウマップから値をサンプリング
         float2 shadowValue = g_playerShadowMap[ligNo].Sample(g_sampler, shadowMapUV).xy;
+        if (shadowValue.r < 0.0f)
+            return shadow;
 
-        //zInLVP -= 0.001f;
-        //float pos = exp(INFINITY * zInLVP);
-        //shadow = Chebyshev(shadowValue.xy, pos);
+        // EVSM
+        zInLVP -= 0.001f;
+        float pos = exp(INFINITY * zInLVP);
+        shadow = Chebyshev(shadowValue.xy, pos);
+        return shadow;
 
+        // 旧バージョン
         // まずこのピクセルが遮蔽されているか調べる
         if (zInLVP >= shadowValue.r + 0.0001f)
         {

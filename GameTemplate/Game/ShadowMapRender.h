@@ -52,12 +52,16 @@ namespace nsMyGame
 				 * @param[in] ligNo ライトの番号
 				 * @param[in] lightDirection ライトの方向
 				 * @param[in] renderObjects 描画するオブジェクト
+				 * @param[in] sceneMaxPosition ゲームシーンの最大座標
+				 * @param[in] sceneMinPosition ゲームシーンの最小座標
 				*/
 				void Render(
 					RenderContext& rc,
 					const int ligNo, 
 					const Vector3& lightDirection,
-					std::vector<CRender*>& renderObjects
+					std::vector<CRender*>& renderObjects,
+					const Vector3& sceneMaxPosition,
+					const Vector3& sceneMinPosition
 				);
 
 				/**

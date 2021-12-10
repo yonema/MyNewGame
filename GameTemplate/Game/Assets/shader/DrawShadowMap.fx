@@ -61,10 +61,13 @@ SPSIn VSMainSkinInstancing(SVSIn vsIn, uint instanceID : SV_InstanceID)
 /// </summary>
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
-    float depth = psIn.pos.z;
-    return float4(depth, depth * depth, 0.0f, 1.0f);
+    // 旧バージョン
+    // float depth = psIn.pos.z;
+    // return float4(depth, depth * depth, 0.0f, 1.0f);
 
-    //float depth = psIn.pos.z;
-    //float pos = exp(INFINITY * depth);
-    //return float4(pos, pos * pos, 0.0f, 1.0f);
+    // EVSM
+    float depth = psIn.pos.z;
+    depth += 0.001f;
+    float pos = exp(INFINITY * depth);
+    return float4(pos, pos * pos, 0.0f, 1.0f);
 }
