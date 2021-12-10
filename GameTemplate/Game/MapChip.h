@@ -88,6 +88,9 @@ namespace nsMyGame
 			EnCollisionAttr m_userIndex = EnCollisionAttr::enCollisionAttr_None;
 			std::unique_ptr<const char*> m_lodModelFilePath = nullptr;	//!< LOD用のモデルのファイルパス
 			bool m_shadowCaster = false;								//!< シャドウキャスターか？
+			//!< LODの切り替えの距離。デフォルトでは負の数。
+			//! 負の数ならモデルレンダラーにLODの切り替えの距離を指定しない
+			float m_distanceLOD = -1.0f;
 		};
 
 	}

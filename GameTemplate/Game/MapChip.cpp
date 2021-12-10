@@ -22,6 +22,8 @@ namespace nsMyGame
 			m_priority = objData.priority;
 			// ユーザー定義のコリジョン属性を取得
 			m_userIndex = objData.userIndex;
+			// LODの切り替えの距離を取得
+			m_distanceLOD = objData.distanceLOD;
 
 			// LOD用のモデルのファイルパスが指定されていたら、ファイルパスを取得
 			if (objData.lodModelFilePath)
@@ -112,6 +114,11 @@ namespace nsMyGame
 				m_modelRender->InitLODModel(*m_lodModelFilePath);
 				// LODを有効化
 				m_modelRender->SetIsEnableLOD(true);
+				if (m_distanceLOD > 0.0f)
+				{
+					// LODの切り替えの距離が指定されていたら、モデルレンダラーに設定する
+					m_modelRender->SetDistanceLOD(m_distanceLOD);
+				}
 			}
 
 			auto p = std::make_unique<PhysicsStaticObject>();
@@ -148,6 +155,11 @@ namespace nsMyGame
 				m_modelRender->InitLODModel(*m_lodModelFilePath);
 				// LODを有効化
 				m_modelRender->SetIsEnableLOD(true);
+				if (m_distanceLOD > 0.0f)
+				{
+					// LODの切り替えの距離が指定されていたら、モデルレンダラーに設定する
+					m_modelRender->SetDistanceLOD(m_distanceLOD);
+				}
 			}
 
 			// シャドウキャスターか？を設定

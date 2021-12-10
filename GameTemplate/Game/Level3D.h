@@ -27,6 +27,9 @@ namespace nsMyGame
 			EnCollisionAttr userIndex = EnCollisionAttr::enCollisionAttr_None;
 			const char* lodModelFilePath = nullptr;		//!< LOD用のモデルのファイルパス
 			bool shadowCaster = false;					//!< シャドウキャスターか？
+			//!< LODの切り替えの距離。デフォルトでは負の数。
+			//! 負の数ならモデルレンダラーにLODの切り替えの距離を指定しない
+			float distanceLOD = -1.0f;
 
 			/// <summary>
 			/// 引数で渡したオブジェクト名のオブジェクトか調べる。
