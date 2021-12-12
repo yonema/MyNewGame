@@ -1,6 +1,8 @@
 #pragma once
 #include "Level3D.h"
 #include "MapConstDatah.h"
+#include "NaviMesh.h"
+#include "PathFinding.h"
 
 
 namespace nsMyGame
@@ -66,6 +68,8 @@ namespace nsMyGame
 				nsGoal::CGoal* m_goal = nullptr;			//!< ゴールクラス
 				nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステートクラス
 				nsBuilding::CBuildings* m_buildings = nullptr;	//!< 建物クラス
+				nsAI::CNaviMesh m_naviMesh;					//!< ナビメッシュ
+				nsAI::CPathFinding m_pathFinding;			//!< パス検索
 			};
 		}
 	}

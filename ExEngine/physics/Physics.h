@@ -113,5 +113,36 @@ private:
 	PhysicsWorld();
 	~PhysicsWorld();
 	void Init();
+
+	// 変更。追加。
+	public:
+		/**
+		 * @brief レイテストを実施
+		 * @param[in] rayStart レイの始点
+		 * @param[in] rayEnd レイの終点
+		 * @param[out] hitPos 交差の格納先
+		 * @return trueが戻ってきたら衝突している
+		*/
+		bool RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPos) const;
+		
+		/**
+		 * @brief 物理ワールドに対して、凸型コライダーSweepテストを行う。
+		 * @param[in,out] collider コライダー
+		 * @param[in] rayStart コライダーの開始座標
+		 * @param[in] rayEnd コライダーの終了座標
+		 * @return trueがかえってきたら当たっている
+		*/
+		bool ConvexSweepTest(ICollider& collider, const Vector3& rayStart, const Vector3& rayEnd) const;
+
+		void ConvexSweepTest(
+			const btConvexShape* castShape,
+			const btTransform& convexFromWorld,
+			const btTransform& convexToWorld,
+			btCollisionWorld::ConvexResultCallback& resultCallback,
+			btScalar allowedCcdPenetration = 0.0f
+		) const
+		{
+			m_dynamicWorld->convexSweepTest(castShape, convexFromWorld, convexToWorld, resultCallback, allowedCcdPenetration);
+		}
 };
 	

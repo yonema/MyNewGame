@@ -150,6 +150,12 @@
     <Filter Include="MyCode\Maps\alphaMaps">
       <UniqueIdentifier>{c48984b4-053c-49c7-9b77-21200d341d90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\AI">
+      <UniqueIdentifier>{087d333e-1698-4d07-8a30-b8ebc9e23b67}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MyCode\AICharacter">
+      <UniqueIdentifier>{9e8706d4-b9f5-4b4c-8d46-a8900ac7d7d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -505,6 +511,27 @@
     </ClCompile>
     <ClCompile Include="SceneGeometryData.cpp">
       <Filter>MyCode\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="TknFile.cpp">
+      <Filter>MyCode\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Cell.cpp">
+      <Filter>MyCode\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="NaviMesh.cpp">
+      <Filter>MyCode\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>MyCode\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="PathFinding.cpp">
+      <Filter>MyCode\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="AICharacterBase.cpp">
+      <Filter>MyCode\AICharacter</Filter>
+    </ClCompile>
+    <ClCompile Include="AICar.cpp">
+      <Filter>MyCode\AICharacter</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -957,6 +984,27 @@
     </ClInclude>
     <ClInclude Include="SceneGeometryData.h">
       <Filter>MyCode\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="TknFile.h">
+      <Filter>MyCode\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell.h">
+      <Filter>MyCode\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="NaviMesh.h">
+      <Filter>MyCode\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>MyCode\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="PathFinding.h">
+      <Filter>MyCode\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AICharacterBase.h">
+      <Filter>MyCode\AICharacter</Filter>
+    </ClInclude>
+    <ClInclude Include="AICar.h">
+      <Filter>MyCode\AICharacter</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

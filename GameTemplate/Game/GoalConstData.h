@@ -14,7 +14,8 @@ namespace nsMyGame
 		namespace nsGoalConstData
 		{
 			//!< ゴールのモデルファイルパス
-			constexpr const char* const kGoalModelFilePath = "Assets/modelData/props/Scroll.tkm";
+			//constexpr const char* const kGoalModelFilePath = "Assets/modelData/props/Scroll.tkm";
+			constexpr const char* const kGoalModelFilePath = "Assets/modelData/car/sedan_car.tkm";
 
 			constexpr float kRotateSpeed = 1.0f;	//!< 回転スピード
 

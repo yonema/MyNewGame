@@ -40,10 +40,10 @@ namespace nsMyGame
 		void CGoal::Update()
 		{
 			// クルクル回転し続ける
-			Rotationg();
+			//Rotationg();
 
 			// ゴールしているかを調べる
-			CheckIsGoal();
+			//CheckIsGoal();
 
 			return;
 		}
@@ -66,7 +66,8 @@ namespace nsMyGame
 			// ゴールのモデルレンダラーを生成
 			m_goalMR = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 			// トランスフォームを設定
-			m_goalMR->SetPosition(pos);
+			//m_goalMR->SetPosition(pos);
+			m_goalMR->SetPosition({1000.0f,10.0f,0.0f});
 			m_goalMR->SetRotation(rot);
 			m_goalMR->SetScale(scale);
 			// 初期化

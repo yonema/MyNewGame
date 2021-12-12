@@ -19,6 +19,36 @@ struct MyContactResultCallback : public btCollisionWorld::ContactResultCallback 
 		return 0.0f;
 	}
 };
+
+// 変更。追加。
+struct MyRayResultCallback : public btCollisionWorld::RayResultCallback
+{
+	Vector3 hitPos;
+	Vector3 rayStart;
+	Vector3 rayEnd;
+	bool isHit = false;
+	float hitFraction = 1.0f;
+	btScalar	addSingleResult(btCollisionWorld::LocalRayResult& rayResult, bool normalInWorldSpace) override
+	{
+		if (rayResult.m_hitFraction < hitFraction) {
+			// こちらの方が近い。
+			hitPos.Lerp(rayResult.m_hitFraction, rayStart, rayEnd);
+		}
+		isHit = true;
+		return rayResult.m_hitFraction;
+	}
+};
+
+struct ResultConvexSweepTest : public btCollisionWorld::ConvexResultCallback
+{
+	bool isHit = false;
+	btScalar	addSingleResult(btCollisionWorld::LocalConvexResult& convexResult, bool normalInWorldSpace) override
+	{
+		isHit = true;
+		return 0.0f;
+	}
+};
+
 }
 
 PhysicsWorld::PhysicsWorld()
@@ -110,3 +140,45 @@ void PhysicsWorld::ContactTest(
 	ContactTest(*charaCon.GetRigidBody(), cb);
 }
 #endif
+
+
+// 変更。追加。
+bool PhysicsWorld::RayTest(const Vector3& rayStart, const Vector3& rayEnd, Vector3& hitPos) const
+{
+	btVector3 start, end;
+	start.setValue(rayStart.x, rayStart.y, rayStart.z);
+	end.setValue(rayEnd.x, rayEnd.y, rayEnd.z);
+	MyRayResultCallback cb;
+	cb.rayStart = rayStart;
+	cb.rayEnd = rayEnd;
+	m_dynamicWorld->rayTest(start, end, cb);
+	if (cb.isHit) {
+		hitPos = cb.hitPos;
+	}
+	return cb.isHit;
+}
+
+/**
+ * @brief 物理ワールドに対して、凸型コライダーSweepテストを行う。
+ * @param[in,out] collider コライダー
+ * @param[in] rayStart コライダーの開始座標
+ * @param[in] rayEnd コライダーの終了座標
+ * @return trueがかえってきたら当たっている
+*/
+bool PhysicsWorld::ConvexSweepTest(ICollider& collider, const Vector3& rayStart, const Vector3& rayEnd) const
+{
+	btTransform start, end;
+	start.setIdentity();
+	end.setIdentity();
+
+	start.setOrigin(btVector3(rayStart.x, rayStart.y, rayStart.z));
+	end.setOrigin(btVector3(rayEnd.x, rayEnd.y, rayEnd.z));
+	ResultConvexSweepTest result;
+	ConvexSweepTest(
+		(const btConvexShape*)collider.GetBody(),
+		start,
+		end,
+		result
+	);
+	return result.isHit;
+}

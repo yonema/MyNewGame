@@ -67,7 +67,6 @@ float4 PSMain(SPSIn psIn) : SV_Target0
 
     // EVSM
     float depth = psIn.pos.z;
-    depth += 0.001f;
     float pos = exp(INFINITY * depth);
     return float4(pos, pos * pos, 0.0f, 1.0f);
 }

@@ -295,6 +295,8 @@
     <ClCompile Include="..\..\MiniEngine\tkFile\TksFile.cpp" />
     <ClCompile Include="..\..\MiniEngine\VertexBuffer.cpp" />
     <ClCompile Include="AABB.cpp" />
+    <ClCompile Include="AICar.cpp" />
+    <ClCompile Include="AICharacterBase.cpp" />
     <ClCompile Include="AlphaMap.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="BSP.cpp" />
@@ -302,7 +304,11 @@
     <ClCompile Include="CameraCollisionSolver.cpp" />
     <ClCompile Include="CascadeShadowMapMatrix.cpp" />
     <ClCompile Include="CEffectPlayer.cpp" />
+    <ClCompile Include="Cell.cpp" />
     <ClCompile Include="GeometryData.cpp" />
+    <ClCompile Include="NaviMesh.cpp" />
+    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="PathFinding.cpp" />
     <ClCompile Include="PlayerShadowMap.cpp" />
     <ClCompile Include="DebugManager.cpp" />
     <ClCompile Include="PlayerWallRun.cpp" />
@@ -344,6 +350,7 @@
     <ClCompile Include="TestMapForPlayerMove.cpp" />
     <ClCompile Include="TestMapForSpotLight.cpp" />
     <ClCompile Include="TklFile.cpp" />
+    <ClCompile Include="TknFile.cpp" />
     <ClCompile Include="VectorRender.cpp" />
     <ClCompile Include="WaveFile.cpp" />
     <ClCompile Include="GameTime.cpp" />
@@ -432,6 +439,8 @@
     <ClInclude Include="..\..\MiniEngine\tkFile\TksFile.h" />
     <ClInclude Include="..\..\MiniEngine\VertexBuffer.h" />
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="AICar.h" />
+    <ClInclude Include="AICharacterBase.h" />
     <ClInclude Include="AlphaMap.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="BSP.h" />
@@ -439,7 +448,11 @@
     <ClInclude Include="BuildingConstData.h" />
     <ClInclude Include="CameraCollisionSolver.h" />
     <ClInclude Include="CascadeShadowMapMatrix.h" />
+    <ClInclude Include="Cell.h" />
     <ClInclude Include="GeometryData.h" />
+    <ClInclude Include="NaviMesh.h" />
+    <ClInclude Include="Path.h" />
+    <ClInclude Include="PathFinding.h" />
     <ClInclude Include="PlayerShadowMap.h" />
     <ClInclude Include="DebugConstData.h" />
     <ClInclude Include="DebugManager.h" />
@@ -509,6 +522,7 @@
     <ClInclude Include="TestMapForPlayerMove.h" />
     <ClInclude Include="TestMapForSpotLight.h" />
     <ClInclude Include="TklFile.h" />
+    <ClInclude Include="TknFile.h" />
     <ClInclude Include="TResourceBank.h" />
     <ClInclude Include="UIConstData.h" />
     <ClInclude Include="Util.h" />

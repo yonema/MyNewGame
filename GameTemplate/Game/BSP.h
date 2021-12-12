@@ -44,6 +44,8 @@ namespace nsMyGame
 				SPlane plane;				// 分割平面。
 				SEntityPtr rightEntity;		// 右の要素
 				SEntityPtr leftEntity;		// 左の要素。
+				Vector3 centerPos;			// 中心座標。
+				std::vector<SEntityPtr> leafArray;	// ノードが内包しているリーフ。
 			};
 			/// <summary>
 			/// リーフ
@@ -91,7 +93,7 @@ namespace nsMyGame
 			/// </remark>
 			/// <param name="pos">座標</param>
 			/// <param name="onEndWalk">探索が終了した時に呼ばれる処理</param>
-			void WalkTree(const Vector3& pos, std::function<void(SLeaf* leaf)> onEndWalk);
+			void WalkTree(const Vector3& pos, std::function<void(SLeaf* leaf)> onEndWalk)const;
 		private:
 			/// <summary>
 			/// 平面でリーフノードを分割していく
@@ -110,7 +112,8 @@ namespace nsMyGame
 			void CalcSplitPlaneFromCovarianceMatrix(
 				SPlane& plane,
 				float covarianceMatrix[3][3],
-				const Vector3& centerPos
+				const Vector3& centerPos,
+				const std::vector<SEntityPtr>& leafArray
 			);
 			/// <summary>
 			/// リーフノードの配列から共分散行列を計算する。
@@ -143,7 +146,7 @@ namespace nsMyGame
 			/// <returns></returns>
 			SEntityPtr CreateBSPTreeEntity_LeafList(const std::vector<SEntityPtr>& leafArray);
 
-			void WalkTree(SEntityPtr entity, const Vector3& pos, std::function<void(SLeaf* leaf)> onEndWalk);
+			void WalkTree(SEntityPtr entity, const Vector3& pos, std::function<void(SLeaf* leaf)> onEndWalk)const;
 		};
 	}
 }
