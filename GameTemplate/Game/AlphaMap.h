@@ -70,6 +70,8 @@ namespace nsMyGame
 				nsBuilding::CBuildings* m_buildings = nullptr;	//!< 建物クラス
 				nsAI::CNaviMesh m_naviMesh;					//!< ナビメッシュ
 				nsAI::CPathFinding m_pathFinding;			//!< パス検索
+				Model m_naviMeshBlockBolume;				//!< ナビメッシュをブロックするボリューム
+				PhysicsGhostObject m_noviMeshBlockGhostObject;	//!< ナビメッシュをブロックするゴーストオブジェクト
 			};
 		}
 	}

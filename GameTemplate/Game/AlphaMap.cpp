@@ -8,7 +8,6 @@
 #include "Goal.h"
 #include "AICar.h"
 
-
 namespace nsMyGame
 {
 	/**
@@ -43,8 +42,22 @@ namespace nsMyGame
 				// 建物の生成
 				m_buildings = NewGO<nsBuilding::CBuildings>(nsCommonData::enPriorityFirst);
 
+				// ナビメッシュの生成
 				m_naviMesh.Init("Assets/naviMesh/NM_Ground.tkn");
-				//m_naviMesh.Init("Assets/naviMesh/test.tkn");
+
+				//
+				ModelInitData nmbbModelInitData;
+				nmbbModelInitData.m_tkmFilePath = "Assets/naviMesh/NMBB.tkm";
+				nmbbModelInitData.m_fxFilePath = 
+					nsGraphic::nsModel::nsModelConstData::kTranslucentModelFxFilePath;
+				m_naviMeshBlockBolume.Init(nmbbModelInitData);//Load("Assets/naviMesh/NMBB.tkm");
+
+				m_noviMeshBlockGhostObject.CreateMesh(
+					Vector3::Zero,
+					Quaternion::Identity,
+					m_naviMeshBlockBolume,
+					Matrix::Identity
+					);
 
 				nsAICharacter::CAICar* car = NewGO<nsAICharacter::CAICar>(nsCommonData::enPriorityFirst, "Car");
 				car->Init(&m_naviMesh, &m_pathFinding);
@@ -57,7 +70,7 @@ namespace nsMyGame
 						// 建物の生成
 						if (objData.ForwardMatchName(nsBuilding::nsBuildingConstData::kBuildingForwardName))
 						{
-							return true;
+							//return true;
 							// 建物のタイプの数の分、当たるまで全部調べる
 							for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
 							{

@@ -35,7 +35,7 @@ namespace nsMyGame
 
 			if (IsEndPathMove() != true)
 			{
-				MoveOnPath(5000.0f);
+				MoveOnPath(50.0f);
 			}
 			return;
 		}

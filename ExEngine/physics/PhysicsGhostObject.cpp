@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "PhysicsGhostObject.h"
 
-namespace nsK2EngineLow {
 	void PhysicsGhostObject::CreateCommon(Vector3 pos, Quaternion rot)
 	{
 		m_ghostObject.setCollisionShape(m_collider->GetBody());
@@ -50,4 +49,3 @@ namespace nsK2EngineLow {
 		m_collider = std::move(sphereCollider);
 		CreateCommon(pos, rot);
 	}
-}
