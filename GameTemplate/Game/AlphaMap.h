@@ -1,9 +1,7 @@
 #pragma once
 #include "Level3D.h"
 #include "MapConstDatah.h"
-#include "NaviMesh.h"
-#include "PathFinding.h"
-
+#include "AIField.h"
 
 namespace nsMyGame
 {
@@ -68,10 +66,7 @@ namespace nsMyGame
 				nsGoal::CGoal* m_goal = nullptr;			//!< ゴールクラス
 				nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステートクラス
 				nsBuilding::CBuildings* m_buildings = nullptr;	//!< 建物クラス
-				nsAI::CNaviMesh m_naviMesh;					//!< ナビメッシュ
-				nsAI::CPathFinding m_pathFinding;			//!< パス検索
-				Model m_naviMeshBlockBolume;				//!< ナビメッシュをブロックするボリューム
-				PhysicsGhostObject m_noviMeshBlockGhostObject;	//!< ナビメッシュをブロックするゴーストオブジェクト
+				nsAI::CAIField m_aiField;					//!< AIのフィールド
 			};
 		}
 	}

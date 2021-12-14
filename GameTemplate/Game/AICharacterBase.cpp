@@ -3,6 +3,7 @@
 #include "ModelRender.h"
 #include "NaviMesh.h"
 #include "PathFinding.h"
+#include "GameTime.h"
 
 namespace nsMyGame
 {
@@ -19,6 +20,13 @@ namespace nsMyGame
 		{
 			// 基底クラスの開始処理
 			m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
+
+			// 非決定的な乱数生成器でシード生成機を生成
+			std::random_device rnd;
+			// メルセンヌツイスターの32ビット版、引数は初期シード
+			m_mt = std::make_unique<std::mt19937>(rnd());
+			// [0, 99] 範囲の一様乱数
+			m_rand = std::make_unique<std::uniform_int_distribution<>>(0, 99);
 
 			// 派生クラスの開始処理
 			return StartSub();
@@ -75,7 +83,7 @@ namespace nsMyGame
 
 		/**
 		 * @brief パス検索処理
-		 * @param[in] targetPos 移動目標座標
+		 * @param[in] targetPos パスの目標座標
 		*/
 		void CAICharacterBase::PathFinding(const Vector3& targetPos)
 		{
@@ -85,14 +93,26 @@ namespace nsMyGame
 				*m_naviMeshRef,					// ナビメッシュ
 				m_modelRender->GetPosition() ,	// 開始座標
 				targetPos,						// 移動目標座標
-				PhysicsWorld::GetInstance(),	// 物理エンジン	
-				50.0f,							// AIエージェントの半径
+				//PhysicsWorld::GetInstance(),	// 物理エンジン
+				nullptr,
+				5.0f,							// AIエージェントの半径
 				200.0f							// AIエージェントの高さ。
 			);
 
 			m_isEndPathMove = false;
 
 			return;
+		}
+
+		/**
+		 * @brief ターゲットの中からランダムでパス検索処理
+		*/
+		void CAICharacterBase::RandomTargetPathFinding()
+		{
+			const int randTargetNum = (*m_rand)(*m_mt);
+			const Vector3 randTargetPos = (*m_naviMeshTargetPointsRef)[randTargetNum];
+
+			PathFinding(randTargetPos);
 		}
 
 		/**
@@ -110,8 +130,39 @@ namespace nsMyGame
 				return;
 			}
 
-			Vector3 pos = m_path.Move(m_modelRender->GetPosition(), moveSpeed, m_isEndPathMove, physicsWorld);
-			m_modelRender->SetPosition(pos);
+			const Vector3 posBeforeMove = m_modelRender->GetPosition();
+			const Vector3 posAfterMove = m_path.Move(
+				posBeforeMove,
+				moveSpeed * nsTimer::CGameTime().GetFrameDeltaTime(),
+				m_isEndPathMove,
+				physicsWorld
+			);
+			Quaternion frontQRot = Quaternion::Identity;
+
+
+			Rotating(&frontQRot, posBeforeMove, posAfterMove);
+
+			m_modelRender->SetPosition(posAfterMove);
+			m_modelRender->SetRotation(frontQRot);
+
+			return;
+		}
+
+		/**
+		 * @brief 移動方向に回転する
+		 * @param[in] frontQRotOut 前方向の回転の格納先
+		 * @param[in] posBefoerMove 移動前の座標
+		 * @param[in] posAfterMove 移動後の座標
+		*/
+		void CAICharacterBase::Rotating(Quaternion* frontQRotOut, const Vector3& posBeforeMove, const Vector3& posAfterMove)
+		{
+			Vector3 moveDir = posAfterMove - posBeforeMove;
+			if (moveDir.LengthSq() <= 1.0f)
+			{
+				return;
+			}
+			moveDir.Normalize();
+			frontQRotOut->SetRotation(Vector3::Front, moveDir);
 
 			return;
 		}

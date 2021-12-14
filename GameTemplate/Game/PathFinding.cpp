@@ -43,32 +43,32 @@ namespace nsMyGame
 				// まずは無限線分として交差しているか判定。
 				Vector3 p0ToStartPos = rayStartPos - p0;
 				p0ToStartPos.y = 0.0f;
-				Vector3 p0ToEndPos = rayEndPos - p0;
-				p0ToEndPos.y = 0.0f;
+				Vector3 p1ToEndPos = rayEndPos - p1;
+				p1ToEndPos.y = 0.0f;
 
-				// p0ToStartPosとp0ToEndPosを正規化する。
+				// p0ToStartPosとp1ToEndPosを正規化する。
 				Vector3 p0ToStartPosNorm = p0ToStartPos;
 				p0ToStartPosNorm.Normalize();
-				Vector3 p0ToEndPosNorm = p0ToEndPos;
-				p0ToEndPosNorm.Normalize();
+				Vector3 p1ToEndPosNorm = p1ToEndPos;
+				p1ToEndPosNorm.Normalize();
 
-				if (p0ToStartPosNorm.Dot(p0ToEndPosNorm) <= 0.0f) {
+				if (p0ToStartPosNorm.Dot(p1ToEndPosNorm) <= 0.0f) {
 					// 交差している。
 					// 続いて交点を求める。
 					// まずは、XZ平面でレイに垂直な線分を求める。
-					Vector3 rayNorm = ray;
-					rayNorm.Normalize();
-					Vector3 rayTangent;
-					rayTangent.Cross(rayNorm, g_vec3AxisY);
-					rayTangent.Normalize();
-					float t0 = fabsf(Dot(rayTangent, p0ToStartPos));
-					float t1 = fabsf(Dot(rayTangent, p0ToEndPos));
+					Vector3 edgeDirection = p1 - p0;
+					edgeDirection.Normalize();
+					Vector3 edgeTangent;
+					edgeTangent.Cross(edgeDirection, g_vec3AxisY);
+					edgeTangent.Normalize();
+					float t0 = fabsf(Dot(edgeTangent, p0ToStartPos));
+					float t1 = fabsf(Dot(edgeTangent, p1ToEndPos));
 					// 始点から交点までの比率を求める。
 					float rate = t0 / (t0 + t1);
 					Vector3 hitPos = Math::Lerp(rate, rayStartPos, rayEndPos);
 					// 続いて交点が線分上にいるか調べる。
-					Vector3 rsToHitPos = hitPos - rayStartPos;
-					Vector3 reToHitPos = hitPos - rayEndPos;
+					Vector3 rsToHitPos = hitPos - p0;
+					Vector3 reToHitPos = hitPos - p1;
 					rsToHitPos.Normalize();
 					reToHitPos.Normalize();
 					if (rsToHitPos.Dot(reToHitPos) <= 0.0f) {
@@ -240,7 +240,7 @@ namespace nsMyGame
 			// 開始セルは開始座標、終了セルは終了座標。
 			// それ以外のセルは、セルの中心座標がCellWork::Init()関数で設定されている。
 			m_cellWork[startCell.GetCellNo()].pathPoint = startPos;
-			m_cellWork[endCell.GetCellNo()].pathPoint = endPos;
+			//m_cellWork[endCell.GetCellNo()].pathPoint = endPos;
 
 			using namespace std;
 			vector< CellWork* > openList;

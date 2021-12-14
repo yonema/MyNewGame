@@ -533,6 +533,9 @@
     <ClCompile Include="AICar.cpp">
       <Filter>MyCode\AICharacter</Filter>
     </ClCompile>
+    <ClCompile Include="AIField.cpp">
+      <Filter>MyCode\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -1005,6 +1008,12 @@
     </ClInclude>
     <ClInclude Include="AICar.h">
       <Filter>MyCode\AICharacter</Filter>
+    </ClInclude>
+    <ClInclude Include="AIField.h">
+      <Filter>MyCode\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="AIConstData.h">
+      <Filter>MyCode\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

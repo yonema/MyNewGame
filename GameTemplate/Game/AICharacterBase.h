@@ -23,6 +23,13 @@ namespace nsMyGame
 		*/
 		class CAICharacterBase : public IGameObject
 		{
+		public:		// 構造体
+			struct SAICharacterInitData
+			{
+				const nsAI::CNaviMesh* naviMeshRef = nullptr;
+				nsAI::CPathFinding* pathFindingRef = nullptr;
+				std::vector<Vector3>* naviMeshTargetPointsRef = nullptr;
+			};
 		public:		// コンストラクタとデストラクタ
 			/**
 			 * @brief コンストラクタ
@@ -76,11 +83,20 @@ namespace nsMyGame
 			 * @param[in] naviMeshRef ナビメッシュ
 			 * @param[in,,out] pathFindingRef パス検索処理
 			*/
-			void Init(const nsAI::CNaviMesh* naviMeshRef, nsAI::CPathFinding* pathFindingRef)
+			void Init(SAICharacterInitData& AICharaInitData)
 			{
-				m_naviMeshRef = naviMeshRef;
-				m_pathFindingRef = pathFindingRef;
+				m_naviMeshRef = AICharaInitData.naviMeshRef;
+				m_pathFindingRef = AICharaInitData.pathFindingRef;
+				m_naviMeshTargetPointsRef = AICharaInitData.naviMeshTargetPointsRef;
 			}
+
+			/**
+			 * @brief 移動方向に回転する
+			 * @param[in] frontQRotOut 前方向の回転の格納先
+			 * @param[in] posBefoerMove 移動前の座標
+			 * @param[in] posAfterMove 移動後の座標
+			*/
+			void Rotating(Quaternion* frontQRotOut, const Vector3& posBeforeMove, const Vector3& posAfterMove);
 
 		protected:	// protectedなメンバ関数
 
@@ -100,9 +116,14 @@ namespace nsMyGame
 
 			/**
 			 * @brief パス検索処理
-			 * @param[in] targetPos 移動目標座標
+			 * @param[in] targetPos パスの目標座標
 			*/
 			void PathFinding(const Vector3& targetPos);
+
+			/**
+			 * @brief ターゲットの中からランダムでパス検索処理
+			*/
+			void RandomTargetPathFinding();
 
 			/**
 			 * @brief パス上を移動する
@@ -127,8 +148,12 @@ namespace nsMyGame
 			nsAI::CPath m_path;		//!< パス
 			const nsAI::CNaviMesh* m_naviMeshRef = nullptr;		//!< ナビメッシュの参照
 			nsAI::CPathFinding* m_pathFindingRef = nullptr;		//!< パス検索処理の参照
+			std::vector<Vector3>* m_naviMeshTargetPointsRef = nullptr;	//!< ナビメッシュのターゲットの参照
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
-			bool m_isEndPathMove = false;						//!< パス移動が終了したか？
+			bool m_isEndPathMove = true;						//!< パス移動が終了したか？
+
+			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
+			std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 		};
 	}
 }

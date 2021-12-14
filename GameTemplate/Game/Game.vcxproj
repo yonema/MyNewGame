@@ -297,6 +297,7 @@
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="AICar.cpp" />
     <ClCompile Include="AICharacterBase.cpp" />
+    <ClCompile Include="AIField.cpp" />
     <ClCompile Include="AlphaMap.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="BSP.cpp" />
@@ -441,6 +442,8 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="AICar.h" />
     <ClInclude Include="AICharacterBase.h" />
+    <ClInclude Include="AIConstData.h" />
+    <ClInclude Include="AIField.h" />
     <ClInclude Include="AlphaMap.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="BSP.h" />

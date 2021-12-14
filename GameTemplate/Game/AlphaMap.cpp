@@ -42,25 +42,10 @@ namespace nsMyGame
 				// 建物の生成
 				m_buildings = NewGO<nsBuilding::CBuildings>(nsCommonData::enPriorityFirst);
 
-				// ナビメッシュの生成
-				m_naviMesh.Init("Assets/naviMesh/NM_Ground.tkn");
 
-				//
-				ModelInitData nmbbModelInitData;
-				nmbbModelInitData.m_tkmFilePath = "Assets/naviMesh/NMBB.tkm";
-				nmbbModelInitData.m_fxFilePath = 
-					nsGraphic::nsModel::nsModelConstData::kTranslucentModelFxFilePath;
-				m_naviMeshBlockBolume.Init(nmbbModelInitData);//Load("Assets/naviMesh/NMBB.tkm");
-
-				m_noviMeshBlockGhostObject.CreateMesh(
-					Vector3::Zero,
-					Quaternion::Identity,
-					m_naviMeshBlockBolume,
-					Matrix::Identity
-					);
 
 				nsAICharacter::CAICar* car = NewGO<nsAICharacter::CAICar>(nsCommonData::enPriorityFirst, "Car");
-				car->Init(&m_naviMesh, &m_pathFinding);
+				car->Init(m_aiField.GetAICharaInitData());
 
 				// レベルの生成
 				m_level3D.Init(
@@ -107,6 +92,7 @@ namespace nsMyGame
 						// ゴールの生成
 						else if (objData.EqualObjectName(kGoalName))
 						{
+							return true;
 							m_goal = NewGO <nsGoal::CGoal>(nsCommonData::enPriorityFirst);
 							m_goal->Init(objData.position, objData.rotation, objData.scale, *m_player);
 
@@ -121,64 +107,65 @@ namespace nsMyGame
 				m_buildings->Init();
 
 				// 小物をレベルから生成
-				//for (int propsType = 0; propsType < enPropsTypeNum; propsType++)
-				//{
-				//	// 小物用のレベルを初期化
-				//	m_propsLevel3D[propsType].Init(
-				//		kPropsLevelFilePath[propsType],
-				//		[&](nsLevel3D::SLevelObjectData& objData)
-				//		{
-				//			// マップチップの予約数を設定する
-				//			objData.numMapChipReserve = kNumMapChipReserveTbl[propsType];
-				//			// ユーザー定義のコリジョン属性を小物用の属性に設定する
-				//			objData.userIndex = EnCollisionAttr::enCollisionAttr_Props;
-				//			// シャドウキャスターにする
-				//			objData.shadowCaster = true;
+				for (int propsType = 0; propsType < enPropsTypeNum; propsType++)
+				{
+					break;
+					// 小物用のレベルを初期化
+					m_propsLevel3D[propsType].Init(
+						kPropsLevelFilePath[propsType],
+						[&](nsLevel3D::SLevelObjectData& objData)
+						{
+							// マップチップの予約数を設定する
+							objData.numMapChipReserve = kNumMapChipReserveTbl[propsType];
+							// ユーザー定義のコリジョン属性を小物用の属性に設定する
+							objData.userIndex = EnCollisionAttr::enCollisionAttr_Props;
+							// シャドウキャスターにする
+							objData.shadowCaster = true;
 
 
-				//			switch (propsType)
-				//			{
-				//			// ココで指定したものが生成される
-				//			case enPropsPedestrianLight:	// 歩行者用信号機
-				//				return false;
-				//				break;
+							switch (propsType)
+							{
+							// ココで指定したものが生成される
+							case enPropsPedestrianLight:	// 歩行者用信号機
+								return false;
+								break;
 
-				//			case enPropsStreetLight:		// 街灯
-				//				objData.lodModelFilePath = "Assets/modelData/levelSource/StreetLight_LOD.tkm";
-				//				objData.distanceLOD = 1000.0f;
-				//				return false;
-				//				break;
+							case enPropsStreetLight:		// 街灯
+								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetLight_LOD.tkm";
+								objData.distanceLOD = 1000.0f;
+								return false;
+								break;
 
-				//			case enPropsTrafficLight:		// 信号機
-				//				objData.lodModelFilePath = "Assets/modelData/levelSource/TrafficLight_LOD.tkm";
-				//				objData.distanceLOD = 1000.0f;
-				//				return false;
-				//				break;
+							case enPropsTrafficLight:		// 信号機
+								objData.lodModelFilePath = "Assets/modelData/levelSource/TrafficLight_LOD.tkm";
+								objData.distanceLOD = 1000.0f;
+								return false;
+								break;
 
-				//			case enPropsStreetTree:			// 街路樹
-				//				objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_LOD.tkm";
-				//				return false;
-				//				break;
+							case enPropsStreetTree:			// 街路樹
+								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_LOD.tkm";
+								return false;
+								break;
 
-				//			// 街路樹の枝は半透明で描画する
-				//			case enPropsStreetTreeBranch:
-				//				objData.isTranslucent = true;
-				//				objData.priority = nsCommonData::enPrioritySecond;
-				//				objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_Branch_LOD.tkm";
-				//				objData.distanceLOD = 10000.0f;
+							// 街路樹の枝は半透明で描画する
+							case enPropsStreetTreeBranch:
+								objData.isTranslucent = true;
+								objData.priority = nsCommonData::enPrioritySecond;
+								objData.lodModelFilePath = "Assets/modelData/levelSource/StreetTree_Branch_LOD.tkm";
+								objData.distanceLOD = 10000.0f;
 
-				//				return false;
-				//				break;
+								return false;
+								break;
 
-				//			// 指定しなかったら生成されない
-				//			default:
-				//				return true;
-				//				break;
-				//			}
-				//		}
-				//	);					
+							// 指定しなかったら生成されない
+							default:
+								return true;
+								break;
+							}
+						}
+					);					
 
-				//}
+				}
 
 				// タイマーの計測を始める
 				m_gameState->StartTimingGame();

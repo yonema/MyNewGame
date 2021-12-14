@@ -28,14 +28,18 @@ namespace nsMyGame
 		*/
 		void CAICar::UpdateSub()
 		{
-			if (g_pad[0]->IsTrigger(enButtonA))
-			{
-				PathFinding(g_camera3D->GetTarget());
-			}
+			//if (g_pad[0]->IsTrigger(enButtonX))
+			//{
+			//	PathFinding(g_camera3D->GetTarget());
+			//}
 
 			if (IsEndPathMove() != true)
 			{
-				MoveOnPath(50.0f);
+				MoveOnPath(5000.0f, PhysicsWorld::GetInstance());
+			}
+			else
+			{
+				RandomTargetPathFinding();
 			}
 			return;
 		}

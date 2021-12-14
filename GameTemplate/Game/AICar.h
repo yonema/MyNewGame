@@ -45,6 +45,7 @@ namespace nsMyGame
 
 		private:	// データメンバ
 
+			
 		};
 
 	}
