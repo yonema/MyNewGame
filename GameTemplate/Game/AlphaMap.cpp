@@ -55,7 +55,7 @@ namespace nsMyGame
 						// 建物の生成
 						if (objData.ForwardMatchName(nsBuilding::nsBuildingConstData::kBuildingForwardName))
 						{
-							//return true;
+							return true;
 							// 建物のタイプの数の分、当たるまで全部調べる
 							for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
 							{

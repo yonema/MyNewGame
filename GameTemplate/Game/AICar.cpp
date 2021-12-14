@@ -32,6 +32,7 @@ namespace nsMyGame
 			//{
 			//	PathFinding(g_camera3D->GetTarget());
 			//}
+			return;
 
 			if (IsEndPathMove() != true)
 			{
