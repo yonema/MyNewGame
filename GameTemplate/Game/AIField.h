@@ -54,8 +54,6 @@ namespace nsMyGame
 			SAICharacterInitData m_AICharaInitData;		//!< AIキャラクターの初期化データ
 			nsAI::CNaviMesh m_naviMesh;					//!< ナビメッシュ
 			nsAI::CPathFinding m_pathFinding;			//!< パス検索
-			Model m_naviMeshBlockBolume;				//!< ナビメッシュをブロックするボリューム
-			PhysicsGhostObject m_noviMeshBlockGhostObject;	//!< ナビメッシュをブロックするゴーストオブジェクト
 			std::vector<Vector3> m_naviMeshTargetPoints;	//!< ナビメッシュのターゲットポイント
 		};
 

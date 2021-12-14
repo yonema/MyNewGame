@@ -55,7 +55,7 @@ namespace nsMyGame
 						// 建物の生成
 						if (objData.ForwardMatchName(nsBuilding::nsBuildingConstData::kBuildingForwardName))
 						{
-							return true;
+							//return true;
 							// 建物のタイプの数の分、当たるまで全部調べる
 							for (int i = 0; i < nsBuilding::nsBuildingConstData::enBuildingTypeNum; i++)
 							{
@@ -109,7 +109,7 @@ namespace nsMyGame
 				// 小物をレベルから生成
 				for (int propsType = 0; propsType < enPropsTypeNum; propsType++)
 				{
-					break;
+					//break;
 					// 小物用のレベルを初期化
 					m_propsLevel3D[propsType].Init(
 						kPropsLevelFilePath[propsType],
@@ -120,7 +120,7 @@ namespace nsMyGame
 							// ユーザー定義のコリジョン属性を小物用の属性に設定する
 							objData.userIndex = EnCollisionAttr::enCollisionAttr_Props;
 							// シャドウキャスターにする
-							objData.shadowCaster = true;
+							//objData.shadowCaster = true;
 
 
 							switch (propsType)

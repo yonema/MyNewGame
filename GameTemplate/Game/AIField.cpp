@@ -33,26 +33,6 @@ namespace nsMyGame
 		{
 			// ナビメッシュの生成
 			m_naviMesh.Init(kNaviMeshFilePath);
-
-			// ナビメッシュブロックボリュームの初期化データ
-			//ModelInitData nmbbModelInitData;
-			//nmbbModelInitData.m_tkmFilePath = kNaviMeshBlockBolumeFilePath;
-			//// fxは何でもいいはず
-			//nmbbModelInitData.m_fxFilePath =
-			//	nsGraphic::nsModel::nsModelConstData::kTranslucentModelFxFilePath;
-			//m_naviMeshBlockBolume.Init(nmbbModelInitData);
-
-			//nsGraphic::nsModel::CModelRender* modelRender = NewGO< nsGraphic::nsModel::CModelRender>(10,"NMBB");
-			//modelRender->IniTranslucent(kNaviMeshBlockBolumeFilePath);
-			//modelRender->SetAlphaValue(0.5f);
-
-			// NMBBをゴーストオブジェクトとして生成
-			//m_noviMeshBlockGhostObject.CreateMesh(
-			//	Vector3::Zero,
-			//	Quaternion::Identity,
-			//	m_naviMeshBlockBolume,
-			//	Matrix::Identity
-			//);
 			
 			// ナビメッシュのターゲットポイント用のレベル
 			nsLevel3D::CLevel3D naviMeshTargetPointLevel;

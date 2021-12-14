@@ -14,8 +14,6 @@ namespace nsMyGame
 		{
 			//!< ナビメッシュのファイルパス
 			constexpr const char* const kNaviMeshFilePath = "Assets/naviMesh/NM_Ground.tkn";
-			//!< ナビメッシュブロックボリュームのファイルパス
-			constexpr const char* const kNaviMeshBlockBolumeFilePath = "Assets/naviMesh/NMBB.tkm";
 			//!< ナビメッシュのターゲットポイント用のレベルのファイルパス
 			constexpr const char* const kNaviMeshTargetPointLevelFilePath = "Assets/naviMesh/NMTP.tkl";
 		}
