@@ -240,7 +240,7 @@ namespace nsMyGame
 			// 開始セルは開始座標、終了セルは終了座標。
 			// それ以外のセルは、セルの中心座標がCellWork::Init()関数で設定されている。
 			m_cellWork[startCell.GetCellNo()].pathPoint = startPos;
-			//m_cellWork[endCell.GetCellNo()].pathPoint = endPos;
+			m_cellWork[endCell.GetCellNo()].pathPoint = endPos;
 
 			using namespace std;
 			vector< CellWork* > openList;

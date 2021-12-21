@@ -1015,6 +1015,9 @@
     <ClInclude Include="AIConstData.h">
       <Filter>MyCode\AI</Filter>
     </ClInclude>
+    <ClInclude Include="AICharacterConstData.h">
+      <Filter>MyCode\AICharacter</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">

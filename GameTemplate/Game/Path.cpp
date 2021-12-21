@@ -39,7 +39,16 @@ namespace nsMyGame
 			Vector3 toEnd2 = currentSection.endPos - pos;
 			toEnd2.Normalize();
 
-			if (toEnd.Dot(toEnd2) <= 0.0f) {
+			// ’Ç‰Á
+			Vector3 distVec = currentSection.endPos - pos;
+			if (physicsWorld)
+			{
+				distVec.y = 0.0f;
+			}
+
+			if (toEnd.Dot(toEnd2) <= 0.0f || 
+				distVec.LengthSq() <= 0.001f)
+			{
 				// Œü‚«‚ª•Ï‚í‚Á‚½‚Ì‚ÅI“_‚ð’´‚¦‚½B
 				pos = currentSection.endPos;
 				if (m_sectionNo == m_sectionArray.size() - 1) {

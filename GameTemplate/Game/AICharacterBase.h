@@ -1,5 +1,8 @@
 #pragma once
+#include "AICharacterConstData.h"
 #include "Path.h"
+#include "AIField.h"
+
 
 namespace nsMyGame
 {
@@ -10,6 +13,7 @@ namespace nsMyGame
 	namespace nsAI {
 		class CNaviMesh;
 		class CPathFinding;
+		struct SAICharacterInitData;
 	}
 
 
@@ -24,12 +28,7 @@ namespace nsMyGame
 		class CAICharacterBase : public IGameObject
 		{
 		public:		// 構造体
-			struct SAICharacterInitData
-			{
-				const nsAI::CNaviMesh* naviMeshRef = nullptr;
-				nsAI::CPathFinding* pathFindingRef = nullptr;
-				std::vector<Vector3>* naviMeshTargetPointsRef = nullptr;
-			};
+
 		public:		// コンストラクタとデストラクタ
 			/**
 			 * @brief コンストラクタ
@@ -83,12 +82,7 @@ namespace nsMyGame
 			 * @param[in] naviMeshRef ナビメッシュ
 			 * @param[in,,out] pathFindingRef パス検索処理
 			*/
-			void Init(SAICharacterInitData& AICharaInitData)
-			{
-				m_naviMeshRef = AICharaInitData.naviMeshRef;
-				m_pathFindingRef = AICharaInitData.pathFindingRef;
-				m_naviMeshTargetPointsRef = AICharaInitData.naviMeshTargetPointsRef;
-			}
+			void Init(nsAI::SAICharacterInitData* AICharaInitData);
 
 			/**
 			 * @brief 移動方向に回転する
@@ -126,6 +120,11 @@ namespace nsMyGame
 			void RandomTargetPathFinding();
 
 			/**
+			 * @brief 安全運転を心掛けたパス検索処理
+			*/
+			void TargetPathFindingToSafeDrive();
+
+			/**
 			 * @brief パス上を移動する
 			 * @param[in] moveSpeed 移動速度
 			 * @param[in] physicsWorld 物理ワールド。
@@ -144,6 +143,40 @@ namespace nsMyGame
 				return m_isEndPathMove;
 			}
 
+		private:	// privateなメンバ関数
+
+			/**
+			 * @brief 距離によるターゲットポイントの除外
+			 * @param[in] distance 自身とターゲットポイントの距離
+			 * @return 除外したか？true戻ってきたら除外した
+			*/
+			bool ExcludeForDistance(const float distance);
+
+			/**
+			 * @brief 角度によるターゲットポイントの除外
+			 * @param[out] moveToPTTAngleRad  移動方向とターゲット座標への方向のラジアン角
+			 * @param[in] posToTargetPosDir 自身からターゲットへのベクトル
+			 * @return 除外したか？trueが戻ってきたら除外した
+			*/
+			bool ExcludeForAngle(float* moveToPTTAngleRadOut, const Vector3& posToTargetPosDir);
+
+			/**
+			 * @brief 候補に入れるターゲットポイントを調べる処理
+			 * @param[in,out] candidateTPsOut ターゲットポイントの候補
+			 * @param[in] targetPos ターゲットポイント
+			 * @param[in,out] posToCandidateTPLenOut 自身から候補のターゲットポイントへの距離
+			 * @param[in] posToTargetPosLen 自身からターゲットポイントへの距離
+			 * @param[in] posToTargetPosDir 自身からターゲットポイントへの方向
+			*/
+			void BeCandidateTargetPoint(
+				std::unordered_map<nsAICharacterConstData::EnCandidateTargetPointType, Vector3>* candidateTPsOut,
+				const Vector3& targetPos,
+				float posToCandidateTPLenOut[nsAICharacterConstData::enCandidateTargetPointTypeNum],
+				const float posToTargetPosLen,
+				const Vector3& posToTargetPosDir
+			);
+
+
 		private:	// データメンバ
 			nsAI::CPath m_path;		//!< パス
 			const nsAI::CNaviMesh* m_naviMeshRef = nullptr;		//!< ナビメッシュの参照
@@ -151,9 +184,12 @@ namespace nsMyGame
 			std::vector<Vector3>* m_naviMeshTargetPointsRef = nullptr;	//!< ナビメッシュのターゲットの参照
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー
 			bool m_isEndPathMove = true;						//!< パス移動が終了したか？
+			Vector3 m_moveDir = Vector3::Front;					//!< 移動方向
 
 			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
 			std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
+			//!< 安全運転時に使用する範囲付きの一様乱数
+			std::unique_ptr<std::uniform_int_distribution<>> m_randForSafeDrive;
 		};
 	}
 }

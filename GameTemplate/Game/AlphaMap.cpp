@@ -45,7 +45,12 @@ namespace nsMyGame
 
 
 				nsAICharacter::CAICar* car = NewGO<nsAICharacter::CAICar>(nsCommonData::enPriorityFirst, "Car");
-				car->Init(m_aiField.GetAICharaInitData());
+				car->Init(
+					m_aiField.GetAICharaInitData(),
+					{-520.0f,0.0f,4200.0f },
+					Quaternion::Identity,
+					Vector3::One
+				);
 
 				// ƒŒƒxƒ‹‚Ì¶¬
 				m_level3D.Init(

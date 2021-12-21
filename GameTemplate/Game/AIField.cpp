@@ -46,10 +46,36 @@ namespace nsMyGame
 				}
 			);
 
+			// ウェイポイントの初期化
+			InitWayPoints();
 
 			m_AICharaInitData.naviMeshRef = &m_naviMesh;
 			m_AICharaInitData.pathFindingRef = &m_pathFinding;
 			m_AICharaInitData.naviMeshTargetPointsRef = &m_naviMeshTargetPoints;
+			m_AICharaInitData.wayPointsRef = &m_wayPoints;
+
+			return;
+		}
+
+		/**
+		 * @brief ウェイポイントの初期化
+		*/
+		void CAIField::InitWayPoints()
+		{
+			// ウェイポイントの数だけリサーブ
+			m_wayPoints.reserve(kWayPointNum);
+
+			// ウェイポイントのレベルデータを生成
+			nsLevel3D::CLevel3D wayPointLevel;
+			wayPointLevel.Init(
+				kWayPointFilePath,
+				[&](nsLevel3D::SLevelObjectData& objData)
+				{
+					// レベルデータから座標を取り出す
+					m_wayPoints.emplace_back(objData.position);
+					return true;
+				}
+			);
 
 			return;
 		}

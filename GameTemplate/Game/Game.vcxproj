@@ -442,6 +442,7 @@
     <ClInclude Include="AABB.h" />
     <ClInclude Include="AICar.h" />
     <ClInclude Include="AICharacterBase.h" />
+    <ClInclude Include="AICharacterConstData.h" />
     <ClInclude Include="AIConstData.h" />
     <ClInclude Include="AIField.h" />
     <ClInclude Include="AlphaMap.h" />

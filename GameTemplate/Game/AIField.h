@@ -13,12 +13,21 @@ namespace nsMyGame
 	namespace nsAI
 	{
 		/**
+		 * @brief AIの初期化データ
+		*/
+		struct SAICharacterInitData
+		{
+			const nsAI::CNaviMesh* naviMeshRef = nullptr;
+			nsAI::CPathFinding* pathFindingRef = nullptr;
+			std::vector<Vector3>* naviMeshTargetPointsRef = nullptr;
+			const std::vector<Vector3>* wayPointsRef = nullptr;
+		};
+
+		/**
 		 * @brief AIのフィールド
 		*/
 		class CAIField : private nsUtil::Noncopyable
 		{
-		private:	// エイリアス宣言
-			using SAICharacterInitData = nsAICharacter::CAICharacterBase::SAICharacterInitData;
 		public:		// コンストラクタとデストラクタ
 			/**
 			 * @brief コンストラクタ
@@ -27,10 +36,7 @@ namespace nsMyGame
 			/**
 			 * @brief デストラクタ
 			*/
-			//~CAIField() = default;
-			~CAIField() {
-				DeleteGO(FindGO<nsGraphic::nsModel::CModelRender>("NMBB"));
-			};
+			~CAIField() = default;
 
 		public:		// メンバ関数
 
@@ -50,11 +56,18 @@ namespace nsMyGame
 			*/
 			void Init();
 
+			/**
+			 * @brief ウェイポイントの初期化
+			*/
+			void InitWayPoints();
+
 		private:	// データメンバ
 			SAICharacterInitData m_AICharaInitData;		//!< AIキャラクターの初期化データ
 			nsAI::CNaviMesh m_naviMesh;					//!< ナビメッシュ
 			nsAI::CPathFinding m_pathFinding;			//!< パス検索
 			std::vector<Vector3> m_naviMeshTargetPoints;	//!< ナビメッシュのターゲットポイント
+			std::vector<Vector3> m_wayPoints;			//!< ウェイポイント
+
 		};
 
 	}
