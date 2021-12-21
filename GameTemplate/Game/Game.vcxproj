@@ -307,6 +307,7 @@
     <ClCompile Include="CEffectPlayer.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="GeometryData.cpp" />
+    <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="NaviMesh.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PathFinding.cpp" />
@@ -454,6 +455,7 @@
     <ClInclude Include="CascadeShadowMapMatrix.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="GeometryData.h" />
+    <ClInclude Include="MiniMap.h" />
     <ClInclude Include="NaviMesh.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="PathFinding.h" />
@@ -554,6 +556,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\miniMap.fx">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Preview|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Assets\shader\model.fx">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

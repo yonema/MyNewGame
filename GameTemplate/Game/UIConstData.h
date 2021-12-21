@@ -32,6 +32,28 @@ namespace nsMyGame
 			//!< ゴールのスプライトの座標
 			static const Vector3 kGoalSpritePosition = { 0.0f,200.0f,0.0f };
 
+			//!< ミニマップの背景用スプライトのファイルパス
+			constexpr const char* const kMiniMapBackSpriteFilePath = "Assets/Image/miniMap/map_back.DDS";
+			//!< ミニマップのスプライトのファイルパス
+			constexpr const char* const kMiniMapSpriteFilePath = "Assets/Image/miniMap/map.DDS";
+			//!< ミニマップのFXファイルパス
+			constexpr const char* const kMiniMapFxFilePath = "Assets/shader/miniMap.fx";
+			// 元の画像サイズ * 大きさ倍率
+			constexpr int kMiniMapSpriteWidth = static_cast<int>(720 * 0.8f);	//!< ミニマップの幅
+			constexpr int kMiniMapSpriteHeight = static_cast<int>(720 * 0.8f);	//!< ミニマップの高さ
+			// 元の画像サイズ * アスペクト比 * 大きさ倍率
+			constexpr int kMiniMapDrawWidth = static_cast<int>(720 * 0.4f * 0.7f);	//!< ミニマップの幅
+			constexpr int kMiniMapDrawHeight = static_cast<int>(720 * 0.3f * 0.7f);	//!< ミニマップの高さ
+			//!< ミニマップのスプライトの座標
+			static const Vector3 kMiniMapSpritePosition = { 500.0f,-250.0f,0.0f };
+
+			//!< プレイヤーのアイコンのスプライトのファイルパス
+			constexpr const char* const kPlayerIconSpriteFilePath = "Assets/Image/miniMap/playerArrow.DDS";
+			constexpr int kPlayerIconSpriteWidth = static_cast<int>(64 * 0.5f);	//! プレイヤーアイコンの幅
+			constexpr int kPlayerIconSpriteHeight = static_cast<int>(64 * 0.5f);	//! プレイヤーアイコンの高さ
+			// プレイヤーのアイコンのスプライトの座標
+			static const Vector3 kPlayerIconSpritePosition = kMiniMapSpritePosition;
+			
 		}
 	}
 }

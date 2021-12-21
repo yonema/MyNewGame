@@ -18,5 +18,22 @@ namespace nsMyGame
 			enPriorityFourth = 30,	//!< 四番目。優先度30
 			enPriorityFinal,		//!< 最後の優先度
 		};
+
+		/**
+		 * @brief ゲームオブジェクトの名前の種類
+		*/
+		enum EnGameObjectName
+		{
+			enMainGameState,
+			enGameObjectNameNum
+		};
+
+		/**
+		 * @brief ゲームオブジェクトの名前
+		*/
+		constexpr const char* const kGameObjectName[enGameObjectNameNum]
+		{
+			"MainGameState"
+		};
 	}
 }

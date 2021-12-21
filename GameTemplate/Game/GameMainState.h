@@ -5,6 +5,7 @@ namespace nsMyGame
 {
 	// 前方宣言
 	namespace nsUI { class CGameMainUI; }	//!< ゲームメインのUIクラス
+	namespace nsPlayer { class CPlayer; }	//!< プレイヤークラス
 
 	/**
 	 * @brief ゲームステート関連のネームスペース
@@ -52,6 +53,15 @@ namespace nsMyGame
 		public:		// メンバ関数
 
 			/**
+			 * @brief 初期化処理
+			 * @param[in] player プレイヤーの参照
+			*/
+			void Init(const nsPlayer::CPlayer& player)
+			{
+				m_playerRef = &player;
+			}
+
+			/**
 			 * @brief ゲームのタイムの計測開始
 			*/
 			void StartTimingGame()
@@ -92,6 +102,15 @@ namespace nsMyGame
 				return m_isGoal;
 			}
 
+			/**
+			 * @brief プレイヤーの参照を得る
+			 * @return プレイヤーの参照
+			*/
+			const nsPlayer::CPlayer& GetPlayer() const
+			{
+				return *m_playerRef;
+			}
+
 		public:		// staticなメンバ関数とデータメンバ
 
 			static CGameMainState* m_instance;	//!< インスタンス
@@ -121,7 +140,7 @@ namespace nsMyGame
 			nsUI::CGameMainUI* m_gameMainUI = nullptr;	//!< ゲームメインのUIクラス
 
 			bool m_isGoal = false;		//!< ゴールしているか？
-
+			const nsPlayer::CPlayer* m_playerRef = nullptr;	//!< プレイヤーのconst参照
 		};
 
 		/**

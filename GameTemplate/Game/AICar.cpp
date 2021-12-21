@@ -228,7 +228,7 @@ namespace nsMyGame
 
 			const Vector3 posAfterMove = m_path.Move(
 				posBeforeMove,
-				3000.0f * nsTimer::CGameTime().GetFrameDeltaTime(),
+				2000.0f * nsTimer::CGameTime().GetFrameDeltaTime(),
 				m_isMoveEnd,
 				PhysicsWorld::GetInstance()
 			);

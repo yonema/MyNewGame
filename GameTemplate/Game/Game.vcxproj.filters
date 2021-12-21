@@ -536,6 +536,9 @@
     <ClCompile Include="AIField.cpp">
       <Filter>MyCode\AI</Filter>
     </ClCompile>
+    <ClCompile Include="MiniMap.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -1018,6 +1021,9 @@
     <ClInclude Include="AICharacterConstData.h">
       <Filter>MyCode\AICharacter</Filter>
     </ClInclude>
+    <ClInclude Include="MiniMap.h">
+      <Filter>MyCode\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">
@@ -1045,6 +1051,9 @@
       <Filter>Assets\shader</Filter>
     </FxCompile>
     <FxCompile Include="Assets\shader\DrawShadowMap.fx">
+      <Filter>Assets\shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Assets\shader\miniMap.fx">
       <Filter>Assets\shader</Filter>
     </FxCompile>
   </ItemGroup>

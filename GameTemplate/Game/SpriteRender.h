@@ -87,6 +87,12 @@ namespace nsMyGame
 				);
 
 				/**
+				 * @brief 初期化データによる初期化処理。最初に呼んでね。
+				 * @param[in] spriteInitData スプライトの初期化データ
+				*/
+				void Init(const SpriteInitData& spriteInitData);
+
+				/**
 				 * @brief 座標を設定
 				 * @param[in] pos 座標
 				*/
@@ -165,6 +171,15 @@ namespace nsMyGame
 				void SetAlphaValue(const float alphaValue)
 				{
 					m_sprite.SetAlphaValue(alphaValue);
+				}
+
+				/**
+				 * @brief 基点を設定
+				 * @param[in] pivot 基点
+				*/
+				void SetPivot(const Vector2& pivot)
+				{
+					m_pivot = pivot;
 				}
 
 			private:	// privateなメンバ関数

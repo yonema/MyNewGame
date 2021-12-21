@@ -30,7 +30,10 @@ namespace nsMyGame
 			bool CAlphaMap::Start()
 			{
 				// ゲームステートの生成
-				m_gameState = NewGO<nsGameState::CGameMainState>(nsCommonData::enPriorityFirst);
+				m_gameState = NewGO<nsGameState::CGameMainState>(
+					nsCommonData::enPriorityFirst,
+					nsCommonData::kGameObjectName[nsCommonData::enMainGameState]
+					);
 
 				// スカイキューブの生成と初期化
 				m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
@@ -42,6 +45,8 @@ namespace nsMyGame
 				// 建物の生成
 				m_buildings = NewGO<nsBuilding::CBuildings>(nsCommonData::enPriorityFirst);
 
+				// ゲームステートの初期化
+				m_gameState->Init(*m_player);
 
 
 				nsAICharacter::CAICar* car = NewGO<nsAICharacter::CAICar>(nsCommonData::enPriorityFirst, "Car");

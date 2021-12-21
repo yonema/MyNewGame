@@ -3,6 +3,7 @@
 #include "UIConstData.h"
 #include "FontRender.h"
 #include "SpriteRender.h"
+#include "MiniMap.h"
 
 namespace nsMyGame
 {
@@ -26,6 +27,8 @@ namespace nsMyGame
 			// ゴールのスプライトの初期化
 			InitGoalSprite();
 
+			m_miniMap = NewGO<CMiniMap>(nsCommonData::enPriorityFirst);
+
 			return true;
 		}
 
@@ -37,6 +40,8 @@ namespace nsMyGame
 			DeleteGO(m_timerFR);
 
 			DeleteGO(m_goalSR);
+
+			DeleteGO(m_miniMap);
 
 			return;
 		}

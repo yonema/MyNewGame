@@ -113,6 +113,21 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief 初期化データによる初期化処理。最初に呼んでね。
+			 * @param[in] spriteInitData スプライトの初期化データ
+			*/
+			void CSpriteRender::Init(const SpriteInitData& spriteInitData)
+			{
+				//スプライトの初期化
+				m_sprite.Init(spriteInitData);
+
+				//スプライトの更新
+				m_sprite.Update(m_position, m_rotation, m_scale, m_pivot);
+
+				return;
+			}
+
+			/**
 			 * @brief 初期化用関数のメインコア。Init関数の中で呼ばれる。
 			 * @param [in] texFilePath ddsファイルパス
 			 * @param [in] w スプライトの横幅

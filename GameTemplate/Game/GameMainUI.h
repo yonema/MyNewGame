@@ -7,6 +7,7 @@ namespace nsMyGame
 		namespace nsFont { class CFontRender; }		// フォントレンダラー
 		namespace nsSprite { class CSpriteRender; }	// スプライトレンダラー
 	}
+	namespace nsUI { class CMiniMap; }
 
 	/**
 	 * @brief UI関連のネームスペース
@@ -74,6 +75,7 @@ namespace nsMyGame
 		private:	// データメンバ
 			nsGraphic::nsFont::CFontRender* m_timerFR = nullptr;	//!< タイマーのフォントレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_goalSR = nullptr;	//!< ゴールのスプライトレンダラー
+			CMiniMap* m_miniMap = nullptr;							//!< ミニマップ表示クラス
 		};
 	}
 }
