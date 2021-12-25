@@ -48,14 +48,20 @@ namespace nsMyGame
 				// ゲームステートの初期化
 				m_gameState->Init(*m_player);
 
+				constexpr int kCarNum = 3;
+				nsAICharacter::CAICar* cars[kCarNum] = {};
+				for (int i = 0; i < kCarNum; i++)
+				{
+					cars[i] = NewGO<nsAICharacter::CAICar>(nsCommonData::enPriorityFirst, "Car");
+					cars[i]->Init(
+						m_aiField.GetAICharaInitData(),
+						//(*m_aiField.GetAICharaInitData().naviMeshTargetPointsRef)[i],
+						{ -520.0f + 11200.0f * i,0.0f,4200.0f },
+						Quaternion::Identity,
+						Vector3::One
+					);
+				}
 
-				nsAICharacter::CAICar* car = NewGO<nsAICharacter::CAICar>(nsCommonData::enPriorityFirst, "Car");
-				car->Init(
-					m_aiField.GetAICharaInitData(),
-					{-520.0f,0.0f,4200.0f },
-					Quaternion::Identity,
-					Vector3::One
-				);
 
 				// レベルの生成
 				m_level3D.Init(

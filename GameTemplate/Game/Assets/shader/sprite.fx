@@ -5,6 +5,8 @@
 cbuffer cb : register(b0){
 	float4x4 mvp;		//���[���h�r���[�v���W�F�N�V�����s��B
 	float4 mulColor;	//��Z�J���[�B
+	float4 albedoColor;
+	int isControlAlbedo;
 };
 struct VSInput{
 	float4 pos : POSITION;
@@ -28,5 +30,14 @@ PSInput VSMain(VSInput In)
 }
 float4 PSMain( PSInput In ) : SV_Target0
 {
-	return colorTexture.Sample(Sampler, In.uv) * mulColor;
+	if (isControlAlbedo == 0)
+	{
+		return colorTexture.Sample(Sampler, In.uv) * mulColor;
+	}
+	else
+	{
+		float4 color = colorTexture.Sample(Sampler, In.uv);
+		color.xyz = albedoColor.xyz;
+		return color * mulColor;
+	}
 }

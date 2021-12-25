@@ -131,6 +131,21 @@ namespace nsMyGame
 				const Vector2& iconPos
 			);
 
+			/**
+			 * @brief 車のアイコンたちの色を更新
+			 * この関数は、UpdateCarMiniIconで呼ばれる。
+			 * @param index 車のインデックス
+			 * @param isIntersect 交差しているか？
+			 * @param prevIconPos 交差点へ移動前のアイコンの座標
+			 * @param iconPos アイコンの座標
+			*/
+			void UpdateCarIconsColor(
+				const int index,
+				const bool isIntersect,
+				const Vector2& prevIconPos,
+				const Vector2& iconPos
+			);
+
 		private:	// データメンバ
 			//!< ミニマップの背景用スプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_miniMapBackSR = nullptr;

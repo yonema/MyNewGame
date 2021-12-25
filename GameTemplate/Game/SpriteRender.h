@@ -184,6 +184,37 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief アルベドカラーを制御するか？を設定
+				 * @param[in] isContolAlbedo アルベドカラーを制御するか？
+				*/
+				void SetIsControlAlbedo(const bool isControlAlbedo)
+				{
+					m_sprite.SetIsControlAlbedo(isControlAlbedo);
+				}
+
+				/**
+				 * @brief アルベドカラーを設定。isContolAlbedoがtrueのときのみ有効。
+				 * @param[in] albedoColor アルベドカラー
+				*/
+				void SetAlbedoColor(const Vector4& albedoColor)
+				{
+					m_sprite.SetAlbedoColor(albedoColor);
+				}
+
+				/**
+				 * @brief アルベドカラーを設定。isContolAlbedoがtrueのときのみ有効。
+				 * @param[in] albedoColor アルベドカラー
+				*/
+				void SetAlbedoColor(const Vector3& albedoColor)
+				{
+					Vector4 albedo;
+					albedo.x = albedoColor.x;
+					albedo.y = albedoColor.y;
+					albedo.z = albedoColor.z;
+					m_sprite.SetAlbedoColor(albedo);
+				}
+
+				/**
 				 * @brief 基点を設定
 				 * @param[in] pivot 基点
 				*/

@@ -71,6 +71,14 @@ namespace nsMyGame
 			constexpr const char* const kCarIconSpriteFilePath = "Assets/Image/miniMap/carIcon.DDS";
 			constexpr int kCarIconSpriteWidth = static_cast<int>(512 * 0.1f);	//! 車アイコンの幅
 			constexpr int kCarIconSpriteHeight = static_cast<int>(512 * 0.1f);	//! 車アイコンの高さ
+			//!< 車アイコンのデフォルトカラー
+			static const Vector3 kCarIconDefaultColor = { 1.0f,0.0f,0.0f };
+			//!< 車アイコンの範囲外カラー、近いバージョン
+			static const Vector3 kCarIconOutColorNear = { 1.0f,0.3f,0.0f };
+			//!< 車アイコンの範囲外カラー、遠いバージョン
+			static const Vector3 kCarIconOutColorFar = { 1.0f,1.0f,0.0f };
+			constexpr float kCarIconOutMaxRage = 300.0f;	//!< 車アイコンの範囲外の最大距離
+
 
 			//!<  車のミニアイコンのスプライトのファイルパス
 			constexpr const char* const kCarMiniIconSpriteFilePath = "Assets/Image/miniMap/carMiniIcon.DDS";

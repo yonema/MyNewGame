@@ -142,6 +142,8 @@ private:
 	struct LocalConstantBuffer {
 		Matrix mvp;
 		Vector4 mulColor;
+		Vector4 albedoColor;
+		int isControlAlbedo = 0;
 		Vector4 screenParam;
 	};
 	LocalConstantBuffer m_constantBufferCPU;	//CPU側の定数バッファ。
@@ -185,6 +187,24 @@ public:
 	void SetAlphaValue(const float alphaValue)
 	{
 		m_constantBufferCPU.mulColor.w = alphaValue;
+	}
+
+	/**
+	 * @brief アルベドカラーを制御するか？を設定
+	 * @param[in] isContolAlbedo アルベドカラーを制御するか？
+	*/
+	void SetIsControlAlbedo(const bool isContolAlbedo)
+	{
+		m_constantBufferCPU.isControlAlbedo = isContolAlbedo;
+	}
+
+	/**
+	 * @brief アルベドカラーを設定。isContolAlbedoがtrueのときのみ有効。
+	 * @param[in] albedoColor アルベドカラー
+	*/
+	void SetAlbedoColor(const Vector4& albedoColor)
+	{
+		m_constantBufferCPU.albedoColor = albedoColor;
 	}
 
 private:	// データメンバ

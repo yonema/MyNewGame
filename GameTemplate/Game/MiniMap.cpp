@@ -220,6 +220,8 @@ namespace nsMyGame
 					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
 					AlphaBlendMode_Trans
 				);
+				m_carMiniIconSRs[i]->SetIsControlAlbedo(true);
+				m_carMiniIconSRs[i]->SetAlbedoColor(kCarIconDefaultColor);
 				m_carMiniIconOutSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond));
 				m_carMiniIconOutSRs[i]->Init(
 					kCarMiniIconOutSpriteFilePath,
@@ -228,6 +230,8 @@ namespace nsMyGame
 					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
 					AlphaBlendMode_Trans
 				);
+				m_carMiniIconOutSRs[i]->SetIsControlAlbedo(true);
+				m_carMiniIconOutSRs[i]->SetAlbedoColor(kCarIconDefaultColor);
 			}
 
 			return;
@@ -405,6 +409,7 @@ namespace nsMyGame
 				Vector2 iconPos = kPlayerIconSpritePosition;
 				iconPos.x += toCarVecOnMap.x;
 				iconPos.y += toCarVecOnMap.y;
+				Vector2 prevIconPos = iconPos;
 
 				//////// 2.車の座標がミニマップ外なら端っこに固定する ////////
  
@@ -440,6 +445,11 @@ namespace nsMyGame
 
 				// 車のミニアイコンの画面はみだし用を更新
 				UpdateCarMiniIconOut(i, isIntersect, playerToCarVec, iconPos);
+
+				//////// 4.車のアイコンたちのカラーを更新 ////////
+
+				// 車のアイコンたちの色を更新
+				UpdateCarIconsColor(i, isIntersect, prevIconPos, iconPos);
 
 				i++;
 			}
@@ -501,6 +511,46 @@ namespace nsMyGame
 
 			m_carMiniIconOutSRs[index]->SetRotation(qRot);
 			m_carMiniIconOutSRs[index]->SetPosition(iconOutPos);
+
+			return;
+		}
+
+		/**
+		 * @brief 車のアイコンたちの色を更新
+		 * この関数は、UpdateCarMiniIconで呼ばれる。
+		 * @param index 車のインデックス
+		 * @param isIntersect 交差しているか？
+		 * @param prevIconPos 交差点へ移動前のアイコンの座標
+		 * @param iconPos アイコンの座標
+		*/
+		void CMiniMap::UpdateCarIconsColor(
+			const int index,
+			const bool isIntersect,
+			const Vector2& prevIconPos,
+			const Vector2& iconPos
+		)
+		{
+			// アルベドカラー
+			Vector3 albedo = kCarIconDefaultColor;
+
+			// 交差しているか？
+			if (isIntersect)
+			{
+				// アイコンの、交差点へ移動前の座標と、交差点へ移動後の座標の距離に応じて
+				// カラーを線形補完する。
+				Vector3 v1, v2;
+				v1.x = prevIconPos.x;
+				v1.y = prevIconPos.y;
+				v2.x = iconPos.x;
+				v2.y = iconPos.y;
+				Vector3 diffV = v1 - v2;
+				float rate = diffV.Length() / kCarIconOutMaxRage;
+				albedo.Lerp(min(rate, 1.0f), kCarIconOutColorNear, kCarIconOutColorFar);
+			}
+
+			// アルベドカラーを設定
+			m_carMiniIconSRs[index]->SetAlbedoColor(albedo);
+			m_carMiniIconOutSRs[index]->SetAlbedoColor(albedo);
 
 			return;
 		}
