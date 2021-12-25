@@ -332,6 +332,37 @@ public:
 	/// <param name="worldPos">ワールド座標</param>
 	void CalcScreenPositionFromWorldPosition(Vector2& screenPos, const Vector3& worldPos) const;
 
+	/// <summary>
+	/// ワールド座標からスクリーン座標を計算する。カメラより後ろにいたらfalseが戻ってくる。
+	/// </summary>
+	/// <remarks>
+	/// 計算されるスクリーン座標は画面の中心を{0,0}、左上を{画面の幅*-0.5,画面の高さ*-0.5}
+	/// 右下を{ 画面の幅 * 0.5,画面の高さ * 0.5 }とする座標系です。
+	/// </remarks>
+	/// <param name="screenPos">スクリーン座標の格納先</param>
+	/// <param name="worldPos">ワールド座標</param>
+	bool CalcScreenPositionFromWorldPositionBackCull(Vector2& screenPos, const Vector3& worldPos) const;
+
+	/// <summary>
+	/// ワールド座標からスクリーン座標を計算する。
+	/// カメラより後ろにいたらisCameraFrontがfalseになる。
+	/// カメラの範囲外に居たらisOnFrameがtrueになって、座標が枠上になる。
+	/// </summary>
+	/// <remarks>
+	/// 計算されるスクリーン座標は画面の中心を{0,0}、左上を{画面の幅*-0.5,画面の高さ*-0.5}
+	/// 右下を{ 画面の幅 * 0.5,画面の高さ * 0.5 }とする座標系です。
+	/// </remarks>
+	/// <param name="screenPos">スクリーン座標の格納先</param>
+	/// <param name="worldPos">ワールド座標</param>
+	void CalcScreenPositionFromWorldPositionBackCullOnFrame(
+		Vector2& screenPos,
+		Vector2& prevPos,
+		const Vector3& worldPos,
+		bool* isCameraFront,
+		bool* isOnFrame,
+		float onFrameBuff = 0.0f
+	) const;
+
 protected:
 	float		m_targetToPositionLen = 1.0f;			//注視点と視点まで距離。
 	Vector3		m_position = {0.0f, 0.0f, 1.0f};		//カメラ位置。

@@ -195,6 +195,8 @@ namespace nsMyGame
 					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
 					AlphaBlendMode_Trans
 				);
+				m_carIconSRs[i]->SetIsControlAlbedo(true);
+				m_carIconSRs[i]->SetAlbedoColor(kCarIconDefaultColor);
 			}
 
 
@@ -367,14 +369,62 @@ namespace nsMyGame
 	
 			// インデックス
 			int i = 0;
+			// 車全部分の更新
 			for (const auto& carIconSR : m_carIconSRs)
 			{
+				// アイコンの座標
 				Vector2 iconPos = Vector2::Zero;
 
-				g_camera3D->CalcScreenPositionFromWorldPosition(
+				// カメラより前にいるか？
+				bool isCameraFront = true;
+				// 枠の上か？
+				bool isOnFrame = false;
+				// 枠に移動させる前の座標
+				Vector2 prevPos;
+				// 車の座標
+				Vector3 carPos = m_aiCarsRef[i++]->GetPosition();
+				// 少し上にあげる
+				carPos.y += kCarIconSpriteWorldPosYBuff;
+
+				// ワールド座標からスクリーン座標へ変換。
+				g_camera3D->CalcScreenPositionFromWorldPositionBackCullOnFrame(
 					iconPos,
-					m_aiCarsRef[i++]->GetPosition()
+					prevPos,
+					carPos,
+					&isCameraFront,
+					&isOnFrame,
+					25.0f
 				);
+
+				// カメラの前後判定。
+				// カメラより後ろにいたら、表示しない。
+				if (isCameraFront)
+				{
+					carIconSR->Activate();
+				}
+				else
+				{
+					carIconSR->Deactivate();
+					continue;
+				}
+
+				// 枠外にいたら、枠上に表示する。
+				if (isOnFrame)
+				{
+					// アイコンがはみ出さないように基点を調整する。
+					Vector2 toPrevPosNorm = prevPos;
+					toPrevPosNorm.Normalize();
+					// 単位ベクトルは-1.0f～1.0fなので、0.0f～1.0fに丸める。
+					toPrevPosNorm.x = toPrevPosNorm.x * 0.5f + 0.5f;
+					toPrevPosNorm.y = toPrevPosNorm.y * 0.5f + 0.5f;
+					carIconSR->SetPivot(toPrevPosNorm);
+				}
+				else
+				{
+					carIconSR->SetPivot(nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot);
+				}
+
+				// 座標更新
 				carIconSR->SetPosition(iconPos);
 			}
 
@@ -424,7 +474,7 @@ namespace nsMyGame
 				for (int i = 0; i < 4; i++)
 				{
 					// Vector2同士の交差判定
-					isIntersect = IsIntercetVector2ToVector2(
+					isIntersect = IsIntersectVector2ToVector2(
 						kPlayerIconSpritePosition,
 						pIconToCIconVec,
 						kMiniMapVert[i],
@@ -449,7 +499,9 @@ namespace nsMyGame
 				//////// 4.車のアイコンたちのカラーを更新 ////////
 
 				// 車のアイコンたちの色を更新
-				UpdateCarIconsColor(i, isIntersect, prevIconPos, iconPos);
+				UpdateCarIconsColor(carMiniIconSR, isIntersect, prevIconPos, iconPos);
+				UpdateCarIconsColor(m_carMiniIconOutSRs[i], isIntersect, prevIconPos, iconPos);
+				UpdateCarIconsColor(m_carIconSRs[i], isIntersect, prevIconPos, iconPos);
 
 				i++;
 			}
@@ -516,15 +568,15 @@ namespace nsMyGame
 		}
 
 		/**
-		 * @brief 車のアイコンたちの色を更新
+		 * @brief 車のアイコンを指定して色を更新
 		 * この関数は、UpdateCarMiniIconで呼ばれる。
-		 * @param index 車のインデックス
-		 * @param isIntersect 交差しているか？
-		 * @param prevIconPos 交差点へ移動前のアイコンの座標
-		 * @param iconPos アイコンの座標
+		 * @param[out] spriteRender 色を更新するスプライトレンダラー
+		 * @param[in] isIntersect 交差しているか？
+		 * @param[in] prevIconPos 交差点へ移動前のアイコンの座標
+		 * @param[in] iconPos アイコンの座標
 		*/
 		void CMiniMap::UpdateCarIconsColor(
-			const int index,
+			nsGraphic::nsSprite::CSpriteRender* spriteRender,
 			const bool isIntersect,
 			const Vector2& prevIconPos,
 			const Vector2& iconPos
@@ -549,8 +601,7 @@ namespace nsMyGame
 			}
 
 			// アルベドカラーを設定
-			m_carMiniIconSRs[index]->SetAlbedoColor(albedo);
-			m_carMiniIconOutSRs[index]->SetAlbedoColor(albedo);
+			spriteRender->SetAlbedoColor(albedo);
 
 			return;
 		}

@@ -132,15 +132,15 @@ namespace nsMyGame
 			);
 
 			/**
-			 * @brief 車のアイコンたちの色を更新
+			 * @brief 車のアイコンを指定して色を更新
 			 * この関数は、UpdateCarMiniIconで呼ばれる。
-			 * @param index 車のインデックス
-			 * @param isIntersect 交差しているか？
-			 * @param prevIconPos 交差点へ移動前のアイコンの座標
-			 * @param iconPos アイコンの座標
+			 * @param[out] spriteRender 色を更新するスプライトレンダラー
+			 * @param[in] isIntersect 交差しているか？
+			 * @param[in] prevIconPos 交差点へ移動前のアイコンの座標
+			 * @param[in] iconPos アイコンの座標
 			*/
 			void UpdateCarIconsColor(
-				const int index,
+				nsGraphic::nsSprite::CSpriteRender* spriteRender,
 				const bool isIntersect,
 				const Vector2& prevIconPos,
 				const Vector2& iconPos

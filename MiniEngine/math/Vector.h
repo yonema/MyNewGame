@@ -1029,7 +1029,7 @@ const Quaternion g_quatIdentity = { 0.0f,  0.0f, 0.0f, 1.0f };
 static inline float D3DXVec2Cross(const Vector2& v1, const Vector2& v2) {
 	return v1.x * v2.y - v1.y * v2.x;
 }
-static inline bool IsIntercetVector2ToVector2(
+static inline bool IsIntersectVector2ToVector2(
 	const Vector2& startPos1,
 	const Vector2& vector1,
 	const Vector2& startPos2,

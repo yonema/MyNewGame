@@ -71,6 +71,7 @@ namespace nsMyGame
 			constexpr const char* const kCarIconSpriteFilePath = "Assets/Image/miniMap/carIcon.DDS";
 			constexpr int kCarIconSpriteWidth = static_cast<int>(512 * 0.1f);	//! 車アイコンの幅
 			constexpr int kCarIconSpriteHeight = static_cast<int>(512 * 0.1f);	//! 車アイコンの高さ
+			constexpr float kCarIconSpriteWorldPosYBuff = 100.0f;	// 車のワールド座標のY座標をずらす量
 			//!< 車アイコンのデフォルトカラー
 			static const Vector3 kCarIconDefaultColor = { 1.0f,0.0f,0.0f };
 			//!< 車アイコンの範囲外カラー、近いバージョン
@@ -121,25 +122,13 @@ namespace nsMyGame
 			static Vector2 kMiniMapEdge[4]
 			{
 				// 左上から右上。始点vert0。
-				{
-					kMiniMapVert[1].x - kMiniMapVert[0].x,
-					kMiniMapVert[1].y - kMiniMapVert[0].y
-				},
+				{ kMiniMapVert[1].x - kMiniMapVert[0].x, kMiniMapVert[1].y - kMiniMapVert[0].y },
 				// 右上から右下。始点vert1。
-				{
-					kMiniMapVert[3].x - kMiniMapVert[1].x,
-					kMiniMapVert[3].y - kMiniMapVert[1].y
-				},
+				{ kMiniMapVert[3].x - kMiniMapVert[1].x, kMiniMapVert[3].y - kMiniMapVert[1].y },
 				// 左下から左上。始点vert2。
-				{
-					kMiniMapVert[0].x - kMiniMapVert[2].x,
-					kMiniMapVert[0].y - kMiniMapVert[2].y
-				},
+				{ kMiniMapVert[0].x - kMiniMapVert[2].x, kMiniMapVert[0].y - kMiniMapVert[2].y },
 				// 右下から左下。始点vert3。
-				{
-					kMiniMapVert[2].x - kMiniMapVert[3].x,
-					kMiniMapVert[2].y - kMiniMapVert[3].y
-				},
+				{ kMiniMapVert[2].x - kMiniMapVert[3].x, kMiniMapVert[2].y - kMiniMapVert[3].y },
 			};
 			
 		}

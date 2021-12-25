@@ -57,6 +57,108 @@ void Camera::CalcScreenPositionFromWorldPosition(Vector2& screenPos, const Vecto
 	screenPos.x = (_screenPos.x / _screenPos.w)*half_w;
 	screenPos.y = (_screenPos.y / _screenPos.w)*half_h;
 }
+bool Camera::CalcScreenPositionFromWorldPositionBackCull(Vector2& screenPos, const Vector3& worldPos) const
+{
+	float half_w = (float)g_graphicsEngine->GetFrameBufferWidth() * 0.5f;
+	float half_h = (float)g_graphicsEngine->GetFrameBufferHeight() * 0.5f;
+	Vector4 _screenPos;
+	_screenPos.Set(worldPos.x, worldPos.y, worldPos.z, 1.0f);
+	m_viewProjectionMatrix.Apply(_screenPos);
+	screenPos.x = (_screenPos.x / _screenPos.w) * half_w;
+	screenPos.y = (_screenPos.y / _screenPos.w) * half_h;
+
+	if (_screenPos.z <= 0.0f)
+	{
+		// カメラより後ろに対象があったら、falseを戻す。
+		return false;
+	}
+	return true;
+}
+
+/// <summary>
+/// ワールド座標からスクリーン座標を計算する。
+/// カメラより後ろにいたらisCameraFrontがfalseになる。
+/// カメラの範囲外に居たらisOnFrameがtrueになって、座標が枠上になる。
+/// </summary>
+/// <remarks>
+/// 計算されるスクリーン座標は画面の中心を{0,0}、左上を{画面の幅*-0.5,画面の高さ*-0.5}
+/// 右下を{ 画面の幅 * 0.5,画面の高さ * 0.5 }とする座標系です。
+/// </remarks>
+/// <param name="screenPos">スクリーン座標の格納先</param>
+/// <param name="worldPos">ワールド座標</param>
+void Camera::CalcScreenPositionFromWorldPositionBackCullOnFrame(
+	Vector2& screenPos,
+	Vector2& prevPos,
+	const Vector3& worldPos,
+	bool* isCameraFront,
+	bool* isOnFrame,
+	float onFrameBuff
+) const
+{
+	*isCameraFront = CalcScreenPositionFromWorldPositionBackCull(screenPos, worldPos);
+	prevPos = screenPos;
+	//if (*isCameraFront == false)
+	//{
+	//	// カメラより後ろなら、枠上計算を行わないで終了。
+	//	return;
+	//}
+
+	float half_w = (float)g_graphicsEngine->GetFrameBufferWidth() * 0.5f;
+	float half_h = (float)g_graphicsEngine->GetFrameBufferHeight() * 0.5f;
+
+	Vector2 vert[4] =
+	{
+		// 左上
+		{-half_w,half_h},
+		// 右上
+		{half_w,half_h},
+		// 左下
+		{-half_w,-half_h},
+		// 右下
+		{half_w,-half_h}
+	};
+
+	Vector2 edge[4] =
+	{
+		// 左上から右上。始点vert0。
+		{ vert[1].x - vert[0].x, vert[1].y - vert[0].y },
+		// 右上から右下。始点vert1。
+		{ vert[3].x - vert[1].x, vert[3].y - vert[1].y },
+		// 左下から左上。始点vert2。
+		{ vert[0].x - vert[2].x, vert[0].y - vert[2].y },
+		// 右下から左下。始点vert3。
+		{ vert[2].x - vert[3].x, vert[2].y - vert[3].y }
+	};
+
+	bool isIntersect = false;
+	Vector2 finalPos = screenPos;
+	Vector2 toPos = screenPos;
+	toPos.Normalize();
+	toPos.x *= (1.0f + onFrameBuff);
+	toPos.y *= (1.0f + onFrameBuff);
+	toPos.x += screenPos.x;
+	toPos.y += screenPos.y;
+	for (int i = 0; i < 4; i++)
+	{
+		isIntersect = IsIntersectVector2ToVector2(
+			Vector2::Zero,
+			toPos,
+			vert[i],
+			edge[i],
+			&finalPos
+		);
+		if (isIntersect)
+		{
+			// 交差したら即抜ける
+			screenPos = finalPos;
+			*isOnFrame = true;
+			break;
+		}
+	}
+
+	return;
+}
+
 void Camera::RotateOriginTarget(const Quaternion& qRot)
 {
 	Vector3 cameraPos = m_position;
