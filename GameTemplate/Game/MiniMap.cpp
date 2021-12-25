@@ -55,6 +55,7 @@ namespace nsMyGame
 		void CMiniMap::OnDestroy()
 		{
 			DeleteGO(m_miniMapSR);
+			DeleteGO(m_miniMapFrameSR);
 			DeleteGO(m_miniMapBackSR);
 			DeleteGO(m_playerIconSR);
 
@@ -113,6 +114,16 @@ namespace nsMyGame
 			m_miniMapBackSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
 			m_miniMapBackSR->Init(kMiniMapBackSpriteFilePath, kMiniMapDrawWidth, kMiniMapDrawHeight);
 
+			// ミニマップの枠用スプライトの生成と初期化
+			m_miniMapFrameSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_miniMapFrameSR->Init(
+				kMiniMapFrameSpriteFilePath,
+				kMiniMapFrameSpriteWidth, 
+				kMiniMapFrameSpriteHeight,
+				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+				AlphaBlendMode_Trans
+			);
+
 			// ミニマップのスプライトの生成
 			m_miniMapSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
 
@@ -138,6 +149,7 @@ namespace nsMyGame
 
 			// 座標を設定
 			m_miniMapBackSR->SetPosition(kMiniMapSpritePosition);
+			m_miniMapFrameSR->SetPosition(kMiniMapFrameSpritePosition);
 			m_miniMapSR->SetPosition(kMiniMapSpritePosition);
 
 			return;

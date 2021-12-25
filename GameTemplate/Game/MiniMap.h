@@ -134,7 +134,9 @@ namespace nsMyGame
 		private:	// データメンバ
 			//!< ミニマップの背景用スプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_miniMapBackSR = nullptr;
-			//!< ミニマップにスプライトレンダラー
+			//!< ミニマップの枠用スプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_miniMapFrameSR = nullptr;
+			//!< ミニマップのスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_miniMapSR = nullptr;
 			//!< プレイヤーのアイコンのスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_playerIconSR = nullptr;

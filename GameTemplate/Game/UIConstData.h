@@ -52,6 +52,14 @@ namespace nsMyGame
 			//!< ミニマップのスプライトの座標
 			static const Vector2 kMiniMapSpritePosition = { 500.0f,-250.0f};
 
+			// ミニマップの枠用のスプライトのファイルパス
+			constexpr const char* const kMiniMapFrameSpriteFilePath = "Assets/Image/miniMap/map_waku.DDS";
+			constexpr int kMiniMapFrameSpriteWidth = static_cast<int>(400 * 0.62f);	//!< ミニマップの枠の幅
+			constexpr int kMiniMapFrameSpriteHeight = static_cast<int>(300 * 0.62f);	//!< ミニマップの枠の高さ
+			//!< ミニマップの枠用のスプライトの座標
+			static const Vector2 kMiniMapFrameSpritePosition =
+			{ kMiniMapSpritePosition.x + 10.0f, kMiniMapSpritePosition.y + 8.0f };
+
 			//!< プレイヤーのアイコンのスプライトのファイルパス
 			constexpr const char* const kPlayerIconSpriteFilePath = "Assets/Image/miniMap/playerArrow.DDS";
 			constexpr int kPlayerIconSpriteWidth = static_cast<int>(64 * 0.5f);	//! プレイヤーアイコンの幅
