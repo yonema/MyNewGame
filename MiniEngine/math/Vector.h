@@ -1023,3 +1023,46 @@ static inline Quaternion operator*(const Quaternion& q1, const Quaternion q2)
 }
 
 const Quaternion g_quatIdentity = { 0.0f,  0.0f, 0.0f, 1.0f };
+
+
+// í«â¡ÅB
+static inline float D3DXVec2Cross(const Vector2& v1, const Vector2& v2) {
+	return v1.x * v2.y - v1.y * v2.x;
+}
+static inline bool IsIntercetVector2ToVector2(
+	const Vector2& startPos1,
+	const Vector2& vector1,
+	const Vector2& startPos2,
+	const Vector2& vector2,
+	Vector2* posOut
+)
+{
+
+	Vector2 v;
+	v.x = startPos2.x - startPos1.x;
+	v.y = startPos2.y - startPos1.y;
+	float crs_v1_v2 = D3DXVec2Cross(vector1, vector2);
+	if (crs_v1_v2 == 0.0f)
+	{
+		return false;
+	}
+
+	float crs_v_v1 = D3DXVec2Cross(v, vector1);
+	float crs_v_v2 = D3DXVec2Cross(v, vector2);
+
+	float t1 = crs_v_v2 / crs_v1_v2;
+	float t2 = crs_v_v1 / crs_v1_v2;
+
+	constexpr float eps = 0.00001f;
+
+	if (t1 + eps < 0 || t1 - eps > 1 || t2 + eps < 0 || t2 - eps > 1) {
+		// åç∑ÇµÇƒÇ¢Ç»Ç¢
+		return false;
+	}
+
+	posOut->x = startPos1.x + vector1.x * t1;
+	posOut->y = startPos1.y + vector1.y * t1;
+
+	return true;
+
+}

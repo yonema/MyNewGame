@@ -4,6 +4,7 @@
 #include "ModelRender.h"
 #include "Level3D.h"
 #include "GameTime.h"
+#include "GameMainState.h"
 
 
 namespace nsMyGame
@@ -25,6 +26,8 @@ namespace nsMyGame
 
 			// モデルレンダラーの生成
 			m_modelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
+			// ゲームステートに車を登録
+			nsGameState::CGameMainState::GetInstance()->AddAICar(this);
 		}
 
 		/**

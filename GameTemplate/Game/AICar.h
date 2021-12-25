@@ -65,6 +65,15 @@ namespace nsMyGame
 				const Vector3& scale
 			);
 
+			/**
+			 * @brief 座標を取得
+			 * @return 座標
+			*/
+			const Vector3& GetPosition() const
+			{
+				return m_modelRender->GetPosition();
+			}
+
 		private:	// privateなデータメンバ
 
 			/**

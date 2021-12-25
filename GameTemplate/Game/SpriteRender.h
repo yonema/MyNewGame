@@ -102,6 +102,16 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 座標を設定（Vector2）
+				 * @param[in] pos 座標
+				*/
+				void SetPosition(const Vector2& pos)
+				{
+					m_position.x = pos.x;
+					m_position.y = pos.y;
+				}
+
+				/**
 				 * @brief 座標を取得
 				 * @return 座標
 				*/

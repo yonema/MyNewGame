@@ -83,5 +83,17 @@ namespace nsMyGame
 
 			return;
 		}
+
+		/**
+		 * @brief ŽÔ‚ð’Ç‰Á‚·‚é
+		 * @param[in] aiCar ’Ç‰Á‚·‚éŽÔ
+		*/
+		void CGameMainState::AddAICar(const nsAICharacter::CAICar* aiCar)
+		{
+
+			m_aiCarsRef.emplace_back(aiCar);
+
+			return;
+		}
 	}
 }
