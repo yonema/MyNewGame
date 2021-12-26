@@ -132,6 +132,16 @@ namespace nsMyGame
 				const Vector3& targetPoint
 			);
 
+			/**
+			 * @brief カーブの座標を作成する
+			 * @param candidateTPType ターゲットポイントへの候補の種類
+			 * @param targetPoint ターゲットポイント
+			*/
+			void MakeCurve(
+				const nsAICharacterConstData::EnCandidateTargetPointType candidateTPType,
+				const Vector3& targetPoint
+			);
+
 
 		private:	// データメンバ
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー

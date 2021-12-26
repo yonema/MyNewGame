@@ -156,6 +156,9 @@
     <Filter Include="MyCode\AICharacter">
       <UniqueIdentifier>{9e8706d4-b9f5-4b4c-8d46-a8900ac7d7d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\Curve">
+      <UniqueIdentifier>{fc266620-7a4d-4937-8108-ecd0dd0f3f65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -538,6 +541,9 @@
     </ClCompile>
     <ClCompile Include="MiniMap.cpp">
       <Filter>MyCode\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BezierCurve.cpp">
+      <Filter>MyCode\Curve</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1023,6 +1029,9 @@
     </ClInclude>
     <ClInclude Include="MiniMap.h">
       <Filter>MyCode\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="BezierCurve.h">
+      <Filter>MyCode\Curve</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

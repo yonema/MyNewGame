@@ -5,6 +5,7 @@
 #include "Level3D.h"
 #include "GameTime.h"
 #include "GameMainState.h"
+#include "BezierCurve.h"
 
 
 namespace nsMyGame
@@ -413,15 +414,18 @@ namespace nsMyGame
 			{
 				// 右折か左折なら中継地点を追加する
 
-				// ターゲットポイントへのベクトル
-				const Vector3 toTargetPointVec = targetPoint - m_modelRender->GetPosition();
-				// ターゲットポイントへのベクトルが射影された移動方向ベクトル
-				const float toTPVecProjMoveDir = Dot(m_moveDir, toTargetPointVec);
-				// ターゲットポイントの中継地点
-				const Vector3 relayTargetPos = 
-					m_modelRender->GetPosition() +m_moveDir * toTPVecProjMoveDir;
-				// 中継地点を追加
-				m_path.AddPoint(relayTargetPos);
+				// カーブの座標を作成する
+				MakeCurve(candidateTPType, targetPoint);
+
+				//// ターゲットポイントへのベクトル
+				//const Vector3 toTargetPointVec = targetPoint - m_modelRender->GetPosition();
+				//// ターゲットポイントへのベクトルが射影された移動方向ベクトル
+				//const float toTPVecProjMoveDir = Dot(m_moveDir, toTargetPointVec);
+				//// ターゲットポイントの中継地点
+				//const Vector3 relayTargetPos = 
+				//	m_modelRender->GetPosition() +m_moveDir * toTPVecProjMoveDir;
+				//// 中継地点を追加
+				//m_path.AddPoint(relayTargetPos);
 			}
 
 			// ゴール地点を追加
@@ -431,6 +435,66 @@ namespace nsMyGame
 			m_path.Build();
 
 			return;
+		}
+
+		/**
+		 * @brief カーブの座標を作成する
+		 * @param candidateTPType ターゲットポイントへの候補の種類
+		 * @param targetPoint ターゲットポイント
+		*/
+		void CAICar::MakeCurve(
+			const nsAICharacterConstData::EnCandidateTargetPointType candidateTPType,
+			const Vector3& targetPoint
+		)
+		{
+			// ターゲットポイントへのベクトル
+			const Vector3 toTargetPointVec = targetPoint - m_modelRender->GetPosition();
+			// ターゲットポイントへのベクトルが射影された移動方向ベクトル
+			const float toTPVecProjMoveDir = Dot(m_moveDir, toTargetPointVec);
+
+			// ベジェ曲線の制御点
+			constexpr int controlPointsNum = 3;
+			Vector3 controlPoints[controlPointsNum];
+			// 真ん中の制御点
+			controlPoints[1] = m_modelRender->GetPosition() + m_moveDir * toTPVecProjMoveDir;
+
+			Vector3 cp1ToCp0Vec = m_modelRender->GetPosition() - controlPoints[1];
+			cp1ToCp0Vec.Normalize();
+			Vector3 cp1ToCp2Vec = targetPoint - controlPoints[1];
+			cp1ToCp2Vec.Normalize();
+
+			// 制御点間の長さ
+			float cpLen = 875.0f;
+			// 左折なら制御点間の長さが短い
+
+			if (candidateTPType == enTurnRight)
+			{
+				// 右折なら制御点間の長さが長い
+				cpLen = 1050.0f;
+			}
+			
+			cp1ToCp0Vec.Scale(cpLen);
+			cp1ToCp2Vec.Scale(cpLen);
+
+			controlPoints[0] = controlPoints[1] + cp1ToCp0Vec;
+			controlPoints[2] = controlPoints[1] + cp1ToCp2Vec;
+
+			nsCurve::CBezierCurve bezierCurve;
+			for (int i = 0; i < controlPointsNum; i++)
+			{
+				bezierCurve.AddControlPoint(controlPoints[i]);
+			}
+
+			constexpr int relayPointNum = 20;
+			
+			// 中継地点を追加
+			for (int i = 0; i < relayPointNum; i++)
+			{
+				Vector3 relayPos = Vector3::Zero;
+				const float t = static_cast<float>(i) / static_cast<float>(relayPointNum - 1);
+				bezierCurve.CalcBezierCurve(t, &relayPos);
+				m_path.AddPoint(relayPos);
+			}
 		}
 
 	}
