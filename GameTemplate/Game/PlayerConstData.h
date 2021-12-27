@@ -46,7 +46,7 @@ namespace nsMyGame
 				constexpr float kWalkAcceleration = 50.0f;	//!< 歩き時の加速度
 				constexpr float kRunAcceleration = 100.0f;	//!< 走り時の加速度
 				constexpr float kWalkMaxSpeed = 300.0f;		//!< 歩き時の最高速度
-				constexpr float kRunMaxSpeed = 750.0f;		//!< 走り時の最高速度
+				constexpr float kRunMaxSpeed = 2500.0f;//750.0f;		//!< 走り時の最高速度
 				constexpr float kMinSpeed = 25.0f;			//!< 最低速度
 				constexpr float kGroundFriction = 0.9f;		//!< 地面の摩擦
 				constexpr float kAirFriction = 1.0f;		//!< 空中の摩擦

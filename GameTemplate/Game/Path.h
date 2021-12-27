@@ -12,6 +12,22 @@ namespace nsMyGame
 		*/
 		class CPath
 		{
+			// 追加。
+		public:
+			/**
+			 * @brief セクションのタグ
+			*/
+			enum EnSectionTag
+			{
+				enNone,		//!< 何もなし
+				enStraight,	//!< 直進
+				enLeftCurveStart,
+				enRightCurveStart,
+				enLeftCurve,	//!< 左カーブ
+				enRightCurve,	//!< 右カーブ
+				enLeftCurveEnd,
+				enRightCurveEnd,
+			};
 		private:	// privateな構造体
 			/**
 			 * @brief パスのセクション
@@ -21,6 +37,7 @@ namespace nsMyGame
 				Vector3 endPos;		// セクションの終了座標。
 				Vector3 direction;	// セクションの方向。
 				float length;		// セクションの長さ。
+				EnSectionTag sectionTag = enNone;	// セクションのタグ
 			};
 		public:		// コンストラクタとデストラクタ
 			/**
@@ -59,15 +76,36 @@ namespace nsMyGame
 				m_sectionNo = 0;
 				m_pointArray.clear();
 				m_sectionArray.clear();
+				m_sectionTagArray.clear();
 			}
 
 			/**
 			 * @brief ポイントの追加。
 			 * @param[in] point ポイント
+			 * @param[in] sectionType セクションの種類
 			*/
-			void AddPoint(const Vector3& point)
+			void AddPoint(const Vector3& point, const EnSectionTag sectionTag = enNone)
 			{
 				m_pointArray.emplace_back(point);
+				m_sectionTagArray.emplace_back(sectionTag);
+			}
+			
+			/**
+			 * @brief 現在のセクションのタグを取得
+			 * @return 現在のセクションの種類
+			*/
+			EnSectionTag GetCurrentSectionTag() const
+			{
+				return m_currentSectionTag;
+			}
+
+			/**
+			 * @brief 現在のセクションを取得
+			 * @return 現在のセクション
+			*/
+			const SSection& GetCurrentSection() const
+			{
+				return m_sectionArray.at(m_sectionNo);
 			}
 
 			/**
@@ -77,8 +115,10 @@ namespace nsMyGame
 
 		private:	// データメンバ
 			std::vector<Vector3>	m_pointArray;	//!< ポイントの配列
+			std::vector<EnSectionTag> m_sectionTagArray;	//!< セクションのタグの配列
 			std::vector< SSection >	m_sectionArray;	//!< セクションの配列。
 			int m_sectionNo = 0;					//!< セクション番号。
+			EnSectionTag m_currentSectionTag = enNone;	//!< 現在のセクションのtag
 		};
 
 	}

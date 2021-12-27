@@ -48,6 +48,7 @@ namespace nsMyGame
 				// ゲームステートの初期化
 				m_gameState->Init(*m_player);
 
+				//constexpr int kCarNum = 1;
 				constexpr int kCarNum = 3;
 				nsAICharacter::CAICar* cars[kCarNum] = {};
 				for (int i = 0; i < kCarNum; i++)

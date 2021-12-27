@@ -92,6 +92,11 @@ namespace nsMyGame
 			void MoveOnWayPoint();
 
 			/**
+			 * @brief 回転を更新
+			*/
+			void UpdateRotating();
+
+			/**
 			 * @brief 距離によるターゲットポイントの除外
 			 * @param[in] distance 自身とターゲットポイントの距離
 			 * @return 除外したか？true戻ってきたら除外した
@@ -149,6 +154,9 @@ namespace nsMyGame
 			const std::vector<Vector3>* m_wayPointsRef = nullptr;		//!< ウェイポイントの参照
 			nsAI::CPath m_path;											//!< パス
 			bool m_isMoveEnd = true;									//!< 移動が終了したか？
+			Vector3 m_curveCenterPosition = Vector3::Zero;				//!< カーブの中心座標
+			Vector3 m_fromCurveCenterToCurveStartVec = Vector3::Zero;	//!< カーブ中心座標からカーブ開始座標へのベクトル
+			float m_moveSpeed = 0.0f;
 
 			std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版

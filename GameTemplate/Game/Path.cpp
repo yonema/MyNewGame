@@ -46,6 +46,8 @@ namespace nsMyGame
 				distVec.y = 0.0f;
 			}
 
+			m_currentSectionTag = currentSection.sectionTag;
+
 			if (toEnd.Dot(toEnd2) <= 0.0f || 
 				distVec.LengthSq() <= 0.001f)
 			{
@@ -54,9 +56,11 @@ namespace nsMyGame
 				if (m_sectionNo == m_sectionArray.size() - 1) {
 					// I“_
 					isEnd = true;
+					m_currentSectionTag = enNone;
 				}
 				else {
 					m_sectionNo++;
+					m_currentSectionTag = m_sectionArray.at(m_sectionNo).sectionTag;
 				}
 			}
 			if (physicsWorld) {
@@ -87,6 +91,7 @@ namespace nsMyGame
 				section.direction = section.endPos - section.startPos;
 				section.length = section.direction.Length();
 				section.direction.Normalize();
+				section.sectionTag = m_sectionTagArray.at(pointNo);
 			}
 			return;
 		}

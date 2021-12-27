@@ -40,6 +40,9 @@ namespace nsMyGame
 			// モデルの初期化
 			m_modelRender->Init(kCarModelFilePath);
 
+			// 車の移動速度を設定
+			m_moveSpeed = kCarSpeed;
+
 			// 乱数の初期化
 			InitRand();
 
@@ -68,13 +71,15 @@ namespace nsMyGame
 				// 次に進むウェイポイントを探す
 				FindNextWayPoint();
 			}
-			else
-			{
-				// 移動中
 
-				// ウェイポイント上を移動する
-				MoveOnWayPoint();
-			}
+			// 移動中
+
+			// ウェイポイント上を移動する
+			MoveOnWayPoint();
+
+			// 回転を更新
+			UpdateRotating();
+
 
 			return;
 		}
@@ -228,24 +233,152 @@ namespace nsMyGame
 		*/
 		void CAICar::MoveOnWayPoint()
 		{
+			// 移動前の座標
 			const Vector3 posBeforeMove = m_modelRender->GetPosition();
 
+			// パス移動後の座標
+			// パス移動
 			const Vector3 posAfterMove = m_path.Move(
 				posBeforeMove,
-				2000.0f * nsTimer::CGameTime().GetFrameDeltaTime(),
+				m_moveSpeed * nsTimer::CGameTime().GetFrameDeltaTime(),
 				m_isMoveEnd,
 				PhysicsWorld::GetInstance()
 			);
 
-			const Vector3 moveVec = posAfterMove - posBeforeMove;
-			m_moveDir = moveVec;
+			// 移動方向を計算
+			m_moveDir = posAfterMove - posBeforeMove;;
 			m_moveDir.Normalize();
 
+			// モデルの座標を更新
 			m_modelRender->SetPosition(posAfterMove);
-			Quaternion qRot;
-			qRot.SetRotation(Vector3::Front, m_moveDir);
-			m_modelRender->SetRotation(qRot);
 
+		}
+
+
+		/**
+		 * @brief 回転を更新
+		*/
+		void CAICar::UpdateRotating()
+		{
+			// 回転させる向きベクトル
+			Vector3 rotateVec = Vector3::Front;
+			// 現在のセクションのタグ
+			nsAI::CPath::EnSectionTag sectionTag = m_path.GetCurrentSectionTag();
+			m_moveSpeed = kCarSpeed;
+
+			if (sectionTag == nsAI::CPath::enLeftCurveStart ||
+				sectionTag == nsAI::CPath::enRightCurveStart/* ||
+				sectionTag == nsAI::CPath::enLeftCurveEnd ||
+				sectionTag == nsAI::CPath::enRightCurveEnd*/)
+			{
+				// セクションが、カーブの開始地点、または、カーブの終了地点
+
+				// 現在の移動の方向を軸に計算する
+				rotateVec = m_moveDir;
+				// ドリフトの回転
+				Quaternion driftRot = Quaternion::Identity;
+				// セクションの開始座標から現在の座標へのベクトル
+				const Vector3 fromSectionStartPos =
+					m_modelRender->GetPosition() - m_path.GetCurrentSection().startPos;
+				// 現在、セクションの何％の位置にいるかを、ドリフトの回転率とする。
+				float driftRate = fromSectionStartPos.Length() / m_path.GetCurrentSection().length;
+				// 最小ドリフトの角度
+				float minDriftAngle = 0.0f;
+				// 最大ドリフトの角度
+				float maxDriftAngle = kCarDriftMaxAngle;
+				// カーブ終了セクションなら、最小と最大を反転する
+				if (sectionTag == nsAI::CPath::enLeftCurveEnd || sectionTag == nsAI::CPath::enRightCurveEnd)
+				{
+					minDriftAngle = kCarDriftMaxAngle;
+					maxDriftAngle = 0.0f;
+				}
+				// ドリフト率に応じて、ドリフトの角度を線形補完する。
+				float driftAngle = Math::Lerp<float>(min(driftRate, 1.0f), minDriftAngle, maxDriftAngle);
+				
+				// 左折なら、角度を反転させる。
+				if (sectionTag == nsAI::CPath::enLeftCurveStart || sectionTag == nsAI::CPath::enLeftCurveEnd)
+				{
+					driftAngle = -driftAngle;
+				}
+				driftRot.SetRotationDegY(driftAngle);
+				driftRot.Apply(rotateVec);
+			}
+			else if (sectionTag == nsAI::CPath::enLeftCurve ||
+				sectionTag == nsAI::CPath::enRightCurve)
+			{
+				// セクションが、カーブ中のとき
+
+				// カーブの中心座標から、現在の座標への方向ベクトル。
+				Vector3 fromCurveCenterPosNorm = m_modelRender->GetPosition() - m_curveCenterPosition;
+				fromCurveCenterPosNorm.Normalize();
+				// 移動方向だと、回転にカクツキができてしまうため、中心からのベクトルを軸に計算する。
+				rotateVec = fromCurveCenterPosNorm;
+
+				// カーブの中心からの角度率
+				float angleRate = Dot(fromCurveCenterPosNorm, m_fromCurveCenterToCurveStartVec);
+				angleRate = acosf(angleRate);
+				// 0度～90度が、0.0f～1.0fになる。
+				angleRate = angleRate / (3.14f * 0.5f);
+				// ドリフトに加える回転
+				float addAngle = 0.0f;
+
+				// ドリフトの回転をもとに戻す
+				if (angleRate >= kCarDriftTurnBackRate)
+				{
+					// 補間率。0.0f～(1.0f-kCarDriftTurnBackRate)の値を、0.0f～1.0fの値に直す。
+					float t = (angleRate - kCarDriftTurnBackRate) / kCarDriftTurnBackRate;
+					addAngle = Math::Lerp<float>(t, 0.0f, kCarDriftMaxAngle);
+				}
+
+				// ドリフト中のスピードダウン
+				if (angleRate <= kCarDriftSpeedDownRate)
+				{
+					// 指数関数的に変化にする。
+					float t = 1.0f - (angleRate / kCarDriftSpeedDownRate);
+					t = 1.0f - pow(t, 2.0f);
+					m_moveSpeed = Math::Lerp<float>(min(t,1.0f),  kCarSpeed, kCarSpeed * kCarDriftSpeedDownScale);
+				}
+				else
+				{
+					// 指数看的変化にする。
+					float t = ((angleRate - kCarDriftSpeedDownRate) / kCarDriftSpeedDownRate);
+					t = pow(t, 2.0f);
+					m_moveSpeed = Math::Lerp<float>(min(t, 1.0f), kCarSpeed * kCarDriftSpeedDownScale, kCarSpeed);
+				}
+
+				// カーブの回転
+				Quaternion curveRot = Quaternion::Identity;
+
+				// 中心からのベクトルを直角に曲げて、それにドリフト分の角度を加味した回転を計算する。
+				if (m_path.GetCurrentSectionTag() == nsAI::CPath::enLeftCurve)
+				{
+					// 左折時
+					curveRot.SetRotationDegY(-90.0f - kCarDriftMaxAngle + addAngle);
+				}
+				else if (m_path.GetCurrentSectionTag() == nsAI::CPath::enRightCurve)
+				{
+					// 右折時
+					curveRot.SetRotationDegY(90.0f + kCarDriftMaxAngle - addAngle);
+
+				}
+				curveRot.Apply(rotateVec);
+			}
+			else
+			{
+				// 通常は移動方向に回転させる
+				rotateVec = m_moveDir;
+			}
+
+			// 次の回転
+			Quaternion nextQRot;
+			// 次の回転を計算
+			nextQRot.SetRotation(Vector3::Front, rotateVec);
+			// カクツキを抑えるために、球面線形補完を行う。
+			nextQRot.Slerp(kCarModelRotRate, m_modelRender->GetRotation(), nextQRot);
+			// モデルに回転を設定
+			m_modelRender->SetRotation(nextQRot);
+
+			return;
 		}
 
 		/**
@@ -416,16 +549,6 @@ namespace nsMyGame
 
 				// カーブの座標を作成する
 				MakeCurve(candidateTPType, targetPoint);
-
-				//// ターゲットポイントへのベクトル
-				//const Vector3 toTargetPointVec = targetPoint - m_modelRender->GetPosition();
-				//// ターゲットポイントへのベクトルが射影された移動方向ベクトル
-				//const float toTPVecProjMoveDir = Dot(m_moveDir, toTargetPointVec);
-				//// ターゲットポイントの中継地点
-				//const Vector3 relayTargetPos = 
-				//	m_modelRender->GetPosition() +m_moveDir * toTPVecProjMoveDir;
-				//// 中継地点を追加
-				//m_path.AddPoint(relayTargetPos);
 			}
 
 			// ゴール地点を追加
@@ -452,16 +575,26 @@ namespace nsMyGame
 			// ターゲットポイントへのベクトルが射影された移動方向ベクトル
 			const float toTPVecProjMoveDir = Dot(m_moveDir, toTargetPointVec);
 
-			// ベジェ曲線の制御点
-			constexpr int controlPointsNum = 3;
-			Vector3 controlPoints[controlPointsNum];
-			// 真ん中の制御点
-			controlPoints[1] = m_modelRender->GetPosition() + m_moveDir * toTPVecProjMoveDir;
+			enum EnControlPointType
+			{
+				enStartCP,
+				enCenterCP,
+				enMidleCP,
+				enEndCP,
+				enCPNum
+			};
 
-			Vector3 cp1ToCp0Vec = m_modelRender->GetPosition() - controlPoints[1];
-			cp1ToCp0Vec.Normalize();
-			Vector3 cp1ToCp2Vec = targetPoint - controlPoints[1];
-			cp1ToCp2Vec.Normalize();
+			// ベジェ曲線の制御点の座標
+			Vector3 controlPoints[enCPNum];
+			// 真ん中の制御点
+			controlPoints[enCenterCP] = m_modelRender->GetPosition() + m_moveDir * toTPVecProjMoveDir;
+
+			// 真ん中から最初の制御点へのベクトル
+			Vector3 cCpToScpVec = m_modelRender->GetPosition() - controlPoints[enCenterCP];
+			cCpToScpVec.Normalize();
+			// 真ん中から最後の制御点へのベクトル
+			Vector3 cCpToEcpVec = targetPoint - controlPoints[enCenterCP];
+			cCpToEcpVec.Normalize();
 
 			// 制御点間の長さ
 			float cpLen = 875.0f;
@@ -473,28 +606,76 @@ namespace nsMyGame
 				cpLen = 1050.0f;
 			}
 			
-			cp1ToCp0Vec.Scale(cpLen);
-			cp1ToCp2Vec.Scale(cpLen);
+			// 制御点へのベクトルを伸ばす
+			cCpToScpVec.Scale(cpLen);
+			cCpToEcpVec.Scale(cpLen * 1.5f);
 
-			controlPoints[0] = controlPoints[1] + cp1ToCp0Vec;
-			controlPoints[2] = controlPoints[1] + cp1ToCp2Vec;
+			// 手前と奥の制御点の座標を計算する
+			controlPoints[enStartCP] = controlPoints[enCenterCP] + cCpToScpVec;
+			controlPoints[enEndCP] = controlPoints[enCenterCP] + cCpToEcpVec;
+			controlPoints[enMidleCP] =
+				controlPoints[enEndCP] + (cCpToScpVec * 0.1f) + (cCpToEcpVec * -0.5f);
 
+			// カーブ時の中心座標を計算
+			m_curveCenterPosition = controlPoints[enStartCP] + cCpToEcpVec;
+			// カーブ時の中心座標からカーブ開始地点への座標を計算
+			m_fromCurveCenterToCurveStartVec = cCpToEcpVec;
+			m_fromCurveCenterToCurveStartVec.Scale(-1.0f);
+			m_fromCurveCenterToCurveStartVec.Normalize();
+
+			// カーブの開始地点と終了地点を計算
+			Vector3 curveStartPos = controlPoints[enCenterCP] + (cCpToScpVec * 3.0f);
+			Vector3 curveEndPos = controlPoints[enCenterCP] + (cCpToEcpVec * 1.5f);
+
+			// 真ん中の制御点を移動させる
+			controlPoints[enCenterCP] += (cCpToScpVec * -1.0f) + (cCpToEcpVec * 0.1f);
+			//controlPoints[enStartCP] += (cCpToEcpVec * -0.2f);
+
+			// ベジェ曲線クラス
 			nsCurve::CBezierCurve bezierCurve;
-			for (int i = 0; i < controlPointsNum; i++)
+			// ベジェ曲線に制御点を追加する
+			for (int i = 0; i < enCPNum; i++)
 			{
 				bezierCurve.AddControlPoint(controlPoints[i]);
 			}
-
-			constexpr int relayPointNum = 20;
 			
-			// 中継地点を追加
-			for (int i = 0; i < relayPointNum; i++)
+			// パスのセクションのタグ
+			nsAI::CPath::EnSectionTag startST = nsAI::CPath::enLeftCurveStart;
+			nsAI::CPath::EnSectionTag sectionTag = nsAI::CPath::enLeftCurve;
+			nsAI::CPath::EnSectionTag endST = nsAI::CPath::enLeftCurveEnd;
+
+			if (candidateTPType == enTurnRight)
 			{
-				Vector3 relayPos = Vector3::Zero;
-				const float t = static_cast<float>(i) / static_cast<float>(relayPointNum - 1);
-				bezierCurve.CalcBezierCurve(t, &relayPos);
-				m_path.AddPoint(relayPos);
+				// 右折なら右折用のタグ
+				startST = nsAI::CPath::enRightCurveStart;
+				sectionTag = nsAI::CPath::enRightCurve;
+				endST = nsAI::CPath::enRightCurveEnd;
 			}
+
+			// 中継地点をパスに追加
+			
+			// カーブ開始地点を追加
+			m_path.AddPoint(curveStartPos, startST);
+			// カーブ中の地点を追加
+			for (int i = 0; i < kCurveRelayPointNum; i++)
+			{
+				if (i == (kCurveRelayPointNum - 1))
+				{
+					// 最後のカーブ地点には、カーブ終了のタグを埋め込む
+					sectionTag = endST;
+				}
+				// 中継地点
+				Vector3 relayPos = Vector3::Zero;
+				// ベジェ曲線のパラメータ
+				const float t = static_cast<float>(i) / static_cast<float>(kCurveRelayPointNum - 1);
+				// ベジェ曲線をパラメータを指定して計算
+				bezierCurve.CalcBezierCurve(t, &relayPos);
+				// 中継地点をパスに追加
+				m_path.AddPoint(relayPos, sectionTag);
+			}
+			// カーブ終了のセクションの終点を追加
+			m_path.AddPoint(curveEndPos, nsAI::CPath::enStraight);
+
 		}
 
 	}
