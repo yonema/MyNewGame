@@ -1,4 +1,5 @@
 #pragma once
+#include "UIConstData.h"
 
 namespace nsMyGame
 {
@@ -17,17 +18,17 @@ namespace nsMyGame
 		/**
 		 * @brief 敵を捕まえる処理関連のUI
 		*/
-		class EnemyCatchUI : public IGameObject
+		class CEnemyCatchUI : public IGameObject
 		{
 		public:		// コンストラクタとデストラクタ
 			/**
 			 * @brief コンストラクタ
 			*/
-			EnemyCatchUI() = default;
+			CEnemyCatchUI() = default;
 			/**
 			 * @brief デストラクタ
 			*/
-			~EnemyCatchUI() = default;
+			~CEnemyCatchUI() = default;
 
 		public:		// オーバーライドしたメンバ関数
 
@@ -56,10 +57,18 @@ namespace nsMyGame
 			*/
 			void InitCanCatchEnemeySprite();
 
+			/**
+			 * @brief 敵を捕まえることができる合図のスプライトの更新
+			*/
+			void UpdateCanCatchEnemySprite();
+
 
 		private:	// データメンバ
 			//!< 敵を捕まえることができる合図のスプライトレンダラー
-			nsGraphic::nsSprite::CSpriteRender* m_canCatchEnemySR = nullptr;
+			nsGraphic::nsSprite::CSpriteRender* 
+				m_canCatchEnemySR[nsEnemyCatchUIConstData::enCanCatchEnemySpriteNum] = {};
+			//!< 敵を捕まえることができる合図のスプライトに使うタイマー
+			float m_canCatchEnemyTimer = 0.0f;
 
 			std::vector<const nsAICharacter::CAICar*> m_aiCarsRef;	//!< 車たちのconst参照
 

@@ -32,6 +32,13 @@ namespace nsMyGame
 			//!< ゴールのスプライトの座標
 			static const Vector3 kGoalSpritePosition = { 0.0f,200.0f,0.0f };
 
+		}
+
+		/**
+		 * @brief ミニマップの定数データ
+		*/
+		namespace nsMiniMapConstData
+		{
 			constexpr float kStageWidth = 70000.0f;				//!< ステージの幅
 			constexpr float kStageHeight = 70000.0f;			//!< ステージの高さ
 			constexpr float kPlayerCenterBuffWidth = 35000.0f;	//!< プレイヤーをセンターに寄せるための幅
@@ -50,7 +57,7 @@ namespace nsMyGame
 			constexpr int kMiniMapDrawWidth = static_cast<int>(720 * 0.4f * 0.7f);	//!< ミニマップの幅
 			constexpr int kMiniMapDrawHeight = static_cast<int>(720 * 0.3f * 0.7f);	//!< ミニマップの高さ
 			//!< ミニマップのスプライトの座標
-			static const Vector2 kMiniMapSpritePosition = { 500.0f,-250.0f};
+			static const Vector2 kMiniMapSpritePosition = { 500.0f,-250.0f };
 
 			// ミニマップの枠用のスプライトのファイルパス
 			constexpr const char* const kMiniMapFrameSpriteFilePath = "Assets/Image/miniMap/map_waku.DDS";
@@ -120,7 +127,7 @@ namespace nsMyGame
 			};
 
 			// ミニマップの辺のベクトル
-			static Vector2 kMiniMapEdge[4]
+			static Vector2 kMiniMapEdge[4] =
 			{
 				// 左上から右上。始点vert0。
 				{ kMiniMapVert[1].x - kMiniMapVert[0].x, kMiniMapVert[1].y - kMiniMapVert[0].y },
@@ -131,6 +138,49 @@ namespace nsMyGame
 				// 右下から左下。始点vert3。
 				{ kMiniMapVert[2].x - kMiniMapVert[3].x, kMiniMapVert[2].y - kMiniMapVert[3].y },
 			};
+
+		}
+
+		/**
+		 * @brief エネミーを捕まえる処理の定数データ
+		*/
+		namespace nsEnemyCatchUIConstData
+		{
+
+			enum EnCatchEnemySpriteType
+			{
+				enCanCatchEnemyMain,
+				enCanCatchEnemyFrame1,
+				enCanCatchEnemyFrame2,
+				enCanCatchEnemySpriteNum
+			};
+			//!< 敵を捕まえることができる合図のスプライトのファイルパス
+			constexpr const char* const kCanCatchEnemySpriteFilePath[enCanCatchEnemySpriteNum] = 
+			{
+				"Assets/Image/qte/y.DDS",
+				"Assets/Image/qte/canCatch_frame1.DDS",
+				"Assets/Image/qte/canCatch_frame2.DDS"
+			};
+
+			//!< 敵を捕まえることができる合図のスプライトの幅
+			constexpr int kCanCatchEnemySpriteWidht[enCanCatchEnemySpriteNum] = 
+			{
+				static_cast<int>(256 * 0.2f),
+				static_cast<int>(512 * 0.2f),
+				static_cast<int>(512 * 0.2f)
+			};
+			//!< 敵を捕まえることができる合図のスプライトの高さ
+			constexpr int kCanCatchEnemySpriteHeight[enCanCatchEnemySpriteNum] =
+			{
+				static_cast<int>(256 * 0.2f),
+				static_cast<int>(512 * 0.2f),
+				static_cast<int>(512 * 0.2f)
+			};
+
+
+			constexpr float kCanCatchTime1 = 1.5f;		//!< 敵を捕まえることができる合図のスプライトのタイム1
+			constexpr float kCanCatchTime2 = 0.5f;		//!< 敵を捕まえることができる合図のスプライトのタイム2
+			constexpr float kCanCatchMaxScale = 1.5f;	//!< 敵を捕まえることができる合図のスプライトの最大拡大率
 			
 		}
 	}

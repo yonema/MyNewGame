@@ -4,6 +4,7 @@
 #include "FontRender.h"
 #include "SpriteRender.h"
 #include "MiniMap.h"
+#include "EnemyCatchUI.h"
 
 namespace nsMyGame
 {
@@ -29,6 +30,8 @@ namespace nsMyGame
 
 			m_miniMap = NewGO<CMiniMap>(nsCommonData::enPriorityFirst);
 
+			m_enemyCatchUI = NewGO<CEnemyCatchUI>(nsCommonData::enPriorityFirst);
+
 			return true;
 		}
 
@@ -42,6 +45,8 @@ namespace nsMyGame
 			DeleteGO(m_goalSR);
 
 			DeleteGO(m_miniMap);
+
+			DeleteGO(m_enemyCatchUI);
 
 			return;
 		}

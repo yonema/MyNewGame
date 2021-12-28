@@ -16,7 +16,7 @@ namespace nsMyGame
 	*/
 	namespace nsUI
 	{
-		using namespace nsGameMainUIConstData;
+		using namespace nsMiniMapConstData;
 
 		/**
 		 * @brief Update‚Ì’¼‘O‚ÅŒÄ‚Î‚ê‚éŠJnˆ—
