@@ -103,8 +103,8 @@ void Camera::CalcScreenPositionFromWorldPositionBackCullOnFrame(
 	//	return;
 	//}
 
-	float half_w = (float)g_graphicsEngine->GetFrameBufferWidth() * 0.5f;
-	float half_h = (float)g_graphicsEngine->GetFrameBufferHeight() * 0.5f;
+	const float half_w = (float)g_graphicsEngine->GetFrameBufferWidth() * 0.5f;
+	const float half_h = (float)g_graphicsEngine->GetFrameBufferHeight() * 0.5f;
 
 	Vector2 vert[4] =
 	{

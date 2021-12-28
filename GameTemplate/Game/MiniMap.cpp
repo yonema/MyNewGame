@@ -369,17 +369,23 @@ namespace nsMyGame
 		*/
 		void CMiniMap::UpdateCarIcon()
 		{
+
+			if (m_gameState->GetPlayer().GetInputData().actionSeachEnemy == true)
+			{
+				// 敵を探知するアクションが入ったら、アイコンを表示するようにする。
+				m_isDisplayCarIcon = true;
+				// タイマーのリセット
+				m_displayCarIconTimer = 0.0f;
+				for (auto& icon : m_carIconSRs)
+				{
+					// 全てのアイコンを表示
+					icon->Activate();
+				}
+			}
+
 			if (m_isDisplayCarIcon != true)
 			{
 				// 車のアイコンを表示しない
-
-				if (m_gameState->GetPlayer().GetInputData().actionSeachEnemy == true)
-				{
-					// 敵を探知するアクションが入ったら、アイコンを表示するようにする。
-					m_isDisplayCarIcon = true;
-					// タイマーのリセット
-					m_displayCarIconTimer = 0.0f;
-				}
 
 				return;
 			}
@@ -428,19 +434,30 @@ namespace nsMyGame
 					carPos,
 					&isCameraFront,
 					&isOnFrame,
-					25.0f
+					kCarIconSpriteWidth * 0.5f
 				);
 
-				// カメラの前後判定。
-				// カメラより後ろにいたら、表示しない。
-				if (isCameraFront)
+				// カメラより後ろの対象は、枠上に表示する
+				if (isCameraFront == false)
 				{
-					carIconSR->Activate();
-				}
-				else
-				{
-					carIconSR->Deactivate();
-					continue;
+					// 枠上フラグをたてる
+					isOnFrame = true;
+					// 画面の横幅
+					const float half_w = (float)g_graphicsEngine->GetFrameBufferWidth() * 0.5f;
+					// Y座標を反転させる
+					iconPos.y *= -1.0f;
+					prevPos.y *= -1.0f;
+					// X座標を反転させて、画面の横幅に合わせる
+					if (iconPos.x <= 0.0f)
+					{
+						iconPos.x = half_w;
+						prevPos.x = half_w;
+					}
+					else
+					{
+						iconPos.x = -half_w;
+						prevPos.x = -half_w;
+					}
 				}
 
 				// 枠外にいたら、枠上に表示する。
