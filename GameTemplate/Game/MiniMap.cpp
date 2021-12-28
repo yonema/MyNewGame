@@ -7,6 +7,7 @@
 #include "Player.h"
 #include "RenderingEngine.h"
 #include "AICar.h"
+#include "GameTime.h"
 
 namespace nsMyGame
 {
@@ -197,6 +198,8 @@ namespace nsMyGame
 				);
 				m_carIconSRs[i]->SetIsControlAlbedo(true);
 				m_carIconSRs[i]->SetAlbedoColor(kCarIconDefaultColor);
+				// 最初は全部非表示
+				m_carIconSRs[i]->Deactivate();
 			}
 
 
@@ -366,7 +369,39 @@ namespace nsMyGame
 		*/
 		void CMiniMap::UpdateCarIcon()
 		{
-	
+			if (m_isDisplayCarIcon != true)
+			{
+				// 車のアイコンを表示しない
+
+				if (m_gameState->GetPlayer().GetInputData().actionSeachEnemy == true)
+				{
+					// 敵を探知するアクションが入ったら、アイコンを表示するようにする。
+					m_isDisplayCarIcon = true;
+					// タイマーのリセット
+					m_displayCarIconTimer = 0.0f;
+				}
+
+				return;
+			}
+
+			if (m_displayCarIconTimer >= kDisplayCarIconTime)
+			{
+				// 一定時間たったらアイコンを非表示
+				m_isDisplayCarIcon = false;
+
+				for (auto& icon : m_carIconSRs)
+				{
+					// 全てのアイコンを非表示
+					icon->Deactivate();
+				}
+
+				return;
+			}
+
+			// タイマーを進める
+			m_displayCarIconTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+
 			// インデックス
 			int i = 0;
 			// 車全部分の更新
@@ -567,6 +602,8 @@ namespace nsMyGame
 			return;
 		}
 
+		// クラス外関数
+
 		/**
 		 * @brief 車のアイコンを指定して色を更新
 		 * この関数は、UpdateCarMiniIconで呼ばれる。
@@ -575,7 +612,7 @@ namespace nsMyGame
 		 * @param[in] prevIconPos 交差点へ移動前のアイコンの座標
 		 * @param[in] iconPos アイコンの座標
 		*/
-		void CMiniMap::UpdateCarIconsColor(
+		void UpdateCarIconsColor(
 			nsGraphic::nsSprite::CSpriteRender* spriteRender,
 			const bool isIntersect,
 			const Vector2& prevIconPos,

@@ -72,6 +72,7 @@ namespace nsMyGame
 			constexpr int kCarIconSpriteWidth = static_cast<int>(512 * 0.1f);	//! 車アイコンの幅
 			constexpr int kCarIconSpriteHeight = static_cast<int>(512 * 0.1f);	//! 車アイコンの高さ
 			constexpr float kCarIconSpriteWorldPosYBuff = 100.0f;	// 車のワールド座標のY座標をずらす量
+			constexpr float kDisplayCarIconTime = 5.0f;	//!< 車のアイコンを表示しておく時間
 			//!< 車アイコンのデフォルトカラー
 			static const Vector3 kCarIconDefaultColor = { 1.0f,0.0f,0.0f };
 			//!< 車アイコンの範囲外カラー、近いバージョン

@@ -4,6 +4,7 @@
 #include "PlayerInput.h"
 #include "PlayerCamera.h"
 #include "PlayerStringModel.h"
+#include "PlayerCatchEnemy.h"
 #include "PlayerConstData.h"
 
 namespace nsMyGame
@@ -190,6 +191,7 @@ namespace nsMyGame
 			//!< プレイヤーのステート
 			nsPlayerConstData::EnPlayerState m_playerState = nsPlayerConstData::enWalkAndRun;
 			CPlayerStringModel* m_playerStringModel = nullptr;	//!< プレイヤーの糸のモデルクラス
+			CPlayerCatchEnemy m_playerCatchEnemy;			//!< プレイヤーが敵を捕まえる処理クラス
 		};
 
 	}

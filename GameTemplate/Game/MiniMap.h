@@ -131,21 +131,6 @@ namespace nsMyGame
 				const Vector2& iconPos
 			);
 
-			/**
-			 * @brief 車のアイコンを指定して色を更新
-			 * この関数は、UpdateCarMiniIconで呼ばれる。
-			 * @param[out] spriteRender 色を更新するスプライトレンダラー
-			 * @param[in] isIntersect 交差しているか？
-			 * @param[in] prevIconPos 交差点へ移動前のアイコンの座標
-			 * @param[in] iconPos アイコンの座標
-			*/
-			void UpdateCarIconsColor(
-				nsGraphic::nsSprite::CSpriteRender* spriteRender,
-				const bool isIntersect,
-				const Vector2& prevIconPos,
-				const Vector2& iconPos
-			);
-
 		private:	// データメンバ
 			//!< ミニマップの背景用スプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_miniMapBackSR = nullptr;
@@ -162,6 +147,9 @@ namespace nsMyGame
 			//!< 車のミニアイコンの画面はみだし用スプライトレンダラー
 			std::vector<nsGraphic::nsSprite::CSpriteRender*> m_carMiniIconOutSRs;
 
+			bool m_isDisplayCarIcon = false;	//!< 車のアイコンを表示するか？
+			float m_displayCarIconTimer = 0.0f;	//!< 車のアイコンを表示するタイマー
+
 			//////// 共通パラメータ ////////
 			const Vector3* m_playerPositionRef = nullptr;			//!< プレイヤーの座標の参照
 			std::vector<const nsAICharacter::CAICar*> m_aiCarsRef;	//!< 車たちのconst参照
@@ -172,6 +160,23 @@ namespace nsMyGame
 			SMiniMapSpriteCB m_miniMapSpriteCB;					//!< ミニマップ用の定数バッファ
 			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステート
 		};
+
+		// クラス外関数
+
+		/**
+		 * @brief 車のアイコンを指定して色を更新
+		 * この関数は、UpdateCarMiniIconで呼ばれる。
+		 * @param[out] spriteRender 色を更新するスプライトレンダラー
+		 * @param[in] isIntersect 交差しているか？
+		 * @param[in] prevIconPos 交差点へ移動前のアイコンの座標
+		 * @param[in] iconPos アイコンの座標
+		*/
+		void UpdateCarIconsColor(
+			nsGraphic::nsSprite::CSpriteRender* spriteRender,
+			const bool isIntersect,
+			const Vector2& prevIconPos,
+			const Vector2& iconPos
+		);
 
 	}
 }

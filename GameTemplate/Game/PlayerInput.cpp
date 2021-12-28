@@ -82,6 +82,12 @@ namespace nsMyGame
 				m_playerInputData.actionSwing = true;
 			}
 
+			if (m_pad->IsTrigger(enButtonRB3))
+			{
+				// “G‚ð’T’m
+				m_playerInputData.actionSeachEnemy = true;
+			}
+
 			return;
 		}
 

@@ -545,6 +545,12 @@
     <ClCompile Include="BezierCurve.cpp">
       <Filter>MyCode\Curve</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerCatchEnemy.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyCatchUI.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -1032,6 +1038,12 @@
     </ClInclude>
     <ClInclude Include="BezierCurve.h">
       <Filter>MyCode\Curve</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCatchEnemy.h">
+      <Filter>MyCode\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyCatchUI.h">
+      <Filter>MyCode\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

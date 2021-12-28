@@ -40,6 +40,9 @@ namespace nsMyGame
 			// プレイヤーの糸のモデルクラスの生成と初期化
 			m_playerStringModel = NewGO<CPlayerStringModel>(nsCommonData::enPriorityFirst);
 			m_playerStringModel->Init(*this);
+			
+			// プレイヤーが敵を捕まえる処理クラスの初期化
+			m_playerCatchEnemy.Init(*this);
 
 			return true;
 		}
@@ -87,6 +90,9 @@ namespace nsMyGame
 
 			// モデルアニメーションクラスを更新
 			m_playerModelAnimation.ExecuteUpdate();
+
+			// プレイヤーが敵を捕まえる処理クラスを実行
+			m_playerCatchEnemy.ExecuteUpdate();
 
 			return;
 		}
