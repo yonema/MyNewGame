@@ -130,6 +130,17 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 拡大率を設定（float）
+				 * @param[in] scale 拡大率（float）
+				*/
+				void SetScale(const float scale)
+				{
+					m_scale.x = scale;
+					m_scale.y = scale;
+					m_scale.z = scale;
+				}
+
+				/**
 				 * @brief 拡大率を取得
 				 * @return 拡大率
 				*/

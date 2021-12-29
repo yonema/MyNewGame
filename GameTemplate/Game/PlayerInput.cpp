@@ -73,6 +73,19 @@ namespace nsMyGame
 				m_playerInputData.actionJump = true;
 			}
 
+			// 右スティックトリガー
+			if (m_pad->IsTrigger(enButtonRB3))
+			{
+				// 敵を探知
+				m_playerInputData.actionSeachEnemy = true;
+			}
+
+			// Yボタントリガー
+			if (m_pad->IsTrigger(enButtonY))
+			{
+				m_playerInputData.actionCatchEnemy = true;
+			}
+
 			// RB2ボタンが押されているか？
 			if (m_pad->IsPress(enButtonRB2))
 			{
@@ -80,12 +93,6 @@ namespace nsMyGame
 				m_playerInputData.actionDush = true;
 				// スイング
 				m_playerInputData.actionSwing = true;
-			}
-
-			if (m_pad->IsTrigger(enButtonRB3))
-			{
-				// 敵を探知
-				m_playerInputData.actionSeachEnemy = true;
 			}
 
 			return;

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "PlayerCatchEnemy.h"
+#include "Player.h"
 
 namespace nsMyGame
 {
@@ -14,9 +15,9 @@ namespace nsMyGame
 		 * @brief 初期化処理
 		 * @param[in] playerRef プレイヤーの参照
 		*/
-		void CPlayerCatchEnemy::Init(const CPlayer& playerRef)
+		void CPlayerCatchEnemy::Init(CPlayer* playerRef)
 		{
-			m_playerRef = &playerRef;
+			m_playerRef = playerRef;
 
 			return;
 		}
@@ -26,7 +27,10 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::ExecuteUpdate()
 		{
-
+			if (m_playerRef->GetInputData().actionCatchEnemy)
+			{
+				m_playerRef->ChangeOnEnemyState();
+			}
 
 			return;
 		}

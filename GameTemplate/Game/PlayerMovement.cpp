@@ -142,7 +142,7 @@ namespace nsMyGame
 
 				//if (IsOnWall())
 				//{
-				//	m_playerRef->ChangeWallRun();
+				//	m_playerRef->ChangeWallRunState();
 				//	return;
 				//}
 
@@ -184,6 +184,9 @@ namespace nsMyGame
 					// 壁走りを実行
 					m_playerWallRun.Execute();
 					break;
+				case nsPlayerConstData::enOnEnemy:
+					OnEnemyMove();
+					break;
 				}
 
 				ApplyGravity();
@@ -218,6 +221,16 @@ namespace nsMyGame
 				// 現在の回転と次の回転を球面線形補間を行い、モデルを徐々に回転させる。
 				nexrQRot.Slerp(kModelRotRate, m_playerRef->GetRotation(), nexrQRot);
 				m_playerRef->SetRotation(nexrQRot);
+
+				return;
+			}
+
+			/**
+			 * @brief 敵の上に乗っている時の動き
+			*/
+			void CPlayerMovement::OnEnemyMove()
+			{
+
 
 				return;
 			}

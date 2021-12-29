@@ -33,7 +33,7 @@ namespace nsMyGame
 			 * @brief 初期化処理
 			 * @param[in] playerRef プレイヤーの参照
 			*/
-			void Init(const CPlayer& playerRef);
+			void Init(CPlayer* playerRef);
 
 			/**
 			 * @brief レイヤーが敵を捕まえる処理クラスのアップデートを実行
@@ -41,7 +41,7 @@ namespace nsMyGame
 			void ExecuteUpdate();
 
 		private:	// データメンバ
-			const CPlayer* m_playerRef = nullptr;	//!< プレイヤーの参照
+			CPlayer* m_playerRef = nullptr;	//!< プレイヤーの参照
 		};
 
 

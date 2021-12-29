@@ -545,11 +545,14 @@
     <ClCompile Include="BezierCurve.cpp">
       <Filter>MyCode\Curve</Filter>
     </ClCompile>
+    <ClCompile Include="EnemyCatchUI.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
     <ClCompile Include="PlayerCatchEnemy.cpp">
       <Filter>MyCode\Player</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyCatchUI.cpp">
-      <Filter>MyCode\UI</Filter>
+    <ClCompile Include="PlayerOnEnemy.cpp">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1039,11 +1042,14 @@
     <ClInclude Include="BezierCurve.h">
       <Filter>MyCode\Curve</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyCatchUI.h">
+      <Filter>MyCode\UI</Filter>
+    </ClInclude>
     <ClInclude Include="PlayerCatchEnemy.h">
       <Filter>MyCode\Player</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyCatchUI.h">
-      <Filter>MyCode\UI</Filter>
+    <ClInclude Include="PlayerOnEnemy.h">
+      <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

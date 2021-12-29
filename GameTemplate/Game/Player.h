@@ -138,7 +138,12 @@ namespace nsMyGame
 			/**
 			 * @brief 壁走り状態へ遷移する
 			*/
-			void ChangeWallRun();
+			void ChangeWallRunState();
+
+			/**
+			 * @brief 敵の上に乗っている状態へ遷移する
+			*/
+			void ChangeOnEnemyState();
 
 			/**
 			 * @brief プレイヤーのステートを得る

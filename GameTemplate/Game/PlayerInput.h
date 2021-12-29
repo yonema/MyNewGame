@@ -26,6 +26,7 @@ namespace nsMyGame
 			bool actionDush = false;				//!< ダッシュの入力情報
 			bool actionSwing = false;				//!< スイングの入力情報
 			bool actionSeachEnemy = false;			//!< 敵を探知する入力情報
+			bool actionCatchEnemy = false;			//!< 敵を捕まえる入力情報
 		};
 
 		/**

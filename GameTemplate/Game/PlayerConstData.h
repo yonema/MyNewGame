@@ -23,6 +23,7 @@ namespace nsMyGame
 				enWalkAndRun,			//!< 歩きと走り
 				enSwing,				//!< スイング
 				enWallRun,				//!< 壁走り
+				enOnEnemy,				//!< 敵の上に乗っている
 			};
 
 
@@ -104,6 +105,16 @@ namespace nsMyGame
 				// カメラの値を線形補完するタイム
 				constexpr float kCameraLerpTime = 0.25f;
 			}
+
+			/**
+			 * @brief 敵を捕まえるクラスの定数データ
+			*/
+			namespace nsCatchEnemyConstData
+			{
+				constexpr float kCanCatchMaxLength = 3000.0f;	//!< 敵を捕まえることができる最大距離
+
+			}
+
 			/**
 			 * @brief プレイヤーモデルクラスの定数データ
 			*/

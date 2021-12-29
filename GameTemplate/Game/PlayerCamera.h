@@ -61,6 +61,15 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief カメラの座標を取得
+			 * @return カメラの座標
+			*/
+			const Vector3& GetCameraPosition() const
+			{
+				return m_camera->GetPosition();
+			}
+
+			/**
 			 * @brief バネカメラの減衰率を線形補完する。
 			 * 0.0fがデフォルトで最小の減衰率。1.0fが最大の減衰率。
 			 * 減衰率が高いほどカメラが遅れて付いてくる。

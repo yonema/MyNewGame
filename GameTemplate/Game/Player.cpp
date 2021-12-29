@@ -42,7 +42,7 @@ namespace nsMyGame
 			m_playerStringModel->Init(*this);
 			
 			// ƒvƒŒƒCƒ„[‚ª“G‚ğ•ß‚Ü‚¦‚éˆ—ƒNƒ‰ƒX‚Ì‰Šú‰»
-			m_playerCatchEnemy.Init(*this);
+			m_playerCatchEnemy.Init(this);
 
 			return true;
 		}
@@ -120,9 +120,18 @@ namespace nsMyGame
 		/**
 		 * @brief •Ç‘–‚èó‘Ô‚Ö‘JˆÚ‚·‚é
 		*/
-		void CPlayer::ChangeWallRun()
+		void CPlayer::ChangeWallRunState()
 		{
 			m_playerState = enWallRun;
+			return;
+		}
+
+		/**
+		 * @brief “G‚Ìã‚Éæ‚Á‚Ä‚¢‚éó‘Ô‚Ö‘JˆÚ‚·‚é
+		*/
+		void CPlayer::ChangeOnEnemyState()
+		{
+			m_playerState = enOnEnemy;
 			return;
 		}
 

@@ -180,6 +180,11 @@ namespace nsMyGame
 				*/
 				void MoveWithCharacterController();
 
+				/**
+				 * @brief 敵の上に乗っている時の動き
+				*/
+				void OnEnemyMove();
+
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
 				Vector3 m_moveVec = Vector3::Zero;		//!< 移動ベクトル

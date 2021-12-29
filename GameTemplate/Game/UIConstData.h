@@ -79,7 +79,7 @@ namespace nsMyGame
 			constexpr int kCarIconSpriteWidth = static_cast<int>(512 * 0.08f);	//! 車アイコンの幅
 			constexpr int kCarIconSpriteHeight = static_cast<int>(512 * 0.08f);	//! 車アイコンの高さ
 			constexpr float kCarIconSpriteWorldPosYBuff = 100.0f;	// 車のワールド座標のY座標をずらす量
-			constexpr float kDisplayCarIconTime = 500.0f;	//!< 車のアイコンを表示しておく時間
+			constexpr float kDisplayCarIconTime = 5.0f;	//!< 車のアイコンを表示しておく時間
 			//!< 車アイコンのデフォルトカラー
 			static const Vector3 kCarIconDefaultColor = { 1.0f,0.0f,0.0f };
 			//!< 車アイコンの範囲外カラー、近いバージョン
@@ -181,7 +181,24 @@ namespace nsMyGame
 			constexpr float kCanCatchTime1 = 1.5f;		//!< 敵を捕まえることができる合図のスプライトのタイム1
 			constexpr float kCanCatchTime2 = 0.5f;		//!< 敵を捕まえることができる合図のスプライトのタイム2
 			constexpr float kCanCatchMaxScale = 1.5f;	//!< 敵を捕まえることができる合図のスプライトの最大拡大率
-			
+
+
+			//!< ターゲットを示すスプライトのファイルパス
+			constexpr const char* const kTargetSpriteFilePath = "Assets/Image/qte/target.DDS";
+			//!< ターゲットを示すスプライトの幅
+			constexpr int kTargetSpriteWidth = static_cast<int>(300 * 0.3f);
+			//!< ターゲットを示すスプライトの高さ
+			constexpr int kTargetSpriteHeight = static_cast<int>(400 * 0.3f);
+
+			constexpr float kTargetMaxLength = 10000.0f;	//!< ターゲットとなる最大距離
+			constexpr float kTargetMaxAngle = 3.14f * 0.25f;	//!< ターゲットとなる最大角度
+			constexpr float kTargetSpriteMaxScale = 1.0f;	//!< ターゲットを示すスプライトの最大拡大率
+			constexpr float kTargetSpriteMinScale = 0.3f;	//!< ターゲットを示すスプライトの最小拡大率
+			constexpr float kTargetSpritePowPower = 3.0f;	//!< ターゲットを示すスプライトの拡大率の変化の指数
+
+
+			//!< ターゲットとの距離を示すフォントレンダラーの座標のバッファ
+			static const Vector2 kTargetLengthFontRenderPosBuff = { -30.0f, 10.0f };
 		}
 	}
 }
