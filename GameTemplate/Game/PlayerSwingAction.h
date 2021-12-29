@@ -86,6 +86,14 @@ namespace nsMyGame
 					return m_swingSpeed;
 				}
 
+				/**
+				 * @brief ‰Šúó‘Ô‚É–ß‚·
+				*/
+				void Reset()
+				{
+					EndSwing();
+				}
+
 			private:	// private‚Èƒƒ“ƒoŠÖ”
 
 				/**

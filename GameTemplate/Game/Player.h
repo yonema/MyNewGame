@@ -9,15 +9,15 @@
 
 namespace nsMyGame
 {
+	// 前方宣言
+	namespace nsPlayer { class CPlayerModelAnimation; }
+	namespace nsAICharacter { class CAICar; }
 
 	/**
 	 * @brief プレイヤー関連のネームスペース
 	*/
 	namespace nsPlayer
 	{
-		// 前方宣言
-		class CPlayerModelAnimation;	// プレイヤーモデルアニメーションクラス
-
 		/**
 		 * @brief プレイヤークラス
 		*/
@@ -126,6 +126,15 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief ターゲットの敵の参照を得る
+			 * @return ターゲットの敵の参照
+			*/
+			const CPlayerCatchEnemy& GetCatchEnemy() const
+			{
+				return m_playerCatchEnemy;
+			}
+
+			/**
 			 * @brief 歩きと走り状態へ遷移する
 			*/
 			void ChangeWalkAndRunState();
@@ -161,6 +170,12 @@ namespace nsMyGame
 			void StartStringStretchToPos(const Vector3& pos);
 
 			/**
+			 * @brief 伸びる先の座標を設定する
+			 * @param[in] pos 座標
+			*/
+			void SetStringStretchPos(const Vector3& pos);
+
+			/**
 			 * @brief 糸が指定した座標に向かって伸びる処理を終了する
 			*/
 			void EndStringStretchToPos();
@@ -181,6 +196,27 @@ namespace nsMyGame
 			float GetStringLength() const
 			{
 				return m_playerStringModel->GetStringLength();
+			}
+
+			/**
+			 * @brief 敵の上に乗っているカメラか？を設定
+			 * @param[in] isOnEnemyCamera 敵の上に乗っているカメラか？
+			*/
+			void SetIsOnEnemyCamera(const bool isOnEnemyCamera)
+			{
+				m_playerCamera.SetIsOnEnemyCamera(isOnEnemyCamera);
+				if (isOnEnemyCamera)
+					m_playerCamera.LerpDampingRate(1.0f);
+				else
+					m_playerCamera.LerpDampingRate(0.0f);
+			}
+
+			/**
+			 * @brief 敵の上に乗る処理クラスを初期状態に戻す
+			*/
+			void ResetOnEnemy()
+			{
+				m_playerMove.ResetOnEnemy();
 			}
 
 		private:	// privateなメンバ関数

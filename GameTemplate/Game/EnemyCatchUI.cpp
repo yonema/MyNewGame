@@ -17,7 +17,11 @@ namespace nsMyGame
 	namespace nsUI
 	{
 		using namespace nsEnemyCatchUIConstData;
+
+		// 必要なプレイヤー用の定数を使用可能にする
 		using nsPlayer::nsPlayerConstData::nsCatchEnemyConstData::kCanCatchMaxLength;
+		using nsPlayer::nsPlayerConstData::nsCatchEnemyConstData::kTargetMaxLength;
+		using nsPlayer::nsPlayerConstData::nsCatchEnemyConstData::kTargetMaxAngle;
 
 		/**
 		 * @brief Updateの直前で呼ばれる開始処理
@@ -65,8 +69,13 @@ namespace nsMyGame
 		*/
 		void CEnemyCatchUI::Update()
 		{
-			// ターゲットを探す
-			FindTarget();
+			if (m_gameState->GetPlayer().GetState() == nsPlayer::nsPlayerConstData::enOnEnemy)
+			{
+				// エネミーの上にいるときの更新
+				OnEnemyUpdate();
+				// 早期リターン
+				return;
+			}
 
 			// このクラスて使用する共通のデータを更新
 			UpdateCommonData();
@@ -138,104 +147,18 @@ namespace nsMyGame
 		}
 
 		/**
-		 * @brief ターゲットを探す
+		 * @brief エネミーの上にいるときの更新
 		*/
-		void CEnemyCatchUI::FindTarget()
+		void CEnemyCatchUI::OnEnemyUpdate()
 		{
-			if (m_targetRef)
+			// 全てのスプライトを非表示にする
+			for (int i = 0; i < enCanCatchEnemySpriteNum; i++)
 			{
-				// ターゲットがいる場合、ターゲットとして継続してよいか調べる。
-
-				// ターゲット状態を継続するか調べる
-				CheckContinueTarget();
+				// すべて非表示
+				m_canCatchEnemySR[i]->Deactivate();
 			}
-			
-			if (m_targetRef != nullptr)
-			{
-				// ターゲットがいる場合は探さないので、早期リターン。
-				return;
-			}
-
-			// エネミー1体ずつ調べる
-			for (const auto& enemy : m_aiCarsRef)
-			{
-				// プレイヤーからエネミーへのベクトル
-				Vector3 playerToEnemyVec = enemy->GetPosition() - m_gameState->GetPlayer().GetPosition();
-				// プレイヤーからエネミーへの距離
-				const float playerToEnemyLen = playerToEnemyVec.Length();
-
-				if (playerToEnemyLen >= kTargetMaxLength)
-				{
-					// 距離が一定以上離れているため、ターゲットにはなれない。次へ。
-					continue;
-				}
-
-				// カメラからエネミーへのベクトル
-				Vector3 cameraToEnemyVec = 
-					enemy->GetPosition() - m_gameState->GetPlayer().GetCamera().GetCameraPosition();
-				// カメラからエネミーへの方向
-				Vector3 cameraToEnemyNorm = cameraToEnemyVec;
-				cameraToEnemyNorm.Normalize();	// 正規化する
-				// カメラからエネミーへの方向と、カメラの前方向の、角度差
-				float angleDiff = 
-					Dot(cameraToEnemyNorm, m_gameState->GetPlayer().GetCamera().GetCameraForward());
-				angleDiff = acosf(angleDiff);	// 内積を角度に変換
-
-				if (angleDiff >= kTargetMaxAngle)
-				{
-					// 角度差が一定以上の大きさのため、ターゲットにはなれない。次へ。
-					continue;
-				}
-
-				// @todo
-				// エネミーへの視線が、建物に遮られていないか調べる処理を追加する。
-				// 多分OBBの当たり判定で計算する。
-
-
-				// 全ての条件を満たしているため、ターゲットとする。
-				m_targetRef = enemy;
-				// ターゲットが見つかったため、ループを終了する。
-				break;
-			}
-
-			return;
-		}
-
-		/**
-		 * @brief ターゲット状態を継続するか調べる
-		*/
-		void CEnemyCatchUI::CheckContinueTarget()
-		{
-			// プレイヤーからターゲットへのベクトル
-			Vector3 playerToTargetVec = m_targetRef->GetPosition() - m_gameState->GetPlayer().GetPosition();
-			// プレイヤーからターゲットまでの距離
-			const float playerToTargetLen = playerToTargetVec.Length();
-			if (playerToTargetLen >= kTargetMaxLength)
-			{
-				// 距離が一定以上離れていたら、ターゲットから解除する。
-				m_targetRef = nullptr;
-				// 解除したので、早期リターン
-				return;
-			}
-
-			// カメラからターゲットへのベクトル
-			Vector3 cameraToTargetVec =
-				m_targetRef->GetPosition() - m_gameState->GetPlayer().GetCamera().GetCameraPosition();
-			// カメラからターゲットへの方向
-			Vector3 cameraToTargetNorm = cameraToTargetVec;
-			cameraToTargetNorm.Normalize();	// 正規化する
-			// カメラからターゲットへの方向と、カメラの前方向の、角度差
-			float angleDiff =
-				Dot(cameraToTargetNorm, m_gameState->GetPlayer().GetCamera().GetCameraForward());
-			angleDiff = acosf(angleDiff);	// 内積から角度へ変換
-
-			if (angleDiff >= kTargetMaxAngle)
-			{
-				// 角度差が一定以上の大きさなら、ターゲットから解除する。
-				m_targetRef = nullptr;
-				// 解除したので、早期リターン
-				return;
-			}
+			m_targetSR->Deactivate();
+			m_targetLengthFR->Deactivate();
 
 			return;
 		}
@@ -245,6 +168,9 @@ namespace nsMyGame
 		*/
 		void CEnemyCatchUI::UpdateCommonData()
 		{
+			// ターゲットの参照を得る
+			m_targetRef = m_gameState->GetPlayer().GetCatchEnemy().GetTargetEnemy();
+
 			if (m_targetRef == nullptr)
 			{
 				// ターゲットが見つかっていない場合は、これ以下の処理は行わない。
@@ -252,8 +178,7 @@ namespace nsMyGame
 			}
 
 			// プレイヤーから、ターゲットへの距離を計算する
-			Vector3 playerToDiff = m_targetRef->GetPosition() - m_gameState->GetPlayer().GetPosition();
-			m_targetLength = playerToDiff.Length();
+			m_targetLength = m_gameState->GetPlayer().GetCatchEnemy().GetTargetLength();
 
 			// ターゲットの画面上の2D座標を計算する
 			g_camera3D->CalcScreenPositionFromWorldPosition(m_taraget2DPos, m_targetRef->GetPosition());

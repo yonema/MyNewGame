@@ -114,17 +114,17 @@ namespace nsMyGame
 
 			/**
 			 * @brief 車を追加する
-			 * @param[in] aiCar 追加する車
+			 * @param[in,out] aiCar 追加する車
 			*/
-			void AddAICar(const nsAICharacter::CAICar* aiCar);
+			void AddAICar(nsAICharacter::CAICar* aiCar);
 
 			/**
 			 * @brief 車達の参照を得る
 			 * @return 車たちの参照
 			*/
-			std::vector<const nsAICharacter::CAICar*> GetAICar() const
+			std::vector<nsAICharacter::CAICar*>* GetAICar()
 			{
-				return m_aiCarsRef;
+				return &m_aiCarsRef;
 			}
 
 		public:		// staticなメンバ関数とデータメンバ
@@ -157,7 +157,7 @@ namespace nsMyGame
 
 			bool m_isGoal = false;		//!< ゴールしているか？
 			const nsPlayer::CPlayer* m_playerRef = nullptr;	//!< プレイヤーのconst参照
-			std::vector<const nsAICharacter::CAICar*> m_aiCarsRef;	//!< 車達のconst参照
+			std::vector<nsAICharacter::CAICar*> m_aiCarsRef;	//!< 車達の参照
 		};
 
 		/**

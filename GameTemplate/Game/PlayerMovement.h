@@ -3,6 +3,7 @@
 #include "PlayerWalkAndRun.h"
 #include "PlayerSwingAction.h"
 #include "PlayerWallRun.h"
+#include "PlayerOnEnemy.h"
 #include "PlayerConstData.h"
 #include "GameTime.h"
 
@@ -128,6 +129,12 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 直接座標を設定
+				 * @param[in] pos 座標
+				*/
+				void SetDirectPosition(const Vector3& pos);
+
+				/**
 				 * @brief 重力を使用するか？を設定する
 				 * @param useGravity 重力を使用するか？
 				*/
@@ -151,6 +158,22 @@ namespace nsMyGame
 				const CPlayerSwingAction& GetPlayerSwingAction() const
 				{
 					return m_playerSwingAction;
+				}
+
+				/**
+				 * @brief 敵の上に乗る処理クラスを初期状態に戻す
+				*/
+				void ResetOnEnemy()
+				{
+					m_playerOnEnemy.Reset();
+				}
+
+				/**
+				 * @brief スイングアクションクラスを初期状態に戻す
+				*/
+				void ResetSwing()
+				{
+					m_playerSwingAction.Reset();
 				}
 
 			private:	// privateなメンバ関数
@@ -180,11 +203,6 @@ namespace nsMyGame
 				*/
 				void MoveWithCharacterController();
 
-				/**
-				 * @brief 敵の上に乗っている時の動き
-				*/
-				void OnEnemyMove();
-
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
 				Vector3 m_moveVec = Vector3::Zero;		//!< 移動ベクトル
@@ -193,6 +211,7 @@ namespace nsMyGame
 				CPlayerWalkAndRun m_playerWalkAndRun;	//!< プレイヤーの歩きと走りクラス
 				CPlayerSwingAction m_playerSwingAction;	//!< プレイヤーのスイングアクションクラス
 				CPlayerWallRun m_playerWallRun;			//!< プレイヤーの壁を走る処理クラス
+				CPlayerOnEnemy m_playerOnEnemy;			//!< プレイヤーの敵の上に乗るクラス
 				bool m_useGravity = true;				//!< 重力を使用するか？
 
 			};

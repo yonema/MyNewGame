@@ -86,9 +86,9 @@ namespace nsMyGame
 
 		/**
 		 * @brief ŽÔ‚ð’Ç‰Á‚·‚é
-		 * @param[in] aiCar ’Ç‰Á‚·‚éŽÔ
+		 * @param[in,out] aiCar ’Ç‰Á‚·‚éŽÔ
 		*/
-		void CGameMainState::AddAICar(const nsAICharacter::CAICar* aiCar)
+		void CGameMainState::AddAICar(nsAICharacter::CAICar* aiCar)
 		{
 
 			m_aiCarsRef.emplace_back(aiCar);

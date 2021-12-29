@@ -152,7 +152,7 @@ namespace nsMyGame
 
 			//////// 共通パラメータ ////////
 			const Vector3* m_playerPositionRef = nullptr;			//!< プレイヤーの座標の参照
-			std::vector<const nsAICharacter::CAICar*> m_aiCarsRef;	//!< 車たちのconst参照
+			const std::vector<nsAICharacter::CAICar*>* m_aiCarsRef = nullptr;	//!< 車たちのconst参照
 			Vector3 m_cameraForwardXZ = Vector3::Front;				//!< XZ平面でのカメラの前方向
 			Vector3 m_cameraRightXZ = Vector3::Right;				//!< XZ平面でのカメラの前方向
 			Quaternion m_miniMapRotatioin = Quaternion::Identity;	//!< ミニマップの回転

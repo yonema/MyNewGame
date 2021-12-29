@@ -90,6 +90,15 @@ namespace nsMyGame
 				return m_modelRender->GetScale().z;
 			}
 
+			/**
+			 * @brief L‚Ñ‚éæ‚ÌÀ•W‚ğİ’è‚·‚é
+			 * @param[in] pos À•W
+			*/
+			void SetToStretchPos(const Vector3& pos)
+			{
+				m_toStretchPos = pos;
+			}
+
 		private:	// private‚Èƒƒ“ƒoŠÖ”
 
 			/**

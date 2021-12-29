@@ -52,6 +52,9 @@ namespace nsMyGame
 				// プレイヤーの壁を走る処理クラスの初期化
 				m_playerWallRun.Init(m_playerRef, this);
 
+				// プレイヤーの敵の上に乗るクラスの初期化
+				m_playerOnEnemy.Init(m_playerRef, this);
+
 				return;
 			}
 
@@ -94,6 +97,16 @@ namespace nsMyGame
 				m_moveVec.Scale(limit);
 
 				return;
+			}
+
+			/**
+			 * @brief 直接座標を設定
+			 * @param[in] pos 座標
+			*/
+			void CPlayerMovement::SetDirectPosition(const Vector3& pos)
+			{
+				m_charaCon.SetPosition(pos);
+				m_playerRef->SetPosition(pos);
 			}
 
 			/**
@@ -185,7 +198,8 @@ namespace nsMyGame
 					m_playerWallRun.Execute();
 					break;
 				case nsPlayerConstData::enOnEnemy:
-					OnEnemyMove();
+					// 敵の上に乗る処理を実行
+					m_playerOnEnemy.Execute();
 					break;
 				}
 
@@ -225,15 +239,6 @@ namespace nsMyGame
 				return;
 			}
 
-			/**
-			 * @brief 敵の上に乗っている時の動き
-			*/
-			void CPlayerMovement::OnEnemyMove()
-			{
-
-
-				return;
-			}
 		}
 	}
 }

@@ -69,14 +69,9 @@ namespace nsMyGame
 			void InitTargetLengthFont();
 
 			/**
-			 * @brief ターゲットを探す
+			 * @brief エネミーの上にいるときの更新
 			*/
-			void FindTarget();
-
-			/**
-			 * @brief ターゲット状態を継続するか調べる
-			*/
-			void CheckContinueTarget();
+			void OnEnemyUpdate();
 
 			/**
 			 * @brief このクラスて使用する共通のデータを更新
@@ -114,7 +109,7 @@ namespace nsMyGame
 			float m_targetLength = 0.0f;
 			const nsAICharacter::CAICar* m_targetRef = nullptr;		//!< ターゲットの参照
 			Vector2 m_taraget2DPos = Vector2::Zero;					//!< ターゲットの画面上の2D座標
-			std::vector<const nsAICharacter::CAICar*> m_aiCarsRef;	//!< 車たちのconst参照
+			const std::vector<nsAICharacter::CAICar*>* m_aiCarsRef = nullptr;	//!< 車たちのconst参照
 			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステート
 
 		};

@@ -74,6 +74,15 @@ namespace nsMyGame
 				return m_modelRender->GetPosition();
 			}
 
+			/**
+			 * @brief 回転を取得
+			 * @return 回転
+			*/
+			const Quaternion& GetRotation() const
+			{
+				return m_modelRender->GetRotation();
+			}
+
 		private:	// privateなデータメンバ
 
 			/**

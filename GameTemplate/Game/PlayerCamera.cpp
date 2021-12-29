@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerCamera.h"
 #include "Player.h"
+#include "AICar.h"
 
 namespace nsMyGame
 {
@@ -52,11 +53,19 @@ namespace nsMyGame
 		*/
 		void CPlayerCamera::ExecuteUpdate()
 		{
-			// カメラの回転を計算する
-			CalcCameraRotation();
+			if (m_isOnEnemyCamera)
+			{
+				// 敵の上に乗っている時のカメラの処理
+				OnEnemyCamera();
+			}
+			else
+			{
+				// カメラの回転を計算する
+				CalcCameraRotation();
 
-			// 自動的にカメラをプレイヤーの移動先に向ける
-			AutoTurnToPlayerDestination();
+				// 自動的にカメラをプレイヤーの移動先に向ける
+				AutoTurnToPlayerDestination();
+			}
 
 			// カメラの視点
 			Vector3 cameraPos = Vector3::Back;
@@ -250,6 +259,47 @@ namespace nsMyGame
 			qRot.SetRotationY(turnSpeed);
 			// XZ平面で、カメラへのベクトルを回す
 			qRot.Apply(m_toCameraVec);
+
+			return;
+		}
+
+
+		/**
+		 * @brief 敵の上に乗っている時のカメラの処理
+		*/
+		void CPlayerCamera::OnEnemyCamera()
+		{
+			const auto& enemy = m_playerRef->GetCatchEnemy().GetTargetEnemy();
+			if (enemy == nullptr)
+			{
+				return;
+			}
+			const Quaternion& enemyRot = enemy->GetRotation();
+			const Quaternion& playerRot = m_playerRef->GetRotation();
+			m_toCameraVec = Vector3::Back;
+			//enemyRot.Apply(m_toCameraVec);
+			playerRot.Apply(m_toCameraVec);
+
+			// 垂直方向のカメラの回転を計算する
+			// 水平な軸
+			Vector3 axisH;
+			// 外積で、Y軸と、注視点から視点へのベクトルに、直交するベクトルを求める
+			axisH.Cross(Vector3::AxisY, m_toCameraVec);
+			// 正規化する
+			axisH.Normalize();
+			// 水平な軸周りで回転させる
+			Quaternion cameraVRot;
+			cameraVRot.SetRotationDeg(
+				axisH,
+				kOnEnemyCameraVerticalAngle
+			);
+			// 注視点から視点へのベクトルを回転させる
+			cameraVRot.Apply(m_toCameraVec);
+
+			// 向きを正規化してから
+			m_toCameraVec.Normalize();
+			// 伸ばす
+			m_toCameraVec.Scale(kNearToCameraDistance);
 
 			return;
 		}

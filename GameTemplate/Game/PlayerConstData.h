@@ -107,11 +107,32 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief 敵の上に乗るクラスの定数データ
+			*/
+			namespace nsOnEnemyConstData
+			{
+				/**
+				 * @brief 敵の上に乗るステート
+				*/
+				enum EnOnEnemyState
+				{
+					enStartStretchToEnemy,	//!< 敵に糸を伸ばし始める
+					enStretchingToEnemy,	//!< 敵に糸を伸ばし中
+					enGoOnEnemy,			//!< 敵の上に移動中
+					enOnEnemy,				//!< 敵の上にいる
+				};
+
+				constexpr float kOnEnemyHeight = 100.0f;	//!< 敵の上に乗るときの高さ
+			}
+
+			/**
 			 * @brief 敵を捕まえるクラスの定数データ
 			*/
 			namespace nsCatchEnemyConstData
 			{
 				constexpr float kCanCatchMaxLength = 3000.0f;	//!< 敵を捕まえることができる最大距離
+				constexpr float kTargetMaxLength = 10000.0f;	//!< ターゲットとなる最大距離
+				constexpr float kTargetMaxAngle = 3.14f * 0.25f;	//!< ターゲットとなる最大角度
 
 			}
 
@@ -233,6 +254,9 @@ namespace nsMyGame
 				constexpr float kAutoTurnSpeedMax = 0.1f;	//!< カメラが自動で回転する最大スピード
 				constexpr float kAutoTurnExecuteThreshold = 0.99f;	//!< カメラが自動で回転を実行するしきい値
 				constexpr float kAutoTurnYRate = 0.03f;		//!< カメラのY座標が自動で回転する率
+
+				//!< 敵に乗っている時のカメラの縦回転の角度
+				constexpr float kOnEnemyCameraVerticalAngle = -30.0f;
 			}
 		}
 	}

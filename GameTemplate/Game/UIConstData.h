@@ -190,8 +190,6 @@ namespace nsMyGame
 			//!< ターゲットを示すスプライトの高さ
 			constexpr int kTargetSpriteHeight = static_cast<int>(400 * 0.3f);
 
-			constexpr float kTargetMaxLength = 10000.0f;	//!< ターゲットとなる最大距離
-			constexpr float kTargetMaxAngle = 3.14f * 0.25f;	//!< ターゲットとなる最大角度
 			constexpr float kTargetSpriteMaxScale = 1.0f;	//!< ターゲットを示すスプライトの最大拡大率
 			constexpr float kTargetSpriteMinScale = 0.3f;	//!< ターゲットを示すスプライトの最小拡大率
 			constexpr float kTargetSpritePowPower = 3.0f;	//!< ターゲットを示すスプライトの拡大率の変化の指数

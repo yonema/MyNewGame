@@ -131,6 +131,7 @@ namespace nsMyGame
 		*/
 		void CPlayer::ChangeOnEnemyState()
 		{
+			m_playerMove.ResetSwing();
 			m_playerState = enOnEnemy;
 			return;
 		}
@@ -143,6 +144,17 @@ namespace nsMyGame
 		void CPlayer::StartStringStretchToPos(const Vector3& pos)
 		{
 			m_playerStringModel->StartStretchToPos(pos);
+
+			return;
+		}
+
+		/**
+		 * @brief L‚Ñ‚éæ‚ÌÀ•W‚ðÝ’è‚·‚é
+		 * @param[in] pos À•W
+		*/
+		void CPlayer::SetStringStretchPos(const Vector3& pos)
+		{
+			m_playerStringModel->SetToStretchPos(pos);
 
 			return;
 		}

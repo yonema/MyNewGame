@@ -183,10 +183,10 @@ namespace nsMyGame
 		void CMiniMap::InitCarIconSprite()
 		{
 			// 車の数だけリサーブ
-			m_carIconSRs.reserve(m_aiCarsRef.size());
+			m_carIconSRs.reserve(m_aiCarsRef->size());
 
 			// 車の数だけスプライトを生成
-			for (int i = 0; i < m_aiCarsRef.size();i++)
+			for (int i = 0; i < m_aiCarsRef->size();i++)
 			{
 				m_carIconSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond));
 				m_carIconSRs[i]->Init(
@@ -212,10 +212,10 @@ namespace nsMyGame
 		void CMiniMap::InitCarMiniIconSprite()
 		{
 			// 車の数だけリサーブ
-			m_carMiniIconSRs.reserve(m_aiCarsRef.size());
+			m_carMiniIconSRs.reserve(m_aiCarsRef->size());
 
 			// 車の数だけスプライトを生成
-			for (int i = 0; i < m_aiCarsRef.size(); i++)
+			for (int i = 0; i < m_aiCarsRef->size(); i++)
 			{
 				m_carMiniIconSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond));
 				m_carMiniIconSRs[i]->Init(
@@ -423,7 +423,7 @@ namespace nsMyGame
 				// 枠に移動させる前の座標
 				Vector2 prevPos;
 				// 車の座標
-				Vector3 carPos = m_aiCarsRef[i++]->GetPosition();
+				Vector3 carPos = (*m_aiCarsRef)[i++]->GetPosition();
 				// 少し上にあげる
 				carPos.y += kCarIconSpriteWorldPosYBuff;
 
@@ -495,7 +495,7 @@ namespace nsMyGame
 				//////// 1.車のアイコンの座標を計算する ////////
 
 				// プレイヤーから車へのベクトル
-				Vector3 playerToCarVec = m_aiCarsRef[i]->GetPosition() - *m_playerPositionRef;
+				Vector3 playerToCarVec = (*m_aiCarsRef)[i]->GetPosition() - *m_playerPositionRef;
 				// 正規化されたプレイヤーから車へのベクトル
 				float xRate = (playerToCarVec.x) / kStageWidth;
 				float yRate = (playerToCarVec.z) / kStageHeight;

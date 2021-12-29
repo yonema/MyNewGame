@@ -99,6 +99,23 @@ namespace nsMyGame
 					);
 			}
 
+			/**
+			 * @brief 敵の上に乗っているカメラか？を設定する
+			 * @param[in] isOnEnemyCamera 敵の上に乗っているカメラか？
+			*/
+			void SetIsOnEnemyCamera(const bool isOnEnemyCamera)
+			{
+				m_isOnEnemyCamera = isOnEnemyCamera;
+			}
+
+			/**
+			 * @brief 敵の上に乗っているカメラか？を得る
+			 * @return 敵の上に乗っているカメラか？
+			*/
+			bool IsOnEnemyCamera() const
+			{
+				return m_isOnEnemyCamera;
+			}
 
 
 		private:	// privateなメンバ関数
@@ -112,6 +129,11 @@ namespace nsMyGame
 			 * @brief 自動的にカメラをプレイヤーの移動先に向ける
 			*/
 			void AutoTurnToPlayerDestination();
+
+			/**
+			 * @brief 敵の上に乗っている時のカメラの処理
+			*/
+			void OnEnemyCamera();
 
 
 			/**
@@ -141,6 +163,7 @@ namespace nsMyGame
 			float m_targetOffsetUp = 0.0f;
 			float m_cameraPositionOffsetUp = 0.0f;
 			float m_toCameraDistance = 0.0f;
+			bool m_isOnEnemyCamera = false;				//!< 敵の上に乗っているときのカメラか？
 		};
 
 	}
