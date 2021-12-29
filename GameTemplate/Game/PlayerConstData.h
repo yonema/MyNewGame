@@ -134,6 +134,79 @@ namespace nsMyGame
 				constexpr float kTargetMaxLength = 10000.0f;	//!< ターゲットとなる最大距離
 				constexpr float kTargetMaxAngle = 3.14f * 0.25f;	//!< ターゲットとなる最大角度
 
+				//!< 敵に乗っている時のタイマーバーのスプライトのファイルパス
+				constexpr const char* const kOnEnemyTimerBarSpriteFilePath = "Assets/Image/qte/barLight.DDS";
+				//!< 敵に乗っている時のタイマーバーのスプライトの幅
+				constexpr int kOnEnemyTimerBarSpirteWidth = static_cast<int>(400 * 1.0f);
+				//!< 敵に乗っている時のタイマーバーのスプライトの高さ
+				constexpr int kOnEnemyTimerBarSpirteHeight = static_cast<int>(300 * 1.0f);
+				//!< 敵に乗っている時のタイマーバーのスプライトの基点
+				static const Vector2 kOnEnemyTimerVarSpritePivot = { 1.0f,0.5f };
+				//!< 敵に乗っている時のタイマーバーのスプライトの座標
+				static const Vector2 kOnEnemyTimerVarSpritePosition = { 0.0f,-200.0f };
+				//!< 敵に乗っている時のタイマーバーのフレームのスプライトのファイルパス
+				constexpr const char* const kOnEnemyTimerBarFrameSpriteFilePath = "Assets/Image/qte/barFrame.DDS";
+				//!< 敵に乗っている時のタイマーバーのフレームのスプライトの幅
+				constexpr int kOnEnemyTimerBarFrameSpirteWidth = static_cast<int>(500 * 1.0f);
+				//!< 敵に乗っている時のタイマーバーのフレームのスプライトの高さ
+				constexpr int kOnEnemyTimerBarFrameSpirteHeight = static_cast<int>(300 * 1.0f);
+
+				/**
+				 * @brief QTEに使用するボタンの種類
+				*/
+				enum EnQTEButtonType
+				{
+					enQTE_A,
+					enQTE_B,
+					enQTE_Y,
+					enQTE_X,
+					enQTE_L_UP,
+					enQTE_L_Down,
+					enQTE_L_Left,
+					enQTE_L_Right,
+					enQTE_L1,
+					enQTE_L2,
+					enQTE_R1,
+					enQTE_R2,
+					enQTEButtouTypeNum	//!< QTEに使用するボタンの種類の数
+				};
+
+				//!< QTEに使用するボタンのスプライトのファイルパス
+				constexpr const char* const kQTEButtonSpriteFilePath[enQTEButtouTypeNum] =
+				{
+					"Assets/Image/qte/a.DDS",
+					"Assets/Image/qte/b.DDS",
+					"Assets/Image/qte/y.DDS",
+					"Assets/Image/qte/x.DDS",
+					"Assets/Image/qte/l_u.DDS",
+					"Assets/Image/qte/l_d.DDS",
+					"Assets/Image/qte/l_l.DDS",
+					"Assets/Image/qte/l_r.DDS",
+					"Assets/Image/qte/l1.DDS",
+					"Assets/Image/qte/l2.DDS",
+					"Assets/Image/qte/r1.DDS",
+					"Assets/Image/qte/r2.DDS",
+				};
+				//!< QTEに使用するボタンのスプライトの幅
+				constexpr int kQTEButtonSpriteWidth[enQTEButtouTypeNum] =
+				{ 256, 256, 256, 256, 512, 512, 512, 512, 256, 256, 256, 256 };
+				//!< QTEに使用するボタンのスプライトの高さ
+				constexpr int kQTEButtonSpriteHeight[enQTEButtouTypeNum] =
+				{ 256, 256, 256, 256, 512, 512, 512, 512, 256, 256, 256, 256 };
+				//!< QTEに使用するボタンのスプライトのサイズの拡大率
+				constexpr float kQTEButtonSizeScale[enQTEButtouTypeNum] =
+				{ 
+					0.3f, 0.3f, 0.3f, 0.3f, 
+					0.3f * 0.6f, 0.3f * 0.6f, 0.3f * 0.6f, 0.3f * 0.6f,
+					0.3f * 0.8f, 0.3f * 0.8f, 0.3f * 0.8f, 0.3f * 0.8f
+				};
+
+				//!< QTEに使用するボタンの枠のスプライトのファイルパス
+				constexpr const char* const kQTEButtonFrameSpriteFilePath = "Assets/Image/qte/buttonFrame.DDS";
+				//!< QTEに使用するボタンの枠のスプライトの幅
+				constexpr int kQTEButtonFrameSpriteWidth = static_cast<int>(256 * 0.35f);
+				//!< QTEに使用するボタンの枠のスプライトの高さ
+				constexpr int kQTEButtonFrameSpriteHeight = static_cast<int>(256 * 0.35f);
 			}
 
 			/**

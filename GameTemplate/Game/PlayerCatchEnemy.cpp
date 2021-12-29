@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "PlayerCatchEnemy.h"
-#include "PlayerConstData.h"
 #include "Player.h"
 #include "GameMainState.h"
 #include "AICar.h"
+#include "SpriteRender.h"
 
 namespace nsMyGame
 {
@@ -14,6 +14,40 @@ namespace nsMyGame
 	namespace nsPlayer
 	{
 		using namespace nsPlayerConstData::nsCatchEnemyConstData;
+
+
+		/**
+		 * @brief コンストラクタ
+		*/
+		CPlayerCatchEnemy::CPlayerCatchEnemy()
+		{
+			// タイマーバーのスプライトの初期化
+			InitTimerBarSprite();
+
+			// QTEに使うボタンのスプライトの初期化
+			InitQTEButtonSprite();
+
+			return;
+		}
+
+
+		/**
+		 * @brief デストラクタ
+		*/
+		CPlayerCatchEnemy::~CPlayerCatchEnemy()
+		{
+			DeleteGO(m_onEnemyTimerBar);
+			DeleteGO(m_onEnemyTimerBarFrame);
+
+			for (int i = 0; i < enQTEButtouTypeNum; i++)
+			{
+				DeleteGO(m_onQTEButtonSRs[i]);
+			}
+
+			DeleteGO(m_onQTEButtonFraneSR);
+
+			return;
+		}
 
 		/**
 		 * @brief 初期化処理
@@ -55,6 +89,97 @@ namespace nsMyGame
 
 			// 敵を捕まえるかどうか調べる
 			CheckCatchEnemy();
+
+			return;
+		}
+
+		/**
+		 * @brief タイマーバーのスプライトの初期化
+		*/
+		void CPlayerCatchEnemy::InitTimerBarSprite()
+		{
+			// バーの生成と初期化
+			m_onEnemyTimerBar = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			m_onEnemyTimerBar->Init(
+				kOnEnemyTimerBarSpriteFilePath,
+				kOnEnemyTimerBarSpirteWidth,
+				kOnEnemyTimerBarSpirteHeight,
+				kOnEnemyTimerVarSpritePivot,
+				AlphaBlendMode_Trans
+			); 
+
+			// バーの座標。ピボットをずらすため、座標を計算する。
+			Vector2 pos = kOnEnemyTimerVarSpritePosition;
+			// 画像のハーフサイズ
+			float halfSize = 0.0f;
+			halfSize = static_cast<float>(kOnEnemyTimerBarSpirteWidth) * 0.5f;
+			// ピボットの分だけ、ずらす。
+			pos.x += halfSize * kOnEnemyTimerVarSpritePivot.x;
+			// 座標を設定
+			m_onEnemyTimerBar->SetPosition(pos);
+			// 非表示にする
+			m_onEnemyTimerBar->Deactivate();
+
+			// バーのフレームの生成と初期化
+			m_onEnemyTimerBarFrame = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			m_onEnemyTimerBarFrame->Init(
+				kOnEnemyTimerBarFrameSpriteFilePath,
+				kOnEnemyTimerBarFrameSpirteWidth,
+				kOnEnemyTimerBarFrameSpirteHeight,
+				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+				AlphaBlendMode_Trans
+			);
+			// 座標を設定。こちらは、ピボットをずらしてないため、そのまま入れる。
+			m_onEnemyTimerBarFrame->SetPosition(kOnEnemyTimerVarSpritePosition);
+			// 非表示にする
+			m_onEnemyTimerBarFrame->Deactivate();
+
+			return;
+		}
+
+		/**
+		 * @brief QTEに使うボタンのスプライトの初期化
+		*/
+		void CPlayerCatchEnemy::InitQTEButtonSprite()
+		{
+			for (int i = 0; i < enQTEButtouTypeNum; i++)
+			{
+				// QTEに使うボタンたちのスプライトの生成と初期化
+				m_onQTEButtonSRs[i] = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+				m_onQTEButtonSRs[i]->Init(
+					kQTEButtonSpriteFilePath[i],
+					kQTEButtonSpriteWidth[i] * kQTEButtonSizeScale[i],
+					kQTEButtonSpriteHeight[i] * kQTEButtonSizeScale[i],
+					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+					AlphaBlendMode_Trans
+				);
+				Vector2 pos = { -400.0f,0.0f };
+				pos.x += i * 66.0f;
+				m_onQTEButtonSRs[i]->SetPosition(pos);
+				if (i != 0)
+				{
+					constexpr float mul = 0.3f;
+					m_onQTEButtonSRs[i]->SetMulColor({ mul,mul,mul,1.0f });
+				}
+				else
+				{
+					m_onQTEButtonSRs[i]->SetScale(1.25f);
+				}
+				//m_onQTEButtonSRs[i]->Deactivate();
+					
+			}
+
+			// QTEに使うボタンの枠のスプライトの生成と初期化
+			m_onQTEButtonFraneSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			m_onQTEButtonFraneSR->Init(
+				kQTEButtonFrameSpriteFilePath,
+				kQTEButtonFrameSpriteWidth,
+				kQTEButtonFrameSpriteHeight,
+				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+				AlphaBlendMode_Trans
+			);
+			m_onQTEButtonFraneSR->SetPosition({ -400.0f,0.0f });
+			//m_onQTEButtonFraneSR->Deactivate();
 
 			return;
 		}

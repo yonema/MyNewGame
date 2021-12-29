@@ -1,5 +1,7 @@
 #pragma once
 #include "Noncopyable.h"
+#include "PlayerConstData.h"
+
 
 namespace nsMyGame
 {
@@ -8,6 +10,7 @@ namespace nsMyGame
 	namespace nsPlayer { class CPlayer; }
 	namespace nsGameState { class CGameMainState; }
 	namespace nsAICharacter { class CAICar; }
+	namespace nsGraphic { namespace nsSprite { class CSpriteRender; } }
 
 	/**
 	 * @brief プレイヤー関連のネームスペース
@@ -23,11 +26,11 @@ namespace nsMyGame
 			/**
 			 * @brief コンストラクタ
 			*/
-			CPlayerCatchEnemy() = default;
+			CPlayerCatchEnemy();
 			/**
 			 * @brief デストラクタ
 			*/
-			~CPlayerCatchEnemy() = default;
+			~CPlayerCatchEnemy();
 
 		public:		// メンバ関数
 
@@ -63,6 +66,16 @@ namespace nsMyGame
 		private:	// privateなメンバ関数
 
 			/**
+			 * @brief タイマーバーのスプライトの初期化
+			*/
+			void InitTimerBarSprite();
+
+			/**
+			 * @brief QTEに使うボタンのスプライトの初期化
+			*/
+			void InitQTEButtonSprite();
+
+			/**
 			 * @brief 敵の上に乗っている時の更新
 			*/
 			void OnEnemyUpdate();
@@ -93,6 +106,19 @@ namespace nsMyGame
 			float m_targetLength = 0.0f;	//!< ターゲットとの距離
 
 			float m_onEnemyTimer = 0.0f;	//!< 敵の上に乗っている間のタイマー
+
+			//!< 敵の上に乗っている時のタイマーバーのスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_onEnemyTimerBar = nullptr;
+			//!< 敵の上に乗っている時のタイマーバーのフレームのスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_onEnemyTimerBarFrame = nullptr;
+
+			//!< QTEに使うボタンたちのスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* 
+				m_onQTEButtonSRs[nsPlayer::nsPlayerConstData::nsCatchEnemyConstData::enQTEButtouTypeNum]
+				= {};
+			//!< QTEに使うボタンの枠のスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_onQTEButtonFraneSR = nullptr;
+
 
 			nsAICharacter::CAICar* m_targetRef = nullptr;		//!< ターゲットの参照
 			std::vector<nsAICharacter::CAICar*>* m_aiCarsRef = nullptr;	//!< 車たちの参照
