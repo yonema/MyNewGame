@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "PlayerInput.h"
 #include "Player.h"
-#include "PlayerConstData.h"
 
 namespace nsMyGame
 {
@@ -12,6 +11,7 @@ namespace nsMyGame
 	{
 		// プレイヤー入力クラスの定数データを使用可能にする
 		using namespace nsPlayerConstData::nsInputConstData;
+		using nsPlayerConstData::nsCatchEnemyConstData::EnQTEButtonType;
 
 		/**
 		 * @brief 初期化
@@ -41,6 +41,9 @@ namespace nsMyGame
 
 			// アクション入力を更新する
 			UpdateInputAction();
+
+			// コマンド入力情報の更新
+			UpdateCommandInputData();
 
 			return;
 		}
@@ -181,6 +184,95 @@ namespace nsMyGame
 			{
 				// あった
 				m_playerInputData.inputCameraAxis = true;
+			}
+
+			return;
+		}
+
+
+		/**
+		 * @brief コマンド入力情報の更新
+		*/
+		void CPlayerInput::UpdateCommandInputData()
+		{
+			m_playerInputData.inputCommand = EnQTEButtonType::enQTE_None;
+
+			// ABYXボタンの更新
+			if (m_pad->IsTrigger(enButtonA))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_A;
+			}
+			else if (m_pad->IsTrigger(enButtonB))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_B;
+			}
+			else if (m_pad->IsTrigger(enButtonY))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_Y;
+			}
+			else if (m_pad->IsTrigger(enButtonX))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_X;
+			}
+			// 十字キーの更新
+			else if (m_pad->IsTrigger(enButtonUp))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Up;
+			}
+			else if (m_pad->IsTrigger(enButtonDown))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Down;
+			}
+			else if (m_pad->IsTrigger(enButtonLeft))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Left;
+			}
+			else if (m_pad->IsTrigger(enButtonRight))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Right;
+			}
+			// 左スティックの更新
+			else if (m_pad->GetLStickYF() >= kCommandInputAxisMin && m_canInputCommandAxis)
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Up;
+				m_canInputCommandAxis = false;
+			}
+			else if (m_pad->GetLStickYF() <= -kCommandInputAxisMin && m_canInputCommandAxis)
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Down;
+				m_canInputCommandAxis = false;
+			}
+			else if (m_pad->GetLStickXF() <= -kCommandInputAxisMin && m_canInputCommandAxis)
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Left;
+				m_canInputCommandAxis = false;
+			}
+			else if (m_pad->GetLStickXF() >= kCommandInputAxisMin && m_canInputCommandAxis)
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Right;
+				m_canInputCommandAxis = false;
+			}
+			// L1,L2,R1,R2ボタンの更新
+			else if (m_pad->IsTrigger(enButtonLB1))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L1;
+			}
+			else if (m_pad->IsTrigger(enButtonLB2))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L2;
+			}
+			else if (m_pad->IsTrigger(enButtonRB1))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_R1;
+			}
+			else if (m_pad->IsTrigger(enButtonRB2))
+			{
+				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_R2;
+			}
+			// 軸入力のフラグの回復
+			else if (fabsf(m_pad->GetLStickYF()) <= kInputAxisMin && fabsf(m_pad->GetLStickXF() <= kInputAxisMin))
+			{
+				m_canInputCommandAxis = true;
 			}
 
 			return;

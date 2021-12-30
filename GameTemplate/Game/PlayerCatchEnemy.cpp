@@ -4,6 +4,7 @@
 #include "GameMainState.h"
 #include "AICar.h"
 #include "SpriteRender.h"
+#include "PlayerCommandInput.h"
 
 namespace nsMyGame
 {
@@ -27,6 +28,9 @@ namespace nsMyGame
 			// QTEに使うボタンのスプライトの初期化
 			InitQTEButtonSprite();
 
+			// コマンド入力クラスを生成する
+			m_commandInput = std::make_unique<CPlayerCommandInput>();
+
 			return;
 		}
 
@@ -39,9 +43,9 @@ namespace nsMyGame
 			DeleteGO(m_onEnemyTimerBar);
 			DeleteGO(m_onEnemyTimerBarFrame);
 
-			for (int i = 0; i < enQTEButtouTypeNum; i++)
+			for (auto& qteButtonSR : m_QTEButtonSRs)
 			{
-				DeleteGO(m_onQTEButtonSRs[i]);
+				DeleteGO(qteButtonSR);
 			}
 
 			DeleteGO(m_onQTEButtonFraneSR);
@@ -56,6 +60,9 @@ namespace nsMyGame
 		void CPlayerCatchEnemy::Init(CPlayer* playerRef)
 		{
 			m_playerRef = playerRef;
+
+			m_commandInput->Init(*m_playerRef);
+
 
 			// ゲームステートの参照を引っ張ってくる
 			m_gameState = FindGO<nsGameState::CGameMainState>(
@@ -142,33 +149,6 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::InitQTEButtonSprite()
 		{
-			for (int i = 0; i < enQTEButtouTypeNum; i++)
-			{
-				// QTEに使うボタンたちのスプライトの生成と初期化
-				m_onQTEButtonSRs[i] = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
-				m_onQTEButtonSRs[i]->Init(
-					kQTEButtonSpriteFilePath[i],
-					kQTEButtonSpriteWidth[i] * kQTEButtonSizeScale[i],
-					kQTEButtonSpriteHeight[i] * kQTEButtonSizeScale[i],
-					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
-					AlphaBlendMode_Trans
-				);
-				Vector2 pos = { -400.0f,0.0f };
-				pos.x += i * 66.0f;
-				m_onQTEButtonSRs[i]->SetPosition(pos);
-				if (i != 0)
-				{
-					constexpr float mul = 0.3f;
-					m_onQTEButtonSRs[i]->SetMulColor({ mul,mul,mul,1.0f });
-				}
-				else
-				{
-					m_onQTEButtonSRs[i]->SetScale(1.25f);
-				}
-				//m_onQTEButtonSRs[i]->Deactivate();
-					
-			}
-
 			// QTEに使うボタンの枠のスプライトの生成と初期化
 			m_onQTEButtonFraneSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
 			m_onQTEButtonFraneSR->Init(
@@ -178,10 +158,71 @@ namespace nsMyGame
 				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
 				AlphaBlendMode_Trans
 			);
-			m_onQTEButtonFraneSR->SetPosition({ -400.0f,0.0f });
-			//m_onQTEButtonFraneSR->Deactivate();
+			// 非表示
+			m_onQTEButtonFraneSR->Deactivate();
 
 			return;
+		}
+
+		/**
+		 * @brief QTEに使うボタンのスプライトの再初期化
+		 * @param[in] commandArray コマンドの配列
+		*/
+		void CPlayerCatchEnemy::ReInitQTEBUttonSprite(
+			const std::vector<nsPlayerConstData::nsCatchEnemyConstData::EnQTEButtonType>& commandArray
+		)
+		{
+			if (m_QTEButtonSRs.empty() != true)
+			{
+				// コンテナが空ではなかったら、DeleteGOを呼ぶ
+				for (auto& qteButtonSR : m_QTEButtonSRs)
+				{
+					DeleteGO(qteButtonSR);
+				}
+				// 消し終わったらクリアする
+				m_QTEButtonSRs.clear();
+			}
+
+			// 新しいスプライトを生成する
+
+			// コマンドの数
+			const int commandNum = static_cast<int>(commandArray.size());
+			// コマンドの数だけリサーブする
+			m_QTEButtonSRs.reserve(commandNum);
+
+			// 左端の座標
+			const float leftEndPos = -kQTEButtonSpriteDistance * 0.5f * (commandNum - 1);
+			// 座標
+			Vector2 pos = { leftEndPos , kQTEButtonSpritePosY };
+
+			for (const auto command : commandArray)
+			{
+				// コマンドを一つずつ取り出してみる
+
+				// スプライトレンダラーを生成する
+				nsGraphic::nsSprite::CSpriteRender* qteButtonSR =
+					NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+				// コマンドにあったスプライトのデータで初期化
+				qteButtonSR->Init(
+					kQTEButtonSpriteFilePath[command],
+					kQTEButtonSpriteWidth[command] * kQTEButtonSizeScale[command],
+					kQTEButtonSpriteHeight[command] * kQTEButtonSizeScale[command],
+					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+					AlphaBlendMode_Trans
+				);
+				// 座標を設定する
+				qteButtonSR->SetPosition(pos);
+				// 待機モードの乗算カラーを設定する
+				qteButtonSR->SetMulColor(kQTEButtonSpriteStandByMulColor);
+				// 座標を次の座標に向けてずらす
+				pos.x += kQTEButtonSpriteDistance;
+				// スプライトレンダラーを配列に入れる
+				m_QTEButtonSRs.emplace_back(qteButtonSR);
+			}
+
+			// 先頭のスプライトをアクティブなモードの乗算カラーと拡大率にする
+			m_QTEButtonSRs[0]->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+			m_QTEButtonSRs[0]->SetScale(kQTEButtonSpriteActionScale);
 		}
 
 		/**
@@ -189,20 +230,72 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::OnEnemyUpdate()
 		{
-			if (m_playerRef->GetCamera().IsOnEnemyCamera() != true)
+			if (m_playerRef->GetPlayerMovement().GetPlayerOnEnemy().GetOnEnemyState() != 
+				nsPlayerConstData::nsOnEnemyConstData::enOnEnemy)
 			{
 				// 敵の上にまだ乗っていなかったら、早期リターン。
 				return;
 			}
 
+			if (m_onEnemyTimer <= FLT_EPSILON)
+			{
+				// タイマーが進んでいない、最初だけ呼ばれる処理
+
+				// コマンドを初期化する
+				m_commandInput->InitCommand(4, nsPlayerConstData::nsCommandInputConstData::enCT_type3);
+				// QTEに使うボタンのスプライトを再初期化
+				ReInitQTEBUttonSprite(m_commandInput->GetCommandButtonTypeArray());
+				// QTEで使うスプライトの有効化
+				QTESpriteActivate();
+				// ボタンの枠のスプライトの座標を、一番左のボタンのスプライトの座標と同じにする。
+				m_onQTEButtonFraneSR->SetPosition(m_QTEButtonSRs[0]->GetPosition());
+			}
+
+			// コマンド入力を実行する
+			m_commandInput->Execute();
+
+			if (m_commandInput->IsEndCommandInput() != true)
+			{
+				// コマンド入力が、まだ終わっていない。
+
+				if (m_oldCommandProgress != m_commandInput->GetCommandProgress())
+				{
+					// 前フレームのコマンド進行度と違ったら
+
+					// 現在のスプライトを非表示にする
+					m_QTEButtonSRs[m_oldCommandProgress]->Deactivate();
+					// 次のスプライトをアクティブモードの乗算カラーと拡大率にする
+					m_QTEButtonSRs[m_oldCommandProgress + 1]->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+					m_QTEButtonSRs[m_oldCommandProgress + 1]->SetScale(kQTEButtonSpriteActionScale);
+					// ボタンの枠を次のボタンの位置にする
+					m_onQTEButtonFraneSR->SetPosition(m_QTEButtonSRs[m_oldCommandProgress + 1]->GetPosition());
+				}
+			}
+			else
+			{
+				// コマンド入力が終了した。コマンド入力成功。
+
+				// 敵を捕まえる処理が終了した時の処理
+				EndCatchEnemy();
+				return;
+			}
+
+			// 前フレームのコマンド進行度を更新する
+			m_oldCommandProgress = m_commandInput->GetCommandProgress();
+
+			// タイマーを進める
 			m_onEnemyTimer += nsTimer::GameTime().GetFrameDeltaTime();
 
-			if (m_onEnemyTimer >= 5.0f)
+			// バーの拡大率。徐々に小さくしていく。
+			const float barRate = 1.0f - (m_onEnemyTimer / kOnEnemyTime);
+			// バーの拡大率を設定
+			m_onEnemyTimerBar->SetScale({ barRate ,1.0f,1.0f });
+
+
+			if (m_onEnemyTimer >= kOnEnemyTime)
 			{
-				m_onEnemyTimer = 0.0f;
-				m_targetRef = nullptr;
-				m_playerRef->ResetOnEnemy();
-				m_playerRef->ChangeWalkAndRunState();
+				// 敵を捕まえる処理が終了した時の処理
+				EndCatchEnemy();
 			}
 
 			return;
@@ -357,6 +450,58 @@ namespace nsMyGame
 			return;
 		}
 
+
+		/**
+		 * @brief QTEで使うスプライトを有効化する
+		*/
+		void CPlayerCatchEnemy::QTESpriteActivate()
+		{
+			m_onEnemyTimerBar->Activate();
+			m_onEnemyTimerBarFrame->Activate();
+			m_onQTEButtonFraneSR->Activate();
+
+			return;
+		}
+
+		/**
+		 * @brief QTEで使うスプライトを有効化する
+		*/
+		void CPlayerCatchEnemy::QTESpriteDeactivate()
+		{
+			m_onEnemyTimerBar->Deactivate();
+			m_onEnemyTimerBarFrame->Deactivate();
+			m_onQTEButtonFraneSR->Deactivate();
+
+			return;
+		}
+
+		/**
+		 * @brief 敵を捕まえる処理が終了した時の処理
+		*/
+		void CPlayerCatchEnemy::EndCatchEnemy()
+		{
+			// 敵の上に乗っているタイマーをリセットする
+			m_onEnemyTimer = 0.0f;
+			// ターゲットの敵がいないようにする
+			m_targetRef = nullptr;
+			// 敵の上に乗っているクラスをリセットする
+			m_playerRef->ResetOnEnemy();
+			// プレイヤーのステートを、歩きと走りに遷移する。
+			m_playerRef->ChangeWalkAndRunState();
+			// コマンド入力クラスを終了させる
+			m_commandInput->EndCommandInput();
+			// 前フレームのコマンド進行度をリセットする
+			m_oldCommandProgress = 0;
+
+			// スプライトたちをすべて非表示にする
+			for (auto& qteButtonSR : m_QTEButtonSRs)
+			{
+				qteButtonSR->Deactivate();
+			}
+			QTESpriteDeactivate();
+
+			return;
+		}
 
 	}
 }

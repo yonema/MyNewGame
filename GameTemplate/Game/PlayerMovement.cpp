@@ -160,7 +160,8 @@ namespace nsMyGame
 				//}
 
 				// スイングトリガーがtrueで、かつ、空中だったら
-				if (m_playerRef->GetInputData().actionSwing && IsAir())
+				if (m_playerRef->GetState() == nsPlayerConstData::enWalkAndRun &&
+					m_playerRef->GetInputData().actionSwing && IsAir())
 				{
 					// スイング状態へ遷移
 					m_playerRef->ChangeSwingState();

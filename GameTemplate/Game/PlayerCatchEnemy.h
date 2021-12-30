@@ -7,7 +7,10 @@ namespace nsMyGame
 {
 	// 前方宣言
 
-	namespace nsPlayer { class CPlayer; }
+	namespace nsPlayer { 
+		class CPlayer; 
+		class CPlayerCommandInput;
+	}
 	namespace nsGameState { class CGameMainState; }
 	namespace nsAICharacter { class CAICar; }
 	namespace nsGraphic { namespace nsSprite { class CSpriteRender; } }
@@ -76,6 +79,14 @@ namespace nsMyGame
 			void InitQTEButtonSprite();
 
 			/**
+			 * @brief QTEに使うボタンのスプライトの再初期化
+			 * @param[in] commandArray コマンドの配列
+			*/
+			void ReInitQTEBUttonSprite(
+				const std::vector<nsPlayerConstData::nsCatchEnemyConstData::EnQTEButtonType>& commandArray
+			);
+
+			/**
 			 * @brief 敵の上に乗っている時の更新
 			*/
 			void OnEnemyUpdate();
@@ -100,6 +111,21 @@ namespace nsMyGame
 			*/
 			void CheckCatchEnemy();
 
+			/**
+			 * @brief QTEで使うスプライトを有効化する
+			*/
+			void QTESpriteActivate();
+
+			/**
+			 * @brief QTEで使うスプライトを有効化する
+			*/
+			void QTESpriteDeactivate();
+
+			/**
+			 * @brief 敵を捕まえる処理が終了した時の処理
+			*/
+			void EndCatchEnemy();
+
 		private:	// データメンバ
 			CPlayer* m_playerRef = nullptr;	//!< プレイヤーの参照
 
@@ -113,12 +139,12 @@ namespace nsMyGame
 			nsGraphic::nsSprite::CSpriteRender* m_onEnemyTimerBarFrame = nullptr;
 
 			//!< QTEに使うボタンたちのスプライトレンダラー
-			nsGraphic::nsSprite::CSpriteRender* 
-				m_onQTEButtonSRs[nsPlayer::nsPlayerConstData::nsCatchEnemyConstData::enQTEButtouTypeNum]
-				= {};
+			std::vector<nsGraphic::nsSprite::CSpriteRender*> m_QTEButtonSRs;
 			//!< QTEに使うボタンの枠のスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_onQTEButtonFraneSR = nullptr;
 
+			std::unique_ptr<CPlayerCommandInput> m_commandInput;	//!< コマンド入力クラス
+			int m_oldCommandProgress = 0;							//!< 前フレームのコマンド進行度
 
 			nsAICharacter::CAICar* m_targetRef = nullptr;		//!< ターゲットの参照
 			std::vector<nsAICharacter::CAICar*>* m_aiCarsRef = nullptr;	//!< 車たちの参照

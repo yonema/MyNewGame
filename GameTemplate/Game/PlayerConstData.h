@@ -156,11 +156,12 @@ namespace nsMyGame
 				*/
 				enum EnQTEButtonType
 				{
+					enQTE_None = -1,
 					enQTE_A,
 					enQTE_B,
 					enQTE_Y,
 					enQTE_X,
-					enQTE_L_UP,
+					enQTE_L_Up,
 					enQTE_L_Down,
 					enQTE_L_Left,
 					enQTE_L_Right,
@@ -168,11 +169,11 @@ namespace nsMyGame
 					enQTE_L2,
 					enQTE_R1,
 					enQTE_R2,
-					enQTEButtouTypeNum	//!< QTEに使用するボタンの種類の数
+					enQTEButtonTypeNum	//!< QTEに使用するボタンの種類の数
 				};
 
 				//!< QTEに使用するボタンのスプライトのファイルパス
-				constexpr const char* const kQTEButtonSpriteFilePath[enQTEButtouTypeNum] =
+				constexpr const char* const kQTEButtonSpriteFilePath[enQTEButtonTypeNum] =
 				{
 					"Assets/Image/qte/a.DDS",
 					"Assets/Image/qte/b.DDS",
@@ -188,18 +189,22 @@ namespace nsMyGame
 					"Assets/Image/qte/r2.DDS",
 				};
 				//!< QTEに使用するボタンのスプライトの幅
-				constexpr int kQTEButtonSpriteWidth[enQTEButtouTypeNum] =
+				constexpr int kQTEButtonSpriteWidth[enQTEButtonTypeNum] =
 				{ 256, 256, 256, 256, 512, 512, 512, 512, 256, 256, 256, 256 };
 				//!< QTEに使用するボタンのスプライトの高さ
-				constexpr int kQTEButtonSpriteHeight[enQTEButtouTypeNum] =
+				constexpr int kQTEButtonSpriteHeight[enQTEButtonTypeNum] =
 				{ 256, 256, 256, 256, 512, 512, 512, 512, 256, 256, 256, 256 };
 				//!< QTEに使用するボタンのスプライトのサイズの拡大率
-				constexpr float kQTEButtonSizeScale[enQTEButtouTypeNum] =
+				constexpr float kQTEButtonSizeScale[enQTEButtonTypeNum] =
 				{ 
 					0.3f, 0.3f, 0.3f, 0.3f, 
 					0.3f * 0.6f, 0.3f * 0.6f, 0.3f * 0.6f, 0.3f * 0.6f,
 					0.3f * 0.8f, 0.3f * 0.8f, 0.3f * 0.8f, 0.3f * 0.8f
 				};
+				//!< QTEに使用するボタンのスプライトの待機中の乗算カラー
+				constexpr float kQTEButtonSpriteStandByMulColor = 0.3f;
+				//!< QTEに使用するボタンのスプライトの対象の拡大率
+				constexpr float kQTEButtonSpriteActionScale = 1.25f;
 
 				//!< QTEに使用するボタンの枠のスプライトのファイルパス
 				constexpr const char* const kQTEButtonFrameSpriteFilePath = "Assets/Image/qte/buttonFrame.DDS";
@@ -207,6 +212,31 @@ namespace nsMyGame
 				constexpr int kQTEButtonFrameSpriteWidth = static_cast<int>(256 * 0.35f);
 				//!< QTEに使用するボタンの枠のスプライトの高さ
 				constexpr int kQTEButtonFrameSpriteHeight = static_cast<int>(256 * 0.35f);
+
+				//!< QTEに使用するボタンのスプライトの距離
+				constexpr float kQTEButtonSpriteDistance = 100.0f;
+				//!< QTEに使用するボタンのスプライトのY座標
+				constexpr float kQTEButtonSpritePosY = 0.0f;
+
+				constexpr float kOnEnemyTime = 5.0f;	//!< 敵の上に乗れる時間
+
+			}
+
+			/**
+			 * @brief コマンド入力クラスの定数データ
+			*/
+			namespace nsCommandInputConstData
+			{
+				/**
+				 * @brief コマンドの種類
+				*/
+				enum EnCommandType
+				{
+					enCT_type1,
+					enCT_type2,
+					enCT_type3,
+					enCT_typeNum
+				};
 			}
 
 			/**
@@ -284,6 +314,7 @@ namespace nsMyGame
 				constexpr float kDPadInputPower = 1.0f;					//!< 十字キー入力の移動量
 				static const float kSquareRootOfTwo = std::sqrtf(2.0f);	//!< ルート2の値
 				constexpr float kInputAxisMin = 0.001f;					//!< 軸入力の最小値
+				constexpr float kCommandInputAxisMin = 0.5f;			//!< コマンド入力の軸入力の最小値
 			}
 
 			/**

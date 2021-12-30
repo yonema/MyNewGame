@@ -314,6 +314,7 @@
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="PathFinding.cpp" />
     <ClCompile Include="PlayerCatchEnemy.cpp" />
+    <ClCompile Include="PlayerCommandInput.cpp" />
     <ClCompile Include="PlayerOnEnemy.cpp" />
     <ClCompile Include="PlayerShadowMap.cpp" />
     <ClCompile Include="DebugManager.cpp" />
@@ -466,6 +467,7 @@
     <ClInclude Include="Path.h" />
     <ClInclude Include="PathFinding.h" />
     <ClInclude Include="PlayerCatchEnemy.h" />
+    <ClInclude Include="PlayerCommandInput.h" />
     <ClInclude Include="PlayerOnEnemy.h" />
     <ClInclude Include="PlayerShadowMap.h" />
     <ClInclude Include="DebugConstData.h" />

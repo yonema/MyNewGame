@@ -554,6 +554,9 @@
     <ClCompile Include="PlayerOnEnemy.cpp">
       <Filter>MyCode\Player\PlayerMovement</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerCommandInput.cpp">
+      <Filter>MyCode\Player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -1050,6 +1053,9 @@
     </ClInclude>
     <ClInclude Include="PlayerOnEnemy.h">
       <Filter>MyCode\Player\PlayerMovement</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCommandInput.h">
+      <Filter>MyCode\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

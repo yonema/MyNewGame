@@ -177,6 +177,16 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief 乗算カラーを設定する（float）
+				 * @param[in] mulColorF 乗算カラー（float）
+				*/
+				void SetMulColor(const float mulColorF)
+				{
+					Vector4 mulColor = { mulColorF ,mulColorF ,mulColorF ,1.0f };
+					m_sprite.SetMulColor(mulColor);
+				}
+
+				/**
 				 * @brief 乗算カラーを得る
 				 * @return 乗算カラー
 				*/

@@ -161,6 +161,15 @@ namespace nsMyGame
 				}
 
 				/**
+				 * @brief プレイヤーが敵の上に乗っている処理の参照を得る
+				 * @return プレイヤーが敵の上に乗っている処理の参照
+				*/
+				const CPlayerOnEnemy& GetPlayerOnEnemy() const
+				{
+					return m_playerOnEnemy;
+				}
+
+				/**
 				 * @brief 敵の上に乗る処理クラスを初期状態に戻す
 				*/
 				void ResetOnEnemy()

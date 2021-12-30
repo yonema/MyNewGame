@@ -1,5 +1,6 @@
 #pragma once
 #include "Noncopyable.h"
+#include "PlayerConstData.h"
 
 namespace nsMyGame
 {
@@ -27,6 +28,9 @@ namespace nsMyGame
 			bool actionSwing = false;				//!< スイングの入力情報
 			bool actionSeachEnemy = false;			//!< 敵を探知する入力情報
 			bool actionCatchEnemy = false;			//!< 敵を捕まえる入力情報
+			//!< コマンド入力情報
+			nsPlayerConstData::nsCatchEnemyConstData::EnQTEButtonType inputCommand =
+				nsPlayerConstData::nsCatchEnemyConstData::enQTE_None;
 		};
 
 		/**
@@ -88,12 +92,16 @@ namespace nsMyGame
 			*/
 			void OnUpdateInputAxisCameraRot();
 
+			/**
+			 * @brief コマンド入力情報の更新
+			*/
+			void UpdateCommandInputData();
+
 		private:	// データメンバ
 			const GamePad* m_pad = nullptr;		//!<  ゲームパッド
 			CPlayer* m_playerRef = nullptr;		//!< プレイヤーの参照
 			SPlayerInputData m_playerInputData;	//!< プレイヤーの入力情報
-
-
+			bool m_canInputCommandAxis = false;	//!< コマンドの軸入力が可能か？
 		};
 	}
 }

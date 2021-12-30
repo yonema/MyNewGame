@@ -58,6 +58,15 @@ namespace nsMyGame
 				*/
 				void Reset();
 
+				/**
+				 * @brief 敵の上に乗っているステートを得る
+				 * @return 敵の上に乗っているステート
+				*/
+				nsPlayerConstData::nsOnEnemyConstData::EnOnEnemyState GetOnEnemyState() const
+				{
+					return m_onEnemyState;
+				}
+
 			private:	// privateなメンバ関数
 
 				/**
