@@ -157,7 +157,7 @@ namespace nsMyGame
 				//!< 敵に乗っている時のタイマーバーのスプライトの基点
 				static const Vector2 kOnEnemyTimerVarSpritePivot = { 1.0f,0.5f };
 				//!< 敵に乗っている時のタイマーバーのスプライトの座標
-				static const Vector2 kOnEnemyTimerVarSpritePosition = { 0.0f,-200.0f };
+				static const Vector2 kOnEnemyTimerVarSpritePosition = { 0.0f,300.0f };
 				//!< 敵に乗っている時のタイマーバーのフレームのスプライトのファイルパス
 				constexpr const char* const kOnEnemyTimerBarFrameSpriteFilePath = "Assets/Image/qte/barFrame.DDS";
 				//!< 敵に乗っている時のタイマーバーのフレームのスプライトの幅
@@ -230,7 +230,7 @@ namespace nsMyGame
 				//!< QTEに使用するボタンのスプライトの距離
 				constexpr float kQTEButtonSpriteDistance = 100.0f;
 				//!< QTEに使用するボタンのスプライトのY座標
-				constexpr float kQTEButtonSpritePosY = 0.0f;
+				constexpr float kQTEButtonSpritePosY = 50.0f;
 
 				constexpr float kOnEnemyTime = 5.0f;	//!< 敵の上に乗れる時間
 
