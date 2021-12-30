@@ -64,6 +64,12 @@ namespace nsMyGame
 		*/
 		void CAICar::Update()
 		{
+			if (m_isCaptured)
+			{
+				// •ß‚Ü‚Á‚½‚ç“®‚¯‚È‚­‚È‚é
+				return;
+			}
+
 			if (m_isMoveEnd)
 			{
 				// ˆÚ“®I—¹

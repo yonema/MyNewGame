@@ -376,10 +376,13 @@ namespace nsMyGame
 				m_isDisplayCarIcon = true;
 				// タイマーのリセット
 				m_displayCarIconTimer = 0.0f;
-				for (auto& icon : m_carIconSRs)
+				for (int i = 0; i < m_carIconSRs.size(); i++)
 				{
-					// 全てのアイコンを表示
-					icon->Activate();
+					if ((*m_aiCarsRef)[i]->IsCaputred() != true)
+					{
+						// 敵が捕まっていなかったら、表示する
+						m_carIconSRs[i]->Activate();
+					}
 				}
 			}
 
@@ -413,6 +416,13 @@ namespace nsMyGame
 			// 車全部分の更新
 			for (const auto& carIconSR : m_carIconSRs)
 			{
+				if ((*m_aiCarsRef)[i]->IsCaputred())
+				{
+					// 捕まっていたら、スキップ
+					i++;
+					continue;
+				}
+
 				// アイコンの座標
 				Vector2 iconPos = Vector2::Zero;
 
@@ -492,6 +502,15 @@ namespace nsMyGame
 			int i = 0;
 			for (const auto& carMiniIconSR : m_carMiniIconSRs)
 			{
+				if ((*m_aiCarsRef)[i]->IsCaputred())
+				{
+					// 敵が捕まっていたら、非表示にして、次へ。
+					carMiniIconSR->Deactivate();
+					m_carMiniIconOutSRs[i]->Deactivate();
+					i++;
+					continue;
+				}
+
 				//////// 1.車のアイコンの座標を計算する ////////
 
 				// プレイヤーから車へのベクトル
@@ -553,6 +572,7 @@ namespace nsMyGame
 				// 車のアイコンたちの色を更新
 				UpdateCarIconsColor(carMiniIconSR, isIntersect, prevIconPos, iconPos);
 				UpdateCarIconsColor(m_carMiniIconOutSRs[i], isIntersect, prevIconPos, iconPos);
+				// メイン画面の方の車のアイコンの色もここで更新する
 				UpdateCarIconsColor(m_carIconSRs[i], isIntersect, prevIconPos, iconPos);
 
 				i++;

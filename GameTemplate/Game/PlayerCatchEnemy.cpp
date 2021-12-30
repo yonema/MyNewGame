@@ -28,6 +28,9 @@ namespace nsMyGame
 			// QTEに使うボタンのスプライトの初期化
 			InitQTEButtonSprite();
 
+			// 忍術のエフェクトを初期化
+			InitNinjyutuEffect();
+
 			// コマンド入力クラスを生成する
 			m_commandInput = std::make_unique<CPlayerCommandInput>();
 
@@ -80,22 +83,48 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::ExecuteUpdate()
 		{
-			if (m_playerRef->GetState() == nsPlayerConstData::enOnEnemy)
+			switch (m_catceEnemyState)
 			{
-				// 敵の上に乗っている時の更新
+			case enCE_FindTarget:
+
+				if (m_playerRef->GetState() == nsPlayerConstData::enOnEnemy)
+				{
+					ChangeState(enCE_GoOnEnemy);
+				}
+
+				// ターゲットを探す
+				FindTarget();
+
+				// このクラスで使う共通データの更新
+				UpdateCommonData();
+
+				// 敵を捕まえるかどうか調べる
+				CheckCatchEnemy();
+				break;
+
+			case enCE_GoOnEnemy:
+				if (m_playerRef->GetPlayerMovement().GetPlayerOnEnemy().GetOnEnemyState() ==
+					nsPlayerConstData::nsOnEnemyConstData::enOnEnemy)
+				{
+					ChangeState(enCE_InputingCommand);
+				}
+				break;
+
+			case enCE_InputingCommand:
 				OnEnemyUpdate();
-				// 早期リターン
-				return;
+				break;
+
+			case enCE_SuccessCommand:
+				SuccessCommandUpdate();
+				break;
+
+			case enCE_FailureCommand:
+				ChangeState(enCE_End);
+				break;
+
+			case enCE_End:
+				break;
 			}
-
-			// ターゲットを探す
-			FindTarget();
-
-			// このクラスで使う共通データの更新
-			UpdateCommonData();
-
-			// 敵を捕まえるかどうか調べる
-			CheckCatchEnemy();
 
 			return;
 		}
@@ -160,6 +189,18 @@ namespace nsMyGame
 			);
 			// 非表示
 			m_onQTEButtonFraneSR->Deactivate();
+
+			return;
+		}
+
+
+		/**
+		 * @brief 忍術のエフェクトを初期化
+		*/
+		void CPlayerCatchEnemy::InitNinjyutuEffect()
+		{
+			m_ninjyutuEF.Init(kNinjyutuEffectFilePath);
+
 
 			return;
 		}
@@ -230,55 +271,32 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::OnEnemyUpdate()
 		{
-			if (m_playerRef->GetPlayerMovement().GetPlayerOnEnemy().GetOnEnemyState() != 
-				nsPlayerConstData::nsOnEnemyConstData::enOnEnemy)
-			{
-				// 敵の上にまだ乗っていなかったら、早期リターン。
-				return;
-			}
-
-			if (m_onEnemyTimer <= FLT_EPSILON)
-			{
-				// タイマーが進んでいない、最初だけ呼ばれる処理
-
-				// コマンドを初期化する
-				m_commandInput->InitCommand(4, nsPlayerConstData::nsCommandInputConstData::enCT_type3);
-				// QTEに使うボタンのスプライトを再初期化
-				ReInitQTEBUttonSprite(m_commandInput->GetCommandButtonTypeArray());
-				// QTEで使うスプライトの有効化
-				QTESpriteActivate();
-				// ボタンの枠のスプライトの座標を、一番左のボタンのスプライトの座標と同じにする。
-				m_onQTEButtonFraneSR->SetPosition(m_QTEButtonSRs[0]->GetPosition());
-			}
-
 			// コマンド入力を実行する
 			m_commandInput->Execute();
 
-			if (m_commandInput->IsEndCommandInput() != true)
-			{
-				// コマンド入力が、まだ終わっていない。
-
-				if (m_oldCommandProgress != m_commandInput->GetCommandProgress())
-				{
-					// 前フレームのコマンド進行度と違ったら
-
-					// 現在のスプライトを非表示にする
-					m_QTEButtonSRs[m_oldCommandProgress]->Deactivate();
-					// 次のスプライトをアクティブモードの乗算カラーと拡大率にする
-					m_QTEButtonSRs[m_oldCommandProgress + 1]->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
-					m_QTEButtonSRs[m_oldCommandProgress + 1]->SetScale(kQTEButtonSpriteActionScale);
-					// ボタンの枠を次のボタンの位置にする
-					m_onQTEButtonFraneSR->SetPosition(m_QTEButtonSRs[m_oldCommandProgress + 1]->GetPosition());
-				}
-			}
-			else
+			if (m_commandInput->IsEndCommandInput() == true)
 			{
 				// コマンド入力が終了した。コマンド入力成功。
-
-				// 敵を捕まえる処理が終了した時の処理
-				EndCatchEnemy();
+				ChangeState(enCE_SuccessCommand);
 				return;
 			}
+			
+			// コマンド入力が、まだ終わっていない。
+
+			if (m_oldCommandProgress != m_commandInput->GetCommandProgress())
+			{
+				// 前フレームのコマンド進行度と違ったら
+
+				// 現在のスプライトを非表示にする
+				m_QTEButtonSRs[m_oldCommandProgress]->Deactivate();
+				// 次のスプライトをアクティブモードの乗算カラーと拡大率にする
+				m_QTEButtonSRs[m_oldCommandProgress + 1]->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
+				m_QTEButtonSRs[m_oldCommandProgress + 1]->SetScale(kQTEButtonSpriteActionScale);
+				// ボタンの枠を次のボタンの位置にする
+				m_onQTEButtonFraneSR->SetPosition(m_QTEButtonSRs[m_oldCommandProgress + 1]->GetPosition());
+			}
+			
+
 
 			// 前フレームのコマンド進行度を更新する
 			m_oldCommandProgress = m_commandInput->GetCommandProgress();
@@ -294,9 +312,31 @@ namespace nsMyGame
 
 			if (m_onEnemyTimer >= kOnEnemyTime)
 			{
-				// 敵を捕まえる処理が終了した時の処理
-				EndCatchEnemy();
+				ChangeState(enCE_FailureCommand);
+				return;
 			}
+
+			return;
+		}
+
+
+		/**
+		 * @brief コマンドが成功した時の更新
+		*/
+		void CPlayerCatchEnemy::SuccessCommandUpdate()
+		{
+			Vector3 pos = m_targetRef->GetPosition();
+			pos.y += 150.0f;
+			m_ninjyutuEF.SetPosition(pos);
+			m_ninjyutuEF.SetRotation(m_targetRef->GetRotation());
+			m_ninjyutuEF.Update();
+
+			if (m_ninjyutuEF.IsPlay() != true)
+			{
+				m_targetRef->BeCaptured();
+				ChangeState(enCE_End);
+			}
+
 
 			return;
 		}
@@ -323,6 +363,11 @@ namespace nsMyGame
 			// エネミー1体ずつ調べる
 			for (auto& enemy : *m_aiCarsRef)
 			{
+				if (enemy->IsCaputred())
+				{
+					// 捕まっていたら、次へ。
+					continue;
+				}
 				// プレイヤーからエネミーへのベクトル
 				Vector3 playerToEnemyVec = enemy->GetPosition() - m_gameState->GetPlayer().GetPosition();
 				// プレイヤーからエネミーへの距離
@@ -480,6 +525,8 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::EndCatchEnemy()
 		{
+			// ステートをリセットする
+			m_catceEnemyState = enCE_FindTarget;
 			// 敵の上に乗っているタイマーをリセットする
 			m_onEnemyTimer = 0.0f;
 			// ターゲットの敵がいないようにする
@@ -499,6 +546,69 @@ namespace nsMyGame
 				qteButtonSR->Deactivate();
 			}
 			QTESpriteDeactivate();
+
+			return;
+		}
+
+		/**
+		 * @brief ステートを遷移する
+		 * @param[in] newState 新しいステート
+		*/
+		void CPlayerCatchEnemy::ChangeState(const nsPlayerConstData::nsCatchEnemyConstData::EnCatchEnemyState newState)
+		{
+			if (m_catceEnemyState == newState)
+			{
+				return;
+			}
+
+
+			m_catceEnemyState = newState;
+
+			switch (m_catceEnemyState)
+			{
+			case enCE_FindTarget:
+				break;
+
+			case enCE_GoOnEnemy:
+				break;
+
+			case enCE_InputingCommand:
+				// コマンドを初期化する
+				m_commandInput->InitCommand(4, nsPlayerConstData::nsCommandInputConstData::enCT_type3);
+				// QTEに使うボタンのスプライトを再初期化
+				ReInitQTEBUttonSprite(m_commandInput->GetCommandButtonTypeArray());
+				// QTEで使うスプライトの有効化
+				QTESpriteActivate();
+				// ボタンの枠のスプライトの座標を、一番左のボタンのスプライトの座標と同じにする。
+				m_onQTEButtonFraneSR->SetPosition(m_QTEButtonSRs[0]->GetPosition());
+				break;
+
+			case enCE_SuccessCommand:
+				// スプライトたちをすべて非表示にする
+				for (auto& qteButtonSR : m_QTEButtonSRs)
+				{
+					qteButtonSR->Deactivate();
+				}
+				QTESpriteDeactivate();
+				m_ninjyutuEF.SetPosition(m_targetRef->GetPosition() + Vector3::Up * 150.0f);
+				m_ninjyutuEF.SetRotation(m_targetRef->GetRotation());
+				m_ninjyutuEF.Play();
+				break;
+
+			case enCE_FailureCommand:
+				// スプライトたちをすべて非表示にする
+				for (auto& qteButtonSR : m_QTEButtonSRs)
+				{
+					qteButtonSR->Deactivate();
+				}
+				QTESpriteDeactivate();
+				break;
+
+			case enCE_End:
+				// 敵を捕まえる処理が終了した時の処理
+				EndCatchEnemy();
+				break;
+			}
 
 			return;
 		}

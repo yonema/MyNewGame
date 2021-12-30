@@ -79,6 +79,11 @@ namespace nsMyGame
 			void InitQTEButtonSprite();
 
 			/**
+			 * @brief 忍術のエフェクトを初期化
+			*/
+			void InitNinjyutuEffect();
+
+			/**
 			 * @brief QTEに使うボタンのスプライトの再初期化
 			 * @param[in] commandArray コマンドの配列
 			*/
@@ -90,6 +95,11 @@ namespace nsMyGame
 			 * @brief 敵の上に乗っている時の更新
 			*/
 			void OnEnemyUpdate();
+
+			/**
+			 * @brief コマンドが成功した時の更新
+			*/
+			void SuccessCommandUpdate();
 
 			/**
 			 * @brief ターゲットを探す
@@ -126,8 +136,17 @@ namespace nsMyGame
 			*/
 			void EndCatchEnemy();
 
+			/**
+			 * @brief ステートを遷移する
+			 * @param[in] newState 新しいステート
+			*/
+			void ChangeState(const nsPlayerConstData::nsCatchEnemyConstData::EnCatchEnemyState newState);
+
 		private:	// データメンバ
 			CPlayer* m_playerRef = nullptr;	//!< プレイヤーの参照
+			//!< 敵を捕まえるクラスのステート
+			nsPlayerConstData::nsCatchEnemyConstData::EnCatchEnemyState m_catceEnemyState =
+				nsPlayerConstData::nsCatchEnemyConstData::enCE_FailureCommand;
 
 			float m_targetLength = 0.0f;	//!< ターゲットとの距離
 
@@ -145,6 +164,8 @@ namespace nsMyGame
 
 			std::unique_ptr<CPlayerCommandInput> m_commandInput;	//!< コマンド入力クラス
 			int m_oldCommandProgress = 0;							//!< 前フレームのコマンド進行度
+
+			Effect m_ninjyutuEF;	//!< 忍術のエフェクト
 
 			nsAICharacter::CAICar* m_targetRef = nullptr;		//!< ターゲットの参照
 			std::vector<nsAICharacter::CAICar*>* m_aiCarsRef = nullptr;	//!< 車たちの参照

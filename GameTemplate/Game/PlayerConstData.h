@@ -123,6 +123,7 @@ namespace nsMyGame
 				};
 
 				constexpr float kOnEnemyHeight = 100.0f;	//!< 敵の上に乗るときの高さ
+				constexpr float kOnEnemyBackLength = 150.0f;	//!< 敵の上に乗るときの後ろの長さ
 			}
 
 			/**
@@ -130,6 +131,19 @@ namespace nsMyGame
 			*/
 			namespace nsCatchEnemyConstData
 			{
+				/**
+				 * @brief 敵を捕まえるクラスのステート
+				*/
+				enum EnCatchEnemyState
+				{
+					enCE_FindTarget,
+					enCE_GoOnEnemy,
+					enCE_InputingCommand,
+					enCE_SuccessCommand,
+					enCE_FailureCommand,
+					enCE_End,
+				};
+
 				constexpr float kCanCatchMaxLength = 3000.0f;	//!< 敵を捕まえることができる最大距離
 				constexpr float kTargetMaxLength = 10000.0f;	//!< ターゲットとなる最大距離
 				constexpr float kTargetMaxAngle = 3.14f * 0.25f;	//!< ターゲットとなる最大角度
@@ -219,6 +233,9 @@ namespace nsMyGame
 				constexpr float kQTEButtonSpritePosY = 0.0f;
 
 				constexpr float kOnEnemyTime = 5.0f;	//!< 敵の上に乗れる時間
+
+				//!< 忍術のエフェクトのファイルパス
+				constexpr const char16_t* const kNinjyutuEffectFilePath = u"Assets/effect/flame.efk";
 
 			}
 

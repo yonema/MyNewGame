@@ -168,13 +168,19 @@ namespace nsMyGame
 					return;
 				}
 
+				// æ‚Á‚Ä‚¢‚é“G‚Æ“¯‚¶‰ñ“]‚É‚·‚é
+				Quaternion qRot = m_enemyRef->GetRotation();
+
 				// ƒ^[ƒQƒbƒgÀ•W‚ÍA“G‚ÌÀ•W
 				Vector3 targetPos = m_enemyRef->GetPosition();
 				// ‚‚³‚ð‚¿‚å‚Á‚Æã‚°‚é
 				targetPos.y += kOnEnemyHeight;
 
-				// æ‚Á‚Ä‚¢‚é“G‚Æ“¯‚¶‰ñ“]‚É‚·‚é
-				Quaternion qRot = m_enemyRef->GetRotation();
+				Vector3 targetBackVec = Vector3::Back;
+				qRot.Apply(targetBackVec);
+				targetBackVec.Normalize();
+				targetBackVec.Scale(kOnEnemyBackLength);
+				targetPos += targetBackVec;
 
 				m_playerMovementRef->SetDirectPosition(targetPos);
 				m_playerRef->SetRotation(qRot);

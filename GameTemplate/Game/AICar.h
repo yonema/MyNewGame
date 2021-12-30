@@ -83,6 +83,23 @@ namespace nsMyGame
 				return m_modelRender->GetRotation();
 			}
 
+			/**
+			 * @brief 捕まえた状態にする
+			*/
+			void BeCaptured()
+			{
+				m_isCaptured = true;
+			}
+
+			/**
+			 * @brief 捕まっているか？を得る
+			 * @return 捕まっているか？
+			*/
+			bool IsCaputred() const
+			{
+				return m_isCaptured;
+			}
+
 		private:	// privateなデータメンバ
 
 			/**
@@ -166,6 +183,7 @@ namespace nsMyGame
 			Vector3 m_curveCenterPosition = Vector3::Zero;				//!< カーブの中心座標
 			Vector3 m_fromCurveCenterToCurveStartVec = Vector3::Zero;	//!< カーブ中心座標からカーブ開始座標へのベクトル
 			float m_moveSpeed = 0.0f;
+			bool m_isCaptured = false;	//!< 捕まったか？
 
 			std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
