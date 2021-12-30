@@ -176,6 +176,7 @@ namespace nsMyGame
 				// ‚‚³‚ğ‚¿‚å‚Á‚Æã‚°‚é
 				targetPos.y += kOnEnemyHeight;
 
+				// ‚¿‚å‚Á‚ÆŒã‚ë‚Éæ‚é
 				Vector3 targetBackVec = Vector3::Back;
 				qRot.Apply(targetBackVec);
 				targetBackVec.Normalize();
