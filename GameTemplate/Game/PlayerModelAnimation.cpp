@@ -194,6 +194,8 @@ namespace nsMyGame
 				else
 				{
 					m_animState = enAnim_idle;
+					m_AnimInterpolateTime = 0.8f;
+
 				}
 			}
 

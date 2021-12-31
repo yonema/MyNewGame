@@ -204,6 +204,7 @@ namespace nsMyGame
 			{
 				// プレイヤーから敵への方向ベクトル
 				Vector3 playerToEnemyNorm = m_enemyRef->GetPosition() - m_playerRef->GetPosition();
+				playerToEnemyNorm.y = 0.0f;
 				playerToEnemyNorm.Normalize();	// 正規化する
 				// 回転
 				Quaternion qRot;
@@ -240,6 +241,8 @@ namespace nsMyGame
 					m_playerRef->SetIsOnEnemyCamera(true);
 					m_playerRef->StartStringStretchToPos(m_enemyRef->GetPosition());
 					m_playerMovementRef->SetUseGravity(false);
+					// ジャンプの姿勢になるように、ちょっとジャンプさせる
+					m_playerMovementRef->AddMoveVec(Vector3::Up * kStretchingToEnemyJumpForce);
 					break;
 
 				case enGoOnEnemy:
