@@ -124,6 +124,9 @@ namespace nsMyGame
 
 				constexpr float kOnEnemyHeight = 100.0f;	//!< “G‚Ìã‚Éæ‚é‚Æ‚«‚Ì‚‚³
 				constexpr float kOnEnemyBackLength = 70.0f;	//!< “G‚Ìã‚Éæ‚é‚Æ‚«‚ÌŒã‚ë‚Ì’·‚³
+
+				//!< “G‚Ìã‚©‚ç—£‚ê‚é‚Æ‚«‚ÌAƒWƒƒƒ“ƒv‚Ì—Í‚ÌA‘O•ûŒü
+				constexpr float kLeaveEnemyJumpForceFront = 100.0f;
 			}
 
 			/**

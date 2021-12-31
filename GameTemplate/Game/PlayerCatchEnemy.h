@@ -146,7 +146,7 @@ namespace nsMyGame
 			CPlayer* m_playerRef = nullptr;	//!< プレイヤーの参照
 			//!< 敵を捕まえるクラスのステート
 			nsPlayerConstData::nsCatchEnemyConstData::EnCatchEnemyState m_catceEnemyState =
-				nsPlayerConstData::nsCatchEnemyConstData::enCE_FailureCommand;
+				nsPlayerConstData::nsCatchEnemyConstData::enCE_FindTarget;
 
 			float m_targetLength = 0.0f;	//!< ターゲットとの距離
 

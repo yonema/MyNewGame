@@ -70,6 +70,13 @@ namespace nsMyGame
 				m_playerRef->SetIsOnEnemyCamera(false);
 				m_playerMovementRef->SetUseGravity(true);
 
+				Vector3 leaveJumpForce = Vector3::Front;
+				m_playerRef->GetRotation().Apply(leaveJumpForce);
+				leaveJumpForce.Scale(kLeaveEnemyJumpForceFront);
+				leaveJumpForce.y = nsPlayerConstData::nsMovementConstData::kJumpForce;
+
+				m_playerMovementRef->AddMoveVec(leaveJumpForce);
+
 				return;
 			}
 
