@@ -176,6 +176,8 @@ namespace nsMyGame
 			int m_oldCommandProgress = 0;							//!< 前フレームのコマンド進行度
 
 			Effect* m_ninjyutuEF = nullptr;	//!< 忍術のエフェクト
+			Effect* m_sonarEF = nullptr;	//!< ソナーのエフェクト
+			float m_sonarTimer = 0.0f;
 
 			nsAICharacter::CAICar* m_targetRef = nullptr;		//!< ターゲットの参照
 			std::vector<nsAICharacter::CAICar*>* m_aiCarsRef = nullptr;	//!< 車たちの参照

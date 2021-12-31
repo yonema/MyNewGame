@@ -54,6 +54,7 @@ namespace nsMyGame
 			DeleteGO(m_onQTEButtonFraneSR);
 
 			DeleteGO(m_ninjyutuEF);
+			DeleteGO(m_sonarEF);
 
 			return;
 		}
@@ -92,6 +93,26 @@ namespace nsMyGame
 				if (m_playerRef->GetState() == nsPlayerConstData::enOnEnemy)
 				{
 					ChangeState(enCE_GoOnEnemy);
+				}
+
+				if (m_playerRef->GetInputData().actionSeachEnemy == true)
+				{
+					// 敵を探知するアクションが入っていたら、
+					// ソナーのエフェクトを再生する
+					m_sonarEF->SetPosition(m_playerRef->GetPosition());
+					m_sonarEF->SetScale(Vector3::One);
+					m_sonarEF->Play();
+					m_sonarTimer = 0.0f;
+				}
+
+				if (m_sonarEF->IsPlay())
+				{
+					// ソナーのエフェクトが再生されていたら、徐々に拡大していく
+					const float rate = m_sonarTimer / kSonarEffectTime;
+					const float scale = Math::Lerp<float>(rate, kSonarEffectMinScale, kSonarEffectMaxScale);
+					Vector3 scaleVec = { scale, kSonarEffectYScale, scale };
+					m_sonarEF->SetScale(scaleVec);
+					m_sonarTimer += nsTimer::GameTime().GetFrameDeltaTime();
 				}
 
 				// ターゲットを探す
@@ -204,6 +225,9 @@ namespace nsMyGame
 			// 忍術のエフェクトの生成と初期化
 			m_ninjyutuEF = NewGO<Effect>(nsCommonData::enPrioritySecond);
 			m_ninjyutuEF->Init(kNinjyutuEffectFilePath);
+
+			m_sonarEF = NewGO<Effect>(nsCommonData::enPrioritySecond);
+			m_sonarEF->Init(kSonarEffectFilePath);
 
 			return;
 		}

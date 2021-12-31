@@ -35,7 +35,7 @@ namespace nsMyGame
 			//!< 爆発時の煙のエフェクトのファイルパス
 			constexpr const char16_t* const kSmokeExplosionEffectFilePath = u"Assets/effect/smokeExplosion.efk";
 
-			constexpr float kCarSpeed = 2000.0f;	//!< 車の速度
+			constexpr float kCarSpeed = 2500.0f;	//!< 車の速度
 			constexpr float kCarDriftMaxAngle = 90.0f;	//!< 車のドリフトの最大角度
 			constexpr float kCarModelRotRate = 0.2f;	//!< 車のモデルの球面線形補完率
 			constexpr float kCarDriftTurnBackRate = 0.6f;	//!< 車のドリフトの回転を戻し始めるレート
