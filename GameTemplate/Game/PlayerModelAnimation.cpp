@@ -185,7 +185,7 @@ namespace nsMyGame
 				m_AnimInterpolateTime = 0.5f;
 			}
 
-			if (m_animState == enAnim_knockDown)
+			if (m_animState == enAnim_knockDown || m_animState == enAnim_standUp)
 			{
 				if (m_playerModel->IsAnimationPlaying() == true)
 				{
@@ -193,8 +193,18 @@ namespace nsMyGame
 				}
 				else
 				{
-					m_animState = enAnim_idle;
-					m_AnimInterpolateTime = 0.8f;
+					if (m_animState == enAnim_knockDown)
+					{
+						m_animState = enAnim_standUp;
+						m_AnimInterpolateTime = 1.0f;
+						return;
+					}
+					else
+					{
+						m_animState = enAnim_idle;
+						m_AnimInterpolateTime = 0.5f;
+
+					}
 
 				}
 			}

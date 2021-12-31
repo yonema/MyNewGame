@@ -283,6 +283,7 @@ namespace nsMyGame
 					enAnim_idle,	//!< アイドル
 					enAnim_ninjaIdle,	//!< 忍者アイドル
 					enAnim_knockDown,	//!< ノックダウン
+					enAnim_standUp,	//!< 起きる
 					enAnim_walk,	//!< 歩く
 					enAnim_run,		//!< 走る
 					enAnim_jumpUp,	//!< ジャンプ
@@ -300,6 +301,7 @@ namespace nsMyGame
 					"Assets/animData/kunoichi/idle.tka",
 					"Assets/animData/kunoichi/ninjaIdle.tka",
 					"Assets/animData/kunoichi/knockDown2.tka",
+					"Assets/animData/kunoichi/standUp.tka",
 					"Assets/animData/kunoichi/walk.tka",
 					"Assets/animData/kunoichi/run.tka",
 					"Assets/animData/kunoichi/jumpUp.tka",
