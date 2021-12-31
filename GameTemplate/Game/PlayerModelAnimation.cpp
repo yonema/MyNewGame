@@ -76,6 +76,7 @@ namespace nsMyGame
 				{
 				// ループするアニメーション
 				case enAnim_idle:
+				case enAnim_ninjaIdle:
 				case enAnim_walk:
 				case enAnim_run:
 				case enAnim_airIdle:
@@ -174,6 +175,33 @@ namespace nsMyGame
 			{
 				// スイング中のアニメーションステートを更新
 				UpdateSwingAnimationState();
+				return;
+			}
+
+			if (m_playerRef->GetCatchEnemy().GetCatchEnemyState() ==
+				nsPlayerConstData::nsCatchEnemyConstData::enCE_FailureCommand)
+			{
+				m_animState = enAnim_knockDown;
+				m_AnimInterpolateTime = 0.5f;
+			}
+
+			if (m_animState == enAnim_knockDown)
+			{
+				if (m_playerModel->IsAnimationPlaying() == true)
+				{
+					return;
+				}
+				else
+				{
+					m_animState = enAnim_idle;
+				}
+			}
+
+
+			if (m_playerRef->GetPlayerMovement().GetPlayerOnEnemy().GetOnEnemyState() ==
+				nsPlayerConstData::nsOnEnemyConstData::enOnEnemy)
+			{
+				m_animState = enAnim_ninjaIdle;
 				return;
 			}
 

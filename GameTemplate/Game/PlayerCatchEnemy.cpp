@@ -85,7 +85,7 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::ExecuteUpdate()
 		{
-			switch (m_catceEnemyState)
+			switch (m_catchEnemyState)
 			{
 			case enCE_FindTarget:
 
@@ -540,7 +540,7 @@ namespace nsMyGame
 			// エフェクトタイマーをリセットする
 			m_ninnjyutuEFTimer = 0.0f;
 			// ステートをリセットする
-			m_catceEnemyState = enCE_FindTarget;
+			m_catchEnemyState = enCE_FindTarget;
 			// 敵の上に乗っているタイマーをリセットする
 			m_onEnemyTimer = 0.0f;
 			// ターゲットの敵がいないようにする
@@ -570,15 +570,15 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::ChangeState(const nsPlayerConstData::nsCatchEnemyConstData::EnCatchEnemyState newState)
 		{
-			if (m_catceEnemyState == newState)
+			if (m_catchEnemyState == newState)
 			{
 				return;
 			}
 
 
-			m_catceEnemyState = newState;
+			m_catchEnemyState = newState;
 
-			switch (m_catceEnemyState)
+			switch (m_catchEnemyState)
 			{
 			case enCE_FindTarget:
 				break;

@@ -122,7 +122,7 @@ namespace nsMyGame
 					enOnEnemy,				//!< 敵の上にいる
 				};
 
-				constexpr float kOnEnemyHeight = 100.0f;	//!< 敵の上に乗るときの高さ
+				constexpr float kOnEnemyHeight = 150.0f;	//!< 敵の上に乗るときの高さ
 				constexpr float kOnEnemyBackLength = 70.0f;	//!< 敵の上に乗るときの後ろの長さ
 
 				//!< 敵の上から離れるときの、ジャンプの力の、前方向
@@ -278,7 +278,8 @@ namespace nsMyGame
 				enum EnAnimationClips
 				{
 					enAnim_idle,	//!< アイドル
-					//enAnim_ninjaIdle,	//!< 忍者アイドル
+					enAnim_ninjaIdle,	//!< 忍者アイドル
+					enAnim_knockDown,	//!< ノックダウン
 					enAnim_walk,	//!< 歩く
 					enAnim_run,		//!< 走る
 					enAnim_jumpUp,	//!< ジャンプ
@@ -294,6 +295,8 @@ namespace nsMyGame
 				constexpr const char* const kAnimationFilePath[enAnim_num] =
 				{
 					"Assets/animData/kunoichi/idle.tka",
+					"Assets/animData/kunoichi/ninjaIdle.tka",
+					"Assets/animData/kunoichi/knockDown2.tka",
 					"Assets/animData/kunoichi/walk.tka",
 					"Assets/animData/kunoichi/run.tka",
 					"Assets/animData/kunoichi/jumpUp.tka",
