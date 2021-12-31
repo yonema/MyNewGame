@@ -28,7 +28,7 @@ void Effect::Play()
 	//êVÇµÇ≠çƒê∂ÅB
 	m_handle = EffectEngine::GetInstance()->Play(m_effect);
 }
-void Effect::Update()
+void Effect::UpdateSub()
 {
 	EffectEngine::GetInstance()->UpdateEffectWorldMatrix(
 		m_handle,
@@ -37,3 +37,10 @@ void Effect::Update()
 		m_scale
 	);
 }
+
+// í«â¡ÅB
+void Effect::Update()
+{
+	UpdateSub();
+}
+

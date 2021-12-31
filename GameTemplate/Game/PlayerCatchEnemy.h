@@ -151,6 +151,7 @@ namespace nsMyGame
 			float m_targetLength = 0.0f;	//!< ターゲットとの距離
 
 			float m_onEnemyTimer = 0.0f;	//!< 敵の上に乗っている間のタイマー
+			float m_ninnjyutuEFTimer = 0.0f;	//!< 忍術のエフェクトタイマー
 
 			//!< 敵の上に乗っている時のタイマーバーのスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_onEnemyTimerBar = nullptr;
@@ -165,7 +166,7 @@ namespace nsMyGame
 			std::unique_ptr<CPlayerCommandInput> m_commandInput;	//!< コマンド入力クラス
 			int m_oldCommandProgress = 0;							//!< 前フレームのコマンド進行度
 
-			Effect m_ninjyutuEF;	//!< 忍術のエフェクト
+			Effect* m_ninjyutuEF = nullptr;	//!< 忍術のエフェクト
 
 			nsAICharacter::CAICar* m_targetRef = nullptr;		//!< ターゲットの参照
 			std::vector<nsAICharacter::CAICar*>* m_aiCarsRef = nullptr;	//!< 車たちの参照

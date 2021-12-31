@@ -236,6 +236,10 @@ namespace nsMyGame
 
 				//!< 忍術のエフェクトのファイルパス
 				constexpr const char16_t* const kNinjyutuEffectFilePath = u"Assets/effect/flame.efk";
+				//!< 忍術のエフェクトのタイム
+				constexpr float kNinjyutuEffectTime = 2.0f;
+				// 忍術のエフェクトの座標の高さのバッファ
+				constexpr float kNinjyutuEffectPosBufHeight = 150.0f;
 
 			}
 

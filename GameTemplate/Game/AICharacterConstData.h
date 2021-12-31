@@ -16,6 +16,25 @@ namespace nsMyGame
 			// 車のモデルデータのファイルパス
 			constexpr const char* const kCarModelFilePath = "Assets/modelData/car/sedan_car.tkm";
 
+			//!< 爆発のエフェクトのファイルパス
+			constexpr const char16_t* const kExplotionEffectFilePath = u"Assets/effect/explosion.efk";
+			// 爆発のエフェクトが出る座標の、高さのバッファ
+			constexpr float kExplotionPosBufHeight = 50.0f;
+			//!< 爆発のエフェクトの拡大率
+			static const Vector3 kExplotionScale = { 2.0f,1.0f,2.0f };
+
+			//!< 煙のエフェクトのファイルパス
+			constexpr const char16_t* const kSmokeEffectFilePath = u"Assets/effect/smoke.efk";
+			constexpr int kSmokeNum = 20;	//!< 煙の数
+			constexpr float kSmokeTime = 2.0f;	//!< 煙の時間
+			// 煙のエフェクトが出る座標の、前向きのバッファ
+			constexpr float kSmokePosBufForward = 100.0f;
+			// 煙のエフェクトが出る座標の、高さのバッファ
+			constexpr float kSmokePosBufHeight = 100.0f;
+
+			//!< 爆発時の煙のエフェクトのファイルパス
+			constexpr const char16_t* const kSmokeExplosionEffectFilePath = u"Assets/effect/smokeExplosion.efk";
+
 			constexpr float kCarSpeed = 2000.0f;	//!< 車の速度
 			constexpr float kCarDriftMaxAngle = 90.0f;	//!< 車のドリフトの最大角度
 			constexpr float kCarModelRotRate = 0.2f;	//!< 車のモデルの球面線形補完率

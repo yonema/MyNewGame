@@ -7,7 +7,8 @@
 /*!
 * @brief	エフェクト。
 */
-class Effect {
+class Effect : public IGameObject
+{
 public:
 	Effect();
 	~Effect();
@@ -93,7 +94,7 @@ public:
 	/*!
 	 *@brief	更新。
 	 */
-	void Update() ;
+	void UpdateSub() ;
 
 	/**
 	 * @brief エフェクトを停止する
@@ -108,4 +109,8 @@ private:
 	Vector3 m_position;				//座標。
 	Quaternion m_rotation;;			//回転。
 	Vector3 m_scale = g_vec3One;	//拡大率。
+
+	// 追加。
+	public:
+		void Update() override final;
 };

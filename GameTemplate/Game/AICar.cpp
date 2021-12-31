@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "AICar.h"
-#include "AICharacterConstData.h"
 #include "ModelRender.h"
 #include "Level3D.h"
 #include "GameTime.h"
 #include "GameMainState.h"
 #include "BezierCurve.h"
+#include "PlayerConstData.h"
 
 
 namespace nsMyGame
@@ -46,6 +46,9 @@ namespace nsMyGame
 			// 乱数の初期化
 			InitRand();
 
+			// エフェクトの初期化
+			InitEffect();
+
 			return true;
 		}
 
@@ -56,6 +59,12 @@ namespace nsMyGame
 		{
 			DeleteGO(m_modelRender);
 
+			DeleteGO(m_explotionEF);
+			for (auto& smokeEF : m_smokeEFs)
+			{
+				DeleteGO(smokeEF);
+			}
+			DeleteGO(m_smokeExplotionEF);
 			return;
 		}
 
@@ -66,8 +75,16 @@ namespace nsMyGame
 		{
 			if (m_isCaptured)
 			{
-				// 捕まったら動けなくなる
-				return;
+				// 捕まっている時の更新
+				// この後の更新処理も行うか？
+				const bool doUpdate = UpdateOnIsCaptured();
+
+				if (doUpdate != true)
+				{
+					// 行わない。早期リターン。
+					return;
+				}
+
 			}
 
 			if (m_isMoveEnd)
@@ -125,6 +142,157 @@ namespace nsMyGame
 			m_mt = std::make_unique<std::mt19937>(rnd());
 			// 範囲の一様乱数
 			m_rand = std::make_unique<std::uniform_int_distribution<>>(0, enCandidateTargetPointTypeNum - 1);
+
+			return;
+		}
+
+
+		/**
+		 * @brief エフェクトの初期化
+		*/
+		void CAICar::InitEffect()
+		{
+			// 爆発エフェクトの生成と初期化
+			m_explotionEF = NewGO<Effect>(nsCommonData::enPrioritySecond);
+			m_explotionEF->Init(kExplotionEffectFilePath);
+
+			// 煙のエフェクトの生成と初期化
+			for (auto& smokeEF : m_smokeEFs)
+			{
+				smokeEF = NewGO<Effect>(nsCommonData::enPrioritySecond);
+				smokeEF->Init(kSmokeEffectFilePath);
+			}
+
+			// 爆発時の煙のエフェクトの生成と初期化
+			m_smokeExplotionEF = NewGO<Effect>(nsCommonData::enPrioritySecond);
+			m_smokeExplotionEF->Init(kSmokeExplosionEffectFilePath);
+
+			return;
+		}
+
+
+		/**
+		 * @brief 捕まっている時の更新
+		 * @return この後も更新処理を行うか？
+		*/
+		bool CAICar::UpdateOnIsCaptured()
+		{
+			if (m_isCaptureTimer < kSmokeTime)
+			{
+				// タイマーが煙の時間より小さいとき
+
+				// 煙のエフェクトの更新
+				UpdateSmokeEffect();
+
+				if (m_ninjyutuEFRef)
+				{
+					// 忍術のエフェクトの参照が渡されているなら、座標と回転を更新する。
+					Vector3 pos = m_modelRender->GetPosition();
+					pos.y += nsPlayer::nsPlayerConstData::nsCatchEnemyConstData::kNinjyutuEffectPosBufHeight;
+					m_ninjyutuEFRef->SetPosition(pos);
+					m_ninjyutuEFRef->SetRotation(m_modelRender->GetRotation());
+				}
+
+				// タイマーを進める
+				m_isCaptureTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				// まだ動いていてほしいので、trueを戻す。
+				return true;
+			}
+
+			// タイマーが煙の時間より大きいとき
+
+			if (m_modelRender->IsActive() != true)
+			{
+				// モデルが非表示なら、何もしない。
+				// もう動いてほしくないので、falseを戻す。
+				return false;
+			}
+
+			// モデルがまだ表示されていたら、エフェクトを再生して、モデルを非表示にする。
+
+			// エフェクトの座標
+			Vector3 pos = m_modelRender->GetPosition();
+			// 自身の位置から、少し上にあげる。
+			pos.y += kExplotionPosBufHeight;
+			// 爆発エフェクトの座標と回転と拡大率を設定
+			m_explotionEF->SetPosition(pos);
+			m_explotionEF->SetRotation(m_modelRender->GetRotation());
+			m_explotionEF->SetScale(kExplotionScale);
+			// 爆発エフェクトの再生
+			m_explotionEF->Play();
+
+			// エフェクトの回転
+			Quaternion qRot;
+			// 横に煙を出すエフェクトのため、回転させて立てる。
+			qRot.SetRotationDegX(90.0f);
+			// モデルの回転も考慮する
+			qRot.Multiply(m_modelRender->GetRotation());
+			// 爆発時の煙のエフェクトの座標と回転を設定する
+			m_smokeExplotionEF->SetPosition(m_modelRender->GetPosition());
+			m_smokeExplotionEF->SetRotation(qRot);
+			// 爆発時の煙のエフェクトを再生する
+			m_smokeExplotionEF->Play();
+
+			// モデルを非表示にする
+			m_modelRender->Deactivate();
+
+			// もういらないので、渡された参照をリセットする。
+			m_ninjyutuEFRef = nullptr;
+
+			// もう動いてほしくないので、falseを戻す。
+			return false;
+
+		}
+
+
+		/**
+		 * @brief 煙のエフェクトの更新
+		*/
+		void CAICar::UpdateSmokeEffect()
+		{
+			// 煙の時間の進み率
+			float rate = m_isCaptureTimer / kSmokeTime;
+			// 煙の時間の進み率から、出す煙エフェクトの要素番号を決める
+			int index = static_cast<int>(static_cast<float>(kSmokeNum) * rate);
+			if (index > kSmokeNum)
+			{
+				// もし、煙の数より多い要素番号になったら、最大数にしておく。
+				index = kSmokeNum - 1;
+			}
+
+			if (m_smokeEFs[index]->IsPlay() == true)
+			{
+				// この要素番号の煙エフェクトが、再生されていたら、何もしない。
+				// 早期リターン
+				return;
+			}
+
+			// この要素番号の煙エフェクトが、まだ再生されていなかったら、エフェクトを再生する。
+
+			// エフェクトの座標
+			Vector3 pos = m_modelRender->GetPosition();
+			// ちょっと前側から出す
+			Vector3 carForward = Vector3::Front;
+			m_modelRender->GetRotation().Apply(carForward);
+			carForward.Scale(kSmokePosBufForward);
+			pos += carForward;
+			// ちょっと上から出す
+			pos.y += kSmokePosBufHeight;
+
+			// エフェクトの回転
+			Quaternion qRot;
+			// 横に煙を出すエフェクトだから、回転させて立てる。
+			qRot.SetRotationDegX(90.0f);
+			// モデルの回転も考慮する
+			qRot.Multiply(m_modelRender->GetRotation());
+
+
+			// 座標と回転を設定
+			m_smokeEFs[index]->SetPosition(pos);
+			m_smokeEFs[index]->SetRotation(qRot);
+			// エフェクトを再生する
+			m_smokeEFs[index]->Play();
 
 			return;
 		}

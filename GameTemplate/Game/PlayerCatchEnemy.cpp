@@ -53,6 +53,8 @@ namespace nsMyGame
 
 			DeleteGO(m_onQTEButtonFraneSR);
 
+			DeleteGO(m_ninjyutuEF);
+
 			return;
 		}
 
@@ -199,8 +201,9 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::InitNinjyutuEffect()
 		{
-			m_ninjyutuEF.Init(kNinjyutuEffectFilePath);
-
+			// 忍術のエフェクトの生成と初期化
+			m_ninjyutuEF = NewGO<Effect>(nsCommonData::enPrioritySecond);
+			m_ninjyutuEF->Init(kNinjyutuEffectFilePath);
 
 			return;
 		}
@@ -325,15 +328,24 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::SuccessCommandUpdate()
 		{
+			// 忍術のエフェクトの座標
 			Vector3 pos = m_targetRef->GetPosition();
-			pos.y += 150.0f;
-			m_ninjyutuEF.SetPosition(pos);
-			m_ninjyutuEF.SetRotation(m_targetRef->GetRotation());
-			m_ninjyutuEF.Update();
+			// 少し上にあげる
+			pos.y += kNinjyutuEffectPosBufHeight;
 
-			if (m_ninjyutuEF.IsPlay() != true)
+			// 忍術のエフェクトの座標と回転を更新する
+			m_ninjyutuEF->SetPosition(pos);
+			m_ninjyutuEF->SetRotation(m_targetRef->GetRotation());
+
+			// タイマーを進める
+			m_ninnjyutuEFTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+			if (m_ninnjyutuEFTimer >= kNinjyutuEffectTime)
 			{
+				// タイマーが、忍術のエフェクトの時間を超えたら、
+				// 車を捕まえた状態にして、忍術のエフェクトの参照を渡して、ステートを遷移する。
 				m_targetRef->BeCaptured();
+				m_targetRef->SetNinjyutuEffectRef(m_ninjyutuEF);
 				ChangeState(enCE_End);
 			}
 
@@ -525,6 +537,8 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::EndCatchEnemy()
 		{
+			// エフェクトタイマーをリセットする
+			m_ninnjyutuEFTimer = 0.0f;
 			// ステートをリセットする
 			m_catceEnemyState = enCE_FindTarget;
 			// 敵の上に乗っているタイマーをリセットする
@@ -590,9 +604,11 @@ namespace nsMyGame
 					qteButtonSR->Deactivate();
 				}
 				QTESpriteDeactivate();
-				m_ninjyutuEF.SetPosition(m_targetRef->GetPosition() + Vector3::Up * 150.0f);
-				m_ninjyutuEF.SetRotation(m_targetRef->GetRotation());
-				m_ninjyutuEF.Play();
+
+				// 忍術のエフェクトの座標と回転を設定して、再生する。
+				m_ninjyutuEF->SetPosition(m_targetRef->GetPosition() + Vector3::Up * kNinjyutuEffectPosBufHeight);
+				m_ninjyutuEF->SetRotation(m_targetRef->GetRotation());
+				m_ninjyutuEF->Play();
 				break;
 
 			case enCE_FailureCommand:

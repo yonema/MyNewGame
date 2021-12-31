@@ -1,5 +1,6 @@
 #pragma once
 #include "AICharacterBase.h"
+#include "AICharacterConstData.h"
 #include "AIField.h"
 #include "Path.h"
 
@@ -100,12 +101,37 @@ namespace nsMyGame
 				return m_isCaptured;
 			}
 
+			/**
+			 * @brief 忍術のエフェクトの参照を設定する
+			 * @param[in.out] effectRef 忍術のエフェクトの参照
+			*/
+			void SetNinjyutuEffectRef(Effect* effectRef)
+			{
+				m_ninjyutuEFRef = effectRef;
+			}
+
 		private:	// privateなデータメンバ
 
 			/**
 			 * @brief 乱数の初期化
 			*/
 			void InitRand();
+
+			/**
+			 * @brief エフェクトの初期化
+			*/
+			void InitEffect();
+
+			/**
+			 * @brief 捕まっている時の更新
+			 * @return この後も更新処理を行うか？
+			*/
+			bool UpdateOnIsCaptured();
+
+			/**
+			 * @brief 煙のエフェクトの更新
+			*/
+			void UpdateSmokeEffect();
 
 			/**
 			 * @brief 次のウェイポイントを探す
@@ -183,8 +209,12 @@ namespace nsMyGame
 			Vector3 m_curveCenterPosition = Vector3::Zero;				//!< カーブの中心座標
 			Vector3 m_fromCurveCenterToCurveStartVec = Vector3::Zero;	//!< カーブ中心座標からカーブ開始座標へのベクトル
 			float m_moveSpeed = 0.0f;
-			bool m_isCaptured = false;	//!< 捕まったか？
-
+			bool m_isCaptured = false;									//!< 捕まったか？
+			Effect* m_explotionEF = nullptr;							//!< 爆発のエフェクト
+			Effect* m_smokeEFs[nsAICharacterConstData::kSmokeNum] = {};	//!< 煙のエフェクト
+			Effect* m_smokeExplotionEF = nullptr;						//!< 爆発時の煙のエフェクト
+			float m_isCaptureTimer = 0.0f;								//!< 捕まっている時のタイマー
+			Effect* m_ninjyutuEFRef = nullptr;							//!< 忍術のエフェクトの参照
 			std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
 
