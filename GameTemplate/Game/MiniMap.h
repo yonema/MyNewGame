@@ -89,7 +89,7 @@ namespace nsMyGame
 			/**
 			 * @brief クラス内のいろんなところで共通して使用されるデータの更新
 			*/
-			void UpdateCommonData();
+			void UpdateTargetLength();
 
 			/**
 			 * @brief ミニマップの基点を更新

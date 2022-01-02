@@ -51,7 +51,12 @@ namespace nsMyGame
 				DeleteGO(qteButtonSR);
 			}
 
-			DeleteGO(m_onQTEButtonFraneSR);
+			DeleteGO(m_QTEButtonFraneSR);
+			DeleteGO(m_QTEButtonAfterImageSR);
+			for (auto& qteResultSR : m_QTEResultSR)
+			{
+				DeleteGO(qteResultSR);
+			}
 
 			DeleteGO(m_ninjyutuEF);
 			DeleteGO(m_sonarEF);
@@ -86,6 +91,9 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::ExecuteUpdate()
 		{
+			// いつでも共通で行われる更新
+			CommonUpdate();
+
 			switch (m_catchEnemyState)
 			{
 			case enCE_FindTarget:
@@ -118,8 +126,8 @@ namespace nsMyGame
 				// ターゲットを探す
 				FindTarget();
 
-				// このクラスで使う共通データの更新
-				UpdateCommonData();
+				// ターゲットとの距離を更新
+				UpdateTargetLength();
 
 				// 敵を捕まえるかどうか調べる
 				CheckCatchEnemy();
@@ -202,8 +210,8 @@ namespace nsMyGame
 		void CPlayerCatchEnemy::InitQTEButtonSprite()
 		{
 			// QTEに使うボタンの枠のスプライトの生成と初期化
-			m_onQTEButtonFraneSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
-			m_onQTEButtonFraneSR->Init(
+			m_QTEButtonFraneSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			m_QTEButtonFraneSR->Init(
 				kQTEButtonFrameSpriteFilePath,
 				kQTEButtonFrameSpriteWidth,
 				kQTEButtonFrameSpriteHeight,
@@ -211,7 +219,44 @@ namespace nsMyGame
 				AlphaBlendMode_Trans
 			);
 			// 非表示
-			m_onQTEButtonFraneSR->Deactivate();
+			m_QTEButtonFraneSR->Deactivate();
+
+			// QTEに使うボタンの残像のスプライトの生成と初期化
+			m_QTEButtonAfterImageSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			m_QTEButtonAfterImageSR->Init(
+				kQTEButtonAfterImageSpriteFilePath,
+				kQTEButtonAfterImageSpriteWidth,
+				kQTEButtonAfterImageSpriteHeight,
+				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+				AlphaBlendMode_Trans
+			);
+			// アルベドカラーを制御可能にする
+			m_QTEButtonAfterImageSR->SetIsControlAlbedo(true);
+			// 非表示
+			m_QTEButtonAfterImageSR->Deactivate();
+
+			int i = 0;	// インデックス
+			for (auto& qteResultSR : m_QTEResultSR)
+			{			
+				// QTEの結果のスプライトの生成と初期化
+				qteResultSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+				qteResultSR->Init(
+					kQTEResultSpriteFilePaths[i],
+					kQTEResultSpriteWitdh,
+					kQTEResultSpriteHeight,
+					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+					AlphaBlendMode_Trans
+				);
+				// 座標を設定
+				qteResultSR->SetPosition(kQTEResultSpriteStartPos);
+				// アルファ値を透明にする
+				qteResultSR->SetAlphaValue(0.0f);
+				// 非表示
+				qteResultSR->Deactivate();
+
+				// インデックスを進める
+				i++;
+			}
 
 			return;
 		}
@@ -293,6 +338,21 @@ namespace nsMyGame
 			m_QTEButtonSRs[0]->SetScale(kQTEButtonSpriteActionScale);
 		}
 
+
+		/**
+		 * @brief いつでも共通で行われる更新
+		*/
+		void CPlayerCatchEnemy::CommonUpdate()
+		{
+			// QTEに使うボタンの残像の更新
+			QTEButternAfterImageUpdate();
+
+			// QTEの結果の更新
+			QTEResultUpdate();
+
+			return;
+		}
+
 		/**
 		 * @brief 敵の上に乗っている時の更新
 		*/
@@ -304,26 +364,47 @@ namespace nsMyGame
 			if (m_commandInput->IsEndCommandInput() == true)
 			{
 				// コマンド入力が終了した。コマンド入力成功。
+
+				// コマンド入力が成功したステートへ遷移
 				ChangeState(enCE_SuccessCommand);
+				// QTEに使うボタンの残像を開始する
+				StartQTEButtonAfterImage(true);
+				// QTEの結果のスプライトの演出を成功で開始する
+				StartQTEResult(enQR_success);
+
 				return;
 			}
 			
 			// コマンド入力が、まだ終わっていない。
 
-			if (m_oldCommandProgress != m_commandInput->GetCommandProgress())
+			if (m_commandInput->GetCommandResult() == 
+				nsPlayerConstData::nsCommandInputConstData::enCR_Success)
 			{
-				// 前フレームのコマンド進行度と違ったら
+				// コマンド入力が成功している。次のコマンドに進む。
 
-				// 現在のスプライトを非表示にする
+				// 現在のボタンのスプライトを非表示にする
 				m_QTEButtonSRs[m_oldCommandProgress]->Deactivate();
-				// 次のスプライトをアクティブモードの乗算カラーと拡大率にする
+				// 次のボタンのスプライトをアクティブモードの乗算カラーと拡大率にする
 				m_QTEButtonSRs[m_oldCommandProgress + 1]->SetMulColor({ 1.0f,1.0f,1.0f,1.0f });
 				m_QTEButtonSRs[m_oldCommandProgress + 1]->SetScale(kQTEButtonSpriteActionScale);
 				// ボタンの枠を次のボタンの位置にする
-				m_onQTEButtonFraneSR->SetPosition(m_QTEButtonSRs[m_oldCommandProgress + 1]->GetPosition());
-			}
-			
+				m_QTEButtonFraneSR->SetPosition(m_QTEButtonSRs[m_oldCommandProgress + 1]->GetPosition());
 
+				// QTEに使うボタンの残像を開始する
+				StartQTEButtonAfterImage(true);
+			}
+			else if (m_commandInput->GetCommandResult() ==
+				nsPlayerConstData::nsCommandInputConstData::enCR_Miss)
+			{
+				// コマンド入力が失敗している。
+
+				// コマンド入力が失敗したステートへ遷移
+				ChangeState(enCE_FailureCommand);
+				// QTEに使うボタンの残像を開始する
+				StartQTEButtonAfterImage(false);
+				// QTEの結果のスプライトの演出を入力ミスで開始する
+				StartQTEResult(enQR_miss);
+			}
 
 			// 前フレームのコマンド進行度を更新する
 			m_oldCommandProgress = m_commandInput->GetCommandProgress();
@@ -339,8 +420,127 @@ namespace nsMyGame
 
 			if (m_onEnemyTimer >= kOnEnemyTime)
 			{
+				// 時間切れ
+
+				// コマンド入力が失敗したステートへ遷移
 				ChangeState(enCE_FailureCommand);
+				// QTEの結果のスプライトの演出を時間切れで開始する
+				StartQTEResult(enQR_failed);
+
 				return;
+			}
+
+			return;
+		}
+
+
+		/**
+		 * @brief QTEに使うボタンの残像の更新
+		*/
+		void CPlayerCatchEnemy::QTEButternAfterImageUpdate()
+		{
+			if (m_QTEButtonAfterImageSR->IsActive() != true)
+			{
+				// 残上が表示されていない。早期リターン。
+				return;
+			}
+
+			// 残像が表示されている時実行
+
+			// タイマーの進み率
+			const float rate = m_buttonAfterImageTimer / kQTEButtonAfterImageTime;
+			// 補完率。指数関数的変化にする。
+			const float t = pow(rate, kQTEButtonAfterImagePowPower);
+
+			// アルファ値。だんだん薄くなっていく。
+			const float alphaValue =
+				Math::Lerp<float>(t, kQTEButtonAfterImageSpriteAlphaValue, 0.0f);
+			// 拡大率。だんだん大きくなっていく。
+			const float scale = Math::Lerp<float>(t, 1.0f, kQTEButtonAfterImageMaxScale);
+			// 残像のアルファ値と拡大率を設定する
+			m_QTEButtonAfterImageSR->SetAlphaValue(alphaValue);
+			m_QTEButtonAfterImageSR->SetScale(scale);
+
+			// タイマーを進める
+			m_buttonAfterImageTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+			if (m_buttonAfterImageTimer >= kQTEButtonAfterImageTime)
+			{
+				// タイマーが時間を過ぎたら、残像を非表示にする。
+				m_QTEButtonAfterImageSR->Deactivate();
+			}
+
+
+			return;
+		}
+
+		/**
+		 * @brief QTEの結果の更新
+		*/
+		void CPlayerCatchEnemy::QTEResultUpdate()
+		{
+			for (auto& qteResultSR : m_QTEResultSR)
+			{
+				if (qteResultSR->IsActive() != true)
+				{
+					// この種類のQTEの結果が、表示しれていない。次へ。
+					continue;
+				}
+
+				if (m_resultTimer <= kQTEResultMoveTime)
+				{
+					// タイマーが移動時間以下だったら
+
+					// タイマーの進み率
+					float t = m_resultTimer / kQTEResultMoveTime;
+					// 結果のスプライトの座標
+					Vector2 pos = Vector2::Zero;
+					pos.Lerp(t, kQTEResultSpriteStartPos, kQTEResultSpriteEndPos);
+					// 結果のスプライトのアルファ値
+					const float alphaValue = Math::Lerp<float>(t, 0.5f, 1.0f);
+
+					// 結果のスプライトの座標とアルファ値を設定
+					qteResultSR->SetPosition(pos);
+					qteResultSR->SetAlphaValue(alphaValue);
+				}
+				else if (m_resultTimer > kQTEResultMoveTime + kQTEResultDisplayTime &&
+					m_resultTimer <= kQTEResultMoveTime + kQTEResultDisplayTime + kQTEResultBackTime)
+				{
+					// タイマーが、移動時間と表示時間を過ぎていて、
+					// 戻る時間以下だったら
+
+					// 戻る時間における、タイマーの進み率。
+					const float t = (m_resultTimer - kQTEResultMoveTime - kQTEResultDisplayTime) /
+						kQTEResultBackTime;
+					// 結果のスプライトの座標
+					Vector2 pos = Vector2::Zero;
+					pos.Lerp(t, kQTEResultSpriteEndPos, kQTEResultSpriteStartPos);
+					// 結果のスプライトのアルファ値
+					const float alphaValue = Math::Lerp<float>(t, 1.0f, 0.0f);
+
+					// 結果のスプライトの座標とアルファ値を設定
+					qteResultSR->SetPosition(pos);
+					qteResultSR->SetAlphaValue(alphaValue);
+				}
+				else
+				{
+					// 結果のスプライトの座標とアルファ値を設定
+					qteResultSR->SetPosition(kQTEResultSpriteEndPos);
+					qteResultSR->SetAlphaValue(1.0f);
+				}
+
+
+				// タイマーを進める。
+				m_resultTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				if (m_resultTimer > kQTEResultMoveTime + kQTEResultDisplayTime + kQTEResultBackTime)
+				{
+					// タイマーが、移動時間と表示時間と戻る時間を過ぎたら、非表示にして、終了。
+					qteResultSR->Deactivate();
+				}
+
+				// 一種類しか、更新しないはずなので、ループを抜ける。
+				break;
 			}
 
 			return;
@@ -487,9 +687,9 @@ namespace nsMyGame
 
 
 		/**
-		 * @brief このクラスで使う共通データの更新
+		 * @brief ターゲットとの距離を更新
 		*/
-		void CPlayerCatchEnemy::UpdateCommonData()
+		void CPlayerCatchEnemy::UpdateTargetLength()
 		{
 			if (m_targetRef == nullptr)
 			{
@@ -533,13 +733,64 @@ namespace nsMyGame
 
 
 		/**
+		 * @brief QTEに使うボタンの残像を開始する
+		 * @param[in] isSuccess コマンド入力が成功したか？
+		*/
+		void CPlayerCatchEnemy::StartQTEButtonAfterImage(const bool isSuccess)
+		{
+			// 残像用のスプライトを表示する
+			m_QTEButtonAfterImageSR->Activate();
+			// 残像用のスプライトを前のボタンの位置に移動させる
+			m_QTEButtonAfterImageSR->SetPosition(m_QTEButtonSRs[m_oldCommandProgress]->GetPosition());
+			// 残像用のスプライトのアルファ値、拡大率、タイマーをリセット
+			m_QTEButtonAfterImageSR->SetAlphaValue(kQTEButtonAfterImageSpriteAlphaValue);
+			m_QTEButtonAfterImageSR->SetScale(1.0f);
+			m_buttonAfterImageTimer = 0.0f;
+
+			if (isSuccess)
+			{
+				// コマンド入力が成功していたら、
+				// 残像用のスプライトのアルベドカラーを成功時のアルベドカラーにする。
+				m_QTEButtonAfterImageSR->SetAlbedoColor(kQTEButtonAfterImageSpriteSuccessAlbedoColor);
+			}
+			else
+			{
+				// コマンド入力が失敗していたら、
+				// 残像用のスプライトのアルベドカラーを失敗時のアルベドカラーにする。
+				m_QTEButtonAfterImageSR->SetAlbedoColor(kQTEButtonAfterImageSpriteMissAlbedoColor);
+			}
+
+
+			return;
+		}
+
+		/**
+		 * @brief QTEの結果のスプライトの演出を開始する
+		 * @param[in] qteResultType QTEの結果の種類
+		*/
+		void CPlayerCatchEnemy::StartQTEResult(
+			const nsPlayerConstData::nsCatchEnemyConstData::EnQTEResultType qteResultType
+		)
+		{
+			// スプライトを有効化
+			m_QTEResultSR[qteResultType]->Activate();
+			// 座標とアルファ値とタイマーをリセット
+			m_QTEResultSR[qteResultType]->SetPosition(kQTEResultSpriteStartPos);
+			m_QTEResultSR[qteResultType]->SetAlphaValue(0.0f);
+			m_resultTimer = 0.0f;
+
+			return;
+		}
+
+
+		/**
 		 * @brief QTEで使うスプライトを有効化する
 		*/
-		void CPlayerCatchEnemy::QTESpriteActivate()
+		void CPlayerCatchEnemy::ActivateQTESprite()
 		{
 			m_onEnemyTimerBar->Activate();
 			m_onEnemyTimerBarFrame->Activate();
-			m_onQTEButtonFraneSR->Activate();
+			m_QTEButtonFraneSR->Activate();
 
 			return;
 		}
@@ -547,11 +798,11 @@ namespace nsMyGame
 		/**
 		 * @brief QTEで使うスプライトを有効化する
 		*/
-		void CPlayerCatchEnemy::QTESpriteDeactivate()
+		void CPlayerCatchEnemy::DeactivateQTESprite()
 		{
 			m_onEnemyTimerBar->Deactivate();
 			m_onEnemyTimerBarFrame->Deactivate();
-			m_onQTEButtonFraneSR->Deactivate();
+			m_QTEButtonFraneSR->Deactivate();
 
 			return;
 		}
@@ -583,7 +834,7 @@ namespace nsMyGame
 			{
 				qteButtonSR->Deactivate();
 			}
-			QTESpriteDeactivate();
+			DeactivateQTESprite();
 
 			return;
 		}
@@ -616,9 +867,9 @@ namespace nsMyGame
 				// QTEに使うボタンのスプライトを再初期化
 				ReInitQTEBUttonSprite(m_commandInput->GetCommandButtonTypeArray());
 				// QTEで使うスプライトの有効化
-				QTESpriteActivate();
+				ActivateQTESprite();
 				// ボタンの枠のスプライトの座標を、一番左のボタンのスプライトの座標と同じにする。
-				m_onQTEButtonFraneSR->SetPosition(m_QTEButtonSRs[0]->GetPosition());
+				m_QTEButtonFraneSR->SetPosition(m_QTEButtonSRs[0]->GetPosition());
 				break;
 
 			case enCE_SuccessCommand:
@@ -627,7 +878,7 @@ namespace nsMyGame
 				{
 					qteButtonSR->Deactivate();
 				}
-				QTESpriteDeactivate();
+				DeactivateQTESprite();
 
 				// 忍術のエフェクトの座標と回転を設定して、再生する。
 				m_ninjyutuEF->SetPosition(m_targetRef->GetPosition() + Vector3::Up * kNinjyutuEffectPosBufHeight);
@@ -641,7 +892,7 @@ namespace nsMyGame
 				{
 					qteButtonSR->Deactivate();
 				}
-				QTESpriteDeactivate();
+				DeactivateQTESprite();
 				break;
 
 			case enCE_End:

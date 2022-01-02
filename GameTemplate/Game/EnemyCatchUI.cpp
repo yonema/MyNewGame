@@ -78,7 +78,7 @@ namespace nsMyGame
 			}
 
 			// このクラスて使用する共通のデータを更新
-			UpdateCommonData();
+			UpdateTargetLength();
 
 			// 敵を捕まえることができる合図のスプライトの更新
 			UpdateCanCatchEnemySprite();
@@ -166,7 +166,7 @@ namespace nsMyGame
 		/**
 		 * @brief このクラスて使用する共通のデータを更新
 		*/
-		void CEnemyCatchUI::UpdateCommonData()
+		void CEnemyCatchUI::UpdateTargetLength()
 		{
 			// ターゲットの参照を得る
 			m_targetRef = m_gameState->GetPlayer().GetCatchEnemy().GetTargetEnemy();

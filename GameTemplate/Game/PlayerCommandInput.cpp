@@ -73,6 +73,9 @@ namespace nsMyGame
 				m_commandButtonTypeArray.emplace_back(static_cast<EnQTEButtonType>(randByType));
 			}
 
+			// コマンドの結果をリセットする
+			m_commondResult = enCR_None;
+
 			return;
 		}
 
@@ -88,10 +91,28 @@ namespace nsMyGame
 				return;
 			}
 
-			if (m_commandButtonTypeArray[m_commandProgress] == m_playerRef->GetInputData().inputCommand)
+
+			if (m_playerRef->GetInputData().inputCommand ==
+				nsPlayerConstData::nsCatchEnemyConstData::enQTE_None)
 			{
-				// コマンドの配列と、コマンド入力情報が一致していたら、コマンド進行度を進める。
+				// 何もコマンドを入力していない
+
+				// コマンドの結果を、何もなしにする。
+				m_commondResult = enCR_None;
+				return;
+			}
+
+			if (m_playerRef->GetInputData().inputCommand == m_commandButtonTypeArray[m_commandProgress])
+			{
+				// コマンド入力情報と、コマンドの配列が一致していたら、コマンド進行度を進める。
 				m_commandProgress++;
+				// コマンドの結果を、成功にする。
+				m_commondResult = enCR_Success;
+			}
+			else
+			{
+				// コマンド結果を、失敗にする。
+				m_commondResult = enCR_Miss;
 			}
 
 			if (m_commandProgress >= m_commandButtonTypeArray.size())

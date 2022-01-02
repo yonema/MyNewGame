@@ -93,6 +93,15 @@ namespace nsMyGame
 				return m_commandProgress;
 			}
 
+			/**
+			 * @brief コマンドの結果を得る
+			 * @return コマンドの結果
+			*/
+			nsPlayerConstData::nsCommandInputConstData::EnCommandResult GetCommandResult() const
+			{
+				return m_commondResult;
+			}
+
 		private:	// privateなメンバ関数
 
 			/**
@@ -111,9 +120,10 @@ namespace nsMyGame
 			std::unique_ptr<std::uniform_int_distribution<>> m_randSelectType;
 
 			int m_commandProgress = 0;	//!< コマンドの進行度
-
 			bool m_isEndCommandInput = true;	//!< コマンド入力が終了したか？
-
+			//!< コマンドの結果
+			nsPlayerConstData::nsCommandInputConstData::EnCommandResult m_commondResult =
+				nsPlayerConstData::nsCommandInputConstData::enCR_None;
 			const CPlayer* m_playerRef = nullptr;
 		};
 

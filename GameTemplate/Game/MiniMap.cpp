@@ -85,7 +85,7 @@ namespace nsMyGame
 		{
 
 			// クラス内のいろんなところで共通して使用されるデータの更新
-			UpdateCommonData();
+			UpdateTargetLength();
 
 			// ミニマップの基点を更新
 			UpdateMiniMapPivot();
@@ -269,7 +269,7 @@ namespace nsMyGame
 		/**
 		 * @brief クラス内のいろんなところで共通して使用されるデータの更新
 		*/
-		void CMiniMap::UpdateCommonData()
+		void CMiniMap::UpdateTargetLength()
 		{
 			// XZ平面でのカメラの前方向更新
 			m_cameraForwardXZ = g_camera3D->GetForward();

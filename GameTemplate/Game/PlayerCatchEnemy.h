@@ -101,9 +101,24 @@ namespace nsMyGame
 			);
 
 			/**
+			 * @brief いつでも共通で行われる更新
+			*/
+			void CommonUpdate();
+
+			/**
 			 * @brief 敵の上に乗っている時の更新
 			*/
 			void OnEnemyUpdate();
+
+			/**
+			 * @brief QTEに使うボタンの残像の更新
+			*/
+			void QTEButternAfterImageUpdate();
+
+			/**
+			 * @brief QTEの結果の更新
+			*/
+			void QTEResultUpdate();
 
 			/**
 			 * @brief コマンドが成功した時の更新
@@ -121,9 +136,9 @@ namespace nsMyGame
 			void CheckContinueTarget();
 
 			/**
-			 * @brief このクラスで使う共通データの更新
+			 * @brief ターゲットとの距離を更新
 			*/
-			void UpdateCommonData();
+			void UpdateTargetLength();
 
 			/**
 			 * @brief 敵を捕まえるかどうか調べる
@@ -131,14 +146,28 @@ namespace nsMyGame
 			void CheckCatchEnemy();
 
 			/**
-			 * @brief QTEで使うスプライトを有効化する
+			 * @brief QTEに使うボタンの残像を開始する
+			 * @param[in] isSuccess コマンド入力が成功したか？
 			*/
-			void QTESpriteActivate();
+			void StartQTEButtonAfterImage(const bool isSuccess);
+
+			/**
+			 * @brief QTEの結果のスプライトの演出を開始する
+			 * @param[in] qteResultType QTEの結果の種類
+			*/
+			void StartQTEResult(
+				const nsPlayerConstData::nsCatchEnemyConstData::EnQTEResultType qteResultType
+			);
 
 			/**
 			 * @brief QTEで使うスプライトを有効化する
 			*/
-			void QTESpriteDeactivate();
+			void ActivateQTESprite();
+
+			/**
+			 * @brief QTEで使うスプライトを有効化する
+			*/
+			void DeactivateQTESprite();
 
 			/**
 			 * @brief 敵を捕まえる処理が終了した時の処理
@@ -170,7 +199,14 @@ namespace nsMyGame
 			//!< QTEに使うボタンたちのスプライトレンダラー
 			std::vector<nsGraphic::nsSprite::CSpriteRender*> m_QTEButtonSRs;
 			//!< QTEに使うボタンの枠のスプライトレンダラー
-			nsGraphic::nsSprite::CSpriteRender* m_onQTEButtonFraneSR = nullptr;
+			nsGraphic::nsSprite::CSpriteRender* m_QTEButtonFraneSR = nullptr;
+			//!< QTEに使うボタンの残像スプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_QTEButtonAfterImageSR = nullptr;
+			float m_buttonAfterImageTimer = 0.0f;	//!< ボタンの残像のタイマー
+			//!< QTEの結果のプライトレンダラー達
+			nsGraphic::nsSprite::CSpriteRender* 
+				m_QTEResultSR[nsPlayerConstData::nsCatchEnemyConstData::enQTEResultTypeNum] = {};
+			float m_resultTimer = 0.0f;	//!< ボタンの残像のタイマー
 
 			std::unique_ptr<CPlayerCommandInput> m_commandInput;	//!< コマンド入力クラス
 			int m_oldCommandProgress = 0;							//!< 前フレームのコマンド進行度

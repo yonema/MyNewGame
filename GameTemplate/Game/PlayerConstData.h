@@ -234,6 +234,57 @@ namespace nsMyGame
 				//!< QTEに使用するボタンの枠のスプライトの高さ
 				constexpr int kQTEButtonFrameSpriteHeight = static_cast<int>(256 * 0.35f);
 
+				//!< QTEに使用するボタンの残像のスプライトのファイルパス
+				constexpr const char* const kQTEButtonAfterImageSpriteFilePath = "Assets/Image/qte/buttonFrame_afterImage.DDS";
+				//!< QTEに使用するボタンの残像のスプライトの幅
+				constexpr int kQTEButtonAfterImageSpriteWidth = static_cast<int>(256 * 0.35f);
+				//!< QTEに使用するボタンの残像のスプライトの高さ
+				constexpr int kQTEButtonAfterImageSpriteHeight = static_cast<int>(256 * 0.35f);
+				//!< QTEに使用するボタンの残像のスプライトの成功時アルベドカラー
+				static const Vector3 kQTEButtonAfterImageSpriteSuccessAlbedoColor = { 0.3f,0.76f,0.53f };
+				//!< QTEに使用するボタンの残像のスプライトの失敗時時アルベドカラー
+				static const Vector3 kQTEButtonAfterImageSpriteMissAlbedoColor = { 1.0f,0.16f,0.16f };
+				//!< QTEに使用するボタンの残像のスプライトのアルファ値
+				constexpr float kQTEButtonAfterImageSpriteAlphaValue = 1.0f;
+				//!< QTEに使用するボタンの残像のスプライトのタイム
+				constexpr float kQTEButtonAfterImageTime = 0.5f;
+				//!< QTEに使用するボタンの残像のスプライトの最大拡大率
+				constexpr float kQTEButtonAfterImageMaxScale = 2.0f;
+				//!< QTEに使用するボタンの残像のスプライトの線形補完の指数
+				constexpr float kQTEButtonAfterImagePowPower = 2.0f;
+
+				/**
+				 * @brief QTEの結果の種類
+				*/
+				enum EnQTEResultType
+				{
+					enQR_success,
+					enQR_miss,
+					enQR_failed,
+					enQTEResultTypeNum
+				};
+				//!< QTEに使う結果のスプライトのファイルパス達
+				constexpr const char* const kQTEResultSpriteFilePaths[enQTEResultTypeNum] = 
+				{
+					"Assets/Image/qte/result_success.DDS",
+					"Assets/Image/qte/result_miss.DDS",
+					"Assets/Image/qte/result_failed.DDS"
+				};
+				//!< QTEの結果のスプライトの幅
+				constexpr float kQTEResultSpriteWitdh = static_cast<int>(256 * 1.0f);
+				//!< QTEの結果のスプライトの高さ
+				constexpr float kQTEResultSpriteHeight = static_cast<int>(256 * 1.0f);
+				//!< QTEの結果のスプライトの開始座標
+				static const Vector2 kQTEResultSpriteStartPos = { 0.0f - 10.0f,200.0f - 5.0f };
+				//!< QTEの結果のスプライトの終了座標
+				static const Vector2 kQTEResultSpriteEndPos = { 0.0f,200.0f };
+				//!< QTEの結果の移動時間
+				constexpr float kQTEResultMoveTime = 0.5f;
+				//!< QTEの結果の表示時間
+				constexpr float kQTEResultDisplayTime = 2.0f;
+				//!< QTEの結果の戻る時間
+				constexpr float kQTEResultBackTime = kQTEResultMoveTime * 0.5f;
+
 				//!< QTEに使用するボタンのスプライトの距離
 				constexpr float kQTEButtonSpriteDistance = 100.0f;
 				//!< QTEに使用するボタンのスプライトのY座標
@@ -274,6 +325,16 @@ namespace nsMyGame
 					enCT_type2,
 					enCT_type3,
 					enCT_typeNum
+				};
+
+				/**
+				 * @brief コマンドの結果
+				*/
+				enum EnCommandResult
+				{
+					enCR_None,			//!< 何もなし
+					enCR_Success,		//!< コマンド入力成功
+					enCR_Miss,			//!< コマンド入力失敗
 				};
 			}
 

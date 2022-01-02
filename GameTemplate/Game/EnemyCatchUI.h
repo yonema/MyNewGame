@@ -76,7 +76,7 @@ namespace nsMyGame
 			/**
 			 * @brief このクラスて使用する共通のデータを更新
 			*/
-			void UpdateCommonData();
+			void UpdateTargetLength();
 
 			/**
 			 * @brief 敵を捕まえることができる合図のスプライトの更新
