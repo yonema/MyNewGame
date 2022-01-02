@@ -271,19 +271,41 @@ namespace nsMyGame
 					"Assets/Image/qte/result_failed.DDS"
 				};
 				//!< QTEの結果のスプライトの幅
-				constexpr float kQTEResultSpriteWitdh = static_cast<int>(256 * 1.0f);
+				constexpr float kQTEResultSpriteWitdh = static_cast<int>(256 * 0.5f);
 				//!< QTEの結果のスプライトの高さ
-				constexpr float kQTEResultSpriteHeight = static_cast<int>(256 * 1.0f);
-				//!< QTEの結果のスプライトの開始座標
-				static const Vector2 kQTEResultSpriteStartPos = { 0.0f - 10.0f,200.0f - 5.0f };
+				constexpr float kQTEResultSpriteHeight = static_cast<int>(256 * 0.5f);
 				//!< QTEの結果のスプライトの終了座標
-				static const Vector2 kQTEResultSpriteEndPos = { 0.0f,200.0f };
+				static const Vector2 kQTEResultSpriteEndPos = { 0.0f,250.0f };
+				//!< QTEの結果のスプライトの開始座標
+				static const Vector2 kQTEResultSpriteStartPos = 
+				{ kQTEResultSpriteEndPos.x - 10.0f,kQTEResultSpriteEndPos.y - 5.0f };
+				//!< QTEの結果のスプライトの最初のアルファ値
+				constexpr float kQTEResultSpriteStartAplhaValue = 0.5f;
+
+				//!< QTEの結果の枠の移動時間
+				constexpr float kQTEResultFrameMoveTime = 0.25f;
 				//!< QTEの結果の移動時間
 				constexpr float kQTEResultMoveTime = 0.5f;
 				//!< QTEの結果の表示時間
-				constexpr float kQTEResultDisplayTime = 2.0f;
+				constexpr float kQTEResultDisplayTime = 3.0f;
 				//!< QTEの結果の戻る時間
 				constexpr float kQTEResultBackTime = kQTEResultMoveTime * 0.5f;
+				//!< QTEの結果の枠の戻る時間
+				constexpr float kQTEResultFrameBackTime = kQTEResultFrameMoveTime * 0.5f;
+
+				//!< QTEの結果の枠（内側）のスプライトのファイルパス
+				constexpr const char* const kQTEResultFrameInSpriteFilePath = "Assets/Image/qte/textFrameIn.DDS";
+				//!< QTEの結果の枠（外側）のスプライトのファイルパス
+				constexpr const char* const kQTEResultFrameOutSpriteFilePath = "Assets/Image/qte/textFrameOut.DDS";
+				//!< QTEの結果の枠のスプライトの幅
+				constexpr float kQTEResultFrameSpriteWitdh = static_cast<int>(256 * 1.1f);
+				//!< QTEの結果の枠のスプライトの高さ
+				constexpr float kQTEResultFrameSpriteHeight = static_cast<int>(256 * 0.9f);
+				//!< QTEの結果の枠（内側）のスプライトの最小拡大率
+				constexpr float kQTEResultFrameInSpriteMinScale = 0.5f;
+				//!< QTEの結果の枠（外側）のスプライトの最大拡大率
+				constexpr float kQTEResultFrameOutSpriteMaxScale = 1.5f;
+
 
 				//!< QTEに使用するボタンのスプライトの距離
 				constexpr float kQTEButtonSpriteDistance = 100.0f;

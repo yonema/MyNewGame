@@ -57,6 +57,8 @@ namespace nsMyGame
 			{
 				DeleteGO(qteResultSR);
 			}
+			DeleteGO(m_QTEResultFrameIn);
+			DeleteGO(m_QTEResultFrameOut);
 
 			DeleteGO(m_ninjyutuEF);
 			DeleteGO(m_sonarEF);
@@ -249,14 +251,40 @@ namespace nsMyGame
 				);
 				// 座標を設定
 				qteResultSR->SetPosition(kQTEResultSpriteStartPos);
-				// アルファ値を透明にする
-				qteResultSR->SetAlphaValue(0.0f);
 				// 非表示
 				qteResultSR->Deactivate();
 
 				// インデックスを進める
 				i++;
 			}
+
+			// QTEの結果の枠（内側）スプライトの生成と初期化
+			m_QTEResultFrameIn = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_QTEResultFrameIn->Init(
+				kQTEResultFrameInSpriteFilePath,
+				kQTEResultFrameSpriteWitdh,
+				kQTEResultFrameSpriteHeight,
+				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+				AlphaBlendMode_Trans
+			);
+			// 座標を設定
+			m_QTEResultFrameIn->SetPosition(kQTEResultSpriteEndPos);
+			// 非表示
+			m_QTEResultFrameIn->Deactivate();
+
+			// QTEの結果の枠（外側）スプライトの生成と初期化
+			m_QTEResultFrameOut = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_QTEResultFrameOut->Init(
+				kQTEResultFrameOutSpriteFilePath,
+				kQTEResultFrameSpriteWitdh,
+				kQTEResultFrameSpriteHeight,
+				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+				AlphaBlendMode_Trans
+			);
+			// 座標を設定
+			m_QTEResultFrameOut->SetPosition(kQTEResultSpriteEndPos);
+			// 非表示
+			m_QTEResultFrameOut->Deactivate();
 
 			return;
 		}
@@ -487,30 +515,63 @@ namespace nsMyGame
 					continue;
 				}
 
-				if (m_resultTimer <= kQTEResultMoveTime)
+				if (m_resultTimer <= kQTEResultFrameMoveTime)
 				{
-					// タイマーが移動時間以下だったら
+					// QTEの結果の枠の移動時間
+
+					// 時間の進み率
+					const float t = m_resultTimer / kQTEResultFrameMoveTime;
+					// QTEの結果の枠の、内側と外側、それぞれの拡大率。
+					const float scaleIn = Math::Lerp<float>(t, kQTEResultFrameInSpriteMinScale, 1.0f);
+					const float scaleOut = Math::Lerp<float>(t, kQTEResultFrameOutSpriteMaxScale, 1.0f);
+					// 結果のスプライトのアルファ値
+					const float alphaValue = Math::Lerp<float>(t, kQTEResultSpriteStartAplhaValue, 1.0f);
+
+					// QTEの結果の枠のスプライトの拡大率とアルファ値を設定
+					m_QTEResultFrameIn->SetScale(scaleIn);
+					m_QTEResultFrameIn->SetAlphaValue(alphaValue);
+					m_QTEResultFrameOut->SetScale(scaleOut);
+					m_QTEResultFrameOut->SetAlphaValue(alphaValue);
+				}
+				else if (m_resultTimer <= kQTEResultFrameMoveTime + kQTEResultMoveTime)
+				{
+					// QTEの結果の移動時間
+
+					// QTEの結果の枠のスプライトの拡大率とアルファ値を最終値を設定
+					m_QTEResultFrameIn->SetScale(1.0f);
+					m_QTEResultFrameIn->SetAlphaValue(1.0f);
+					m_QTEResultFrameOut->SetScale(1.0f);
+					m_QTEResultFrameOut->SetAlphaValue(1.0f);
 
 					// タイマーの進み率
-					float t = m_resultTimer / kQTEResultMoveTime;
+					const float t = (m_resultTimer - kQTEResultFrameMoveTime) / kQTEResultMoveTime;
 					// 結果のスプライトの座標
 					Vector2 pos = Vector2::Zero;
 					pos.Lerp(t, kQTEResultSpriteStartPos, kQTEResultSpriteEndPos);
 					// 結果のスプライトのアルファ値
-					const float alphaValue = Math::Lerp<float>(t, 0.5f, 1.0f);
+					const float alphaValue = Math::Lerp<float>(t, kQTEResultSpriteStartAplhaValue, 1.0f);
 
 					// 結果のスプライトの座標とアルファ値を設定
 					qteResultSR->SetPosition(pos);
 					qteResultSR->SetAlphaValue(alphaValue);
 				}
-				else if (m_resultTimer > kQTEResultMoveTime + kQTEResultDisplayTime &&
-					m_resultTimer <= kQTEResultMoveTime + kQTEResultDisplayTime + kQTEResultBackTime)
+				else if (m_resultTimer <=
+					kQTEResultFrameMoveTime + kQTEResultMoveTime + kQTEResultDisplayTime)
 				{
-					// タイマーが、移動時間と表示時間を過ぎていて、
-					// 戻る時間以下だったら
+					// QTEの結果の表示時間
 
-					// 戻る時間における、タイマーの進み率。
-					const float t = (m_resultTimer - kQTEResultMoveTime - kQTEResultDisplayTime) /
+					// 結果のスプライトの座標とアルファ値の最終値を設定
+					qteResultSR->SetPosition(kQTEResultSpriteEndPos);
+					qteResultSR->SetAlphaValue(1.0f);
+				}
+				else if (m_resultTimer <= kQTEResultFrameMoveTime + kQTEResultMoveTime +
+					kQTEResultDisplayTime + kQTEResultBackTime)
+				{
+					//  QTEの結果の戻る時間
+
+					// タイマーの進み率
+					const float t = (m_resultTimer - kQTEResultFrameMoveTime - 
+						kQTEResultMoveTime - kQTEResultDisplayTime) /
 						kQTEResultBackTime;
 					// 結果のスプライトの座標
 					Vector2 pos = Vector2::Zero;
@@ -522,21 +583,40 @@ namespace nsMyGame
 					qteResultSR->SetPosition(pos);
 					qteResultSR->SetAlphaValue(alphaValue);
 				}
-				else
+				else if (m_resultTimer <= kQTEResultFrameMoveTime + kQTEResultMoveTime +
+					kQTEResultDisplayTime + kQTEResultBackTime + kQTEResultFrameBackTime)
 				{
-					// 結果のスプライトの座標とアルファ値を設定
-					qteResultSR->SetPosition(kQTEResultSpriteEndPos);
-					qteResultSR->SetAlphaValue(1.0f);
+					// QTEの結果の枠の戻る時間
+
+					// タイマーの進み率。
+					const float t = (m_resultTimer - kQTEResultFrameMoveTime -
+						kQTEResultMoveTime - kQTEResultDisplayTime - kQTEResultBackTime) /
+						kQTEResultFrameBackTime;
+
+					// QTEの結果の枠の、内側と外側、それぞれの拡大率。
+					const float scaleIn = Math::Lerp<float>(t, 1.0f, kQTEResultFrameInSpriteMinScale);
+					const float scaleOut = Math::Lerp<float>(t, 1.0f, kQTEResultFrameOutSpriteMaxScale);
+					// 結果のスプライトのアルファ値
+					const float alphaValue = Math::Lerp<float>(t, 1.0f, 0.0f);
+
+					// QTEの結果の枠のスプライトの拡大率とアルファ値を設定
+					m_QTEResultFrameIn->SetScale(scaleIn);
+					m_QTEResultFrameIn->SetAlphaValue(alphaValue);
+					m_QTEResultFrameOut->SetScale(scaleOut);
+					m_QTEResultFrameOut->SetAlphaValue(alphaValue);
 				}
 
 
 				// タイマーを進める。
 				m_resultTimer += nsTimer::GameTime().GetFrameDeltaTime();
 
-				if (m_resultTimer > kQTEResultMoveTime + kQTEResultDisplayTime + kQTEResultBackTime)
+				if (m_resultTimer > kQTEResultFrameMoveTime + kQTEResultMoveTime +
+					kQTEResultDisplayTime + kQTEResultBackTime + kQTEResultFrameBackTime)
 				{
-					// タイマーが、移動時間と表示時間と戻る時間を過ぎたら、非表示にして、終了。
+					// タイマーが、全ての時間を過ぎたら、非表示にして、終了。
 					qteResultSR->Deactivate();
+					m_QTEResultFrameIn->Deactivate();
+					m_QTEResultFrameOut->Deactivate();
 				}
 
 				// 一種類しか、更新しないはずなので、ループを抜ける。
@@ -774,9 +854,15 @@ namespace nsMyGame
 		{
 			// スプライトを有効化
 			m_QTEResultSR[qteResultType]->Activate();
+			m_QTEResultFrameIn->Activate();
+			m_QTEResultFrameOut->Activate();
 			// 座標とアルファ値とタイマーをリセット
 			m_QTEResultSR[qteResultType]->SetPosition(kQTEResultSpriteStartPos);
 			m_QTEResultSR[qteResultType]->SetAlphaValue(0.0f);
+			m_QTEResultFrameIn->SetScale(1.0f);
+			m_QTEResultFrameOut->SetScale(1.0f);
+			m_QTEResultFrameIn->SetAlphaValue(0.0f);
+			m_QTEResultFrameOut->SetAlphaValue(0.0f);
 			m_resultTimer = 0.0f;
 
 			return;

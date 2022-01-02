@@ -203,9 +203,13 @@ namespace nsMyGame
 			//!< QTEに使うボタンの残像スプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_QTEButtonAfterImageSR = nullptr;
 			float m_buttonAfterImageTimer = 0.0f;	//!< ボタンの残像のタイマー
-			//!< QTEの結果のプライトレンダラー達
+			//!< QTEの結果のスプライトレンダラー達
 			nsGraphic::nsSprite::CSpriteRender* 
 				m_QTEResultSR[nsPlayerConstData::nsCatchEnemyConstData::enQTEResultTypeNum] = {};
+			//!< QTEの結果の枠（内側）のスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_QTEResultFrameIn = nullptr;
+			//!< QTEの結果の枠（外側）のスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_QTEResultFrameOut = nullptr;
 			float m_resultTimer = 0.0f;	//!< ボタンの残像のタイマー
 
 			std::unique_ptr<CPlayerCommandInput> m_commandInput;	//!< コマンド入力クラス
