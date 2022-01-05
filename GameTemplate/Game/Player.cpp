@@ -102,9 +102,8 @@ namespace nsMyGame
 		*/
 		void CPlayer::ChangeWalkAndRunState()
 		{
-			m_playerState = enWalkAndRun;
-			// 歩きと走りのクラスの移動パラメータを合わせる
-			m_playerMove.MuchWalkAndRunMoveParam();
+			ChangeState(enWalkAndRun);
+
 			return;
 		}
 
@@ -113,7 +112,8 @@ namespace nsMyGame
 		*/
 		void CPlayer::ChangeSwingState()
 		{
-			m_playerState = enSwing;
+			ChangeState(enSwing);
+
 			return;
 		}
 
@@ -122,7 +122,8 @@ namespace nsMyGame
 		*/
 		void CPlayer::ChangeWallRunState()
 		{
-			m_playerState = enWallRun;
+			ChangeState(enWallRun);
+
 			return;
 		}
 
@@ -132,7 +133,7 @@ namespace nsMyGame
 		void CPlayer::ChangeOnEnemyState()
 		{
 			m_playerMove.ResetSwing();
-			m_playerState = enOnEnemy;
+			ChangeState(enOnEnemy);
 			return;
 		}
 
@@ -165,6 +166,51 @@ namespace nsMyGame
 		void CPlayer::EndStringStretchToPos()
 		{
 			m_playerStringModel->EndStretchToPos();
+
+			return;
+		}
+
+		/**
+		 * @brief ステート遷移
+		 * @param newState[in] 新しいステート
+		*/
+		void CPlayer::ChangeState(nsPlayerConstData::EnPlayerState newState)
+		{
+			if (m_playerState == newState)
+			{
+				// ステートが同じなら、何もしない。早期リターン
+				return;
+			}
+
+			switch (m_playerState)
+			{
+			case enWalkAndRun:
+				// 歩きと走りのサウンドを停止する
+				m_playerMove.StopWalkAndRunSound();
+				break;
+			case enSwing:
+				break;
+			case enWallRun:
+				break;
+			case enOnEnemy:
+				break; 
+			}
+
+			m_playerState = newState;
+
+			switch (newState)
+			{
+			case enWalkAndRun:
+				// 歩きと走りのクラスの移動パラメータを合わせる
+				m_playerMove.MuchWalkAndRunMoveParam();
+				break;
+			case enSwing:
+				break;
+			case enWallRun:
+				break;
+			case enOnEnemy:
+				break;
+			}
 
 			return;
 		}

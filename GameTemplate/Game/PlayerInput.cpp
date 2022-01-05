@@ -80,7 +80,7 @@ namespace nsMyGame
 			if (m_pad->IsTrigger(enButtonRB3))
 			{
 				// 敵を探知
-				m_playerInputData.actionSeachEnemy = true;
+				m_playerInputData.actionSearchEnemy = true;
 			}
 
 			// Yボタントリガー

@@ -9,16 +9,21 @@
 
 namespace nsMyGame
 {
+	// 前方宣言
+	namespace nsPlayer
+	{
+		class CPlayer;			// プレイヤークラス
+		class CPlayerCamera;	// プレイヤーカメラクラス
+		class CPlayerModelAnimation; // プレイヤーモデルアニメーションクラス
+	}
+	namespace nsSound { class CSoundCue; }
+
+
 	/**
 	 * @brief プレイヤー関連のネームスペース
 	*/
 	namespace nsPlayer
 	{
-		// 前方宣言
-		class CPlayer;			// プレイヤークラス
-		class CPlayerCamera;	// プレイヤーカメラクラス
-		class CPlayerModelAnimation; // プレイヤーモデルアニメーションクラス
-
 		/**
 		 * @brief プレイヤーの動き関連のネームスペース
 		*/
@@ -33,11 +38,11 @@ namespace nsMyGame
 				/**
 				 * @brief コンストラクタ
 				*/
-				CPlayerMovement() = default;
+				CPlayerMovement();
 				/**
 				 * @brief デストラクタ
 				*/
-				~CPlayerMovement() = default;
+				~CPlayerMovement();
 
 			public:		// メンバ関数
 
@@ -185,6 +190,14 @@ namespace nsMyGame
 					m_playerSwingAction.Reset();
 				}
 
+				/**
+				 * @brief 歩きと走りのサウンドを停止する
+				*/
+				void StopWalkAndRunSound()
+				{
+					m_playerWalkAndRun.StopSound();
+				}
+
 			private:	// privateなメンバ関数
 
 				/**
@@ -212,6 +225,11 @@ namespace nsMyGame
 				*/
 				void MoveWithCharacterController();
 
+				/**
+				 * @brief サウンドの更新
+				*/
+				void UpdateSound();
+
 			private:	// データメンバ
 				CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
 				Vector3 m_moveVec = Vector3::Zero;		//!< 移動ベクトル
@@ -223,6 +241,8 @@ namespace nsMyGame
 				CPlayerOnEnemy m_playerOnEnemy;			//!< プレイヤーの敵の上に乗るクラス
 				bool m_useGravity = true;				//!< 重力を使用するか？
 
+				nsSound::CSoundCue* m_landingSC = nullptr;	//!< 着地のサウンド
+				bool m_landingSoundFlag = false;			//!< 着地のサウンドを流せるか？
 			};
 		}
 	}

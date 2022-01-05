@@ -3,22 +3,24 @@
 
 namespace nsMyGame
 {
+	// 前方宣言
+	namespace nsPlayer 
+	{
+		class CPlayer;			// プレイヤークラス
+		namespace nsPlayerMovenent { class CPlayerMovement; }
+	}
+	namespace nsSound { class CSoundCue; }
+
 	/**
 	 * @brief プレイヤー関連のネームスペース
 	*/
 	namespace nsPlayer
 	{
-		// 前方宣言
-		class CPlayer;			// プレイヤークラス
-
 		/**
 		 * @brief プレイヤーの動き関連のネームスペース
 		*/
 		namespace nsPlayerMovenent
 		{
-			// 前方宣言
-			class CPlayerMovement;	// プレイヤーの動きクラス
-
 			/**
 			 * @brief プレイヤーの歩きと走りクラス
 			*/
@@ -28,11 +30,11 @@ namespace nsMyGame
 				/**
 				 * @brief コンストラクタ
 				*/
-				CPlayerWalkAndRun() = default;
+				CPlayerWalkAndRun();
 				/**
 				 * @brief デストラクタ
 				*/
-				~CPlayerWalkAndRun() = default;
+				~CPlayerWalkAndRun();
 
 			public:		// メンバ関数
 
@@ -56,8 +58,18 @@ namespace nsMyGame
 				*/
 				void MuchMoveParam();
 
+				/**
+				 * @brief このクラスのサウンドを停止する
+				*/
+				void StopSound();
+
 
 			private:	// privateなメンバ関数
+
+				/**
+				 * @brief サウンドの初期化
+				*/
+				void InitSound();
 
 				/**
 				 * @brief 歩きか走りの移動の処理
@@ -104,6 +116,11 @@ namespace nsMyGame
 				*/
 				void Move();
 
+				/**
+				 * @brief サウンドの更新
+				*/
+				void UpdateSound();
+
 			private:	// データメンバ
 				CPlayerMovement* m_playerMovementRef = nullptr;	//!< 移動クラスの参照
 				const CPlayer* m_playerRef = nullptr;			//!< プレイヤーの参照
@@ -118,6 +135,12 @@ namespace nsMyGame
 				// 歩きと走りで変わるパラメータ
 				float m_acceleration = 0.0f;	//!< 加速度
 				float m_maxSpeed = 0.0f;		//!< 最高速度
+
+				// サウンド
+				nsSound::CSoundCue* m_walkSC = nullptr;		//!< 歩きのサウンド
+				nsSound::CSoundCue* m_runSC = nullptr;		//!< 走りのサウンド
+				nsSound::CSoundCue* m_jumpSC = nullptr;		//!< ジャンプのサウンド
+
 			};
 
 		}

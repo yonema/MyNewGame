@@ -11,6 +11,8 @@ namespace nsMyGame
 	namespace nsGraphic {
 		namespace nsModel { class CModelRender; }
 	}
+	namespace nsSound { class CSoundCue; }
+
 
 	/**
 	 * @brief AIキャラクター関連のネームスペース
@@ -123,6 +125,11 @@ namespace nsMyGame
 			void InitEffect();
 
 			/**
+			 * @brief サウンドの初期化
+			*/
+			void InitSound();
+
+			/**
 			 * @brief 捕まっている時の更新
 			 * @return この後も更新処理を行うか？
 			*/
@@ -147,6 +154,22 @@ namespace nsMyGame
 			 * @brief 回転を更新
 			*/
 			void UpdateRotating();
+
+			/**
+			 * @brief サウンドを更新
+			*/
+			void UpdateSound();
+
+			/**
+			 * @brief サウンドの音量を計算する
+			 * @return 計算されたサウンドの音量
+			*/
+			float CalcSoundVolume();
+
+			/**
+			 * @brief このクラスのサウンドの停止
+			*/
+			void StopSound();
 
 			/**
 			 * @brief 距離によるターゲットポイントの除外
@@ -218,7 +241,13 @@ namespace nsMyGame
 			std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
 
-			
+			// サウンド
+			nsSound::CSoundCue* m_driveSC = nullptr;		//!< 運転中のサウンド
+			nsSound::CSoundCue* m_driftSC = nullptr;		//!< ドリフトのサウンド
+			nsSound::CSoundCue* m_fireExplosionSC = nullptr;	//!< 火遁の爆発のサウンド
+			nsSound::CSoundCue* m_carExplosionSC = nullptr;		//!< 車の爆発のサウンド
+			bool m_driftSoundFlag = false;					//!< ドリフト音を再生できるか？
+			float m_driveTimer = 0.0f;						//!< 運転中に使用するタイマー
 		};
 
 	}

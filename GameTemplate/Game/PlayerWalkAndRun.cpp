@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "PlayerMovement.h"
 #include "PlayerConstData.h"
+#include "SoundCue.h"
 
 namespace nsMyGame
 {
@@ -20,6 +21,28 @@ namespace nsMyGame
 			using namespace nsPlayerConstData::nsWalkAndRunConstData;
 			// ジャンプ力を使用可能にする
 			using nsPlayerConstData::nsMovementConstData::kJumpForce;
+
+			/**
+			 * @brief コンストラクタ
+			*/
+			CPlayerWalkAndRun::CPlayerWalkAndRun()
+			{
+				// サウンドの初期化
+				InitSound();
+
+				return;
+			}
+			/**
+			 * @brief デストラクタ
+			*/
+			CPlayerWalkAndRun::~CPlayerWalkAndRun()
+			{
+				DeleteGO(m_walkSC);
+				DeleteGO(m_runSC);
+				DeleteGO(m_jumpSC);
+
+				return;
+			}
 
 			/**
 			 * @brief 初期化
@@ -61,6 +84,31 @@ namespace nsMyGame
 			}
 
 			/**
+			 * @brief このクラスのサウンドを停止する
+			*/
+			void CPlayerWalkAndRun::StopSound()
+			{
+				// 再生中のサウンドをすべて停止する
+
+				if (m_walkSC->IsPlaying())
+				{
+					m_walkSC->Stop();
+				}
+				if (m_runSC->IsPlaying())
+				{
+					m_runSC->Stop();
+				}
+
+				// ジャンプは止めない
+				//if (m_jumpSC->IsPlaying())
+				//{
+				//	m_jumpSC->Stop();
+				//}
+
+				return;
+			}
+
+			/**
 			 * @brief 歩きと走りの処理を実行
 			*/
 			void CPlayerWalkAndRun::Execute()
@@ -69,7 +117,27 @@ namespace nsMyGame
 
 				// 歩きか走りの移動の処理
 				WalkOrRunMove();
+
+				// サウンドの更新
+				UpdateSound();
 				
+				return;
+			}
+
+			/**
+			 * @brief サウンドの初期化
+			*/
+			void CPlayerWalkAndRun::InitSound()
+			{
+				m_walkSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_walkSC->Init(kWalkSoundFilePath, nsSound::CSoundCue::enSE);
+
+				m_runSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_runSC->Init(kRunSoundFilePath, nsSound::CSoundCue::enSE);
+
+				m_jumpSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_jumpSC->Init(kJumpSoundFilePath, nsSound::CSoundCue::enSE);
+
 				return;
 			}
 
@@ -314,6 +382,42 @@ namespace nsMyGame
 				if (m_playerRef->GetInputData().actionJump/* && m_charaCon.IsOnGround()*/)
 				{
 					m_playerMovementRef->AddMoveVec({ 0.0f, kJumpForce,0.0f });
+				}
+
+				return;
+			}
+
+
+			/**
+			 * @brief サウンドの更新
+			*/
+			void CPlayerWalkAndRun::UpdateSound()
+			{
+				// ジャンプ
+				// ジャンプボタンが押されている、かつ、地面についている
+				if (m_playerRef->GetInputData().actionJump/* && m_charaCon.IsOnGround()*/)
+				{
+					m_jumpSC->Play(false);
+				}
+
+				if (m_velocity <= 0.001f || m_playerMovementRef->IsAir())
+				{
+					// 移動していない、または空中。サウンドを停止して、早期リターン。
+					StopSound();
+					return;
+				}
+
+				if (m_playerRef->GetInputData().actionDush != true)
+				{
+					// 歩き
+					m_walkSC->Play(true);
+					m_runSC->Stop();
+				}
+				else
+				{
+					// 走り
+					m_runSC->Play(true);
+					m_walkSC->Stop();
 				}
 
 				return;

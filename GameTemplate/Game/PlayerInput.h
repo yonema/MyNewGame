@@ -26,7 +26,7 @@ namespace nsMyGame
 			bool actionJump = false;				//!< ジャンプの入力情報
 			bool actionDush = false;				//!< ダッシュの入力情報
 			bool actionSwing = false;				//!< スイングの入力情報
-			bool actionSeachEnemy = false;			//!< 敵を探知する入力情報
+			bool actionSearchEnemy = false;			//!< 敵を探知する入力情報
 			bool actionCatchEnemy = false;			//!< 敵を捕まえる入力情報
 			//!< コマンド入力情報
 			nsPlayerConstData::nsCatchEnemyConstData::EnQTEButtonType inputCommand =

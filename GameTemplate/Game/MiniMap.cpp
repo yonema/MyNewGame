@@ -370,7 +370,7 @@ namespace nsMyGame
 		void CMiniMap::UpdateCarIcon()
 		{
 
-			if (m_gameState->GetPlayer().GetInputData().actionSeachEnemy == true)
+			if (m_gameState->GetPlayer().GetInputData().actionSearchEnemy == true)
 			{
 				// 敵を探知するアクションが入ったら、アイコンを表示するようにする。
 				m_isDisplayCarIcon = true;

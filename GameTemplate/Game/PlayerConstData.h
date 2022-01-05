@@ -37,6 +37,9 @@ namespace nsMyGame
 				constexpr float kJumpForce = 1500.0f;	//!< ジャンプ力
 				constexpr float kModelRotRate = 0.3f;	//!< モデルの回転の補間率
 				constexpr float kMoveVecMin = 0.001f;	//!< 移動ベクトルの最小値
+
+				//!< 着地のサウンドファイルパス
+				constexpr const wchar_t* const kLandingSoundFilePath = L"Assets/sound/character/normalMove/landing.wav";
 			}
 
 			/**
@@ -54,6 +57,13 @@ namespace nsMyGame
 				constexpr float kAirFriction = 1.0f;		//!< 空中の摩擦
 				constexpr float kBreakThresholdAngle = 135.0f;		//!< ブレーキの角度のしきい値
 				constexpr float kBreakThresholdVelocity = 135.0f;	//!< ブレーキの速度のしきい値
+
+				//!< 歩きのサウンドファイルパス
+				constexpr const wchar_t* const kWalkSoundFilePath = L"Assets/sound/character/normalMove/walk.wav";
+				//!< 走りのサウンドファイルパス
+				constexpr const wchar_t* const kRunSoundFilePath = L"Assets/sound/character/normalMove/run.wav";
+				//!< ジャンプのサウンドファイルパス
+				constexpr const wchar_t* const kJumpSoundFilePath = L"Assets/sound/character/normalMove/jump.wav";
 			}
 
 			/**
@@ -103,8 +113,17 @@ namespace nsMyGame
 				constexpr float kMinVelocityOfAfterSwingAcceleration = 
 					kInitialVelocityOfAterSwingAcceleration * 0.1f;
 
-				// カメラの値を線形補完するタイム
+				//!< カメラの値を線形補完するタイム
 				constexpr float kCameraLerpTime = 0.25f;
+
+				//!< 鎖を出すサウンドのファイルパス
+				constexpr const wchar_t* const kChainPutOutSoundFilePath = L"Assets/sound/character/swing/chain_putOut.wav";
+				//!< 鎖がしなるサウンドのファイルパス
+				constexpr const wchar_t* const kChainBendingSoundFilePath = L"Assets/sound/character/swing/chain_bending.wav";
+				//!< 鎖を離すサウンドのファイルパス
+				constexpr const wchar_t* const kChainReleaseSoundFilePath = L"Assets/sound/character/swing/chain_release.wav";
+				//!< スイング状態から離れるサウンドのファイルパス
+				constexpr const wchar_t* const kSwingLeaveSoundFilePath = L"Assets/sound/character/swing/swing_leave.wav";
 			}
 
 			/**
@@ -131,6 +150,14 @@ namespace nsMyGame
 
 				//!< 敵の上から離れるときの、ジャンプの力の、前方向
 				constexpr float kLeaveEnemyJumpForceFront = 100.0f;
+
+				//!< 鎖を出すサウンドのファイルパス
+				constexpr const wchar_t* const kChainPutOutSoundFilePath = nsSwingActionConstData::kChainPutOutSoundFilePath;
+				//!< 敵の上に向かうサウンドのファイルパス
+				constexpr const wchar_t* const kGoOnEnemySoundFilePath = nsSwingActionConstData::kSwingLeaveSoundFilePath;
+				//!< 敵の上に乗ったときのサウンドのファイルパス
+				constexpr const wchar_t* const kLandingOnEnemySoundFilePath = L"Assets/sound/qte/car/car_landing.wav";
+
 			}
 
 			/**
@@ -287,7 +314,7 @@ namespace nsMyGame
 				//!< QTEの結果の移動時間
 				constexpr float kQTEResultMoveTime = 0.5f;
 				//!< QTEの結果の表示時間
-				constexpr float kQTEResultDisplayTime = 3.0f;
+				constexpr float kQTEResultDisplayTime = 4.0f;
 				//!< QTEの結果の戻る時間
 				constexpr float kQTEResultBackTime = kQTEResultMoveTime * 0.5f;
 				//!< QTEの結果の枠の戻る時間
@@ -331,6 +358,27 @@ namespace nsMyGame
 				constexpr float kSonarEffectMaxScale = 100.0f;
 				//!< ソナーのエフェクトのYの拡大率
 				constexpr float kSonarEffectYScale = 10.0f;
+
+				//!< コマンド入力成功のサウンドのファイルパス
+				constexpr const wchar_t* const kCommandSuccessSoundFilePath = L"Assets/sound/qte/command/command_success.wav";
+				//!< コマンド入力失敗のサウンドのファイルパス
+				constexpr const wchar_t* const kCommandMissSoundFilePath = L"Assets/sound/qte/command/command_miss.wav";
+				//!< ウィンドウを開くサウンドのファイルパス
+				constexpr const wchar_t* const kWindowOpneSoundFilePath = L"Assets/sound/qte/window/opne_window.wav";
+				//!< ウィンドウを閉じるサウンドのファイルパス
+				constexpr const wchar_t* const kWindowCloseSoundFilePath = L"Assets/sound/qte/window/opne_window.wav";
+
+				constexpr float kWindowOpenSoundVolume = 0.3f;	//!< ウィンドウを開くサウンドの音量
+				constexpr float kWindowCloseSoundVolume = 0.3f;	//!< ウィンドウを閉じるサウンドの音量
+
+				//!< 火遁の開始のサウンドのファイルパス
+				constexpr const wchar_t* const kFireStartSoundFilePath = L"Assets/sound/qte/fire/fire_start.wav";
+				//!< 火遁を放つサウンドのファイルパス
+				constexpr const wchar_t* const kFireReleaseSoundFilePath = L"Assets/sound/qte/fire/fire_release.wav";
+				constexpr float kFireReleaseSoundTime = 1.5f;	//!< 火を放つサウンドのタイム
+
+				//!< ソナーのサウンドのファイルパス
+				constexpr const wchar_t* const kSonarSoundFilePath = L"Assets/sound/character/other/sonar.wav";
 			}
 
 			/**

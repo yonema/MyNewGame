@@ -221,6 +221,12 @@ namespace nsMyGame
 
 		private:	// privateなメンバ関数
 
+			/**
+			 * @brief ステート遷移
+			 * @param newState[in] 新しいステート
+			*/
+			void ChangeState(nsPlayerConstData::EnPlayerState newState);
+
 		private:	// データメンバ
 			Vector3 m_position = Vector3::Zero;				//!< 座標
 			Quaternion m_rotation = Quaternion::Identity;	//!< 回転

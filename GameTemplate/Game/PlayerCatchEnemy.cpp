@@ -5,6 +5,7 @@
 #include "AICar.h"
 #include "SpriteRender.h"
 #include "PlayerCommandInput.h"
+#include "SoundCue.h"
 
 namespace nsMyGame
 {
@@ -30,6 +31,9 @@ namespace nsMyGame
 
 			// 忍術のエフェクトを初期化
 			InitNinjyutuEffect();
+
+			// サウンドの初期化
+			InitSound();
 
 			// コマンド入力クラスを生成する
 			m_commandInput = std::make_unique<CPlayerCommandInput>();
@@ -62,6 +66,14 @@ namespace nsMyGame
 
 			DeleteGO(m_ninjyutuEF);
 			DeleteGO(m_sonarEF);
+
+			DeleteGO(m_commandSuccessSC);
+			DeleteGO(m_commandMissSC);
+			DeleteGO(m_windowOpneSC);
+			DeleteGO(m_windowCloseSC);
+			DeleteGO(m_fireStartSC);
+			DeleteGO(m_fireReleaseSC);
+			DeleteGO(m_sonarSC);
 
 			return;
 		}
@@ -105,7 +117,7 @@ namespace nsMyGame
 					ChangeState(enCE_GoOnEnemy);
 				}
 
-				if (m_playerRef->GetInputData().actionSeachEnemy == true)
+				if (m_playerRef->GetInputData().actionSearchEnemy == true)
 				{
 					// 敵を探知するアクションが入っていたら、
 					// ソナーのエフェクトを再生する
@@ -113,6 +125,7 @@ namespace nsMyGame
 					m_sonarEF->SetScale(Vector3::One);
 					m_sonarEF->Play();
 					m_sonarTimer = 0.0f;
+					m_sonarSC->Play(false);
 				}
 
 				if (m_sonarEF->IsPlay())
@@ -306,6 +319,37 @@ namespace nsMyGame
 		}
 
 		/**
+		 * @brief サウンドを初期化
+		*/
+		void CPlayerCatchEnemy::InitSound()
+		{
+			m_commandSuccessSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_commandSuccessSC->Init(kCommandSuccessSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_commandMissSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_commandMissSC->Init(kCommandMissSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_windowOpneSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_windowOpneSC->Init(kWindowOpneSoundFilePath, nsSound::CSoundCue::enSE);
+			m_windowOpneSC->SetVolume(kWindowOpenSoundVolume);
+
+			m_windowCloseSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_windowCloseSC->Init(kWindowCloseSoundFilePath, nsSound::CSoundCue::enSE);
+			m_windowCloseSC->SetVolume(kWindowCloseSoundVolume);
+
+			m_fireStartSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_fireStartSC->Init(kFireStartSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_fireReleaseSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_fireReleaseSC->Init(kFireReleaseSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_sonarSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_sonarSC->Init(kSonarSoundFilePath, nsSound::CSoundCue::enSE);
+
+			return;
+		}
+
+		/**
 		 * @brief QTEに使うボタンのスプライトの再初期化
 		 * @param[in] commandArray コマンドの配列
 		*/
@@ -400,6 +444,9 @@ namespace nsMyGame
 				// QTEの結果のスプライトの演出を成功で開始する
 				StartQTEResult(enQR_success);
 
+				// コマンド入力成功のサウンドを再生
+				m_commandSuccessSC->Play(false);
+
 				return;
 			}
 			
@@ -420,6 +467,9 @@ namespace nsMyGame
 
 				// QTEに使うボタンの残像を開始する
 				StartQTEButtonAfterImage(true);
+
+				// コマンド入力成功のサウンドを再生
+				m_commandSuccessSC->Play(false);
 			}
 			else if (m_commandInput->GetCommandResult() ==
 				nsPlayerConstData::nsCommandInputConstData::enCR_Miss)
@@ -432,6 +482,9 @@ namespace nsMyGame
 				StartQTEButtonAfterImage(false);
 				// QTEの結果のスプライトの演出を入力ミスで開始する
 				StartQTEResult(enQR_miss);
+
+				// コマンド入力失敗のサウンドを再生
+				m_commandMissSC->Play(false);
 			}
 
 			// 前フレームのコマンド進行度を更新する
@@ -454,6 +507,9 @@ namespace nsMyGame
 				ChangeState(enCE_FailureCommand);
 				// QTEの結果のスプライトの演出を時間切れで開始する
 				StartQTEResult(enQR_failed);
+
+				// コマンド入力失敗のサウンドを再生
+				m_commandMissSC->Play(false);
 
 				return;
 			}
@@ -532,6 +588,11 @@ namespace nsMyGame
 					m_QTEResultFrameIn->SetAlphaValue(alphaValue);
 					m_QTEResultFrameOut->SetScale(scaleOut);
 					m_QTEResultFrameOut->SetAlphaValue(alphaValue);
+
+					if (m_windowOpneSC->IsPlaying() != true)
+					{
+						m_windowOpneSC->Play(false);
+					}
 				}
 				else if (m_resultTimer <= kQTEResultFrameMoveTime + kQTEResultMoveTime)
 				{
@@ -604,6 +665,11 @@ namespace nsMyGame
 					m_QTEResultFrameIn->SetAlphaValue(alphaValue);
 					m_QTEResultFrameOut->SetScale(scaleOut);
 					m_QTEResultFrameOut->SetAlphaValue(alphaValue);
+
+					if (m_windowCloseSC->IsPlaying() != true)
+					{
+						m_windowCloseSC->Play(false);
+					}
 				}
 
 
@@ -643,7 +709,7 @@ namespace nsMyGame
 
 			// タイマーを進める
 			m_ninnjyutuEFTimer += nsTimer::GameTime().GetFrameDeltaTime();
-
+			
 			if (m_ninnjyutuEFTimer >= kNinjyutuEffectTime)
 			{
 				// タイマーが、忍術のエフェクトの時間を超えたら、
@@ -651,6 +717,14 @@ namespace nsMyGame
 				m_targetRef->BeCaptured();
 				m_targetRef->SetNinjyutuEffectRef(m_ninjyutuEF);
 				ChangeState(enCE_End);
+
+			}
+			else if (m_ninnjyutuEFTimer >= kFireReleaseSoundTime)
+			{
+				if (m_fireReleaseSC->IsPlaying() != true)
+				{
+					m_fireReleaseSC->Play(false);
+				}
 			}
 
 
@@ -970,6 +1044,8 @@ namespace nsMyGame
 				m_ninjyutuEF->SetPosition(m_targetRef->GetPosition() + Vector3::Up * kNinjyutuEffectPosBufHeight);
 				m_ninjyutuEF->SetRotation(m_targetRef->GetRotation());
 				m_ninjyutuEF->Play();
+
+				m_fireStartSC->Play(false);
 				break;
 
 			case enCE_FailureCommand:

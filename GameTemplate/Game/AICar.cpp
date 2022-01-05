@@ -6,7 +6,7 @@
 #include "GameMainState.h"
 #include "BezierCurve.h"
 #include "PlayerConstData.h"
-
+#include "SoundCue.h"
 
 namespace nsMyGame
 {
@@ -49,6 +49,9 @@ namespace nsMyGame
 			// エフェクトの初期化
 			InitEffect();
 
+			// サウンドの初期化
+			InitSound();
+
 			return true;
 		}
 
@@ -65,6 +68,12 @@ namespace nsMyGame
 				DeleteGO(smokeEF);
 			}
 			DeleteGO(m_smokeExplotionEF);
+
+			DeleteGO(m_driveSC);
+			DeleteGO(m_driftSC);
+			DeleteGO(m_fireExplosionSC);
+			DeleteGO(m_carExplosionSC);
+
 			return;
 		}
 
@@ -102,6 +111,9 @@ namespace nsMyGame
 
 			// 回転を更新
 			UpdateRotating();
+
+			// サウンドの更新
+			UpdateSound();
 
 
 			return;
@@ -170,6 +182,27 @@ namespace nsMyGame
 			return;
 		}
 
+		/**
+		 * @brief サウンドの初期化
+		*/
+		void CAICar::InitSound()
+		{			
+			m_driveSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_driveSC->Init(kCarDriveSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_driftSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_driftSC->Init(kCarDriftSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_fireExplosionSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_fireExplosionSC->Init(kFireExplosionSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_carExplosionSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_carExplosionSC->Init(kCarExplosionSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_driveTimer = kDriveSoundTime;
+
+			return;
+		}
 
 		/**
 		 * @brief 捕まっている時の更新
@@ -239,6 +272,15 @@ namespace nsMyGame
 
 			// もういらないので、渡された参照をリセットする。
 			m_ninjyutuEFRef = nullptr;
+
+			const float volume = CalcSoundVolume();
+			m_fireExplosionSC->SetVolume(volume * 2.0f);
+			m_carExplosionSC->SetVolume(volume * 2.0f);
+			m_fireExplosionSC->Play(false);
+			m_carExplosionSC->Play(false);
+
+			// サウンドを停止
+			StopSound();
 
 			// もう動いてほしくないので、falseを戻す。
 			return false;
@@ -441,9 +483,7 @@ namespace nsMyGame
 			m_moveSpeed = kCarSpeed;
 
 			if (sectionTag == nsAI::CPath::enLeftCurveStart ||
-				sectionTag == nsAI::CPath::enRightCurveStart/* ||
-				sectionTag == nsAI::CPath::enLeftCurveEnd ||
-				sectionTag == nsAI::CPath::enRightCurveEnd*/)
+				sectionTag == nsAI::CPath::enRightCurveStart)
 			{
 				// セクションが、カーブの開始地点、または、カーブの終了地点
 
@@ -551,6 +591,73 @@ namespace nsMyGame
 			nextQRot.Slerp(kCarModelRotRate, m_modelRender->GetRotation(), nextQRot);
 			// モデルに回転を設定
 			m_modelRender->SetRotation(nextQRot);
+
+			return;
+		}
+
+		/**
+		 * @brief サウンドを更新
+		*/
+		void CAICar::UpdateSound()
+		{
+			const float volume = CalcSoundVolume();
+			m_driveSC->SetVolume(volume * kDriveSoundVolume);
+			m_driftSC->SetVolume(volume * kDriftSoundVolume);
+
+			if (m_driveTimer >= kDriveSoundTime)
+			{
+				m_driveSC->Play(false);
+				m_driveTimer = 0.0f;
+			}
+
+			m_driveTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+			if (m_path.GetCurrentSectionTag() != nsAI::CPath::enNone &&
+				m_path.GetCurrentSectionTag() != nsAI::CPath::enStraight)
+			{
+				if (m_driftSoundFlag)
+				{
+					m_driftSC->Play(false);
+					m_driftSoundFlag = false;
+				}
+			}
+			else
+			{
+				m_driftSoundFlag = true;
+			}
+
+			return;
+		}
+
+		/**
+		 * @brief サウンドの音量を計算する
+		 * @return 計算されたサウンドの音量
+		*/
+		float CAICar::CalcSoundVolume()
+		{
+			Vector3 fromCamraVec = m_modelRender->GetPosition() - g_camera3D->GetPosition();
+
+			float volume = max(0.0f,(kMaxSoundDistance - fromCamraVec.Length())) / kMaxSoundDistance;
+			volume = pow(volume, 2.0f);
+
+			return volume;
+		}
+
+		/**
+		 * @brief このクラスのサウンドの停止
+		*/
+		void CAICar::StopSound()
+		{
+			// 再生中のサウンドをすべて停止
+
+			if (m_driveSC->IsPlaying())
+			{
+				m_driveSC->Stop();
+			}
+			if (m_driftSC->IsPlaying())
+			{
+				m_driftSC->Stop();
+			}
 
 			return;
 		}

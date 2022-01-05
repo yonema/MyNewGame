@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "PlayerCamera.h"
 #include "PlayerModelAnimation.h"
-
+#include "SoundCue.h"
 
 namespace nsMyGame
 {
@@ -20,6 +20,26 @@ namespace nsMyGame
 		{
 			// プレイヤー移動クラスの定数データを使用可能にする
 			using namespace nsPlayerConstData::nsMovementConstData;
+
+			/**
+			 * @brief コンストラクタ
+			*/
+			CPlayerMovement::CPlayerMovement()
+			{
+				m_landingSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_landingSC->Init(kLandingSoundFilePath, nsSound::CSoundCue::enSE);
+
+				return;
+			}
+			/**
+			 * @brief デストラクタ
+			*/
+			CPlayerMovement::~CPlayerMovement()
+			{
+				DeleteGO(m_landingSC);
+
+				return;
+			}
 
 			/**
 			 * @brief 初期化
@@ -74,6 +94,9 @@ namespace nsMyGame
 
 				// プレイヤーの回転を更新
 				UpdateTurnPlayer();
+
+				// サウンドの更新
+				UpdateSound();
 
 				nsDebug::DrawVector(m_playerRef->GetPosition(), m_moveVec, "playerVec");
 
@@ -236,6 +259,25 @@ namespace nsMyGame
 				// 現在の回転と次の回転を球面線形補間を行い、モデルを徐々に回転させる。
 				nexrQRot.Slerp(kModelRotRate, m_playerRef->GetRotation(), nexrQRot);
 				m_playerRef->SetRotation(nexrQRot);
+
+				return;
+			}
+
+
+			/**
+			 * @brief サウンドの更新
+			*/
+			void CPlayerMovement::UpdateSound()
+			{
+				if (IsAir())
+				{
+					m_landingSoundFlag = true;
+				}
+				else if (m_landingSoundFlag)
+				{
+					m_landingSoundFlag = false;
+					m_landingSC->Play(false);
+				}
 
 				return;
 			}

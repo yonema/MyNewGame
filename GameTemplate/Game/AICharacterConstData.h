@@ -69,6 +69,22 @@ namespace nsMyGame
 				enGoStraight,					//!< 直進
 				enCandidateTargetPointTypeNum	//!< 候補の種類の数
 			};
+
+			//!< 車の運転中のサウンドのファイルパス
+			constexpr const wchar_t* const kCarDriveSoundFilePath = L"Assets/sound/car/car_idle.wav";
+			//!< 車のドリフトのサウンドのファイルパス
+			constexpr const wchar_t* const kCarDriftSoundFilePath = L"Assets/sound/car/car_break.wav";
+			//!< 火遁の術の爆発のサウンドのファイルパス
+			constexpr const wchar_t* const kFireExplosionSoundFilePath = L"Assets/sound/car/fire_explosion.wav";
+			//!< 車の爆発のサウンドのファイルパス
+			constexpr const wchar_t* const kCarExplosionSoundFilePath = L"Assets/sound/car/car_explositon.wav";
+
+			//!< サウンドが聞こえる最大距離
+			constexpr float kMaxSoundDistance = 10000.0f;
+			//!< 運転中のサウンドのタイム
+			constexpr float kDriveSoundTime = 9.5f;
+			constexpr float kDriveSoundVolume = 0.3f;	//!< 運転中のサウンドの音量
+			constexpr float kDriftSoundVolume = 0.7f;	//!< ドリフトのサウンドの音量
 		}
 	}
 }

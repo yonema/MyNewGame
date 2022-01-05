@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "AICar.h"
 #include "GameTime.h"
+#include "SoundCue.h"
 
 namespace nsMyGame
 {
@@ -18,6 +19,29 @@ namespace nsMyGame
 		{
 
 			using namespace nsPlayerConstData::nsOnEnemyConstData;
+
+			/**
+			 * @brief コンストラクタ
+			*/
+			CPlayerOnEnemy::CPlayerOnEnemy()
+			{
+				// サウンドを初期化
+				InitSound();
+
+				return;
+			}
+
+			/**
+			 * @brief デストラクタ
+			*/
+			CPlayerOnEnemy::~CPlayerOnEnemy()
+			{
+				DeleteGO(m_chainPutOutSC);
+				DeleteGO(m_goOnEnemySC);
+				DeleteGO(m_landingOnEnemySC);
+
+				return;
+			}
 
 			/**
 			 * @brief 初期化
@@ -76,6 +100,24 @@ namespace nsMyGame
 				leaveJumpForce.y = nsPlayerConstData::nsMovementConstData::kJumpForce;
 
 				m_playerMovementRef->AddMoveVec(leaveJumpForce);
+
+				return;
+			}
+
+
+			/**
+			 * @brief サウンドを初期化
+			*/
+			void CPlayerOnEnemy::InitSound()
+			{
+				m_chainPutOutSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_chainPutOutSC->Init(kChainPutOutSoundFilePath, nsSound::CSoundCue::enSE);
+
+				m_goOnEnemySC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_goOnEnemySC->Init(kGoOnEnemySoundFilePath, nsSound::CSoundCue::enSE);
+
+				m_landingOnEnemySC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_landingOnEnemySC->Init(kLandingOnEnemySoundFilePath, nsSound::CSoundCue::enSE);
 
 				return;
 			}
@@ -243,16 +285,20 @@ namespace nsMyGame
 					m_playerMovementRef->SetUseGravity(false);
 					// ジャンプの姿勢になるように、ちょっとジャンプさせる
 					m_playerMovementRef->AddMoveVec(Vector3::Up * kStretchingToEnemyJumpForce);
+
+					m_chainPutOutSC->Play(false);
 					break;
 
 				case enGoOnEnemy:
 					m_startGoOnEnemyPos = m_playerRef->GetPosition();
+					m_goOnEnemySC->Play(false);
 					break;
 
 				case enOnEnemy:
 					// 補完率をリセットして、糸の伸ばしを終える。
 					m_goOnEnemyRate = 0.0f;
 					m_playerRef->EndStringStretchToPos();
+					m_landingOnEnemySC->Play(false);
 					break;
 				}
 

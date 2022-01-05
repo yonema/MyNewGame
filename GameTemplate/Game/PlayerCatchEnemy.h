@@ -14,6 +14,7 @@ namespace nsMyGame
 	namespace nsGameState { class CGameMainState; }
 	namespace nsAICharacter { class CAICar; }
 	namespace nsGraphic { namespace nsSprite { class CSpriteRender; } }
+	namespace nsSound { class CSoundCue; }
 
 	/**
 	 * @brief プレイヤー関連のネームスペース
@@ -91,6 +92,11 @@ namespace nsMyGame
 			 * @brief 忍術のエフェクトを初期化
 			*/
 			void InitNinjyutuEffect();
+
+			/**
+			 * @brief サウンドを初期化
+			*/
+			void InitSound();
 
 			/**
 			 * @brief QTEに使うボタンのスプライトの再初期化
@@ -222,6 +228,17 @@ namespace nsMyGame
 			nsAICharacter::CAICar* m_targetRef = nullptr;		//!< ターゲットの参照
 			std::vector<nsAICharacter::CAICar*>* m_aiCarsRef = nullptr;	//!< 車たちの参照
 			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステート
+
+			// サウンド
+			nsSound::CSoundCue* m_commandSuccessSC = nullptr;	//!< コマンド入力成功のサウンド
+			nsSound::CSoundCue* m_commandMissSC = nullptr;		//!< コマンド入力失敗のサウンド
+			nsSound::CSoundCue* m_windowOpneSC = nullptr;		//!< ウィンドウを開くサウンド
+			nsSound::CSoundCue* m_windowCloseSC = nullptr;		//!< ウィンドウを閉じるサウンド
+			nsSound::CSoundCue* m_fireStartSC = nullptr;		//!< 火遁の最初のサウンド
+			nsSound::CSoundCue* m_fireReleaseSC = nullptr;		//!< 火遁を放つサウンド
+			nsSound::CSoundCue* m_sonarSC = nullptr;			//!< ソナーのサウンド
+
+
 		};
 
 

@@ -11,6 +11,7 @@ namespace nsMyGame
 		namespace nsPlayerMovenent { class CPlayerMovement; }
 	}
 	namespace nsAICharacter { class CAICar; }
+	namespace nsSound { class CSoundCue; }
 
 	/**
 	 * @brief プレイヤー関連のネームスペース
@@ -31,11 +32,11 @@ namespace nsMyGame
 				/**
 				 * @brief コンストラクタ
 				*/
-				CPlayerOnEnemy() = default;
+				CPlayerOnEnemy();
 				/**
 				 * @brief デストラクタ
 				*/
-				~CPlayerOnEnemy() = default;
+				~CPlayerOnEnemy();
 
 			public:		// メンバ関数
 				/**
@@ -68,6 +69,11 @@ namespace nsMyGame
 				}
 
 			private:	// privateなメンバ関数
+
+				/**
+				 * @brief サウンドを初期化
+				*/
+				void InitSound();
 
 				/**
 				 * @brief 敵に向かって糸を伸ばし始める処理
@@ -110,6 +116,13 @@ namespace nsMyGame
 
 				Vector3 m_startGoOnEnemyPos = Vector3::Zero;	//!< 敵の上に行くときの最初の座標
 				float m_goOnEnemyRate = 0.0f;	//!< 敵の上に行くまでの補完率
+
+
+				// サウンド
+				nsSound::CSoundCue* m_chainPutOutSC = nullptr;		//!< 鎖を出すサウンド
+				nsSound::CSoundCue* m_goOnEnemySC = nullptr;		//!< 敵の上に乗りに行くサウンド
+				nsSound::CSoundCue* m_landingOnEnemySC = nullptr;	//!< 敵の上に乗ったサウンド
+
 			};
 
 		}

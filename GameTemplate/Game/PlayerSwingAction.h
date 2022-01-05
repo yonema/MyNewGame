@@ -4,17 +4,22 @@
 
 
 namespace nsMyGame
-{
+{		
+	// 前方宣言
+	namespace nsPlayer
+	{
+		class CPlayer;			// プレイヤークラス
+		class CPlayerCamera;	// プレイヤーのカメラクラス
+		class CPlayerModelAnimation; // プレイヤーモデルアニメーションクラス
+	}
+	namespace nsSound { class CSoundCue; }
+
+
 	/**
 	 * @brief プレイヤー関連のネームスペース
 	*/
 	namespace nsPlayer
 	{
-		// 前方宣言
-		class CPlayer;			// プレイヤークラス
-		class CPlayerCamera;	// プレイヤーのカメラクラス
-		class CPlayerModelAnimation; // プレイヤーモデルアニメーションクラス
-
 		/**
 		 * @brief プレイヤーの動き関連のネームスペース
 		*/
@@ -36,11 +41,11 @@ namespace nsMyGame
 				/**
 				 * @brief コンストラクタ
 				*/
-				CPlayerSwingAction() = default;
+				CPlayerSwingAction();
 				/**
 				 * @brief デストラクタ
 				*/
-				~CPlayerSwingAction() = default;
+				~CPlayerSwingAction();
 
 			public:		// メンバ関数
 
@@ -95,6 +100,11 @@ namespace nsMyGame
 				}
 
 			private:	// privateなメンバ関数
+
+				/**
+				 * @brief サウンドを初期化
+				*/
+				void InitSound();
 
 				/**
 				 * @brief スイングターゲットを探す
@@ -169,6 +179,13 @@ namespace nsMyGame
 				bool m_afterSwing = false;							//!< スイングを行ったか？
 				bool m_swingRollFlag = false;						//!< スイングロールを行うか？
 				Vector3 m_swingForwardDir = Vector3::Front;			//!< スイングの前方向
+
+				// サウンド
+				nsSound::CSoundCue* m_chainPutOutSC = nullptr;		//!< 鎖を出すのサウンド
+				nsSound::CSoundCue* m_chainBendingSC = nullptr;		//!< 鎖がしなるのサウンド
+				nsSound::CSoundCue* m_chainReleaseSC = nullptr;		//!< 鎖を離すのサウンド
+				nsSound::CSoundCue* m_swingLeaveSC = nullptr;		//!< スイング状態から離れるのサウンド
+
 			};
 		}
 	}

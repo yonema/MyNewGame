@@ -4,6 +4,7 @@
 #include "PlayerMovement.h"
 #include "StringActionTargetManager.h"
 #include "PlayerCamera.h"
+#include "SoundCue.h"
 
 namespace nsMyGame
 {
@@ -22,6 +23,30 @@ namespace nsMyGame
 			// プレイヤーのスイングアクションクラスの定数データを使用可能にする
 			using namespace nsSwingActionConstData;
 
+			/**
+			 * @brief コンストラクタ
+			*/
+			CPlayerSwingAction::CPlayerSwingAction()
+			{
+
+				// サウンドの初期化
+				InitSound();
+
+				return;
+			}
+
+			/**
+			 * @brief デストラクタ
+			*/
+			CPlayerSwingAction::~CPlayerSwingAction()
+			{
+				DeleteGO(m_chainPutOutSC);
+				DeleteGO(m_chainBendingSC);
+				DeleteGO(m_chainReleaseSC);
+				DeleteGO(m_swingLeaveSC);
+
+				return;
+			}
 
 			/**
 			 * @brief 初期化
@@ -141,6 +166,26 @@ namespace nsMyGame
 					return;
 				}
 
+
+				return;
+			}
+
+			/**
+			 * @brief サウンドを初期化
+			*/
+			void CPlayerSwingAction::InitSound()
+			{
+				m_chainPutOutSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_chainPutOutSC->Init(kChainPutOutSoundFilePath, nsSound::CSoundCue::enSE);
+
+				m_chainBendingSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_chainBendingSC->Init(kChainBendingSoundFilePath, nsSound::CSoundCue::enSE);
+
+				m_chainReleaseSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_chainReleaseSC->Init(kChainReleaseSoundFilePath, nsSound::CSoundCue::enSE);
+
+				m_swingLeaveSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_swingLeaveSC->Init(kSwingLeaveSoundFilePath, nsSound::CSoundCue::enSE);
 
 				return;
 			}
@@ -674,6 +719,9 @@ namespace nsMyGame
 			*/
 			void CPlayerSwingAction::IsStringStretchingEvent()
 			{
+				// 鎖を出すのサウンドを流す
+				m_chainPutOutSC->Play(false);
+
 				// 糸をスイングターゲットに向かって伸ばし始める
 				m_playerRef->StartStringStretchToPos(*m_swingTargetPos);
 				// 糸を伸ばし始めるアニメーションを再生する
@@ -691,6 +739,9 @@ namespace nsMyGame
 			*/
 			void CPlayerSwingAction::IsSwingingEvent()
 			{
+				// 鎖がしなるのサウンドを流す
+				m_chainBendingSC->Play(false);
+
 				// 減速し始めるスイングスピードを初期化する
 				m_startDecelerateSwingSpeed = kStartDecelerateSwingSpeedInitialValue;
 				// 入力によって生じたXZ平面での移動方向を初期化する
@@ -765,6 +816,17 @@ namespace nsMyGame
 					m_swingForwardDir = m_playerMovementRef->GetMoveVec();
 					m_swingForwardDir.y = 0.0f;
 					m_swingForwardDir.Normalize();
+
+					if (m_chainBendingSC->IsPlaying())
+					{
+						// 鎖がしなるのサウンドがまだ流れていたら、止める
+						m_chainBendingSC->Stop();
+					}
+
+					// 鎖を離すのサウンドを流す
+					m_chainReleaseSC->Play(false);
+					// スイング状態から離れるのサウンドを流す
+					m_swingLeaveSC->Play(false);
 				}
 				else
 				{
