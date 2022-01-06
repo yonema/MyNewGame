@@ -7,6 +7,7 @@
 #include "GameMainState.h"
 #include "Goal.h"
 #include "AICar.h"
+#include "BGM.h"
 
 namespace nsMyGame
 {
@@ -184,6 +185,10 @@ namespace nsMyGame
 
 				}
 
+				// BGMクラスの生成と初期化
+				m_bgm = NewGO<nsBGM::CBGM>(nsCommonData::enPriorityFirst);
+				m_bgm->Init(*m_player);
+
 				// タイマーの計測を始める
 				m_gameState->StartTimingGame();
 
@@ -200,6 +205,7 @@ namespace nsMyGame
 				DeleteGO(m_goal);		// ゴールを破棄
 				DeleteGO(m_gameState);	// ゲームステートを破棄
 				DeleteGO(m_buildings);	// 建物を破棄
+				DeleteGO(m_bgm);
 				
 				QueryGOs<nsAICharacter::CAICar>(
 					"Car",

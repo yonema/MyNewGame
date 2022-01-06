@@ -14,7 +14,7 @@ namespace nsMyGame
 	namespace nsGameState { class CGameMainState; }	// ゲームメインステートクラス
 	namespace nsGoal { class CGoal; }				// ゴールクラス
 	namespace nsBuilding { class CBuildings; }		// 建物クラス
-
+	namespace nsBGM { class CBGM; }
 	/**
 	 * @brief マップ（レベル）用ネームスペース
 	*/
@@ -67,6 +67,7 @@ namespace nsMyGame
 				nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステートクラス
 				nsBuilding::CBuildings* m_buildings = nullptr;	//!< 建物クラス
 				nsAI::CAIField m_aiField;					//!< AIのフィールド
+				nsBGM::CBGM* m_bgm = nullptr;				//!< BGMクラス
 			};
 		}
 	}

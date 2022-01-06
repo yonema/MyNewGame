@@ -300,6 +300,7 @@
     <ClCompile Include="AIField.cpp" />
     <ClCompile Include="AlphaMap.cpp" />
     <ClCompile Include="BezierCurve.cpp" />
+    <ClCompile Include="BGM.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="BSP.cpp" />
     <ClCompile Include="Buildings.cpp" />
@@ -453,6 +454,8 @@
     <ClInclude Include="AIField.h" />
     <ClInclude Include="AlphaMap.h" />
     <ClInclude Include="BezierCurve.h" />
+    <ClInclude Include="BGM.h" />
+    <ClInclude Include="BGMConstData.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="BSP.h" />
     <ClInclude Include="Buildings.h" />
