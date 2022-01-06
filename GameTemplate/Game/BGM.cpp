@@ -79,6 +79,10 @@ namespace nsMyGame
 		*/
 		void CBGM::SetCrossFade(const nsBGMConstData::EnBGMType bgmType)
 		{
+			if (m_currentBGMType == bgmType)
+			{
+				m_currentBGMType = m_nextBGMType;
+			}
 			// 次のBGMを設定
 			m_nextBGMType = bgmType;
 			// クロスフェードのタイマーとタイムを初期化する

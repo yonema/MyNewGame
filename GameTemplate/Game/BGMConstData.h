@@ -27,7 +27,7 @@ namespace nsMyGame
 
 			constexpr float kBGMSoundVolume[enBGMTypeNum] =
 			{
-				0.5f,0.5f,0.75f
+				0.5f,0.75f,0.75f
 			};
 
 			//!< クロスフェードのタイム
