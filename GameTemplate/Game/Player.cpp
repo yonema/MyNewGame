@@ -19,22 +19,28 @@ namespace nsMyGame
 		*/
 		bool CPlayer::Start()
 		{
+			m_playerModelAnimation = std::make_unique<CPlayerModelAnimation>();
+			m_playerInput = std::make_unique<CPlayerInput>();
+			m_playerCamera = std::make_unique<CPlayerCamera>();
+			m_playerMove = std::make_unique<nsPlayerMovenent::CPlayerMovement>();
+			m_playerCatchEnemy = std::make_unique<CPlayerCatchEnemy>();
+
 			// プレイヤーモデルアニメーションクラスの初期化
-			m_playerModelAnimation.Init(*this);
+			m_playerModelAnimation->Init(*this);
 
 			// プレイヤーの入力情報クラスの初期化
-			m_playerInput.Init(this);
+			m_playerInput->Init(this);
 
 			// プレイヤーカメラクラスの初期化
-			m_playerCamera.Init(*this);
+			m_playerCamera->Init(*this);
 
 			// プレイヤー移動クラスの初期化
-			m_playerMove.Init(
+			m_playerMove->Init(
 				kCapsuleRadius,
 				kDapsuleHeight,
 				this,
-				&m_playerCamera,
-				&m_playerModelAnimation
+				m_playerCamera.get(),
+				m_playerModelAnimation.get()
 				);
 
 			// プレイヤーの糸のモデルクラスの生成と初期化
@@ -42,7 +48,7 @@ namespace nsMyGame
 			m_playerStringModel->Init(*this);
 			
 			// プレイヤーが敵を捕まえる処理クラスの初期化
-			m_playerCatchEnemy.Init(this);
+			m_playerCatchEnemy->Init(this);
 
 			return true;
 		}
@@ -52,6 +58,12 @@ namespace nsMyGame
 		*/
 		void CPlayer::OnDestroy()
 		{
+			m_playerModelAnimation.reset();
+			m_playerInput.reset();
+			m_playerCamera.reset();
+			m_playerMove.reset();
+			m_playerCatchEnemy.reset();
+
 			// プレイヤーの糸のモデルクラスの破棄
 			DeleteGO(m_playerStringModel);
 
@@ -80,19 +92,19 @@ namespace nsMyGame
 			nsDebug::DrawTextPanel(m_position, L"pos");
 
 			// 入力処理を実行
-			m_playerInput.ExecuteUpdate();
+			m_playerInput->ExecuteUpdate();
 
 			// プレイヤーの移動を実行
-			m_playerMove.ExecuteUpdate();
+			m_playerMove->ExecuteUpdate();
 
 			// カメラクラスを更新
-			m_playerCamera.ExecuteUpdate();
+			m_playerCamera->ExecuteUpdate();
 
 			// モデルアニメーションクラスを更新
-			m_playerModelAnimation.ExecuteUpdate();
+			m_playerModelAnimation->ExecuteUpdate();
 
 			// プレイヤーが敵を捕まえる処理クラスを実行
-			m_playerCatchEnemy.ExecuteUpdate();
+			m_playerCatchEnemy->ExecuteUpdate();
 
 			return;
 		}
@@ -132,7 +144,7 @@ namespace nsMyGame
 		*/
 		void CPlayer::ChangeOnEnemyState()
 		{
-			m_playerMove.ResetSwing();
+			m_playerMove->ResetSwing();
 			ChangeState(enOnEnemy);
 			return;
 		}
@@ -186,7 +198,7 @@ namespace nsMyGame
 			{
 			case enWalkAndRun:
 				// 歩きと走りのサウンドを停止する
-				m_playerMove.StopWalkAndRunSound();
+				m_playerMove->StopWalkAndRunSound();
 				break;
 			case enSwing:
 				break;
@@ -202,7 +214,7 @@ namespace nsMyGame
 			{
 			case enWalkAndRun:
 				// 歩きと走りのクラスの移動パラメータを合わせる
-				m_playerMove.MuchWalkAndRunMoveParam();
+				m_playerMove->MuchWalkAndRunMoveParam();
 				break;
 			case enSwing:
 				break;

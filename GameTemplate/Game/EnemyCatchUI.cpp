@@ -100,7 +100,7 @@ namespace nsMyGame
 		{
 			for (int i = 0; i < enCanCatchEnemySpriteNum; i++)
 			{
-				m_canCatchEnemySR[i] = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+				m_canCatchEnemySR[i] = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
 				m_canCatchEnemySR[i]->Init(
 					kCanCatchEnemySpriteFilePath[i],
 					kCanCatchEnemySpriteWidht[i],
@@ -118,7 +118,7 @@ namespace nsMyGame
 		*/
 		void CEnemyCatchUI::InitTargetSprite()
 		{
-			m_targetSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			m_targetSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
 			m_targetSR->Init(
 				kTargetSpriteFilePath,
 				kTargetSpriteWidth,
@@ -135,7 +135,7 @@ namespace nsMyGame
 		*/
 		void CEnemyCatchUI::InitTargetLengthFont()
 		{
-			m_targetLengthFR = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityThird);
+			m_targetLengthFR = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPrioritySecond);
 			m_targetLengthFR->SetParam(
 				L"",
 				Vector2::Zero,

@@ -112,11 +112,11 @@ namespace nsMyGame
 		void CMiniMap::InitMiniMapSprite()
 		{
 			// ミニマップの背景用スプライトの生成と初期化
-			m_miniMapBackSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_miniMapBackSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
 			m_miniMapBackSR->Init(kMiniMapBackSpriteFilePath, kMiniMapDrawWidth, kMiniMapDrawHeight);
 
 			// ミニマップの枠用スプライトの生成と初期化
-			m_miniMapFrameSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_miniMapFrameSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
 			m_miniMapFrameSR->Init(
 				kMiniMapFrameSpriteFilePath,
 				kMiniMapFrameSpriteWidth, 
@@ -126,7 +126,7 @@ namespace nsMyGame
 			);
 
 			// ミニマップのスプライトの生成
-			m_miniMapSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_miniMapSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
 
 			// スプライトの定数データを使用可能にする
 			using namespace nsGraphic::nsSprite::nsSpriteConstData;
@@ -162,7 +162,7 @@ namespace nsMyGame
 		void CMiniMap::InitPlayerIconSprite()
 		{
 			// プレイヤーのアイコンのスプライトの生成と初期化
-			m_playerIconSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_playerIconSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFourth);
 			m_playerIconSR->Init(
 				kPlayerIconSpriteFilePath,
 				kPlayerIconSpriteWidth,
@@ -188,7 +188,7 @@ namespace nsMyGame
 			// 車の数だけスプライトを生成
 			for (int i = 0; i < m_aiCarsRef->size();i++)
 			{
-				m_carIconSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond));
+				m_carIconSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird));
 				m_carIconSRs[i]->Init(
 					kCarIconSpriteFilePath,
 					kCarIconSpriteWidth,
@@ -217,7 +217,7 @@ namespace nsMyGame
 			// 車の数だけスプライトを生成
 			for (int i = 0; i < m_aiCarsRef->size(); i++)
 			{
-				m_carMiniIconSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond));
+				m_carMiniIconSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird));
 				m_carMiniIconSRs[i]->Init(
 					kCarMiniIconSpriteFilePath,
 					kCarMiniIconSpriteWidth,
@@ -227,7 +227,7 @@ namespace nsMyGame
 				);
 				m_carMiniIconSRs[i]->SetIsControlAlbedo(true);
 				m_carMiniIconSRs[i]->SetAlbedoColor(kCarIconDefaultColor);
-				m_carMiniIconOutSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond));
+				m_carMiniIconOutSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird));
 				m_carMiniIconOutSRs[i]->Init(
 					kCarMiniIconOutSpriteFilePath,
 					kCarMiniIconOutSpriteWidth,

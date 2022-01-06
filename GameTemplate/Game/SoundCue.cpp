@@ -17,7 +17,7 @@ namespace nsMyGame
 		void CSoundCue::OnDestroy()
 		{
 			//CSoundCueオブジェクトをDeleteGOした際、再生中だった場合、停止させる。
-			if (m_soundSource)
+			//if (m_soundSource)
 			{
 				DeleteGO(m_soundSource);
 			}

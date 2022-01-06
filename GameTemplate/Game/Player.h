@@ -95,7 +95,7 @@ namespace nsMyGame
 			*/
 			const SPlayerInputData& GetInputData() const
 			{
-				return m_playerInput.GetPlayerInputData();
+				return m_playerInput->GetPlayerInputData();
 			}
 
 			/**
@@ -104,7 +104,7 @@ namespace nsMyGame
 			*/
 			const CPlayerCamera& GetCamera() const
 			{
-				return m_playerCamera;
+				return *m_playerCamera;
 			}
 
 			/**
@@ -113,7 +113,7 @@ namespace nsMyGame
 			*/
 			const nsPlayerMovenent::CPlayerMovement& GetPlayerMovement() const
 			{
-				return m_playerMove;
+				return *m_playerMove;
 			}
 
 			/**
@@ -122,7 +122,7 @@ namespace nsMyGame
 			*/
 			const CPlayerModelAnimation& GetPlayerModelAnimation() const
 			{
-				return m_playerModelAnimation;
+				return *m_playerModelAnimation;
 			}
 
 			/**
@@ -131,7 +131,7 @@ namespace nsMyGame
 			*/
 			const CPlayerCatchEnemy& GetCatchEnemy() const
 			{
-				return m_playerCatchEnemy;
+				return *m_playerCatchEnemy;
 			}
 
 			/**
@@ -204,11 +204,11 @@ namespace nsMyGame
 			*/
 			void SetIsOnEnemyCamera(const bool isOnEnemyCamera)
 			{
-				m_playerCamera.SetIsOnEnemyCamera(isOnEnemyCamera);
+				m_playerCamera->SetIsOnEnemyCamera(isOnEnemyCamera);
 				if (isOnEnemyCamera)
-					m_playerCamera.LerpDampingRate(1.0f);
+					m_playerCamera->LerpDampingRate(1.0f);
 				else
-					m_playerCamera.LerpDampingRate(0.0f);
+					m_playerCamera->LerpDampingRate(0.0f);
 			}
 
 			/**
@@ -216,7 +216,7 @@ namespace nsMyGame
 			*/
 			void ResetOnEnemy()
 			{
-				m_playerMove.ResetOnEnemy();
+				m_playerMove->ResetOnEnemy();
 			}
 
 		private:	// privateなメンバ関数
@@ -231,14 +231,14 @@ namespace nsMyGame
 			Vector3 m_position = Vector3::Zero;				//!< 座標
 			Quaternion m_rotation = Quaternion::Identity;	//!< 回転
 
-			CPlayerModelAnimation m_playerModelAnimation;	//!< プレイヤーモデルアニメーションクラス
-			CPlayerInput m_playerInput;						//!< プレイヤー入力クラス
-			CPlayerCamera m_playerCamera;					//!< プレイヤーカメラクラス
-			nsPlayerMovenent::CPlayerMovement m_playerMove;	//!< プレイヤー移動クラス
+			std::unique_ptr<CPlayerModelAnimation> m_playerModelAnimation;	//!< プレイヤーモデルアニメーションクラス
+			std::unique_ptr <CPlayerInput> m_playerInput;						//!< プレイヤー入力クラス
+			std::unique_ptr <CPlayerCamera> m_playerCamera;					//!< プレイヤーカメラクラス
+			std::unique_ptr <nsPlayerMovenent::CPlayerMovement> m_playerMove;	//!< プレイヤー移動クラス
+			std::unique_ptr <CPlayerCatchEnemy> m_playerCatchEnemy;			//!< プレイヤーが敵を捕まえる処理クラス
 			//!< プレイヤーのステート
 			nsPlayerConstData::EnPlayerState m_playerState = nsPlayerConstData::enWalkAndRun;
 			CPlayerStringModel* m_playerStringModel = nullptr;	//!< プレイヤーの糸のモデルクラス
-			CPlayerCatchEnemy m_playerCatchEnemy;			//!< プレイヤーが敵を捕まえる処理クラス
 		};
 
 	}

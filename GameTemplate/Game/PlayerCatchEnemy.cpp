@@ -224,6 +224,21 @@ namespace nsMyGame
 		*/
 		void CPlayerCatchEnemy::InitQTEButtonSprite()
 		{
+			// いや、まだリソースバンク作ってなかったわ。
+			//for (int i = 0; i < enQTEButtonTypeNum; i++)
+			//{
+			//	// ゲーム中の読み込みを速くするため、最初に読み込んですぐに破棄する。
+			//	// リソースバンクに登録される。
+			//	nsGraphic::nsSprite::CSpriteRender* sr = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFirst);
+			//	sr->Init(
+			//		kQTEButtonSpriteFilePath[i],
+			//		0.0f, 0.0f
+			//	);
+			//	sr->Deactivate();
+			//	DeleteGO(sr);
+			//}
+
+
 			// QTEに使うボタンの枠のスプライトの生成と初期化
 			m_QTEButtonFraneSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
 			m_QTEButtonFraneSR->Init(
@@ -254,7 +269,7 @@ namespace nsMyGame
 			for (auto& qteResultSR : m_QTEResultSR)
 			{			
 				// QTEの結果のスプライトの生成と初期化
-				qteResultSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+				qteResultSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFourth);
 				qteResultSR->Init(
 					kQTEResultSpriteFilePaths[i],
 					kQTEResultSpriteWitdh,
@@ -272,7 +287,7 @@ namespace nsMyGame
 			}
 
 			// QTEの結果の枠（内側）スプライトの生成と初期化
-			m_QTEResultFrameIn = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_QTEResultFrameIn = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
 			m_QTEResultFrameIn->Init(
 				kQTEResultFrameInSpriteFilePath,
 				kQTEResultFrameSpriteWitdh,
@@ -286,7 +301,7 @@ namespace nsMyGame
 			m_QTEResultFrameIn->Deactivate();
 
 			// QTEの結果の枠（外側）スプライトの生成と初期化
-			m_QTEResultFrameOut = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPrioritySecond);
+			m_QTEResultFrameOut = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
 			m_QTEResultFrameOut->Init(
 				kQTEResultFrameOutSpriteFilePath,
 				kQTEResultFrameSpriteWitdh,
