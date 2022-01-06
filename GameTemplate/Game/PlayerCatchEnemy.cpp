@@ -325,6 +325,7 @@ namespace nsMyGame
 		{
 			m_commandSuccessSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_commandSuccessSC->Init(kCommandSuccessSoundFilePath, nsSound::CSoundCue::enSE);
+			m_commandSuccessSC->SetVolume(kCommandSuccessSoundVolume);
 
 			m_commandMissSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_commandMissSC->Init(kCommandMissSoundFilePath, nsSound::CSoundCue::enSE);
@@ -340,12 +341,15 @@ namespace nsMyGame
 
 			m_fireStartSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_fireStartSC->Init(kFireStartSoundFilePath, nsSound::CSoundCue::enSE);
+			m_fireStartSC->SetVolume(kFireStartSoundVolume);
 
 			m_fireReleaseSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_fireReleaseSC->Init(kFireReleaseSoundFilePath, nsSound::CSoundCue::enSE);
+			m_fireReleaseSC->SetVolume(kFireReleaseSoundVolume);
 
 			m_sonarSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_sonarSC->Init(kSonarSoundFilePath, nsSound::CSoundCue::enSE);
+			m_sonarSC->SetVolume(kSonarSoundVolume);
 
 			return;
 		}

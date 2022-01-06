@@ -64,6 +64,13 @@ namespace nsMyGame
 				constexpr const wchar_t* const kRunSoundFilePath = L"Assets/sound/character/normalMove/run.wav";
 				//!< ジャンプのサウンドファイルパス
 				constexpr const wchar_t* const kJumpSoundFilePath = L"Assets/sound/character/normalMove/jump.wav";
+			
+				//!< 歩きのサウンドの音量
+				constexpr float kWalkSoundVolume = 2.0f;
+				//!< 走りのサウンドの音量
+				constexpr float kRunSoundVolume = 2.0f;
+				//!< ジャンプのサウンドの音量
+				constexpr float kJumpSoundVolume = 1.0f;
 			}
 
 			/**
@@ -124,6 +131,15 @@ namespace nsMyGame
 				constexpr const wchar_t* const kChainReleaseSoundFilePath = L"Assets/sound/character/swing/chain_release.wav";
 				//!< スイング状態から離れるサウンドのファイルパス
 				constexpr const wchar_t* const kSwingLeaveSoundFilePath = L"Assets/sound/character/swing/swing_leave.wav";
+
+				//!< 鎖を出すサウンドの音量
+				constexpr float kChainPutOutSoundVolume = 2.0f;
+				//!< 鎖がしなるサウンドの音量
+				constexpr float kChainBendingSoundVolume = 2.0f;
+				//!< 鎖を離すサウンドの音量
+				constexpr float kChainReleaseSoundVolume = 2.0f;
+				//!<スイング状態から離れるサウンドの音量
+				constexpr float kSwingLeaveSoundVolume = 2.0f;
 			}
 
 			/**
@@ -158,6 +174,12 @@ namespace nsMyGame
 				//!< 敵の上に乗ったときのサウンドのファイルパス
 				constexpr const wchar_t* const kLandingOnEnemySoundFilePath = L"Assets/sound/qte/car/car_landing.wav";
 
+				//!< 鎖を出すサウンドの音量
+				constexpr float kChainPutOutSoundVolume = nsSwingActionConstData::kChainPutOutSoundVolume;
+				//!< 敵の上に向かうサウンドの音量
+				constexpr float kGoOnEnemySoundVolume = 2.0f;
+				//!< 敵の上に乗ったときのサウンドの音量
+				constexpr float kLandingOnEnemySoundVolume = 3.0f;
 			}
 
 			/**
@@ -363,24 +385,28 @@ namespace nsMyGame
 				constexpr const wchar_t* const kCommandSuccessSoundFilePath = L"Assets/sound/qte/command/command_success.wav";
 				//!< コマンド入力失敗のサウンドのファイルパス
 				constexpr const wchar_t* const kCommandMissSoundFilePath = L"Assets/sound/qte/command/command_miss.wav";
-				//!< コマンド入力失敗のサウンドの音量
-				constexpr float kCommandMissSoundVolume = 2.0f;
 				//!< ウィンドウを開くサウンドのファイルパス
 				constexpr const wchar_t* const kWindowOpneSoundFilePath = L"Assets/sound/qte/window/opne_window.wav";
 				//!< ウィンドウを閉じるサウンドのファイルパス
 				constexpr const wchar_t* const kWindowCloseSoundFilePath = L"Assets/sound/qte/window/opne_window.wav";
 
-				constexpr float kWindowOpenSoundVolume = 0.3f;	//!< ウィンドウを開くサウンドの音量
-				constexpr float kWindowCloseSoundVolume = 0.3f;	//!< ウィンドウを閉じるサウンドの音量
+				constexpr float kCommandSuccessSoundVolume = 1.5f;	//!< コマンド入力成功のサウンドの音量
+				constexpr float kCommandMissSoundVolume = 3.0f;	//!< コマンド入力失敗のサウンドの音量
+				constexpr float kWindowOpenSoundVolume = 0.5f;	//!< ウィンドウを開くサウンドの音量
+				constexpr float kWindowCloseSoundVolume = 0.5f;	//!< ウィンドウを閉じるサウンドの音量
 
 				//!< 火遁の開始のサウンドのファイルパス
 				constexpr const wchar_t* const kFireStartSoundFilePath = L"Assets/sound/qte/fire/fire_start.wav";
 				//!< 火遁を放つサウンドのファイルパス
 				constexpr const wchar_t* const kFireReleaseSoundFilePath = L"Assets/sound/qte/fire/fire_release.wav";
+
+				constexpr float kFireStartSoundVolume = 2.0f;	//!< 火遁の開始のサウンドの音量
+				constexpr float kFireReleaseSoundVolume = 2.0f;	//!< 火遁を放つサウンドの音量
 				constexpr float kFireReleaseSoundTime = 1.5f;	//!< 火を放つサウンドのタイム
 
 				//!< ソナーのサウンドのファイルパス
 				constexpr const wchar_t* const kSonarSoundFilePath = L"Assets/sound/character/other/sonar.wav";
+				constexpr float kSonarSoundVolume = 1.0f;	//!< ソナーのサウンドの音量
 			}
 
 			/**

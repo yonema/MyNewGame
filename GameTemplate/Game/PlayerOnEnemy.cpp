@@ -112,12 +112,15 @@ namespace nsMyGame
 			{
 				m_chainPutOutSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_chainPutOutSC->Init(kChainPutOutSoundFilePath, nsSound::CSoundCue::enSE);
+				m_chainPutOutSC->SetVolume(kChainPutOutSoundVolume);
 
 				m_goOnEnemySC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_goOnEnemySC->Init(kGoOnEnemySoundFilePath, nsSound::CSoundCue::enSE);
+				m_goOnEnemySC->SetVolume(kGoOnEnemySoundVolume);
 
 				m_landingOnEnemySC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_landingOnEnemySC->Init(kLandingOnEnemySoundFilePath, nsSound::CSoundCue::enSE);
+				m_landingOnEnemySC->SetVolume(kLandingOnEnemySoundVolume);
 
 				return;
 			}

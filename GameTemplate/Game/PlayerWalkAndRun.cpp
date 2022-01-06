@@ -131,12 +131,15 @@ namespace nsMyGame
 			{
 				m_walkSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_walkSC->Init(kWalkSoundFilePath, nsSound::CSoundCue::enSE);
+				m_walkSC->SetVolume(kWalkSoundVolume);
 
 				m_runSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_runSC->Init(kRunSoundFilePath, nsSound::CSoundCue::enSE);
+				m_runSC->SetVolume(kRunSoundVolume);
 
 				m_jumpSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_jumpSC->Init(kJumpSoundFilePath, nsSound::CSoundCue::enSE);
+				m_jumpSC->SetVolume(kJumpSoundVolume);
 
 				return;
 			}

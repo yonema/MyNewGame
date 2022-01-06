@@ -177,15 +177,19 @@ namespace nsMyGame
 			{
 				m_chainPutOutSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_chainPutOutSC->Init(kChainPutOutSoundFilePath, nsSound::CSoundCue::enSE);
+				m_chainPutOutSC->SetVolume(kChainPutOutSoundVolume);
 
 				m_chainBendingSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_chainBendingSC->Init(kChainBendingSoundFilePath, nsSound::CSoundCue::enSE);
+				m_chainBendingSC->SetVolume(kChainBendingSoundVolume);
 
 				m_chainReleaseSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_chainReleaseSC->Init(kChainReleaseSoundFilePath, nsSound::CSoundCue::enSE);
+				m_chainReleaseSC->SetVolume(kChainReleaseSoundVolume);
 
 				m_swingLeaveSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_swingLeaveSC->Init(kSwingLeaveSoundFilePath, nsSound::CSoundCue::enSE);
+				m_swingLeaveSC->SetVolume(kSwingLeaveSoundVolume);
 
 				return;
 			}

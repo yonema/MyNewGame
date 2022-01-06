@@ -85,8 +85,8 @@ namespace nsMyGame
 			constexpr float kDriveSoundTime = 9.5f;
 			constexpr float kDriveSoundVolume = 1.0f;	//!< 運転中のサウンドの音量
 			constexpr float kDriftSoundVolume = 1.0f;	//!< ドリフトのサウンドの音量
-			constexpr float kFireExplosionSoundVolume = 2.5f;	//!< 火遁の爆発のサウンドの音量
-			constexpr float kCarExplosionSoundVolume = 2.5f;	//!< 車の爆発のサウンドの音量
+			constexpr float kFireExplosionSoundVolume = 3.0f;	//!< 火遁の爆発のサウンドの音量
+			constexpr float kCarExplosionSoundVolume = 3.0f;	//!< 車の爆発のサウンドの音量
 		}
 	}
 }
