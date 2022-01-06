@@ -1,4 +1,5 @@
 #pragma once
+#include "BGMConstData.h"
 
 namespace nsMyGame
 {
@@ -45,11 +46,45 @@ namespace nsMyGame
 			*/
 			void Init(const nsPlayer::CPlayer& player);
 
+		private:	// privateなメンバ関数
+
+			/**
+			 * @brief クロスフェードを設定する
+			 * @param[in] bgmType 次のBGMの種類
+			*/
+			void SetCrossFade(const nsBGMConstData::EnBGMType bgmType);
+
+			/**
+			 * @brief BGMのステートを更新する
+			*/
+			void UpdateBGMState();
+
+			/**
+			 * @brief クロスフェードを更新
+			*/
+			void UpdateCrossFade();
+
+			/**
+			 * @brief ステート遷移
+			 * @param[in] newState 新しいステート
+			*/
+			void ChangeState(const nsBGMConstData::EnBGMType newState);
+
 		private:	// データメンバ
 			const nsPlayer::CPlayer* m_playerRef = nullptr;		//!< プレイヤークラスの参照
 
-			nsSound::CSoundCue* m_swingBGMSC = nullptr;		//!< スイング中のBGMのサウンド
+			//!< スイング中のBGMのサウンド
+			nsSound::CSoundCue* m_bgmSC[nsBGMConstData::enBGMTypeNum] = {};
 
+			//!< 現在のBGMの種類
+			nsBGMConstData::EnBGMType m_currentBGMType = nsBGMConstData::enBT_Normal;
+			//!< 次のBGMの種類
+			nsBGMConstData::EnBGMType m_nextBGMType = nsBGMConstData::enBT_Normal;
+			//!< BGMのステート
+			nsBGMConstData::EnBGMType m_bgmState = nsBGMConstData::enBT_Normal;
+			bool m_isCrossFade = false;					//!< クロスフェード中か？
+
+			float m_crossFadeTimer = 0.0f;					//!< クロスフェードに使用するタイマー
 		};
 
 	}

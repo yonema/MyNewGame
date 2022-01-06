@@ -6,10 +6,30 @@ namespace nsMyGame
 	{
 		namespace nsBGMConstData
 		{
-			//!< スイング中のBGMのサウンドのファイルパス
-			constexpr const wchar_t* const kSwingBGMSoundFilePath = L"Assets/sound/bgm/swingBGM.wav";
-			//!< スイング中のBGMのサウンドの音量
-			constexpr float kSwingBGMSoundVolume = 0.5f;
+			/**
+			 * @brief BGMの種類
+			*/
+			enum EnBGMType
+			{
+				enBT_Normal,
+				enBT_Swing,
+				enBGMTypeNum
+			};
+
+			//!< BGMのサウンドのファイルパス
+			constexpr const wchar_t* const kBGMSoundFilePaht[enBGMTypeNum] =
+			{
+				L"Assets/sound/bgm/normalBGM.wav",
+				L"Assets/sound/bgm/swingBGM.wav"
+			};
+
+			constexpr float kBGMSoundVolume[enBGMTypeNum] =
+			{
+				0.5f,0.5f
+			};
+
+			//!< クロスフェードのタイム
+			constexpr float kCrossFadeTime = 3.0f;
 		}
 	}
 }
