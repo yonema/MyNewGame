@@ -27,14 +27,14 @@ namespace nsMyGame
 			// 初期化
 			m_modelRender->Init(kStringModelFilePath);
 			// 無効化する
-			//m_modelRender->Deactivate();
+			m_modelRender->Deactivate();
 
 			// モデルレンダラーの生成
 			m_tipModelRender = NewGO <nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 			// 初期化
 			m_tipModelRender->Init(kStringModelFilePath);
 			// 無効化する
-			//m_tipModelRender->Deactivate();
+			m_tipModelRender->Deactivate();
 
 			return true;
 		}
@@ -167,12 +167,12 @@ namespace nsMyGame
 			m_isStretched = true;
 
 			// 自身を無効化する
-			//Deactivate();
+			Deactivate();
 
 			// モデルを無効化する
-			//m_modelRender->Deactivate();
+			m_modelRender->Deactivate();
 
-			//m_tipModelRender->Deactivate();
+			m_tipModelRender->Deactivate();
 
 			m_stretchRate = 0.0f;
 

@@ -187,17 +187,21 @@ namespace nsMyGame
 				m_playerMovementRef->ResetMoveVecY();
 				m_playerMovementRef->ResetMoveVecZ();
 
+				const float t = m_goOnEnemyTimer / kGoOnEnemyTime;
 				// 移動先の座標
 				Vector3 pos = Vector3::Zero;
 				// 最初の座標から、ターゲット座標まで、線形補完で徐々に近づく。
-				pos.Lerp(m_goOnEnemyRate, m_startGoOnEnemyPos, targetPos);
+				pos.Lerp(t, m_startGoOnEnemyPos, targetPos);
 				// プレイヤーの座標を直接設定する
 				m_playerMovementRef->SetDirectPosition(pos);
 
-				// 補間率を進める
-				m_goOnEnemyRate += nsTimer::GameTime().GetFrameDeltaTime();
+				// 敵の方を向ける
+				LookAtEnemy();
 
-				if (m_goOnEnemyRate >= 1.0f)
+				// 補間率を進める
+				m_goOnEnemyTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				if (m_goOnEnemyTimer >= kGoOnEnemyTime)
 				{
 					// 敵の上まで着いたら、ステートを遷移する。
 					ChangeState(enOnEnemy);
@@ -299,7 +303,7 @@ namespace nsMyGame
 
 				case enOnEnemy:
 					// 補完率をリセットして、糸の伸ばしを終える。
-					m_goOnEnemyRate = 0.0f;
+					m_goOnEnemyTimer = 0.0f;
 					m_playerRef->EndStringStretchToPos();
 					m_landingOnEnemySC->Play(false);
 					break;

@@ -165,6 +165,9 @@ namespace nsMyGame
 				constexpr float kOnEnemyHeight = 150.0f;	//!< 敵の上に乗るときの高さ
 				constexpr float kOnEnemyBackLength = 70.0f;	//!< 敵の上に乗るときの後ろの長さ
 
+				//!< 敵の上に行くまでのタイム
+				constexpr float kGoOnEnemyTime = 0.8f;
+
 				//!< 敵に糸を伸ばすときに、ジャンプの姿勢になるように、ちょっとジャンプさせる時の力
 				constexpr float kStretchingToEnemyJumpForce = 10.0f;
 
@@ -466,6 +469,8 @@ namespace nsMyGame
 					enAnim_swinging,	//!< スインギング
 					enAnim_swingRaiseLeg,	//!< 足を上げるスイング
 					enAnim_swingRoll,	//!< スイングロール
+					enAnim_goOnEnemy,	//!< 敵の上に向かう
+					enAnim_goOnEnemy2,	//!< 敵の上に向かう
 					enAnim_num		//!< アニメーションクリップの数
 				};
 
@@ -484,6 +489,8 @@ namespace nsMyGame
 					"Assets/animData/kunoichi/swinging.tka",
 					"Assets/animData/kunoichi/swingRaiseLeg.tka",
 					"Assets/animData/kunoichi/swingRoll.tka",
+					"Assets/animData/kunoichi/goOnEnemy.tka",
+					"Assets/animData/kunoichi/goOnEnemy2.tka",
 
 				};
 

@@ -115,7 +115,7 @@ namespace nsMyGame
 				const nsAICharacter::CAICar* m_enemyRef = nullptr;	//!< 敵の参照
 
 				Vector3 m_startGoOnEnemyPos = Vector3::Zero;	//!< 敵の上に行くときの最初の座標
-				float m_goOnEnemyRate = 0.0f;	//!< 敵の上に行くまでの補完率
+				float m_goOnEnemyTimer = 0.0f;	//!< 敵の上に行くまでのタイマー
 
 
 				// サウンド

@@ -219,6 +219,22 @@ namespace nsMyGame
 				m_animState = enAnim_ninjaIdle;
 				return;
 			}
+			else if (m_playerRef->GetPlayerMovement().GetPlayerOnEnemy().GetOnEnemyState() ==
+				nsPlayerConstData::nsOnEnemyConstData::enGoOnEnemy)
+			{
+				if (m_animState == enAnim_goOnEnemy && m_playerModel->IsAnimationPlaying() != true)
+				{
+					m_animState = enAnim_goOnEnemy2;
+					m_playerModel->SetAnimationSpeed(2.0f);
+				}
+				else if (m_animState != enAnim_goOnEnemy2)
+				{
+					m_animState = enAnim_goOnEnemy;
+					m_playerModel->SetAnimationSpeed(2.0f);
+					m_AnimInterpolateTime = 0.5f;
+				}
+				return;
+			}
 
 			// プレイヤーの速度
 
