@@ -84,7 +84,8 @@ namespace nsMyGame
 			nsBGMConstData::EnBGMType m_bgmState = nsBGMConstData::enBT_Normal;
 			bool m_isCrossFade = false;					//!< クロスフェード中か？
 
-			float m_crossFadeTimer = 0.0f;					//!< クロスフェードに使用するタイマー
+			float m_crossFadeTimer = 0.0f;				//!< クロスフェードに使用するタイマー
+			float m_crossFadeTime = 0.0f;				//!< クロスフェードのタイム
 		};
 
 	}

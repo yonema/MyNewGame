@@ -19,12 +19,15 @@ namespace nsMyGame
 
 			for (int i = 0; i < enBGMTypeNum; i++)
 			{
+				// 各BGMを生成して初期化
 				m_bgmSC[i] = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_bgmSC[i]->Init(kBGMSoundFilePaht[i], nsSound::CSoundCue::enBGM);
+				// 音量を0にして再生しておく
 				m_bgmSC[i]->SetVolume(0.0f);
 				m_bgmSC[i]->Play(true);
 			}
 
+			// 現在のBGMとステートをノーマルにしておく
 			m_currentBGMType = enBT_Normal;
 			m_bgmState = enBT_Normal;
 			m_bgmSC[m_currentBGMType]->SetVolume(kBGMSoundVolume[m_currentBGMType]);
@@ -76,9 +79,24 @@ namespace nsMyGame
 		*/
 		void CBGM::SetCrossFade(const nsBGMConstData::EnBGMType bgmType)
 		{
+			// 次のBGMを設定
 			m_nextBGMType = bgmType;
+			// クロスフェードのタイマーとタイムを初期化する
 			m_crossFadeTimer = 0.0f;
+			m_crossFadeTime = kCrossFadeTime[m_nextBGMType];
+			// クロスフェード、オン
 			m_isCrossFade = true;
+
+			for (int i = 0; i < enBGMTypeNum; i++)
+			{
+				// クロスフェードに使うBGM以外は音量0にする
+				if (i != m_currentBGMType &&
+					i != m_nextBGMType)
+				{
+					m_bgmSC[i]->SetVolume(0.0f);
+				}
+			}
+
 			return;
 		}
 
@@ -89,10 +107,23 @@ namespace nsMyGame
 		{
 			if (m_playerRef->GetState() == nsPlayer::nsPlayerConstData::enSwing)
 			{
+				// スイング状態
 				ChangeState(enBT_Swing);
+			}
+			else if (m_playerRef->GetState() == nsPlayer::nsPlayerConstData::enOnEnemy)
+			{
+				// QTE状態
+				ChangeState(enBT_qte);
+			}
+			else if (m_bgmState == enBT_Swing &&
+				m_playerRef->GetPlayerMovement().IsAir())
+			{
+				// スイング中に、空中でスイング中ではなくなっても、地面に降りるまでは
+				// ノーマルに戻らず、スイング状態を維持するためのif
 			}
 			else
 			{
+				// ノーマル状態
 				ChangeState(enBT_Normal);
 			}
 			return;
@@ -105,26 +136,42 @@ namespace nsMyGame
 		{
 			if (m_isCrossFade != true)
 			{
+				// クロスフェードしない。早期リターン。
 				return;
 			}
 
-			if (m_crossFadeTimer >= kCrossFadeTime)
+			if (m_crossFadeTimer >= m_crossFadeTime)
 			{
+				// タイマーがタイムをオーバーしたら終了
+
+				// クロスフェード、オフ。
 				m_isCrossFade = false;
+				// 現在のBGMの音量と次のBGMの音量を完全に切り替える
 				m_bgmSC[m_currentBGMType]->SetVolume(0.0f);
 				m_bgmSC[m_nextBGMType]->SetVolume(1.0f);
 
+				// 次のBGMを現在のBGMにする
 				m_currentBGMType = m_nextBGMType;
 			}
 
-			const float rate = m_crossFadeTimer / kCrossFadeTime;
+			// タイマーの進んでいる率
+			const float rate = m_crossFadeTimer / m_crossFadeTime;
 
-			float volume = Math::Lerp<float>(rate, kBGMSoundVolume[m_currentBGMType], 0.0f);
+			// 指数関数的変化にさせる。音が大きい状態が長くなるようにする。
+			float t = pow(rate, 2.0f);	// 補完率
+			// 音量を線形補完
+			float volume = Math::Lerp<float>(t, kBGMSoundVolume[m_currentBGMType], 0.0f);
+			// 現在のBGMの音量を設定
 			m_bgmSC[m_currentBGMType]->SetVolume(volume);
 
+			// 指数関数的変化にさせる。音が大きい状態が長くなるようにする。
+			t = 1.0f - pow((1.0f - rate), 2.0f);
+			// 音量を線形補完
 			volume = Math::Lerp<float>(rate, 0.0f, kBGMSoundVolume[m_nextBGMType]);
+			// 次のBGMの音量を設定
 			m_bgmSC[m_nextBGMType]->SetVolume(volume);
 
+			// タイマーを進める
 			m_crossFadeTimer += nsTimer::GameTime().GetFrameDeltaTime();
 
 			return;
@@ -143,6 +190,7 @@ namespace nsMyGame
 
 			m_bgmState = newState;
 
+			// ステートが遷移したら、クロスフェードを行う
 			SetCrossFade(m_bgmState);
 
 			switch (m_bgmState)
