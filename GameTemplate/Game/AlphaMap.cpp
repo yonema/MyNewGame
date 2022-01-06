@@ -41,7 +41,8 @@ namespace nsMyGame
 				m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day);
 
 				// プレイヤーの生成
-				m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPriorityFirst);
+				// 何か優先度下げないと、鎖の位置がずれる。
+				m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPrioritySecond);
 
 				// 建物の生成
 				m_buildings = NewGO<nsBuilding::CBuildings>(nsCommonData::enPriorityFirst);

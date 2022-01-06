@@ -45,33 +45,27 @@ void GameObjectManager::ExecuteUpdate()
 
 	//追加
 
-	//ポーズ中ではないか？
-	if (m_isGamePaused == false)
-	{
+
 		//ポーズ中ではない
-		for (auto& goList : m_gameObjectListArray) {
-			for (auto& go : goList) {
+	for (auto& goList : m_gameObjectListArray)
+	{
+		for (auto& go : goList)
+		{
+			if (m_isGamePaused != true)
+			{
 				go->UpdateWrapper();
 			}
-		}
-	}
-	else
-	{
-		//ポーズ中
-		for (auto& goList : m_gameObjectListArray) {
-			for (auto& go : goList) {
+			else
+			{
 				//ポーズ中に呼ばれるアップデート処理
 				go->UpdateOnlyPausedWrapper();
 			}
-		}
-	}
-
-	//ポーズ中でもポーズ中でなくても関係なく常に呼ばれるアップデート処理
-	for (auto& goList : m_gameObjectListArray) {
-		for (auto& go : goList) {
+			//ポーズ中でもポーズ中でなくても関係なく常に呼ばれるアップデート処理
 			go->AlwaysUpdateWrapper();
 		}
 	}
+	
+
 
 	//物理エンジンのアップデートを呼び出す。
 	PhysicsWorld::GetInstance()->Update(nsMyGame::nsTimer::GameTime().GetFrameDeltaTime());

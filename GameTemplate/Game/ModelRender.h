@@ -324,6 +324,34 @@ namespace nsMyGame
 					m_distanceLOD = distanceLOD;
 				}
 
+				/**
+				 * @brief ボーンの名前からボーン番号を検索
+				 * @param[in] boneName ボーンの名前
+				 * @return ボーン番号。見つからなかった場合は-1が返ってきます。
+				*/
+				int FindBoneID(const wchar_t* boneName) const
+				{
+					if (m_skeletonPtr)
+					{
+						return m_skeletonPtr->FindBoneID(boneName);
+					}
+					return -1;
+				}
+
+				/**
+				 * @brief ボーン番号からボーンを取得。
+				 * @param[in] boneNo ボーン番号
+				 * @return ボーン
+				*/
+				const Bone* GetBone(int boneNo) const
+				{
+					if (m_skeletonPtr)
+					{
+						return m_skeletonPtr->GetBone(boneNo);
+					}
+					return nullptr;
+				}
+
 
 			private:	// privateなメンバ関数
 

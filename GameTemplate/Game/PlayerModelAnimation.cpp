@@ -41,6 +41,9 @@ namespace nsMyGame
 			// ƒ‚ƒfƒ‹‰Šú‰»
 			InitModel();
 
+			// Žè‚Ìƒ{[ƒ“ID‚ðŽæ“¾
+			m_handBoneID = m_playerModel->FindBoneID(kHandBoneName);
+
 			return;
 		}
 

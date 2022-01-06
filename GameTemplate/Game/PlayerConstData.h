@@ -499,6 +499,10 @@ namespace nsMyGame
 					enSwingAnim_airAfterSwing,	//!< スイング後の空中状態
 				};
 
+				//!< 手のボーンの名前
+				constexpr const wchar_t* const kHandBoneName = L"J_Bip_L_Hand";
+				//constexpr const wchar_t* const kHandBoneName = L"J_Bip_L_LowerArm";
+				//constexpr const wchar_t* const kHandBoneName = L"user_VRoid_CustomItem_9230dd456e474947a406a52a3df4ce1c_transferable_J_Sec_R_CoatSkirtSide2";
 			}
 
 			/**

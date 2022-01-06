@@ -66,7 +66,14 @@ namespace nsMyGame
 				return m_animState;
 			}
 
-
+			/**
+			 * @brief 手のボーンのワールドマトリクスを得る
+			 * @return 手のボーンのワールドマトリクス
+			*/
+			const Matrix& GetHandBoneMatrix() const
+			{
+				return m_playerModel->GetBone(m_handBoneID)->GetWorldMatrix();
+			}
 
 		private:	// privateなメンバ関数
 
@@ -110,6 +117,8 @@ namespace nsMyGame
 		private:	// データメンバ
 			const CPlayer* m_playerRef = nullptr;						//!< プレイヤーの参照
 			nsGraphic::nsModel::CModelRender* m_playerModel = nullptr;	//!< プレイヤーのモデルレンダラー
+
+			int m_handBoneID = -1;	//!< 手のボーンID
 
 			//!< アニメーションクリップスクラス
 			AnimationClip m_animationClips[nsPlayerConstData::nsModelAnimationConstData::enAnim_num];

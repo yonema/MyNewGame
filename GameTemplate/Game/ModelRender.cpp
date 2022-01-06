@@ -42,6 +42,10 @@ namespace nsMyGame
 				if (m_isInited != true)
 					return;	// 初期化していない、早期リターン
 
+				// アニメーションが初期化されているか？
+				if (m_animationPtr)	// アニメーションが初期化されていたら、アニメーションを進める。
+					m_animationPtr->Progress(nsTimer::GameTime().GetFrameDeltaTime() * m_animationSpeed);
+
 				// スケルトンが初期化されているか？
 				if (m_skeletonPtr)
 				{
@@ -61,9 +65,7 @@ namespace nsMyGame
 						m_skeletonPtr->Update(m_model->GetWorldMatrix());
 					}
 				}
-				// アニメーションが初期化されているか？
-				if (m_animationPtr)	// アニメーションが初期化されていたら、アニメーションを進める。
-					m_animationPtr->Progress(nsTimer::GameTime().GetFrameDeltaTime() * m_animationSpeed);
+
 
 				// シャドウマップ描画用モデルが初期化されているか？
 				if (m_shadowModels[0][0])

@@ -27,14 +27,14 @@ namespace nsMyGame
 			// 初期化
 			m_modelRender->Init(kStringModelFilePath);
 			// 無効化する
-			m_modelRender->Deactivate();
+			//m_modelRender->Deactivate();
 
 			// モデルレンダラーの生成
 			m_tipModelRender = NewGO <nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
 			// 初期化
 			m_tipModelRender->Init(kStringModelFilePath);
 			// 無効化する
-			m_tipModelRender->Deactivate();
+			//m_tipModelRender->Deactivate();
 
 			return true;
 		}
@@ -56,8 +56,16 @@ namespace nsMyGame
 		void CPlayerStringModel::Update()
 		{
 			// 伸びる開始座標の計算
-			m_startStretchPos = m_playerRef->GetPosition();
-			m_startStretchPos.y += kStartStretchHeight;
+
+			// 手のボーンのワールド行列を持ってくる
+			const Matrix& mHand = m_playerRef->GetPlayerModelAnimation().GetHandBoneMatrix();
+			// 座標に変換
+			m_startStretchPos.x = mHand.m[3][0];
+			m_startStretchPos.y = mHand.m[3][1];
+			m_startStretchPos.z = mHand.m[3][2];
+
+			//m_startStretchPos = m_playerRef->GetPosition();
+			//m_startStretchPos.y += kStartStretchHeight;
 
 			// モデルを回転させる処理
 			ModelRotation();
@@ -159,12 +167,12 @@ namespace nsMyGame
 			m_isStretched = true;
 
 			// 自身を無効化する
-			Deactivate();
+			//Deactivate();
 
 			// モデルを無効化する
-			m_modelRender->Deactivate();
+			//m_modelRender->Deactivate();
 
-			m_tipModelRender->Deactivate();
+			//m_tipModelRender->Deactivate();
 
 			m_stretchRate = 0.0f;
 
