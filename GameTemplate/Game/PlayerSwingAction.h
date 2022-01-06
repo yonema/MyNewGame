@@ -185,6 +185,7 @@ namespace nsMyGame
 				nsSound::CSoundCue* m_chainBendingSC = nullptr;		//!< 鎖がしなるのサウンド
 				nsSound::CSoundCue* m_chainReleaseSC = nullptr;		//!< 鎖を離すのサウンド
 				nsSound::CSoundCue* m_swingLeaveSC = nullptr;		//!< スイング状態から離れるのサウンド
+				nsSound::CSoundCue* m_swingRollLeaveSC = nullptr;	//!< スイングロール状態から離れるのサウンド
 
 			};
 		}

@@ -44,6 +44,7 @@ namespace nsMyGame
 				DeleteGO(m_chainBendingSC);
 				DeleteGO(m_chainReleaseSC);
 				DeleteGO(m_swingLeaveSC);
+				DeleteGO(m_swingRollLeaveSC);
 
 				return;
 			}
@@ -190,6 +191,10 @@ namespace nsMyGame
 				m_swingLeaveSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_swingLeaveSC->Init(kSwingLeaveSoundFilePath, nsSound::CSoundCue::enSE);
 				m_swingLeaveSC->SetVolume(kSwingLeaveSoundVolume);
+
+				m_swingRollLeaveSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_swingRollLeaveSC->Init(kSwingRollLeaveSoundFilePath, nsSound::CSoundCue::enSE);
+				m_swingRollLeaveSC->SetVolume(kSwingRollLeaveSoundVolume);
 
 				return;
 			}
@@ -608,6 +613,12 @@ namespace nsMyGame
 						m_swingRollFlag = false;
 						// Y成分にジャンプを加える
 						addMoveVec.y += nsMovementConstData::kJumpForce;
+						m_swingRollLeaveSC->Play(false);
+					}
+					else
+					{
+						// スイング状態から離れるのサウンドを流す
+						m_swingLeaveSC->Play(false);
 					}
 				}
 				else
@@ -829,8 +840,7 @@ namespace nsMyGame
 
 					// 鎖を離すのサウンドを流す
 					m_chainReleaseSC->Play(false);
-					// スイング状態から離れるのサウンドを流す
-					m_swingLeaveSC->Play(false);
+
 				}
 				else
 				{

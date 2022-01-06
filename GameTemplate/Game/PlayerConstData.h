@@ -131,6 +131,8 @@ namespace nsMyGame
 				constexpr const wchar_t* const kChainReleaseSoundFilePath = L"Assets/sound/character/swing/chain_release.wav";
 				//!< スイング状態から離れるサウンドのファイルパス
 				constexpr const wchar_t* const kSwingLeaveSoundFilePath = L"Assets/sound/character/swing/swing_leave.wav";
+				//!< スイングロール状態から離れるサウンドのファイルパス
+				constexpr const wchar_t* const kSwingRollLeaveSoundFilePath = L"Assets/sound/character/swing/swingRoll_leave.wav";
 
 				//!< 鎖を出すサウンドの音量
 				constexpr float kChainPutOutSoundVolume = 2.0f;
@@ -139,7 +141,9 @@ namespace nsMyGame
 				//!< 鎖を離すサウンドの音量
 				constexpr float kChainReleaseSoundVolume = 2.0f;
 				//!<スイング状態から離れるサウンドの音量
-				constexpr float kSwingLeaveSoundVolume = 2.0f;
+				constexpr float kSwingLeaveSoundVolume = 1.0f;
+				//!<スイングロール状態から離れるサウンドの音量
+				constexpr float kSwingRollLeaveSoundVolume = 2.0f;
 			}
 
 			/**
@@ -170,12 +174,12 @@ namespace nsMyGame
 				//!< 鎖を出すサウンドのファイルパス
 				constexpr const wchar_t* const kChainPutOutSoundFilePath = nsSwingActionConstData::kChainPutOutSoundFilePath;
 				//!< 敵の上に向かうサウンドのファイルパス
-				constexpr const wchar_t* const kGoOnEnemySoundFilePath = nsSwingActionConstData::kSwingLeaveSoundFilePath;
+				constexpr const wchar_t* const kGoOnEnemySoundFilePath = L"Assets/sound/character/other/goOnEnemy.wav";
 				//!< 敵の上に乗ったときのサウンドのファイルパス
 				constexpr const wchar_t* const kLandingOnEnemySoundFilePath = L"Assets/sound/qte/car/car_landing.wav";
 
 				//!< 鎖を出すサウンドの音量
-				constexpr float kChainPutOutSoundVolume = nsSwingActionConstData::kChainPutOutSoundVolume;
+				constexpr float kChainPutOutSoundVolume = 2.0f;
 				//!< 敵の上に向かうサウンドの音量
 				constexpr float kGoOnEnemySoundVolume = 2.0f;
 				//!< 敵の上に乗ったときのサウンドの音量
