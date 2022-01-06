@@ -363,6 +363,8 @@ namespace nsMyGame
 				constexpr const wchar_t* const kCommandSuccessSoundFilePath = L"Assets/sound/qte/command/command_success.wav";
 				//!< コマンド入力失敗のサウンドのファイルパス
 				constexpr const wchar_t* const kCommandMissSoundFilePath = L"Assets/sound/qte/command/command_miss.wav";
+				//!< コマンド入力失敗のサウンドの音量
+				constexpr float kCommandMissSoundVolume = 2.0f;
 				//!< ウィンドウを開くサウンドのファイルパス
 				constexpr const wchar_t* const kWindowOpneSoundFilePath = L"Assets/sound/qte/window/opne_window.wav";
 				//!< ウィンドウを閉じるサウンドのファイルパス

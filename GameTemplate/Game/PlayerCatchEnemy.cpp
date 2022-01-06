@@ -328,6 +328,7 @@ namespace nsMyGame
 
 			m_commandMissSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_commandMissSC->Init(kCommandMissSoundFilePath, nsSound::CSoundCue::enSE);
+			m_commandMissSC->SetVolume(kCommandMissSoundVolume);
 
 			m_windowOpneSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_windowOpneSC->Init(kWindowOpneSoundFilePath, nsSound::CSoundCue::enSE);

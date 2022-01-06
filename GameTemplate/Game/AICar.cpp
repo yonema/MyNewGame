@@ -274,8 +274,8 @@ namespace nsMyGame
 			m_ninjyutuEFRef = nullptr;
 
 			const float volume = CalcSoundVolume();
-			m_fireExplosionSC->SetVolume(volume * 2.0f);
-			m_carExplosionSC->SetVolume(volume * 2.0f);
+			m_fireExplosionSC->SetVolume(volume * kFireExplosionSoundVolume);
+			m_carExplosionSC->SetVolume(volume * kCarExplosionSoundVolume);
 			m_fireExplosionSC->Play(false);
 			m_carExplosionSC->Play(false);
 
