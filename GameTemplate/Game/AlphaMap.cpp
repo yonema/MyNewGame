@@ -128,7 +128,7 @@ namespace nsMyGame
 				// ¬•¨‚ğƒŒƒxƒ‹‚©‚ç¶¬
 				for (int propsType = 0; propsType < enPropsTypeNum; propsType++)
 				{
-					//break;
+					break;
 					// ¬•¨—p‚ÌƒŒƒxƒ‹‚ğ‰Šú‰»
 					m_propsLevel3D[propsType].Init(
 						kPropsLevelFilePath[propsType],

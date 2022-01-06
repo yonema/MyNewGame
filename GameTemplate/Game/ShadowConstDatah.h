@@ -31,14 +31,14 @@ namespace nsMyGame
 				//!< シャドウマップのサイズ
 				constexpr int kShadowMapSizes[enShadowMapArea_num]
 				{
+					4096,
 					2048,
-					1024,
-					512
+					1024
 				};
 				//!< カスケードシャドウの最大深度
 				constexpr float kCascadeMaxDepth = 50000.0f;
 				//!< デフォルトのカスケードシャドウのエリア率
-				constexpr float kDefaultCascadeAreaRateArray[enShadowMapArea_num] = { 0.05f,0.3f, 1.0f };
+				constexpr float kDefaultCascadeAreaRateArray[enShadowMapArea_num] = { 0.3f,0.5f, 1.0f };
 				//constexpr float kDefaultCascadeAreaRateArray[enShadowMapArea_num] = { 0.01f,0.3f, 1.0f };
 
 				//!< デフォルトのクリアカラー
