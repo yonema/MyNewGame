@@ -8,7 +8,7 @@
 #define _TKUTIL_H_
 
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief Util関連のネームスペース

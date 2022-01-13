@@ -4,7 +4,7 @@
 #include "RenderingEngine.h"
 
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief デバック関連のネームスペース

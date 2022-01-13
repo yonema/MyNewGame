@@ -5,7 +5,7 @@
 #include "AICharacterBase.h"
 #include "ModelRender.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief AI関連のネームスペース

@@ -5,7 +5,7 @@
 #include "PlayerModelAnimation.h"
 #include "SoundCue.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 
 	/**

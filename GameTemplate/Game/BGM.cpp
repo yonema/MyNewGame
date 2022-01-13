@@ -4,7 +4,7 @@
 #include "SoundCue.h"
 #include "GameTime.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	namespace nsBGM
 	{
@@ -16,6 +16,8 @@ namespace nsMyGame
 		*/
 		bool CBGM::Start()
 		{
+			// ‚±‚±‰ü‘¢
+			nsSound::CSoundCue::SetBGMVolume(0.0f);
 
 			for (int i = 0; i < enBGMTypeNum; i++)
 			{

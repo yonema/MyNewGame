@@ -1,7 +1,7 @@
 #pragma once
 #include "Noncopyable.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	namespace nsTimer
 	{

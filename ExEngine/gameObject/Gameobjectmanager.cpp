@@ -68,7 +68,7 @@ void GameObjectManager::ExecuteUpdate()
 
 
 	//物理エンジンのアップデートを呼び出す。
-	PhysicsWorld::GetInstance()->Update(nsMyGame::nsTimer::GameTime().GetFrameDeltaTime());
+	PhysicsWorld::GetInstance()->Update(nsNinjaAttract::nsTimer::GameTime().GetFrameDeltaTime());
 }
 //void GameObjectManager::ExecuteRender(RenderContext& rc)
 //{

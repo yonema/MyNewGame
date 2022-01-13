@@ -2,7 +2,7 @@
 #include "Render.h"
 #include "DebugConstData.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	namespace nsGraphic
 	{

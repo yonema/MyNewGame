@@ -4,7 +4,7 @@
 // 前方宣言
 class TkmFile;	// tkmファイルクラス
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ジオメトリ関連のネームスペース

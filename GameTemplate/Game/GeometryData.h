@@ -2,7 +2,7 @@
 #include "AABB.h"
 #include "Noncopyable.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 
 	// ‘O•ûéŒ¾

@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	// 前方宣言
 	namespace nsGraphic { namespace nsModel { class CModelRender; } }	// モデルレンダラー

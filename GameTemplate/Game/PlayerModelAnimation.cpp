@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "ModelRender.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 
 	/**

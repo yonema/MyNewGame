@@ -1,7 +1,7 @@
 #pragma once
 #include "ModelRender.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	// ‘O•ûéŒ¾
 	namespace nsGraphic

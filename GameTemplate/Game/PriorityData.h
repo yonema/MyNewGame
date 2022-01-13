@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief 共通データ
@@ -19,21 +19,5 @@ namespace nsMyGame
 			enPriorityFinal,		//!< 最後の優先度
 		};
 
-		/**
-		 * @brief ゲームオブジェクトの名前の種類
-		*/
-		enum EnGameObjectName
-		{
-			enMainGameState,
-			enGameObjectNameNum
-		};
-
-		/**
-		 * @brief ゲームオブジェクトの名前
-		*/
-		constexpr const char* const kGameObjectName[enGameObjectNameNum]
-		{
-			"MainGameState"
-		};
 	}
 }

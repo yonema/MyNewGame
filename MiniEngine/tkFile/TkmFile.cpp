@@ -11,7 +11,7 @@ struct SSmoothVertex {
 //法線スムージング。
 class NormalSmoothing {
 private:
-	using CBSP = nsMyGame::nsGeometry::CBSP;
+	using CBSP = nsNinjaAttract::nsGeometry::CBSP;
 
 	struct SFace {
 		Vector3 normal;
@@ -237,7 +237,7 @@ void TkmFile::BuildMaterial(SMaterial& tkmMat, FILE* fp, const char* filePath)
 			// 変更。
 
 			// ddsファイルバンクからリソースを探して取ってくる
-			*ddsFileMemory = nsMyGame::nsMyEngine::
+			*ddsFileMemory = nsNinjaAttract::nsMyEngine::
 				CRenderingEngine::GetInstance()->GetDdsFileFromBank(texFilePath.c_str());
 
 			//テクスチャをロード。
@@ -261,7 +261,7 @@ void TkmFile::BuildMaterial(SMaterial& tkmMat, FILE* fp, const char* filePath)
 					fread(*ddsFileMemory, fileSize, 1, texFileFp);
 
 					// リソースを登録する
-					nsMyGame::nsMyEngine::
+					nsNinjaAttract::nsMyEngine::
 						CRenderingEngine::GetInstance()->RegistDdsFileToBank(texFilePath.c_str(), *ddsFileMemory);
 
 				}

@@ -1,7 +1,7 @@
 #pragma once
 #include "StopWatch.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	// 前方宣言
 	namespace nsUI { class CGameMainUI; }	//!< ゲームメインのUIクラス

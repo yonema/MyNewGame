@@ -7,7 +7,7 @@
 #include "PlayerCommandInput.h"
 #include "SoundCue.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 
 	/**
@@ -91,7 +91,7 @@ namespace nsMyGame
 
 			// ゲームステートの参照を引っ張ってくる
 			m_gameState = FindGO<nsGameState::CGameMainState>(
-				nsCommonData::kGameObjectName[nsCommonData::enMainGameState]
+				nsCommonData::kGameObjectName[nsCommonData::enGN_MainGameState]
 				);
 
 			// 車たちの参照を引っ張ってくる

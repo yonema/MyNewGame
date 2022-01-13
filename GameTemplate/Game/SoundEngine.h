@@ -2,7 +2,7 @@
 #include "WaveFileBank.h"
 #include "WaveFile.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ƒTƒEƒ“ƒh

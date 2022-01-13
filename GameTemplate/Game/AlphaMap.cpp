@@ -9,7 +9,7 @@
 #include "AICar.h"
 #include "BGM.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -33,7 +33,7 @@ namespace nsMyGame
 				// ゲームステートの生成
 				m_gameState = NewGO<nsGameState::CGameMainState>(
 					nsCommonData::enPriorityFirst,
-					nsCommonData::kGameObjectName[nsCommonData::enMainGameState]
+					nsCommonData::kGameObjectName[nsCommonData::enGN_MainGameState]
 					);
 
 				// スカイキューブの生成と初期化
@@ -103,8 +103,13 @@ namespace nsMyGame
 						// プレイヤーの生成
 						else if (objData.EqualObjectName(kPlayerName))
 						{
-							m_player->SetPosition(objData.position);
-							m_player->SetRotation(objData.rotation);
+							Vector3 plPos = { -17938.7656f ,9000.0f ,60841.4609f };
+							Quaternion plRot;
+							plRot.SetRotationDegY(180.0f);
+							//m_player->SetPosition(objData.position);
+							m_player->SetPosition(plPos);
+							//m_player->SetRotation(objData.rotation);
+							m_player->SetRotation(plRot);
 
 							return true;
 						}
@@ -128,7 +133,7 @@ namespace nsMyGame
 				// 小物をレベルから生成
 				for (int propsType = 0; propsType < enPropsTypeNum; propsType++)
 				{
-					break;
+					//break;
 					// 小物用のレベルを初期化
 					m_propsLevel3D[propsType].Init(
 						kPropsLevelFilePath[propsType],

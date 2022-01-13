@@ -2,7 +2,7 @@
 #include "SkyCube.h"
 #include "RenderingEngine.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief 自然関連のネームスペース
@@ -90,6 +90,10 @@ namespace nsMyGame
 			// 座標と拡大率を設定する
 			m_skyModelRender->SetPosition(m_position);
 			m_skyModelRender->SetScale(m_scale);
+
+			// 改造
+			//float mul = 0.9f;
+			//m_skyModelRender->SetMulColor({ mul ,mul ,mul ,1.0f });
 
 			return;
 		}

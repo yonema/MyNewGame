@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "PointLight.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ライト関連のネームスペース

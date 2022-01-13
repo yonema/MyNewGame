@@ -3,7 +3,7 @@
 #include "ModelRender.h"
 
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief 建物関連のネームスペース

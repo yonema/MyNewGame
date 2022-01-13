@@ -2,7 +2,7 @@
 #include "SceneGeometryData.h"
 #include "GeometryData.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 
 

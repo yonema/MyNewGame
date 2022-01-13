@@ -2,7 +2,7 @@
 #include "PostEffectConstData.h"
 #include "GaussianBlur.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief グラフィック関連のネームスペース

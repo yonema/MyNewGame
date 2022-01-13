@@ -1,7 +1,7 @@
 #pragma once
 #include "Level3D.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	// ‘O•ûéŒ¾
 	namespace nsGraphic {

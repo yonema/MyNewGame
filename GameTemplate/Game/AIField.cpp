@@ -4,7 +4,7 @@
 #include "ModelRenderConstData.h"
 #include "Level3D.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief AI関連のネームスペース

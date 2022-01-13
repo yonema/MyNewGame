@@ -54,7 +54,7 @@ void Model::Init(const ModelInitData& initData)
 
 	// エイリアス宣言
 	// レンダリングエンジンクラス
-	using CRenderingEngine = nsMyGame::nsMyEngine::CRenderingEngine;
+	using CRenderingEngine = nsNinjaAttract::nsMyEngine::CRenderingEngine;
 
 	const char* tkmFilePath = initData.m_tkmFilePath;
 	if (initData.m_lodNum != 0)

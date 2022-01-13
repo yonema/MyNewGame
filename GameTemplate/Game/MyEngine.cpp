@@ -8,7 +8,7 @@
 #include "system/system.h"
 #include "DebugManager.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief このゲーム用のゲームエンジン。TkEngineをラップする

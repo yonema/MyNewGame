@@ -140,7 +140,7 @@ private:
 	void BuildTangentAndBiNormal();
 private:
 	std::vector< SMesh>	m_meshParts;		//メッシュパーツ。
-	using CBSP = nsMyGame::nsGeometry::CBSP;
+	using CBSP = nsNinjaAttract::nsGeometry::CBSP;
 	CBSP m_bpsOnVertexPosition;				// 頂点座標を使ったBSPツリー。
 
 };

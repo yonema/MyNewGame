@@ -88,7 +88,7 @@ void InitGame(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, in
 
 	// 追加
 	// Tkエンジンをラップした自分のエンジンを生成
-	nsMyGame::nsMyEngine::CMyEngine::CreateInstance();
+	nsNinjaAttract::nsMyEngine::CMyEngine::CreateInstance();
 
 	return;
 }

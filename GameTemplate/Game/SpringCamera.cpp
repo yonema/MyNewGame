@@ -2,7 +2,7 @@
 #include "SpringCamera.h"
 #include "GameTime.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief カメラ関連のネームスペース

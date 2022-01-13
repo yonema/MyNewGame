@@ -3,7 +3,7 @@
 #include "ModelRender.h"
 #include "SkyCube.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief マップ（レベル）用ネームスペース

@@ -2,7 +2,7 @@
 #include "Noncopyable.h"
 #include "CameraCollisionSolver.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief カメラ関連のネームスペース
@@ -190,6 +190,15 @@ namespace nsMyGame
 				m_targetMoveSpeed = Vector3::Zero;
 				m_positionMoveSpeed = Vector3::Zero;
 				m_isRefresh = true;
+			}
+
+			/**
+			 * @brief カメラを設定
+			 * @param[in] camera カメラ
+			*/
+			void SetCamera(Camera* camera)
+			{
+				m_camera = camera;
 			}
 
 		private:	// privateなメンバ関数

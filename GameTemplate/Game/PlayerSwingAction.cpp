@@ -6,7 +6,7 @@
 #include "PlayerCamera.h"
 #include "SoundCue.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief プレイヤー関連のネームスペース

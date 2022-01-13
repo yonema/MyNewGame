@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CameraCollisionSolver.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief カメラ関連のネームスペース

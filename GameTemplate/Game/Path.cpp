@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Path.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief AI関連のネームスペース

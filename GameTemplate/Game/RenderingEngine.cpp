@@ -6,7 +6,7 @@
 #include "Render.h"
 #include "LightManager.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 
 	/**

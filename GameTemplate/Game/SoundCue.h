@@ -1,7 +1,7 @@
 #pragma once
 #include "SoundSource.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ƒTƒEƒ“ƒh

@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "AICar.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief プレイヤー関連のネームスペース
@@ -45,6 +45,36 @@ namespace nsMyGame
 
 			m_toCameraDistance = kDefaultToCameraDistance;
 
+			// ここから改造
+			//m_dummyCamera.SetPosition(m_camera->GetPosition());
+			//m_dummyCamera.SetTarget(m_camera->GetTarget());
+			//m_camera = &m_dummyCamera;
+			//m_springCamera.SetCamera(m_camera);
+
+			//g_camera3D->SetPosition({ -17788.7656f,9081.0f,61081.4609f});
+			//g_camera3D->SetTarget(g_camera3D->GetPosition() + Vector3::Back * 50.0f);
+
+			//m_titleSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			//m_titleSR->Init(
+			//	"Assets/Image/title/title.DDS",
+			//	512.0f * 1.5f,
+			//	512.0f * 1.5f,
+			//	{ 0.5f,0.5f },
+			//	AlphaBlendMode_Trans
+			//);
+
+			//m_titleStartSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			//m_titleStartSR->Init(
+			//	"Assets/Image/title/title_start.DDS",
+			//	512.0f * 0.5f,
+			//	512.0f * 0.5f,
+			//	{ 0.5f,0.5f },
+			//	AlphaBlendMode_Trans
+			//);
+			//m_titleSR->SetPosition({ -200.0f, 100.0f });
+			//m_titleStartSR->SetPosition({ -200.0f,0.0f });
+
+			// ここまで改造
 			return;
 		}
 
@@ -53,6 +83,40 @@ namespace nsMyGame
 		*/
 		void CPlayerCamera::ExecuteUpdate()
 		{
+			// 改造ここから
+			//const float power = 10.0f;
+			//Vector3 dir = Vector3::Right;
+			//if (g_pad[0]->IsPress(enButtonStart))
+			//{
+			//	dir = Vector3::Front;
+			//	m_titleFadeOut = true;
+			//}
+			//else if (g_pad[0]->IsPress(enButtonSelect))
+			//{
+			//	dir = Vector3::Up;
+			//}
+			//if (g_pad[0]->IsPress(enButtonRB1))
+			//{
+			//	g_camera3D->SetPosition(g_camera3D->GetPosition() + dir * power);
+			//}
+			//else if (g_pad[0]->IsPress(enButtonLB1))
+			//{
+			//	g_camera3D->SetPosition(g_camera3D->GetPosition() + dir * -power);
+
+			//}
+			//g_camera3D->SetTarget(g_camera3D->GetPosition() + Vector3::Back * 50.0f);
+
+			//if (m_titleFadeOut)
+			//{
+			//	constexpr float time = 3.0f;
+			//	float a = min(1.0f,m_titleA / time);
+			//	m_titleSR->SetAlphaValue(1.0f - a);
+			//	m_titleStartSR->SetAlphaValue(1.0f - a);
+			//	m_titleA += nsTimer::GameTime().GetFrameDeltaTime();
+			//}
+
+			// 改造ここまで
+
 			if (m_isOnEnemyCamera)
 			{
 				// 敵の上に乗っている時のカメラの処理

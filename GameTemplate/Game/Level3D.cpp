@@ -2,7 +2,7 @@
 #include "Level3D.h"
 #include "MapChip.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief 3Dのレベルデータ関連のネームスペース

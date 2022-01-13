@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "WaveFileBank.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ƒTƒEƒ“ƒh

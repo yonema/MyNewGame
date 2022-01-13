@@ -13,7 +13,7 @@ class RenderContext;
 *@brief	ゲームオブジェクト。
 * コピー禁止継承
 */
-class IGameObject : private nsMyGame::nsUtil::Noncopyable
+class IGameObject : private nsNinjaAttract::nsUtil::Noncopyable
 {
 public:
 	/*!

@@ -13,7 +13,7 @@ namespace raytracing{
 /// <summary>
 /// レンダリングコンテキスト。
 /// </summary>
-class RenderContext : public nsMyGame::nsUtil::Noncopyable{
+class RenderContext : public nsNinjaAttract::nsUtil::Noncopyable{
 public:
 	/// <summary>
 	/// 初期化。

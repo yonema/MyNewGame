@@ -8,7 +8,7 @@
 #include "PlayerConstData.h"
 #include "SoundCue.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief AIキャラクター関連のネームスペース
@@ -432,6 +432,7 @@ namespace nsMyGame
 				if (candidateTargetPoints.count(randCandidateTPType))
 				{
 					IsFindedTargetPoint = true;
+					break;
 				}
 			}
 

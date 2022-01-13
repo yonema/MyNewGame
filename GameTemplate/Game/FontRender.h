@@ -2,7 +2,7 @@
 #include "FontRenderConstData.h"
 #include "Render.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief グラフィック関連のネームスペース

@@ -2,7 +2,7 @@
 #include "SwingTarget.h"
 #include "StringActionTargetManager.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief 糸を使ったアクションのターゲット関連のネームスペース

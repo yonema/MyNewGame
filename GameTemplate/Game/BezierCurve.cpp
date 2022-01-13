@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
 #include "BezierCurve.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief 曲線関連のネームスペース

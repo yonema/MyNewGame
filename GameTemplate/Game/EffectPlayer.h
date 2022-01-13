@@ -1,7 +1,7 @@
 #pragma once
 #include "../../ExEngine/effect/Effect.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief エフェクト関連のネームスペース

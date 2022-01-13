@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -25,6 +25,9 @@ namespace nsMyGame
 				enLevelProto3,	//!< プロト用レベル3
 				enLevelAlpha,	//!< アルファ用レベル
 				enLevelAlpha2,	//!< アルファ2用レベル
+				enLevelPlateAndBuildings,	//!< 地面と建物用レベル
+				enLevelPlayer,	//!< プレイヤー用レベル
+				enLevelCar,		//!< 車用レベル
 				enLevelTypeNum	//!< レベルの種類の数
 			};
 
@@ -37,7 +40,10 @@ namespace nsMyGame
 				"Assets/levelData/level_proto2.tkl",
 				"Assets/levelData/level_proto3.tkl",
 				"Assets/levelData/level_alpha.tkl",
-				"Assets/levelData/level_alpha2.tkl"
+				"Assets/levelData/level_alpha2.tkl",
+				"Assets/levelData/plateAndBuildings.tkl",
+				"Assets/levelData/playerLevel.tkl",
+				"Assets/levelData/carLevel.tkl"
 			};
 
 			/**
@@ -65,6 +71,26 @@ namespace nsMyGame
 				"Assets/levelData/level_StreetTree_Branch.tkl"
 			};
 
+			//!< 小物のLOD用のモデルのファイルパス
+			constexpr const char* const kPropsLODModelFilePath[enPropsTypeNum] =
+			{
+				"Assets/modelData/levelSource/StreetLight_LOD.tkm",
+				"Assets/modelData/levelSource/TrafficLight_LOD.tkm",
+				nullptr,
+				"Assets/modelData/levelSource/StreetTree_LOD.tkm",
+				"Assets/modelData/levelSource/StreetTree_Branch_LOD.tkm"
+			};
+
+			//!< 小物のLOD用の距離
+			constexpr float kPropsLODDistance[enPropsTypeNum] =
+			{
+				1000.0f,
+				1000.0f,
+				-1.0f,
+				-1.0f,
+				10000.0f
+			};
+
 			//!< マップチップの予約数テーブル
 			constexpr int kNumMapChipReserveTbl[enPropsTypeNum] =
 			{
@@ -74,6 +100,11 @@ namespace nsMyGame
 				458,
 				458
 			};
+
+			//!< タイトル中のプレイヤーのレベル上の名前
+			constexpr const char* const kPlayerLevelNameInTitle = "player_inTitle";
+			//!< ゲーム中のプレイヤーのレベル上の名前
+			constexpr const char* const kPlayerLevelNameInGame = "player_inGame";
 
 		}
 	}

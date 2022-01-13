@@ -3,7 +3,7 @@
 #include "PlayerConstData.h"
 
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	// ‘O•ûéŒ¾
 

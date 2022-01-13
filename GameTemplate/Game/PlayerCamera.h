@@ -3,8 +3,10 @@
 #include "SpringCamera.h"
 #include "PlayerConstData.h"
 
+// ここ改造
+//#include "SpriteRender.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief プレイヤー関連のネームスペース
@@ -164,6 +166,13 @@ namespace nsMyGame
 			float m_cameraPositionOffsetUp = 0.0f;
 			float m_toCameraDistance = 0.0f;
 			bool m_isOnEnemyCamera = false;				//!< 敵の上に乗っているときのカメラか？
+
+			// 改造ここから
+			//Camera m_dummyCamera;
+			//nsGraphic::nsSprite::CSpriteRender* m_titleSR = nullptr;
+			//nsGraphic::nsSprite::CSpriteRender* m_titleStartSR = nullptr;
+			//bool m_titleFadeOut = false;
+			//float m_titleA = 1.0f;
 		};
 
 	}

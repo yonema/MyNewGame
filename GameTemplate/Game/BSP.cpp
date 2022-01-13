@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BSP.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ジオメトリ関連のネームスペース

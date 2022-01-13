@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "PlayerMovement.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief プレイヤー関連のネームスペース

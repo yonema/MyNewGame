@@ -43,7 +43,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 	}
 
 	// テクスチャバンクからリソースを探して取ってくる
-	textureMap = nsMyGame::nsMyEngine::
+	textureMap = nsNinjaAttract::nsMyEngine::
 		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
 
 	if (textureMap == nullptr)
@@ -52,7 +52,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 		textureMap = new Texture();
 		textureMap->InitFromMemory(map, mapSize);
 		// リソースを登録する
-		nsMyGame::nsMyEngine::
+		nsNinjaAttract::nsMyEngine::
 			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
 	}
 
@@ -83,7 +83,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 	}
 
 	// テクスチャバンクからリソースを探して取ってくる
-	textureMap = nsMyGame::nsMyEngine::
+	textureMap = nsNinjaAttract::nsMyEngine::
 		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
 
 	if (textureMap == nullptr)
@@ -92,7 +92,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 		textureMap = new Texture();
 		textureMap->InitFromMemory(map, mapSize);
 		// リソースを登録する
-		nsMyGame::nsMyEngine::
+		nsNinjaAttract::nsMyEngine::
 			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
 	}
 
@@ -122,7 +122,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 	}
 
 	// テクスチャバンクからリソースを探して取ってくる
-	textureMap = nsMyGame::nsMyEngine::
+	textureMap = nsNinjaAttract::nsMyEngine::
 		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
 
 	if (textureMap == nullptr)
@@ -131,7 +131,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 		textureMap = new Texture();
 		textureMap->InitFromMemory(map, mapSize);
 		// リソースを登録する
-		nsMyGame::nsMyEngine::
+		nsNinjaAttract::nsMyEngine::
 			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
 	}
 
@@ -162,7 +162,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 	}
 
 	// テクスチャバンクからリソースを探して取ってくる
-	textureMap = nsMyGame::nsMyEngine::
+	textureMap = nsNinjaAttract::nsMyEngine::
 		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
 
 	if (textureMap == nullptr)
@@ -171,7 +171,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 		textureMap = new Texture();
 		textureMap->InitFromMemory(map, mapSize);
 		// リソースを登録する
-		nsMyGame::nsMyEngine::
+		nsNinjaAttract::nsMyEngine::
 			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
 	}
 
@@ -202,7 +202,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 	}
 
 	// テクスチャバンクからリソースを探して取ってくる
-	textureMap = nsMyGame::nsMyEngine::
+	textureMap = nsNinjaAttract::nsMyEngine::
 		CRenderingEngine::GetInstance()->GetTextureFileFromBank(filePath);
 
 	if (textureMap == nullptr)
@@ -211,7 +211,7 @@ void Material::InitTexture(const TkmFile::SMaterial& tkmMat)
 		textureMap = new Texture();
 		textureMap->InitFromMemory(map, mapSize);
 		// リソースを登録する
-		nsMyGame::nsMyEngine::
+		nsNinjaAttract::nsMyEngine::
 			CRenderingEngine::GetInstance()->RegistTextureFileToBank(filePath, textureMap);
 	}
 
@@ -344,7 +344,7 @@ void Material::InitShaders(
 
 	// エイリアス宣言
 	// レンダリングエンジン
-	using CRenderingEngine = nsMyGame::nsMyEngine::CRenderingEngine;
+	using CRenderingEngine = nsNinjaAttract::nsMyEngine::CRenderingEngine;
 
 	//fxFilePathをwcharからcharに変換
 	char filePath[256];

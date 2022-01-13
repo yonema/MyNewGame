@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TklFile.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief 3Dのレベルデータ関連のネームスペース

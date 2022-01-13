@@ -2,7 +2,7 @@
 #include "LightConstData.h"
 #include "ShadowConstDatah.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ライト関連のネームスペース

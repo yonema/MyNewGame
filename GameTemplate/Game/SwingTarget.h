@@ -4,7 +4,7 @@
 #include "ModelRender.h"
 
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 
 	/**

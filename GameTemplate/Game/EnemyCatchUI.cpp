@@ -9,7 +9,7 @@
 #include "GameTime.h"
 
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief UI関連のネームスペース
@@ -31,7 +31,7 @@ namespace nsMyGame
 		{
 			// ゲームステートの参照を引っ張ってくる
 			m_gameState = FindGO<nsGameState::CGameMainState>(
-				nsCommonData::kGameObjectName[nsCommonData::enMainGameState]
+				nsCommonData::kGameObjectName[nsCommonData::enGN_MainGameState]
 				);
 
 			// 車たちの参照を引っ張ってくる

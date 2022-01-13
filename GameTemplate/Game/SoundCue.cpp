@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SoundCue.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief サウンド
@@ -20,6 +20,7 @@ namespace nsMyGame
 			//if (m_soundSource)
 			{
 				DeleteGO(m_soundSource);
+				m_soundSource = nullptr;
 			}
 
 			return;
@@ -43,6 +44,9 @@ namespace nsMyGame
 			CSoundSource* ss = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
 			ss->Init(m_filePath);
 			DeleteGO(ss);
+
+			// サウンドタイプを登録
+			m_soundType = soundType;
 
 			return;
 		}
@@ -130,6 +134,10 @@ namespace nsMyGame
 			m_soundSource->SetDestroyEvent(
 				[&]()
 				{
+					if (m_soundSource == nullptr)
+					{
+						return;
+					}
 					// サウンドが再生中ではなかったら
 					if (!m_soundSource->IsPlaying())
 					{

@@ -2,7 +2,7 @@
 #include "StringActionTargetManager.h"
 #include "SwingTarget.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 
 	/**

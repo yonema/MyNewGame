@@ -7,13 +7,13 @@
 #include "TestMapForPlayerMove.h"
 #include "ProtoMap.h"
 #include "AlphaMap.h"
+#include "MainMap.h"
 #include "DirectionalLight.h"
 
 /**
  * @brief このゲームのネームスペース
- * @todo MyGameをもっとユニークなゲームのタイトル名とかに変更する
 */
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ゲームファイルのネームスペース
@@ -65,6 +65,9 @@ namespace nsMyGame
 			case 6:
 				NewGO<nsMaps::nsAlphaMaps::CAlphaMap>(enPriorityFirst, m_kMapObjName);
 				break;
+			case 7:
+				NewGO<nsMaps::CMainMap>(enPriorityFirst, m_kMapObjName);
+				break;
 			default:
 				break;
 			}
@@ -103,6 +106,9 @@ namespace nsMyGame
 				break;
 			case 6:
 				DeleteGO(FindGO<nsMaps::nsAlphaMaps::CAlphaMap>(m_kMapObjName));
+				break;
+			case 7:
+				DeleteGO(FindGO<nsMaps::CMainMap>(m_kMapObjName));
 				break;
 			default:
 				break;

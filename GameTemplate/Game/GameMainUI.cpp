@@ -6,7 +6,7 @@
 #include "MiniMap.h"
 #include "EnemyCatchUI.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief UI関連のネームスペース
@@ -28,6 +28,7 @@ namespace nsMyGame
 			// ゴールのスプライトの初期化
 			InitGoalSprite();
 
+			// ここ改造
 			m_miniMap = NewGO<CMiniMap>(nsCommonData::enPriorityFirst);
 
 			m_enemyCatchUI = NewGO<CEnemyCatchUI>(nsCommonData::enPriorityFirst);
@@ -111,7 +112,7 @@ namespace nsMyGame
 			);
 			// シャドウパラメータを設定
 			m_timerFR->SetShadowParam(true, kTimerFontShadowOffset, kTimerFontShadowColor);
-
+			m_timerFR->Deactivate();
 			return;
 		}
 

@@ -5,7 +5,7 @@
 #include "Path.h"
 #include "Cell.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief AI関連のネームスペース

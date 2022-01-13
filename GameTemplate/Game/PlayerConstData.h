@@ -1,6 +1,6 @@
 #pragma once
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief プレイヤー関連のネームスペース

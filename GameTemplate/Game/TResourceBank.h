@@ -5,7 +5,7 @@
 #include <memory>
 #include "Noncopyable.h"
 
-namespace nsMyGame 
+namespace nsNinjaAttract 
 {
 	/**
 	 * @brief Util関連のネームスペース

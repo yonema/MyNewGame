@@ -7,7 +7,7 @@
 #include "PlayerConstData.h"
 #include "GameTime.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	// ‘O•ûéŒ¾
 	namespace nsPlayer

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "EffectPlayer.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief エフェクト関連のネームスペース

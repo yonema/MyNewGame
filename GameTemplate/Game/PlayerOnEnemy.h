@@ -2,7 +2,7 @@
 #include "Noncopyable.h"
 #include "PlayerConstData.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	// ‘O•ûéŒ¾
 	namespace nsPlayer

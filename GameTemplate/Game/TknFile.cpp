@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TknFile.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief AI関連のネームスペース

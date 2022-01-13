@@ -3,7 +3,7 @@
 #include "ModelRender.h"
 #include "SpotLight.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
  * @brief マップ（レベル）用ネームスペース

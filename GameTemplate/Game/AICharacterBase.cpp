@@ -5,7 +5,7 @@
 #include "PathFinding.h"
 #include "GameTime.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief AIキャラクター関連のネームスペース

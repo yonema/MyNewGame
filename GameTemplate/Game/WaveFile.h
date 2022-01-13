@@ -2,7 +2,7 @@
 #include "Util.h"
 #include "Noncopyable.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ƒTƒEƒ“ƒh

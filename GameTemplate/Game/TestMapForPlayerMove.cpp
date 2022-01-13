@@ -5,7 +5,7 @@
 #include "Buildings.h"
 #include "BuildingConstData.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief マップ（レベル）用ネームスペース

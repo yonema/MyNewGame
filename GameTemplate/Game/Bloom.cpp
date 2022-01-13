@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Bloom.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief グラフィック関連のネームスペース

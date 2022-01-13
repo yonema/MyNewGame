@@ -2,7 +2,7 @@
 #include "AABB.h"
 #include "../../MiniEngine/tkFile/TkmFile.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ジオメトリ関連のネームスペース

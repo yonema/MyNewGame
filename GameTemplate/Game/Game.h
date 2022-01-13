@@ -2,9 +2,8 @@
 
 /**
  * @brief このゲームのネームスペース
- * @todo MyGameをもっとユニークなゲームのタイトル名とかに変更する
 */
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	namespace nsLight { class CDirectionalLight; }
 	/**
@@ -44,7 +43,7 @@ namespace nsMyGame
 			static const char* const m_kMapObjName;				//!< マップのオブジェクトの名前
 			static const Vector3 m_kGameDirectionalLightDir;	//!< ゲーム全体のディレクションライトの方向
 			static const Vector4 m_kGameDirectionalLightColor;	//!< ゲーム全体のディレクションライトのカラー
-			static const int m_kCurrentMapNum = 6;				//!< 現在のマップ番号
+			static const int m_kCurrentMapNum = 7;				//!< 現在のマップ番号
 
 		private:	// データメンバ
 			nsLight::CDirectionalLight* m_gameDirectionalLight = nullptr;	//!< ゲーム全体のディレクションライト

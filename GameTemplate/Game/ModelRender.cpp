@@ -5,7 +5,7 @@
 #include "RenderingEngine.h"
 #include "RenderingEngineConstData.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief グラフィック関連のネームスペース

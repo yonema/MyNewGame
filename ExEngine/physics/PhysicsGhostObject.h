@@ -7,7 +7,7 @@
 	/// キャラクターのチェックポイント通過判定、クリア判定などの
 	/// キャラクターがすり抜ける必要のあるあたり判定に使えます。
 	/// </summary>
-class PhysicsGhostObject : public nsMyGame::nsUtil::Noncopyable {
+class PhysicsGhostObject : public nsNinjaAttract::nsUtil::Noncopyable {
 public:
 	~PhysicsGhostObject()
 	{

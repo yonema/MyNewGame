@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief プレイヤー関連のネームスペース

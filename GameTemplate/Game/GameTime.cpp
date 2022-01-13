@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "GameTime.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief タイマー

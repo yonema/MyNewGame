@@ -8,7 +8,7 @@
 
 
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief Util関連のネームスペース

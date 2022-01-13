@@ -1,7 +1,7 @@
 #pragma once
 #include "LightManager.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ライト関連のネームスペース

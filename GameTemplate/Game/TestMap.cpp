@@ -11,7 +11,7 @@
 #include "RenderingEngine.h"
 
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief マップ（レベル）用ネームスペース

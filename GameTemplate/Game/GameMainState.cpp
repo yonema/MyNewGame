@@ -3,7 +3,7 @@
 #include "GameMainUI.h"
 #include "GameTime.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ゲームステート関連のネームスペース

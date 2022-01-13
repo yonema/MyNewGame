@@ -7,7 +7,7 @@
 #include "PlayerCatchEnemy.h"
 #include "PlayerConstData.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	// ‘O•ûéŒ¾
 	namespace nsPlayer { class CPlayerModelAnimation; }

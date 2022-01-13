@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "DebugManager.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief デバック関連のネームスペース

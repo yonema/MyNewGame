@@ -299,6 +299,7 @@
     <ClCompile Include="AICharacterBase.cpp" />
     <ClCompile Include="AIField.cpp" />
     <ClCompile Include="AlphaMap.cpp" />
+    <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BezierCurve.cpp" />
     <ClCompile Include="BGM.cpp" />
     <ClCompile Include="Bloom.cpp" />
@@ -310,6 +311,7 @@
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="EnemyCatchUI.cpp" />
     <ClCompile Include="GeometryData.cpp" />
+    <ClCompile Include="MainMap.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="NaviMesh.cpp" />
     <ClCompile Include="Path.cpp" />
@@ -357,6 +359,7 @@
     <ClCompile Include="TestMapForLevel3D.cpp" />
     <ClCompile Include="TestMapForPlayerMove.cpp" />
     <ClCompile Include="TestMapForSpotLight.cpp" />
+    <ClCompile Include="TitleMap.cpp" />
     <ClCompile Include="TklFile.cpp" />
     <ClCompile Include="TknFile.cpp" />
     <ClCompile Include="VectorRender.cpp" />
@@ -453,6 +456,7 @@
     <ClInclude Include="AIConstData.h" />
     <ClInclude Include="AIField.h" />
     <ClInclude Include="AlphaMap.h" />
+    <ClInclude Include="BackGround.h" />
     <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="BGM.h" />
     <ClInclude Include="BGMConstData.h" />
@@ -464,7 +468,9 @@
     <ClInclude Include="CascadeShadowMapMatrix.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="EnemyCatchUI.h" />
+    <ClInclude Include="GameObjectNameData.h" />
     <ClInclude Include="GeometryData.h" />
+    <ClInclude Include="MainMap.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="NaviMesh.h" />
     <ClInclude Include="Path.h" />
@@ -540,6 +546,7 @@
     <ClInclude Include="TestMap.h" />
     <ClInclude Include="TestMapForPlayerMove.h" />
     <ClInclude Include="TestMapForSpotLight.h" />
+    <ClInclude Include="TitleMap.h" />
     <ClInclude Include="TklFile.h" />
     <ClInclude Include="TknFile.h" />
     <ClInclude Include="TResourceBank.h" />

@@ -2,7 +2,7 @@
 #include "CTestMapForShadow.h"
 #include "ModelRender.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief マップ（レベル）用ネームスペース

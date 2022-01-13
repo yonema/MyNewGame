@@ -4,7 +4,7 @@
 #include "PointLight.h"
 #include "SpotLight.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	/**
 	 * @brief ライト関連のネームスペース

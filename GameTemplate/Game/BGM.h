@@ -1,7 +1,7 @@
 #pragma once
 #include "BGMConstData.h"
 
-namespace nsMyGame
+namespace nsNinjaAttract
 {
 	namespace nsPlayer { class CPlayer; }
 	namespace nsSound { class CSoundCue; }
