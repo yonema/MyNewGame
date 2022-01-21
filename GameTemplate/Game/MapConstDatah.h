@@ -106,6 +106,45 @@ namespace nsNinjaAttract
 			//!< ゲーム中のプレイヤーのレベル上の名前
 			constexpr const char* const kPlayerLevelNameInGame = "player_inGame";
 
+			//!< 決定音のサウンドのファイルパス
+			constexpr const wchar_t* const kDecisionSoundFilePath = L"Assets/sound/decision.wav";
+
+			//!< タイトルのスプライトのファイスパス
+			constexpr const char* const kTitleSpriteFilePath = "Assets/Image/title/title.DDS";
+			//!< スタートのスプライトのファイスパス
+			constexpr const char* const kTitleStartSpriteFilePath = "Assets/Image/title/title_start.DDS";
+			//!< タイトルのスプライトの幅
+			constexpr int kTitleSpriteWidth = static_cast<int>(512.0f + 1.5f);
+			//!< タイトルのスプライトの高さ
+			constexpr int kTitleSpriteHeight = static_cast<int>(512.0f + 1.5f);
+			//!< スタートのスプライトの幅
+			constexpr int kTitleStartSpriteWidth = static_cast<int>(512.0f + 0.4f);
+			//!< スタートのスプライトの高さ
+			constexpr int kTitleStartSpriteHeight = static_cast<int>(512.0f + 0.4f);
+			//!< タイトルのスプライトの座標
+			static const Vector2 kTitleSpritePosition = { -200.0f,100.0f };
+			//!< スタートのスプライトの座標
+			static const Vector2 kTitleStartSpritePosition = { kTitleSpritePosition.x,kTitleSpritePosition .y - 100.0f};
+			//!< タイトルのスプライトの最初の高さ
+			constexpr float kTitleSpriteInitialHeight = 50.0f;
+
+			/**
+			 * @brief タイトルのステート
+			*/
+			enum EnTitleState
+			{
+				enTS_beforeFadeIn,
+				enTS_fadeIn,
+				enTS_titleIn,
+				enTS_titleIdle,
+				enTS_titleOut,
+				enTS_swingDirecting,
+				enTS_fadeOut
+			};
+
+			constexpr float kTitleInTime = 1.0f;		//!< タイトルインのタイム
+			constexpr float kTitleIdleLoopTime = 5.0f;	//!< タイトルアイドルのループタイム
+			constexpr float kTitleOutTime = 1.0f;		//!< タイトルアウトのタイム
 		}
 	}
 }

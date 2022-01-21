@@ -5,6 +5,8 @@
 #include "StopWatch.h"
 #include "Render.h"
 #include "LightManager.h"
+#include "SpriteRender.h"
+#include "Fade.h"
 
 namespace nsNinjaAttract
 {
@@ -36,6 +38,9 @@ namespace nsNinjaAttract
 
 			m_postEffect.Init(m_mainRenderTarget);	// ポストエフェクトの初期化
 
+			// フェードクラスの生成
+			m_fade = NewGO<nsGraphic::CFade>(nsCommonData::enPriorityFirst);
+
 			return;
 		}
 		/**
@@ -43,6 +48,7 @@ namespace nsNinjaAttract
 		*/
 		CRenderingEngine::~CRenderingEngine()
 		{
+
 			return;
 		}
 
@@ -251,6 +257,17 @@ namespace nsNinjaAttract
 				g_camera3D->GetFar()
 			);
 			m_viewProjMatrixForViewCulling.Multiply(g_camera3D->GetViewMatrix(), projMatrix);
+
+			return;
+		}
+
+		/**
+		 * @brief 事前破棄処理
+		*/
+		void CRenderingEngine::PreDelete()
+		{
+			// フェードクラスの破棄
+			DeleteGO(m_fade);
 
 			return;
 		}

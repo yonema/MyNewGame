@@ -575,6 +575,9 @@
     <ClCompile Include="BackGround.cpp">
       <Filter>MyCode\BackGround</Filter>
     </ClCompile>
+    <ClCompile Include="Fade.cpp">
+      <Filter>MyCode\Graphic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -1092,6 +1095,9 @@
     </ClInclude>
     <ClInclude Include="GameObjectNameData.h">
       <Filter>MyCode\CommonData</Filter>
+    </ClInclude>
+    <ClInclude Include="Fade.h">
+      <Filter>MyCode\Graphic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

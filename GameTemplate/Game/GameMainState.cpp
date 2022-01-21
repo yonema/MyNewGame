@@ -2,6 +2,7 @@
 #include "GameMainState.h"
 #include "GameMainUI.h"
 #include "GameTime.h"
+#include "Player.h"
 
 namespace nsNinjaAttract
 {
@@ -19,8 +20,10 @@ namespace nsNinjaAttract
 		*/
 		bool CGameMainState::Start()
 		{
-			m_gameMainUI = NewGO<nsUI::CGameMainUI>(nsCommonData::enPriorityFirst);
-
+			if (m_playerRef->IsTitleMode() != true)
+			{
+				m_gameMainUI = NewGO<nsUI::CGameMainUI>(nsCommonData::enPriorityFirst);
+			}
 
 			return true;
 		}
@@ -31,6 +34,7 @@ namespace nsNinjaAttract
 		void CGameMainState::OnDestroy()
 		{
 			DeleteGO(m_gameMainUI);
+			m_instance = nullptr;
 
 			return;
 		}

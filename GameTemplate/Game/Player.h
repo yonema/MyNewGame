@@ -54,6 +54,42 @@ namespace nsNinjaAttract
 		public:		// メンバ関数
 
 			/**
+			 * @brief 入力可能か？を設定する
+			 * @param[in] isInputtable 入力可能か？
+			*/
+			void SetIsInputtable(const bool isInputtable)
+			{
+				m_isInputtable = isInputtable;
+			}
+
+			/**
+			 * @brief 入力可能か？を得る
+			 * @return 入力可能か？
+			*/
+			bool IsInputtable() const
+			{
+				return m_isInputtable;
+			}
+
+			/**
+			 * @brief タイトルモードに設定
+			*/
+			void TitleMode()
+			{
+				m_isTitleMode = true;
+				SetIsInputtable(false);
+			}
+
+			/**
+			 * @brief タイトルモードか？を得る
+			 * @return タイトルモードか？
+			*/
+			bool IsTitleMode() const
+			{
+				return m_isTitleMode;
+			}
+
+			/**
 			 * @brief 座標を設定する
 			 * @param[in] pos 座標
 			*/
@@ -239,6 +275,9 @@ namespace nsNinjaAttract
 			//!< プレイヤーのステート
 			nsPlayerConstData::EnPlayerState m_playerState = nsPlayerConstData::enWalkAndRun;
 			CPlayerStringModel* m_playerStringModel = nullptr;	//!< プレイヤーの糸のモデルクラス
+
+			bool m_isInputtable = true;		//!< 入力可能か？
+			bool m_isTitleMode = false;		//!< タイトルモードか？
 		};
 
 	}

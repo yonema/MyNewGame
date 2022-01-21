@@ -5,7 +5,9 @@
 */
 namespace nsNinjaAttract
 {
+	// 前方宣言
 	namespace nsLight { class CDirectionalLight; }
+
 	/**
 	 * @brief ゲームファイルのネームスペース
 	*/

@@ -770,6 +770,12 @@ namespace nsNinjaAttract
 				return;
 			}
 
+			if (m_aiCarsRef->empty())
+			{
+				// エネミーがいないなら、調べない。早期リターン。
+				return;
+			}
+
 			// エネミー1体ずつ調べる
 			for (auto& enemy : *m_aiCarsRef)
 			{

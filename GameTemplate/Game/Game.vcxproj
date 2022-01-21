@@ -310,6 +310,7 @@
     <ClCompile Include="CEffectPlayer.cpp" />
     <ClCompile Include="Cell.cpp" />
     <ClCompile Include="EnemyCatchUI.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GeometryData.cpp" />
     <ClCompile Include="MainMap.cpp" />
     <ClCompile Include="MiniMap.cpp" />
@@ -468,6 +469,7 @@
     <ClInclude Include="CascadeShadowMapMatrix.h" />
     <ClInclude Include="Cell.h" />
     <ClInclude Include="EnemyCatchUI.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="GameObjectNameData.h" />
     <ClInclude Include="GeometryData.h" />
     <ClInclude Include="MainMap.h" />

@@ -16,9 +16,6 @@ namespace nsNinjaAttract
 		*/
 		bool CBGM::Start()
 		{
-			// ‚±‚±‰ü‘¢
-			nsSound::CSoundCue::SetBGMVolume(0.0f);
-
 			for (int i = 0; i < enBGMTypeNum; i++)
 			{
 				// ŠeBGM‚ð¶¬‚µ‚Ä‰Šú‰»

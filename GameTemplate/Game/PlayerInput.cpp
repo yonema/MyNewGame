@@ -45,6 +45,13 @@ namespace nsNinjaAttract
 			// コマンド入力情報の更新
 			UpdateCommandInputData();
 
+			if (m_playerRef->IsInputtable() != true)
+			{
+				// プレイヤーが入力不可の時
+				// 入力情報を初期化する
+				memset(&m_playerInputData, 0, sizeof(m_playerInputData));
+			}
+
 			return;
 		}
 

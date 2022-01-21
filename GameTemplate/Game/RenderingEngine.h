@@ -9,7 +9,11 @@
 namespace nsNinjaAttract
 {
 	// 前方宣言
-	namespace nsGraphic { class CRender; };		// レンダラークラス
+	namespace nsGraphic 
+	{
+		class CRender;		// レンダラークラス
+		class CFade;
+	};
 	namespace nsTimer { class CStopWatch; }		// タイマー
 
 	/**
@@ -246,6 +250,20 @@ namespace nsNinjaAttract
 			}
 
 			/**
+			 * @brief フェードの参照を得る。
+			 * @return フェードの参照
+			*/
+			nsGraphic::CFade* GetFade()
+			{
+				return m_fade;
+			}
+
+			/**
+			 * @brief 事前破棄処理
+			*/
+			void PreDelete();
+
+			/**
 			 * @brief レンダリングエンジンを実行
 			 * @param[in] stopWatch ストップウォッチ
 			*/
@@ -381,6 +399,7 @@ namespace nsNinjaAttract
 			Matrix m_viewProjMatrixForViewCulling;		//!< ビューカリング用のビュープロジェクション行列
 			nsGeometry::CSceneGeometryData m_sceneGeometryData;	//!< シーンのジオメトリ情報
 
+			nsGraphic::CFade* m_fade = nullptr;
 
 			//////// リソースバンク ////////
 			nsUtil::TResourceBank<TkmFile> m_tkmFileBank;	//!< tkmファイルバンク

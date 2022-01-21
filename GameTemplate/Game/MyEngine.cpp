@@ -155,6 +155,7 @@ namespace nsNinjaAttract
 		void CMyEngine::PreDelete()
 		{
 			nsDebug::CDebugManager::GetInstance()->PreDelete();
+			CRenderingEngine::GetInstance()->PreDelete();
 
 			return;
 		}

@@ -119,6 +119,12 @@ namespace nsNinjaAttract
 				return m_isOnEnemyCamera;
 			}
 
+			/**
+			 * @brief カメラを制御するか？を設定
+			 * @param[in] isControl カメラを制御するか？
+			*/
+			void SetIsControl(const bool isControl);
+
 
 		private:	// privateなメンバ関数
 
@@ -167,8 +173,8 @@ namespace nsNinjaAttract
 			float m_toCameraDistance = 0.0f;
 			bool m_isOnEnemyCamera = false;				//!< 敵の上に乗っているときのカメラか？
 
+			Camera m_dummyCamera;
 			// 改造ここから
-			//Camera m_dummyCamera;
 			//nsGraphic::nsSprite::CSpriteRender* m_titleSR = nullptr;
 			//nsGraphic::nsSprite::CSpriteRender* m_titleStartSR = nullptr;
 			//bool m_titleFadeOut = false;

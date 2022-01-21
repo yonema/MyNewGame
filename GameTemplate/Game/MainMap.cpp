@@ -8,6 +8,8 @@
 #include "AIField.h"
 #include "Level3D.h"
 #include "AICar.h"
+#include "RenderingEngine.h"
+#include "Fade.h"
 
 namespace nsNinjaAttract
 {
@@ -37,18 +39,24 @@ namespace nsNinjaAttract
 			m_gameState->Init(*m_player);
 
 			// AIフィールドクラスの生成
-			m_aiField = std::make_unique<nsAI::CAIField>();
+			m_aiField = new nsAI::CAIField();
 
 			// 車の初期化
 			InitCar();
 
-			// 背景ステージの生成
-			m_backGround = new nsBackGround::CBackGround;
+			if (m_backGround == nullptr)
+			{
+				// 背景ステージが設定されていなければ、
+				// 背景ステージを生成する。
+				m_backGround = new nsBackGround::CBackGround;
+			}
 
 			// BGMクラスの生成と初期化
 			m_bgm = NewGO<nsBGM::CBGM>(nsCommonData::enPriorityFirst);
 			m_bgm->Init(*m_player);
 
+			// フェードインを開始
+			nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeIn();
 
 			return true;
 		}
@@ -73,6 +81,7 @@ namespace nsNinjaAttract
 			);
 
 			delete m_backGround;
+			delete m_aiField;
 
 			return;
 		}
@@ -82,6 +91,13 @@ namespace nsNinjaAttract
 		*/
 		void CMainMap::Update()
 		{
+			if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd())
+			{
+				// プレイヤーを入力可能にする
+				m_player->SetIsInputtable(true);
+			}
+
+
 			return;
 		}
 
@@ -93,6 +109,8 @@ namespace nsNinjaAttract
 			// プレイヤーの生成
 			// 何か優先度下げないと、鎖の位置がずれる。
 			m_player = NewGO<nsPlayer::CPlayer>(nsCommonData::enPrioritySecond);
+			// プレイヤーを入力不可にする
+			m_player->SetIsInputtable(false);
 
 			// プレイヤー用のレベルを生成
 			m_playerLevel = std::make_unique<nsLevel3D::CLevel3D>();
@@ -101,6 +119,7 @@ namespace nsNinjaAttract
 				kLevelFilePath[enLevelPlayer],
 				[&](nsLevel3D::SLevelObjectData& objData)
 				{
+					// ゲーム中のプレイヤーのレベル上の名前
 					if (objData.EqualObjectName(kPlayerLevelNameInGame))
 					{
 						// ゲーム中のプレイヤーの座標と回転を設定

@@ -29,10 +29,7 @@ namespace nsNinjaAttract
 			/**
 			 * @brief デストラクタ
 			*/
-			~CGameMainState()
-			{
-				m_instance = nullptr;
-			}
+			~CGameMainState() = default;
 
 		public:		// オーバーライドしたメンバ関数
 

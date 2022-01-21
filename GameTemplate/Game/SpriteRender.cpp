@@ -60,6 +60,10 @@ namespace nsNinjaAttract
 			*/
 			void CSpriteRender::Render2D(RenderContext& rc)
 			{
+				if (m_name == "AAA")
+				{
+					int a = 1;
+				}
 				//スプライトの描画
 				m_sprite.Draw(rc);
 

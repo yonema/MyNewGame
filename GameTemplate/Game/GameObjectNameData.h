@@ -13,6 +13,8 @@ namespace nsNinjaAttract
 		*/
 		enum EnGameObjectName
 		{
+			enGN_TitleMap,
+			enGN_MainMap,
 			enGN_MainGameState,
 			enGN_Car,
 			enGameObjectNameNum
@@ -23,6 +25,8 @@ namespace nsNinjaAttract
 		*/
 		constexpr const char* const kGameObjectName[enGameObjectNameNum]
 		{
+			"TitleMap",
+			"MainMap",
 			"MainGameState",
 			"Car"
 		};

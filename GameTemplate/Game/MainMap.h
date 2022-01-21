@@ -51,6 +51,15 @@ namespace nsNinjaAttract
 
 		public:		// メンバ関数
 
+			/**
+			 * @brief 背景ステージクラスを設定する
+			 * @param[in,out] backGround 背景ステージクラス
+			*/
+			void SetBackGround(nsBackGround::CBackGround* backGround)
+			{
+				m_backGround = backGround;
+			}
+
 		private:	// privateなメンバ関数
 
 			/**
@@ -65,12 +74,12 @@ namespace nsNinjaAttract
 
 		private:	// データメンバ
 			std::unique_ptr<nsLevel3D::CLevel3D> m_playerLevel;	//!< プレイヤー用レベル
-			std::unique_ptr<nsLevel3D::CLevel3D> m_carLevel;	//!< プレイヤー用レベル
+			std::unique_ptr<nsLevel3D::CLevel3D> m_carLevel;	//!< 車用レベル
 			nsPlayer::CPlayer* m_player = nullptr;		//!< プレイヤークラス
 			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステートクラス
 			nsBGM::CBGM* m_bgm = nullptr;				//!< BGMクラス
 			nsBackGround::CBackGround* m_backGround = nullptr;	//!< バックグラウンドクラス
-			std::unique_ptr<nsAI::CAIField> m_aiField;	//!< AIのフィールドクラス
+			nsAI::CAIField* m_aiField = nullptr;	//!< AIのフィールドクラス
 		};
 
 	}

@@ -110,6 +110,15 @@ namespace nsNinjaAttract
 					m_font.SetShadowParam(isDrawShadow, shadowOffset, shadowColor);
 				}
 
+				/**
+				 * @brief ピボットを設定する
+				 * @param[in] pivot ピボット
+				*/
+				void SetPivot(const Vector2& pivot)
+				{
+					m_pivot = pivot;
+				}
+
 			private:	// privateなメンバ関数
 				/**
 				 * @brief 2D描画関数
