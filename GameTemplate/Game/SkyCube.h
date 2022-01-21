@@ -94,6 +94,12 @@ namespace nsNinjaAttract
 					m_skyModelRender->SetScale(m_scale);
 			}
 
+			/**
+			 * @brief タイトル画面か？を設定
+			 * @param[in] isTitle タイトル画面か？
+			*/
+			void SetIsTitle(const bool isTitle);
+
 		private:	// privateなメンバ関数
 
 			/**
@@ -113,7 +119,6 @@ namespace nsNinjaAttract
 
 			Vector3 m_position = Vector3::Zero;								//!< 座標
 			Vector3 m_scale = nsSkyCubeConstData::kDefaultSkySclae;			//!< 拡大率
-			
 		};
 
 	}

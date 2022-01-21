@@ -55,6 +55,16 @@ namespace nsNinjaAttract
 		}
 
 		/**
+		 * @brief タイトル画面か？を設定
+		 * @param[in] isTitle タイトル画面か？
+		*/
+		void CBackGround::SetIsTitle(const bool isTitle) 
+		{
+			m_skyCube->SetIsTitle(isTitle);
+			return;
+		}
+
+		/**
 		 * @brief レベルをロードする
 		*/
 		void CBackGround::LoadLevel3D()

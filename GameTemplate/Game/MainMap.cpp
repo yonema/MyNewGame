@@ -50,6 +50,8 @@ namespace nsNinjaAttract
 				// 背景ステージを生成する。
 				m_backGround = new nsBackGround::CBackGround;
 			}
+			// タイトル画面ではない
+			m_backGround->SetIsTitle(false);
 
 			// BGMクラスの生成と初期化
 			m_bgm = NewGO<nsBGM::CBGM>(nsCommonData::enPriorityFirst);

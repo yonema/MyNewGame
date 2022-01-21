@@ -32,6 +32,12 @@ namespace nsNinjaAttract
 
 		public:		// メンバ関数
 
+			/**
+			 * @brief タイトル画面か？を設定
+			 * @param[in] isTitle タイトル画面か？
+			*/
+			void SetIsTitle(const bool isTitle);
+
 		private:	// privateなメンバ関数
 
 			/**

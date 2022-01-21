@@ -58,7 +58,9 @@ namespace nsNinjaAttract
 			InitSprite();
 
 			// 背景ステージの生成
-			m_backGround = new nsBackGround::CBackGround;
+			m_backGround = new nsBackGround::CBackGround();
+			// タイトル画面
+			m_backGround->SetIsTitle(true);
 
 			return true;
 		}

@@ -18,11 +18,7 @@ namespace nsNinjaAttract
 		*/
 		bool CSkyCube::Start()
 		{
-			// テクスチャの初期化
-			InitTexture();
 
-			// モデルレンダラーの初期化
-			InitModelRender();
 
 			return true;
 		}
@@ -48,6 +44,36 @@ namespace nsNinjaAttract
 			m_skyTexture.InitFromDDSFile(GetSkyCubeTextureDDSFilePath(skyCubeType));
 
 			nsMyEngine::CRenderingEngine::GetInstance()->ReInitIBL(GetSkyCubeTextureDDSFilePath(skyCubeType), 1.0f,isIBL);
+
+			// スカイのモデルレンダラーの生成
+			m_skyModelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
+
+			// テクスチャの初期化
+			InitTexture();
+
+			// モデルレンダラーの初期化
+			InitModelRender();
+		}
+
+		/**
+		 * @brief タイトル画面か？を設定
+		 * @param[in] isTitle タイトル画面か？
+		*/
+		void CSkyCube::SetIsTitle(const bool isTitle)
+		{
+			// 空のモデルの乗算カラー
+			float mul = 1.0f;
+
+			if (isTitle)
+			{
+				// タイトル画面では少し暗くする
+				mul = 0.9f;
+			}
+
+			// 乗算カラーを設定
+			m_skyModelRender->SetMulColor({ mul ,mul ,mul ,1.0f });
+
+			return;
 		}
 
 		/**
@@ -71,9 +97,6 @@ namespace nsNinjaAttract
 		*/
 		void CSkyCube::InitModelRender()
 		{
-			// スカイのモデルレンダラーの初期化
-			m_skyModelRender = NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-
 			// モデルの初期化データ
 			ModelInitData modelInitData;
 			modelInitData.m_tkmFilePath = kTkmFilePath;	// tkmファイルパスを設定
@@ -90,10 +113,6 @@ namespace nsNinjaAttract
 			// 座標と拡大率を設定する
 			m_skyModelRender->SetPosition(m_position);
 			m_skyModelRender->SetScale(m_scale);
-
-			// 改造
-			//float mul = 0.9f;
-			//m_skyModelRender->SetMulColor({ mul ,mul ,mul ,1.0f });
 
 			return;
 		}
