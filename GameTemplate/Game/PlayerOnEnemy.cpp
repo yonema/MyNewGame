@@ -199,7 +199,7 @@ namespace nsNinjaAttract
 				LookAtEnemy();
 
 				// •âŠÔ—¦‚ði‚ß‚é
-				m_goOnEnemyTimer += nsTimer::GameTime().GetFrameDeltaTime();
+				m_goOnEnemyTimer += m_playerRef->GetDeltaTime();
 
 				if (m_goOnEnemyTimer >= kGoOnEnemyTime)
 				{

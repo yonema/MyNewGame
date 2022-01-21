@@ -135,7 +135,7 @@ namespace nsNinjaAttract
 					const float scale = Math::Lerp<float>(rate, kSonarEffectMinScale, kSonarEffectMaxScale);
 					Vector3 scaleVec = { scale, kSonarEffectYScale, scale };
 					m_sonarEF->SetScale(scaleVec);
-					m_sonarTimer += nsTimer::GameTime().GetFrameDeltaTime();
+					m_sonarTimer += m_playerRef->GetDeltaTime();
 				}
 
 				// ターゲットを探す
@@ -511,7 +511,7 @@ namespace nsNinjaAttract
 			m_oldCommandProgress = m_commandInput->GetCommandProgress();
 
 			// タイマーを進める
-			m_onEnemyTimer += nsTimer::GameTime().GetFrameDeltaTime();
+			m_onEnemyTimer += m_playerRef->GetDeltaTime();
 
 			// バーの拡大率。徐々に小さくしていく。
 			const float barRate = 1.0f - (m_onEnemyTimer / kOnEnemyTime);
@@ -566,7 +566,7 @@ namespace nsNinjaAttract
 			m_QTEButtonAfterImageSR->SetScale(scale);
 
 			// タイマーを進める
-			m_buttonAfterImageTimer += nsTimer::GameTime().GetFrameDeltaTime();
+			m_buttonAfterImageTimer += m_playerRef->GetDeltaTime();
 
 			if (m_buttonAfterImageTimer >= kQTEButtonAfterImageTime)
 			{
@@ -694,7 +694,7 @@ namespace nsNinjaAttract
 
 
 				// タイマーを進める。
-				m_resultTimer += nsTimer::GameTime().GetFrameDeltaTime();
+				m_resultTimer += m_playerRef->GetDeltaTime();
 
 				if (m_resultTimer > kQTEResultFrameMoveTime + kQTEResultMoveTime +
 					kQTEResultDisplayTime + kQTEResultBackTime + kQTEResultFrameBackTime)
@@ -728,7 +728,7 @@ namespace nsNinjaAttract
 			m_ninjyutuEF->SetRotation(m_targetRef->GetRotation());
 
 			// タイマーを進める
-			m_ninnjyutuEFTimer += nsTimer::GameTime().GetFrameDeltaTime();
+			m_ninnjyutuEFTimer += m_playerRef->GetDeltaTime();
 			
 			if (m_ninnjyutuEFTimer >= kNinjyutuEffectTime)
 			{

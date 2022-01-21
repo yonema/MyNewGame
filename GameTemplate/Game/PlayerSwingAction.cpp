@@ -507,7 +507,7 @@ namespace nsNinjaAttract
 				// cosΘ上 = 一番上の時の角度（一番上の時の角度は90度）
 				float highestCos = 0.0f;
 				// g = 重力加速度
-				m_g += 980.0f * nsTimer::CGameTime().GetFrameDeltaTime() * 0.25f;
+				m_g += 980.0f * m_playerRef->GetDeltaTime() * 0.25f;
 				const float maxG = 2500.0f;
 				if (m_g > maxG)
 				{
@@ -865,7 +865,7 @@ namespace nsNinjaAttract
 				}
 
 				// タイマーを進める
-				m_cameraChangeLinearlyTimer += nsTimer::GameTime().GetFrameDeltaTime();
+				m_cameraChangeLinearlyTimer += m_playerRef->GetDeltaTime();
 
 				// カメラの値を線形補完して変化させる
 				m_playerCameraRef->LerpDampingRate(1.0f - 1.0f * m_cameraChangeLinearlyTimer / kCameraLerpTime);

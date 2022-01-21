@@ -98,6 +98,15 @@ namespace nsNinjaAttract
 				return (m_fadeState == enFS_fadeEnd);
 			};
 
+			/**
+			 * @brief フェードの進行率を得る
+			 * @return フェードの進行率
+			*/
+			float GetFadeRate() const
+			{
+				return min(1.0f, m_fadeTimer / m_fadeTime);
+			}
+
 		private:	// データメンバ
 			//!< フェード用のスプライト
 			nsGraphic::nsSprite::CSpriteRender* m_fadeSR = nullptr;	//!< フェードに使用するスプライトレンダラー

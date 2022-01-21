@@ -1,17 +1,20 @@
 #pragma once
 #include "Noncopyable.h"
 #include "PlayerConstData.h"
+#include "SavedPlayerInputDataConstData.h"
 
 namespace nsNinjaAttract
 {
+	// 前方宣言
+	namespace nsPlayer{ class CPlayer; }						// プレイヤークラス
+	namespace nsExternalData { class CSavedPlayerInputData; }	// プレイヤーの入力情報の書き出しクラス
+
+
 	/**
 	 * @brief プレイヤー関連のネームスペース
 	*/
 	namespace nsPlayer
 	{
-		// 前方宣言
-		class CPlayer;	// プレイヤークラス
-
 		/**
 		 * @brief プレイヤーの入力情報構造体
 		*/
@@ -33,6 +36,12 @@ namespace nsNinjaAttract
 				nsPlayerConstData::nsCatchEnemyConstData::enQTE_None;
 		};
 
+		struct SPlayerInputDataAndDeltaTime
+		{
+			SPlayerInputData playerInputData;	//!< プレイヤーの入力データ
+			float deltaTime = 0.0f;				//!< デルタタイム
+		};
+
 		/**
 		 * @brief プレイヤー入力クラス
 		*/
@@ -42,11 +51,11 @@ namespace nsNinjaAttract
 			/**
 			 * @brief コンストラクタ
 			*/
-			CPlayerInput() = default;
+			CPlayerInput();
 			/**
-			 * @brief コンストラクタ
+			 * @brief デストラクタ
 			*/
-			~CPlayerInput() = default;
+			~CPlayerInput();
 
 		public:		// メンバ関数
 
@@ -67,10 +76,59 @@ namespace nsNinjaAttract
 			*/
 			const SPlayerInputData& GetPlayerInputData() const
 			{
-				return m_playerInputData;
+				return m_playerInputDataAndDeltaTime.playerInputData;
 			}
 
+			/**
+			 * @brief プレイヤー全体で使用するデルタタイムを取得
+			 * @return プレイヤー全体で使用するデルタタイム
+			*/
+			float GetDeltaTime() const
+			{
+				return m_playerInputDataAndDeltaTime.deltaTime;
+			}
+
+			/**
+			 * @brief 保存する入力データの収集を開始する
+			*/
+			void StartSaveData()
+			{
+				m_isStartSaveData = true;
+			}
+
+			/**
+			 * @brief 保存する入力データの収取を終了して、保存する。
+			 * @param[in] saveFileType 保存ファイルの種類
+			*/
+			void EndSaveDataAndSave(
+				const nsExternalData::nsSavedPlayerInputDataConstData::EnSavedFileType saveFileType
+			);
+
+			/**
+			 * @brief 保存したデータの使用を開始する
+			 * @param[in] saveFileType 保存ファイルの種類
+			*/
+			void StartUsingSavedData(
+				const nsExternalData::nsSavedPlayerInputDataConstData::EnSavedFileType saveFileType
+			);
+
+			/**
+			 * @brief 保存したデータの使用を終了する
+			*/
+			void EndUsingSavedData();
+
+			/**
+			 * @brief ロードしたデータの進捗が、最後まで行っているか？を得る。
+			 * @return ロードしたデータの進捗が、最後まで行っているか？
+			*/
+			bool IsEndLoadDataProgress() const;
+
 		private:	// privateなメンバ関数
+
+			/**
+			 * @brief 入力情報を更新する
+			*/
+			void UpdateInput();
 
 			/**
 			 * @brief 軸入力情報を更新する
@@ -100,8 +158,12 @@ namespace nsNinjaAttract
 		private:	// データメンバ
 			const GamePad* m_pad = nullptr;		//!<  ゲームパッド
 			CPlayer* m_playerRef = nullptr;		//!< プレイヤーの参照
-			SPlayerInputData m_playerInputData;	//!< プレイヤーの入力情報
+			//!< プレイヤーの入力情報とデルタタイム
+			SPlayerInputDataAndDeltaTime m_playerInputDataAndDeltaTime;
 			bool m_canInputCommandAxis = false;	//!< コマンドの軸入力が可能か？
+			nsExternalData::CSavedPlayerInputData* m_savedPlayerInputData = nullptr;
+			bool m_isStartSaveData = false;		//!< 保存データの収集を開始しているか？
+			bool m_isUsingSavedData = false;	//!< 保存データを使用中か？
 		};
 	}
 }

@@ -135,6 +135,24 @@ namespace nsNinjaAttract
 			}
 
 			/**
+			 * @brief ロードしたデータの進捗が、最後まで行っているか？を得る。
+			 * @return ロードしたデータの進捗が、最後まで行っているか？
+			*/
+			bool IsEndLoadDataProgress() const
+			{
+				return m_playerInput->IsEndLoadDataProgress();
+			}
+
+			/**
+			 * @brief プレイヤー全体で使用するデルタタイムを取得
+			 * @return プレイヤー全体で使用するデルタタイム
+			*/
+			float GetDeltaTime() const
+			{
+				return m_playerInput->GetDeltaTime();
+			}
+
+			/**
 			 * @brief プレイヤーのカメラを得る
 			 * @return プレイヤーのカメラ
 			*/
@@ -253,6 +271,44 @@ namespace nsNinjaAttract
 			void ResetOnEnemy()
 			{
 				m_playerMove->ResetOnEnemy();
+			}
+
+			/**
+			 * @brief 保存する入力データの収集を開始する
+			*/
+			void StartSaveInputData()
+			{
+				m_playerInput->StartSaveData();
+			}
+
+			/**
+			 * @brief 保存する入力データの収取を終了して、保存する。
+			 * @param[in] saveFileType 保存ファイルの種類
+			*/
+			void EndSaveInputDataAndSave(
+				const nsExternalData::nsSavedPlayerInputDataConstData::EnSavedFileType saveFileType
+			)
+			{
+				m_playerInput->EndSaveDataAndSave(saveFileType);
+			}
+
+			/**
+			 * @brief 保存したデータの使用を開始する
+			 * @param[in] saveFileType 保存ファイルの種類
+			*/
+			void StartUsingSavedInputData(
+				const nsExternalData::nsSavedPlayerInputDataConstData::EnSavedFileType saveFileType
+			)
+			{
+				m_playerInput->StartUsingSavedData(saveFileType);
+			}
+
+			/**
+			 * @brief 保存したデータの使用を終了する
+			*/
+			void EndUsingSavedInputData()
+			{
+				m_playerInput->EndUsingSavedData();
 			}
 
 		private:	// privateなメンバ関数

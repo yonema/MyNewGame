@@ -48,6 +48,8 @@ namespace nsNinjaAttract
 			if (m_playerRef->IsTitleMode())
 			{
 				SetIsControl(false);
+				m_toCameraVec = kDefaultToCameraVec;
+				m_toCameraVec.z *= -1.0f;
 				g_camera3D->SetPosition({ -17788.7656f,9081.0f,61081.4609f});
 				g_camera3D->SetTarget(g_camera3D->GetPosition() + Vector3::Back * 50.0f);
 			}
@@ -202,7 +204,7 @@ namespace nsNinjaAttract
 				if (m_autoTurnStartTimerResetTimer < kAutoTurnStartTimerResetTime)
 				{
 					// 進んでいない。タイマーを進める。
-					m_autoTurnStartTimerResetTimer += nsTimer::GameTime().GetFrameDeltaTime();
+					m_autoTurnStartTimerResetTimer += m_playerRef->GetDeltaTime();
 					return;
 				}
 				// 進んだ。タイマーをリセットする・
@@ -220,7 +222,7 @@ namespace nsNinjaAttract
 			if (m_autoTurnStartTimer < kAutoTurnStartTime)
 			{
 				// 進んでいない。タイマーを進める。
-				m_autoTurnStartTimer += nsTimer::GameTime().GetFrameDeltaTime();
+				m_autoTurnStartTimer += m_playerRef->GetDeltaTime();
 				// 早期リターン
 				return;
 			}

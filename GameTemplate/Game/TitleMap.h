@@ -9,7 +9,7 @@ namespace nsNinjaAttract
 	namespace nsSound { class CSoundCue; }			// サウンドキュークラス
 	namespace nsBackGround { class CBackGround; }	// バックグラウンドクラス
 	namespace nsLevel3D { class CLevel3D; }			// 3Dレベルクラス
-	namespace nsGraphic { namespace nsSprite { class CSpriteRender; } }
+	namespace nsGraphic { namespace nsSprite { class CSpriteRender; } }	// スプライトレンダラークラス
 
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -133,6 +133,7 @@ namespace nsNinjaAttract
 
 			nsMapConstData::EnTitleState m_state = nsMapConstData::enTS_beforeFadeIn;	//!< ステート
 			float m_timer = 0.0f;	//!< タイマー
+
 		};
 	}
 }

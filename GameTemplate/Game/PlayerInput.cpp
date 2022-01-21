@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "PlayerInput.h"
 #include "Player.h"
+#include "SavedPlayerInputData.h"
 
 namespace nsNinjaAttract
 {
@@ -12,6 +13,24 @@ namespace nsNinjaAttract
 		// プレイヤー入力クラスの定数データを使用可能にする
 		using namespace nsPlayerConstData::nsInputConstData;
 		using nsPlayerConstData::nsCatchEnemyConstData::EnQTEButtonType;
+
+		/**
+		 * @brief コンストラクタ
+		*/
+		CPlayerInput::CPlayerInput()
+		{
+			m_savedPlayerInputData = new nsExternalData::CSavedPlayerInputData;
+			return;
+		}
+
+		/**
+		 * @brief デストラクタ
+		*/
+		CPlayerInput::~CPlayerInput()
+		{
+			delete m_savedPlayerInputData;
+			return;
+		}
 
 		/**
 		 * @brief 初期化
@@ -34,8 +53,108 @@ namespace nsNinjaAttract
 		void CPlayerInput::ExecuteUpdate()
 		{
 			// 入力情報を初期化する
-			memset(&m_playerInputData, 0, sizeof(m_playerInputData));
+			memset(&m_playerInputDataAndDeltaTime, 0, sizeof(m_playerInputDataAndDeltaTime));
 
+			// 入力情報を更新する
+			UpdateInput();
+
+			if (m_isStartSaveData)
+			{
+				// 保存データの収集を開始しているなら、保存するデータを追加する。
+				m_savedPlayerInputData->PushBuckData(m_playerInputDataAndDeltaTime);
+			}
+
+			if (m_playerRef->IsInputtable() != true || m_isUsingSavedData)
+			{
+				// プレイヤーが入力不可の時、または、保存した入力データを使用中の時
+				// 入力情報を初期化する
+				memset(
+					&m_playerInputDataAndDeltaTime.playerInputData,
+					0, 
+					sizeof(m_playerInputDataAndDeltaTime.playerInputData));
+			}
+
+			if (m_isUsingSavedData)
+			{
+				// 保存した入力データを使用中の時
+				// 現在の進捗のロードしたデータを取り出して、進捗を進める。
+				SPlayerInputDataAndDeltaTime* loadData = m_savedPlayerInputData->GetAndProgressLoadData();
+				if (loadData)
+				{
+					// データがあれば、入力データに反映する。
+					m_playerInputDataAndDeltaTime = *loadData;
+				}
+			}
+
+			return;
+		}
+
+		/**
+		 * @brief 保存する入力データの収取を終了して、保存する。
+		 * @param[in] 保存ファイルの種類
+		*/
+		void CPlayerInput::EndSaveDataAndSave(
+			const nsExternalData::nsSavedPlayerInputDataConstData::EnSavedFileType saveFileType
+		)
+		{
+			// 保存データの収集を開始しているか？のフラグを折る
+			m_isStartSaveData = false;
+
+			// 収集したデータを保存する
+			m_savedPlayerInputData->SaveData(saveFileType);
+
+			// 収集したデータをクリアする
+			m_savedPlayerInputData->ClearSaveData();
+
+			return;
+		}
+
+		/**
+		 * @brief 保存したデータの使用を開始する
+		 * @param[in] saveFileType 保存ファイルの種類
+		*/
+		void CPlayerInput::StartUsingSavedData(
+			const nsExternalData::nsSavedPlayerInputDataConstData::EnSavedFileType saveFileType
+		)
+		{
+			// 保存データを使用中フラグをたてる
+			m_isUsingSavedData = true;
+
+			// 保存してあるプレイヤーの入力データをロードする
+			m_savedPlayerInputData->LoadData(saveFileType);
+
+			return;
+		}
+
+		/**
+		 * @brief 保存したデータの使用を終了する
+		*/
+		void CPlayerInput::EndUsingSavedData()
+		{
+			// 保存データを使用中フラグを折る
+			m_isUsingSavedData = false;
+
+			// ロードしてあるデータをクリア
+			m_savedPlayerInputData->ClearLoadData();
+
+			return;
+		}
+
+		/**
+		 * @brief ロードしたデータの進捗が、最後まで行っているか？を得る。
+		 * @return ロードしたデータの進捗が、最後まで行っているか？
+		*/
+		bool CPlayerInput::IsEndLoadDataProgress() const
+		{
+			return m_savedPlayerInputData->IsEndLoadDataProgress();
+		}
+
+
+		/**
+		 * @brief 入力情報を更新する
+		*/
+		void CPlayerInput::UpdateInput()
+		{
 			// 軸入力を更新する
 			UpdateInputAxis();
 
@@ -45,12 +164,8 @@ namespace nsNinjaAttract
 			// コマンド入力情報の更新
 			UpdateCommandInputData();
 
-			if (m_playerRef->IsInputtable() != true)
-			{
-				// プレイヤーが入力不可の時
-				// 入力情報を初期化する
-				memset(&m_playerInputData, 0, sizeof(m_playerInputData));
-			}
+			// デルタタイムを取得
+			m_playerInputDataAndDeltaTime.deltaTime = nsTimer::GameTime().GetFrameDeltaTime();
 
 			return;
 		}
@@ -80,29 +195,29 @@ namespace nsNinjaAttract
 			if (m_pad->IsTrigger(enButtonA))
 			{
 				// ジャンプ
-				m_playerInputData.actionJump = true;
+				m_playerInputDataAndDeltaTime.playerInputData.actionJump = true;
 			}
 
 			// 右スティックトリガー
 			if (m_pad->IsTrigger(enButtonRB3))
 			{
 				// 敵を探知
-				m_playerInputData.actionSearchEnemy = true;
+				m_playerInputDataAndDeltaTime.playerInputData.actionSearchEnemy = true;
 			}
 
 			// Yボタントリガー
 			if (m_pad->IsTrigger(enButtonY))
 			{
-				m_playerInputData.actionCatchEnemy = true;
+				m_playerInputDataAndDeltaTime.playerInputData.actionCatchEnemy = true;
 			}
 
 			// RB2ボタンが押されているか？
 			if (m_pad->IsPress(enButtonRB2))
 			{
 				// ダッシュ
-				m_playerInputData.actionDush = true;
+				m_playerInputDataAndDeltaTime.playerInputData.actionDush = true;
 				// スイング
-				m_playerInputData.actionSwing = true;
+				m_playerInputDataAndDeltaTime.playerInputData.actionSwing = true;
 			}
 
 			return;
@@ -121,16 +236,16 @@ namespace nsNinjaAttract
 			padLStickF.Normalize();
 
 			// Y軸方向の入力を調べる
-			m_playerInputData.axisMoveForward = padLStickF.y;
+			m_playerInputDataAndDeltaTime.playerInputData.axisMoveForward = padLStickF.y;
 			// X軸方向の入力を調べる
-			m_playerInputData.axisMoveRight = padLStickF.x;
+			m_playerInputDataAndDeltaTime.playerInputData.axisMoveRight = padLStickF.x;
 
 			// 軸入力があった場合は十字キーを調べる必要がないため、早期リターンを行う
-			if (fabsf(m_playerInputData.axisMoveForward) > kInputAxisMin || 
-				fabsf(m_playerInputData.axisMoveRight) > kInputAxisMin)
+			if (fabsf(m_playerInputDataAndDeltaTime.playerInputData.axisMoveForward) > kInputAxisMin ||
+				fabsf(m_playerInputDataAndDeltaTime.playerInputData.axisMoveRight) > kInputAxisMin)
 			{
 				// あった
-				m_playerInputData.inputMoveAxis = true;
+				m_playerInputDataAndDeltaTime.playerInputData.inputMoveAxis = true;
 				return;
 			}
 
@@ -140,34 +255,36 @@ namespace nsNinjaAttract
 			// 上、下キーの入力情報を調べる
 			if (m_pad->IsPress(enButtonUp))
 			{
-				m_playerInputData.axisMoveForward = kDPadInputPower;
+				m_playerInputDataAndDeltaTime.playerInputData.axisMoveForward = kDPadInputPower;
 			}
 			else if (m_pad->IsPress(enButtonDown))
 			{
-				m_playerInputData.axisMoveForward = -kDPadInputPower;
+				m_playerInputDataAndDeltaTime.playerInputData.axisMoveForward = -kDPadInputPower;
 			}
 			// 右、左キーの入力情報を調べる
 			if (m_pad->IsPress(enButtonRight))
 			{
-				m_playerInputData.axisMoveRight = kDPadInputPower;
+				m_playerInputDataAndDeltaTime.playerInputData.axisMoveRight = kDPadInputPower;
 			}
 			else if (m_pad->IsPress(enButtonLeft))
 			{
-				m_playerInputData.axisMoveRight = -kDPadInputPower;
+				m_playerInputDataAndDeltaTime.playerInputData.axisMoveRight = -kDPadInputPower;
 			}
 
 			// 斜め移動の移動の場合は、ルート2倍入力量が多くなるため、ルート2で割る
-			if (m_playerInputData.axisMoveForward != 0.0f && m_playerInputData.axisMoveRight != 0.0f)
+			if (m_playerInputDataAndDeltaTime.playerInputData.axisMoveForward != 0.0f && 
+				m_playerInputDataAndDeltaTime.playerInputData.axisMoveRight != 0.0f)
 			{
-				m_playerInputData.axisMoveForward /= kSquareRootOfTwo;
-				m_playerInputData.axisMoveRight /= kSquareRootOfTwo;
+				m_playerInputDataAndDeltaTime.playerInputData.axisMoveForward /= kSquareRootOfTwo;
+				m_playerInputDataAndDeltaTime.playerInputData.axisMoveRight /= kSquareRootOfTwo;
 			}
 
 			// 軸入力があったか？
-			if (m_playerInputData.axisMoveForward != 0.0f || m_playerInputData.axisMoveRight != 0.0f)
+			if (m_playerInputDataAndDeltaTime.playerInputData.axisMoveForward != 0.0f || 
+				m_playerInputDataAndDeltaTime.playerInputData.axisMoveRight != 0.0f)
 			{
 				// あった
-				m_playerInputData.inputMoveAxis = true;
+				m_playerInputDataAndDeltaTime.playerInputData.inputMoveAxis = true;
 			}
 
 			return;
@@ -181,16 +298,16 @@ namespace nsNinjaAttract
 			// 右スティックの軸入力情報を調べる
 
 			// Y軸方向の入力を調べる
-			m_playerInputData.axisCameraRotVertical = m_pad->GetRStickYF();
+			m_playerInputDataAndDeltaTime.playerInputData.axisCameraRotVertical = m_pad->GetRStickYF();
 			// X軸方向の入力を調べる
-			m_playerInputData.axisCameraRotHorizontal = m_pad->GetRStickXF();
+			m_playerInputDataAndDeltaTime.playerInputData.axisCameraRotHorizontal = m_pad->GetRStickXF();
 
 			// 入力があったか？
-			if (fabsf(m_playerInputData.axisCameraRotVertical) > kInputAxisMin ||
-				fabsf(m_playerInputData.axisCameraRotHorizontal) > kInputAxisMin)
+			if (fabsf(m_playerInputDataAndDeltaTime.playerInputData.axisCameraRotVertical) > kInputAxisMin ||
+				fabsf(m_playerInputDataAndDeltaTime.playerInputData.axisCameraRotHorizontal) > kInputAxisMin)
 			{
 				// あった
-				m_playerInputData.inputCameraAxis = true;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCameraAxis = true;
 			}
 
 			return;
@@ -202,79 +319,79 @@ namespace nsNinjaAttract
 		*/
 		void CPlayerInput::UpdateCommandInputData()
 		{
-			m_playerInputData.inputCommand = EnQTEButtonType::enQTE_None;
+			m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_None;
 
 			// ABYXボタンの更新
 			if (m_pad->IsTrigger(enButtonA))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_A;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_A;
 			}
 			else if (m_pad->IsTrigger(enButtonB))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_B;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_B;
 			}
 			else if (m_pad->IsTrigger(enButtonY))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_Y;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_Y;
 			}
 			else if (m_pad->IsTrigger(enButtonX))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_X;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_X;
 			}
 			// 十字キーの更新
 			else if (m_pad->IsTrigger(enButtonUp))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Up;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Up;
 			}
 			else if (m_pad->IsTrigger(enButtonDown))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Down;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Down;
 			}
 			else if (m_pad->IsTrigger(enButtonLeft))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Left;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Left;
 			}
 			else if (m_pad->IsTrigger(enButtonRight))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Right;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Right;
 			}
 			// 左スティックの更新
 			else if (m_pad->GetLStickYF() >= kCommandInputAxisMin && m_canInputCommandAxis)
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Up;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Up;
 				m_canInputCommandAxis = false;
 			}
 			else if (m_pad->GetLStickYF() <= -kCommandInputAxisMin && m_canInputCommandAxis)
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Down;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Down;
 				m_canInputCommandAxis = false;
 			}
 			else if (m_pad->GetLStickXF() <= -kCommandInputAxisMin && m_canInputCommandAxis)
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Left;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Left;
 				m_canInputCommandAxis = false;
 			}
 			else if (m_pad->GetLStickXF() >= kCommandInputAxisMin && m_canInputCommandAxis)
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Right;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L_Right;
 				m_canInputCommandAxis = false;
 			}
 			// L1,L2,R1,R2ボタンの更新
 			else if (m_pad->IsTrigger(enButtonLB1))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L1;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L1;
 			}
 			else if (m_pad->IsTrigger(enButtonLB2))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_L2;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_L2;
 			}
 			else if (m_pad->IsTrigger(enButtonRB1))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_R1;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_R1;
 			}
 			else if (m_pad->IsTrigger(enButtonRB2))
 			{
-				m_playerInputData.inputCommand = EnQTEButtonType::enQTE_R2;
+				m_playerInputDataAndDeltaTime.playerInputData.inputCommand = EnQTEButtonType::enQTE_R2;
 			}
 			// 軸入力のフラグの回復
 			else if (fabsf(m_pad->GetLStickYF()) <= kInputAxisMin && fabsf(m_pad->GetLStickXF() <= kInputAxisMin))

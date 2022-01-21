@@ -145,7 +145,7 @@ namespace nsNinjaAttract
 
 				// 重力をかける
 				m_moveVec.y -= nsPlayerConstData::nsMovementConstData::kGravityScale *
-					nsTimer::GameTime().GetFrameDeltaTime();
+					m_playerRef->GetDeltaTime();
 
 				// 重力の制限
 				//if (m_moveVec.y < -nsPlayerConstData::nsMovementConstData::kMaxFallSpeed)
@@ -163,7 +163,7 @@ namespace nsNinjaAttract
 			{
 				// キャラクターコントローラー実行
 				m_playerRef->SetPosition(
-					m_charaCon.Execute(m_moveVec, nsTimer::GameTime().GetFrameDeltaTime())
+					m_charaCon.Execute(m_moveVec, m_playerRef->GetDeltaTime())
 				);
 				//m_playerRef->SetPosition(m_playerRef->GetPosition() + m_moveVec / 100.0f);
 

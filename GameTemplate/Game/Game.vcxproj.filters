@@ -165,6 +165,9 @@
     <Filter Include="MyCode\BackGround">
       <UniqueIdentifier>{e945c69c-c123-448f-93cb-46bed57f0867}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MyCode\ExternalData">
+      <UniqueIdentifier>{8ca11a64-0ebf-4afd-8967-c073f07a889b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="system\system.cpp">
@@ -577,6 +580,9 @@
     </ClCompile>
     <ClCompile Include="Fade.cpp">
       <Filter>MyCode\Graphic</Filter>
+    </ClCompile>
+    <ClCompile Include="SavedPlayerInputData.cpp">
+      <Filter>MyCode\ExternalData</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1098,6 +1104,12 @@
     </ClInclude>
     <ClInclude Include="Fade.h">
       <Filter>MyCode\Graphic</Filter>
+    </ClInclude>
+    <ClInclude Include="SavedPlayerInputDataConstData.h">
+      <Filter>MyCode\ExternalData</Filter>
+    </ClInclude>
+    <ClInclude Include="SavedPlayerInputData.h">
+      <Filter>MyCode\ExternalData</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

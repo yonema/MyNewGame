@@ -12,6 +12,11 @@
 #include "GameTime.h"
 #include "RenderingEngine.h"
 #include "Fade.h"
+#include "SavedPlayerInputDataConstData.h"
+
+// 入力データを保存する
+//#define SAVE_INPUTDATA
+
 
 namespace nsNinjaAttract
 {
@@ -29,7 +34,8 @@ namespace nsNinjaAttract
 		bool CTitleMap::Start()
 		{
 			// ここ改造
-			constexpr float kWorldSoundVolume = 0.2f;
+			constexpr float kWorldSoundVolume = 1.0f;
+			//constexpr float kWorldSoundVolume = 0.2f;
 			nsSound::CSoundCue::SetBGMVolume(kWorldSoundVolume);
 			nsSound::CSoundCue::SetSEVolume(kWorldSoundVolume);
 
@@ -349,8 +355,30 @@ namespace nsNinjaAttract
 		*/
 		void CTitleMap::UpdateSwingDirecting()
 		{
-			// ステートをフェードアウトに遷移
-			ChangeState(enTS_fadeOut);
+#ifdef SAVE_INPUTDATA
+
+			if (g_pad[0]->IsTrigger(enButtonStart))
+			{
+				// startボタンで、入力情報の保存を終了する。
+				m_player->EndSaveInputDataAndSave(
+					nsExternalData::nsSavedPlayerInputDataConstData::enST_titleDirecting
+				);
+				// ステートをフェードアウトに遷移
+				ChangeState(enTS_fadeOut);
+			}
+#else
+			if (m_player->IsEndLoadDataProgress())
+			{
+				// ロードした入力情報が最後まで進んだら、
+				// ロードした入力情報の使用を終了する。
+				m_player->EndUsingSavedInputData();
+
+				// ステートをフェードアウトに遷移
+				ChangeState(enTS_fadeOut);
+			}
+#endif
+
+
 
 			return;
 		}
@@ -362,9 +390,16 @@ namespace nsNinjaAttract
 		{
 			if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd() != true)
 			{
-				// フェードが終了するまで、何もしない。早期リターン。
+				// フェードが終了するまで、徐々にBGMを小さくしていく。
+				m_bgmSC->SetVolume(
+					1.0f - 1.0f * nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->GetFadeRate()
+				);
+				// 早期リターン
 				return;
 			}
+
+			// 完全の音量を0にする
+			m_bgmSC->SetVolume(0.0f);
 
 			// メインマップに遷移
 			ChangeToMainMap();
@@ -421,6 +456,17 @@ namespace nsNinjaAttract
 			case enTS_titleOut:
 				break;
 			case enTS_swingDirecting:
+#ifdef SAVE_INPUTDATA
+				// 入力情報の保存を開始する
+				m_player->StartSaveInputData();
+				// プレイヤーの入力を有効にする
+				m_player->SetIsInputtable(true);
+#else
+				// 保存してある入力情報の使用を開始する
+				m_player->StartUsingSavedInputData(
+					nsExternalData::nsSavedPlayerInputDataConstData::enST_titleDirecting
+				);
+#endif
 				break;
 			case enTS_fadeOut:
 				// フェードアウトを開始

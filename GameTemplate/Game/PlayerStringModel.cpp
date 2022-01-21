@@ -75,7 +75,7 @@ namespace nsNinjaAttract
 			// L‚Î‚·—¦‚ğ‘‚â‚·
 			if (m_isStretched != true)
 			{
-				m_stretchRate += nsTimer::GameTime().GetFrameDeltaTime() / kStretchedTime;
+				m_stretchRate += m_playerRef->GetDeltaTime() / kStretchedTime;
 			}
 
 			if (m_stretchRate >= 1.0f)
@@ -139,7 +139,7 @@ namespace nsNinjaAttract
 			Vector3 toStretchVec = m_toStretchPos - m_startStretchPos;
 			// L‚Ñ‚é‘¬“x‚ğİ’è‚·‚é
 			m_stretchSpeed =
-				toStretchVec.Length() * nsTimer::CGameTime().GetFrameDeltaTime() / kStretchedTime;
+				toStretchVec.Length() * m_playerRef->GetDeltaTime() / kStretchedTime;
 
 			// ©g‚ğ—LŒø‰»‚·‚é
 			Activate();
