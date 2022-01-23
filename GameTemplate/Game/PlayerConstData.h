@@ -95,9 +95,9 @@ namespace nsNinjaAttract
 
 				//!< スイングを開始できる落下速度
 				constexpr float kCanStartSwingFallSpeed = -10.0f;
-				constexpr int kFindSwintTargetNum = 4;	//!< スイングターゲットを探す数
+				constexpr int kFindSwingTargetNum = 4;	//!< スイングターゲットを探す数
 				//!< スイングターゲットを探す座標へのベクトル集
-				static const Vector3 kToFindSwingTargetVecs[kFindSwintTargetNum] =
+				static const Vector3 kToFindSwingTargetVecs[kFindSwingTargetNum] =
 				{
 					{ 0.0f,2000.0f,2000.0f },		// 前上
 					{ 500.0f,2000.0f,2000.0f },		// 前上
