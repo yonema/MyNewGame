@@ -611,8 +611,8 @@ namespace nsNinjaAttract
 					{
 						// スイングロールを行った
 						m_swingRollFlag = false;
-						// Y成分にジャンプを加える
-						addMoveVec.y += nsMovementConstData::kJumpForce;
+						// Y成分にスイングロールの上昇力を加える
+						addMoveVec.y += kSwingRollUpPower;
 						m_swingRollLeaveSC->Play(false);
 					}
 					else

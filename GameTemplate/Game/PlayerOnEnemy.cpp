@@ -97,7 +97,7 @@ namespace nsNinjaAttract
 				Vector3 leaveJumpForce = Vector3::Front;
 				m_playerRef->GetRotation().Apply(leaveJumpForce);
 				leaveJumpForce.Scale(kLeaveEnemyJumpForceFront);
-				leaveJumpForce.y = nsPlayerConstData::nsMovementConstData::kJumpForce;
+				leaveJumpForce.y = kLeaveEnemyJumpForceUp;
 
 				m_playerMovementRef->AddMoveVec(leaveJumpForce);
 

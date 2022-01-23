@@ -238,14 +238,16 @@ namespace nsNinjaAttract
 
 			// プレイヤーの速度
 
-			if (m_playerRef->GetPlayerMovement().IsAir())
+			if (m_playerRef->GetPlayerMovement().IsAir() || m_playerRef->GetPlayerMovement().GetPlayerWalkAudRun().IsJumpUp())
 			{
 				if (m_animState != enAnim_airIdle)
 				{
 					m_playerModel->SetAnimationSpeed(1.0f);
 					if (m_playerModel->IsAnimationPlaying() == true)
 					{
-						//m_AnimInterpolateTime = 0.0f;
+						m_AnimInterpolateTime = 0.2f;
+						m_playerModel->SetAnimationSpeed(2.0f);
+
 						m_animState = enAnim_jumpUp;
 					}
 					else

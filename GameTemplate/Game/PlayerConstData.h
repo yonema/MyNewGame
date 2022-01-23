@@ -34,7 +34,6 @@ namespace nsNinjaAttract
 			{
 				constexpr float kGravityScale = 980.0f * 3.0f;	//!< 重力の強さ
 				constexpr float kMaxFallSpeed = 2000.0f;		//!< 最高落下速度
-				constexpr float kJumpForce = 1500.0f;	//!< ジャンプ力
 				constexpr float kModelRotRate = 0.3f;	//!< モデルの回転の補間率
 				constexpr float kMoveVecMin = 0.001f;	//!< 移動ベクトルの最小値
 
@@ -50,13 +49,17 @@ namespace nsNinjaAttract
 				constexpr float kWalkAcceleration = 50.0f;	//!< 歩き時の加速度
 				constexpr float kRunAcceleration = 100.0f;	//!< 走り時の加速度
 				constexpr float kWalkMaxSpeed = 300.0f;		//!< 歩き時の最高速度
-				constexpr float kRunMaxSpeed = 750.0f;		//!< 走り時の最高速度
+				constexpr float kRunMaxSpeed = 1000.0f;		//!< 走り時の最高速度
 				//constexpr float kRunMaxSpeed = 2500.0f;		//!< 走り時の最高速度
 				constexpr float kMinSpeed = 25.0f;			//!< 最低速度
 				constexpr float kGroundFriction = 0.9f;		//!< 地面の摩擦
 				constexpr float kAirFriction = 1.0f;		//!< 空中の摩擦
 				constexpr float kBreakThresholdAngle = 135.0f;		//!< ブレーキの角度のしきい値
 				constexpr float kBreakThresholdVelocity = 135.0f;	//!< ブレーキの速度のしきい値
+				constexpr float kJumpForce = 9000.0f;	//!< ジャンプ力
+				constexpr float kInitialJumpForce = kJumpForce * 2.0f;	//!< 最初のジャンプ力
+				constexpr float kJumpChargeTime = 0.2f;	//!< ジャンプの溜めの時間
+				constexpr float kJumpUpTime = kJumpChargeTime + 0.15f;	//!< ジャンプの上昇中の時間
 
 				//!< 歩きのサウンドファイルパス
 				constexpr const wchar_t* const kWalkSoundFilePath = L"Assets/sound/character/normalMove/walk.wav";
@@ -119,6 +122,9 @@ namespace nsNinjaAttract
 				//!< スイング後の加速の最低速度
 				constexpr float kMinVelocityOfAfterSwingAcceleration = 
 					kInitialVelocityOfAterSwingAcceleration * 0.1f;
+				
+				// スイングロールの上昇力
+				constexpr float kSwingRollUpPower = 1500.0f;
 
 				//!< カメラの値を線形補完するタイム
 				constexpr float kCameraLerpTime = 0.25f;
@@ -173,6 +179,8 @@ namespace nsNinjaAttract
 
 				//!< 敵の上から離れるときの、ジャンプの力の、前方向
 				constexpr float kLeaveEnemyJumpForceFront = 100.0f;
+				//!< 敵の上から離れるときの、ジャンプの力の、上方向
+				constexpr float kLeaveEnemyJumpForceUp = 1500.0f;
 
 				//!< 鎖を出すサウンドのファイルパス
 				constexpr const wchar_t* const kChainPutOutSoundFilePath = nsSwingActionConstData::kChainPutOutSoundFilePath;

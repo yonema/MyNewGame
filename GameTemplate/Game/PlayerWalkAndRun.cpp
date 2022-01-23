@@ -19,8 +19,6 @@ namespace nsNinjaAttract
 		{
 			// プレイヤーの歩きと走りクラスの定数データを使用可能にする
 			using namespace nsPlayerConstData::nsWalkAndRunConstData;
-			// ジャンプ力を使用可能にする
-			using nsPlayerConstData::nsMovementConstData::kJumpForce;
 
 			/**
 			 * @brief コンストラクタ
@@ -169,6 +167,9 @@ namespace nsNinjaAttract
 
 				// 実際に移動させる
 				Move();
+
+				// ジャンプの更新
+				UpdateJump();
 
 				// 前のフレームの速度を更新
 				m_oldVelocity = m_velocity;
@@ -379,12 +380,56 @@ namespace nsNinjaAttract
 				// 移動ベクトルに、加算移動ベクトルを加算する
 				m_playerMovementRef->AddMoveVec(m_moveDir * m_velocity);
 
+				return;
+			}
 
+
+			/**
+			 * @brief ジャンプの更新
+			*/
+			void CPlayerWalkAndRun::UpdateJump()
+			{
 				// ジャンプ
-				// ジャンプボタンが押されている、かつ、地面についている
-				if (m_playerRef->GetInputData().actionJump/* && m_charaCon.IsOnGround()*/)
+				// ジャンプボタンが押されている、かつ、
+				// ジャンプの上昇中ではない、かつ、
+				// 地面についている
+				if (m_playerRef->GetInputData().actionJump && !m_isJumpUp/* && m_charaCon.IsOnGround()*/)
 				{
-					m_playerMovementRef->AddMoveVec({ 0.0f, kJumpForce,0.0f });
+					m_isJumpUp = true;
+					m_jumpUpTimer = 0.0f;
+				}
+
+				if (m_isJumpUp)
+				{
+					// ジャンプの上昇中
+
+					// ジャンプの上昇中のタイマーを進める
+					m_jumpUpTimer += m_playerRef->GetDeltaTime();
+
+					if (m_jumpUpTimer <= kJumpChargeTime)
+					{
+						// タイマーが溜めの時間以下なら、何もしない。早期リターン。
+						return;
+					}
+
+					if (m_jumpSC->IsPlaying() != true)
+					{
+						// ジャンプの上昇し始める最初だけ行う処理
+						// ジャンプのSEを再生
+						m_jumpSC->Play(false);
+						// ジャンプ力が0からスタートだと、遅すぎるし、加速の仕方がいびつだから、
+						// ある程度、最初に力を加えておく。
+						m_playerMovementRef->AddMoveVec({ 0.0f, kInitialJumpForce * m_playerRef->GetDeltaTime(),0.0f });
+					}
+
+					// ジャンプ力を加える
+					m_playerMovementRef->AddMoveVec({ 0.0f, kJumpForce * m_playerRef->GetDeltaTime(),0.0f });
+					
+					if (m_jumpUpTimer >= kJumpUpTime)
+					{
+						// タイマーが上昇中の時間を超えたら、ジャンプの上昇を終了する。
+						m_isJumpUp = false;
+					}
 				}
 
 				return;
@@ -400,7 +445,7 @@ namespace nsNinjaAttract
 				// ジャンプボタンが押されている、かつ、地面についている
 				if (m_playerRef->GetInputData().actionJump/* && m_charaCon.IsOnGround()*/)
 				{
-					m_jumpSC->Play(false);
+					//m_jumpSC->Play(false);
 				}
 
 				if (m_velocity <= 0.001f || m_playerMovementRef->IsAir())

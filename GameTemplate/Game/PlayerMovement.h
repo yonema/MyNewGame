@@ -157,6 +157,15 @@ namespace nsNinjaAttract
 				}
 
 				/**
+				 * @brief 歩きと走りクラスの参照を得る
+				 * @return 歩きと走りクラスの参照
+				*/
+				const CPlayerWalkAndRun& GetPlayerWalkAudRun() const
+				{
+					return m_playerWalkAndRun;
+				}
+
+				/**
 				 * @brief スイングアクションの参照を得る
 				 * @return スイングアクションの参照
 				*/

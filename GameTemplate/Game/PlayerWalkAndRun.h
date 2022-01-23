@@ -63,6 +63,15 @@ namespace nsNinjaAttract
 				*/
 				void StopSound();
 
+				/**
+				 * @brief ジャンプの上昇中か？を得る
+				 * @return ジャンプの上昇中か？
+				*/
+				bool IsJumpUp() const
+				{
+					return m_isJumpUp;
+				}
+
 
 			private:	// privateなメンバ関数
 
@@ -117,6 +126,11 @@ namespace nsNinjaAttract
 				void Move();
 
 				/**
+				 * @brief ジャンプの更新
+				*/
+				void UpdateJump();
+
+				/**
 				 * @brief サウンドの更新
 				*/
 				void UpdateSound();
@@ -127,6 +141,8 @@ namespace nsNinjaAttract
 				Vector3 m_moveDir = Vector3::Zero;				//!< 移動方向
 				float m_velocity = 0.0f;						//!< スピード
 				float m_oldVelocity = 0.0f;						//!< 前のフレームの速度
+				bool m_isJumpUp = false;						//!< ジャンプの上昇中か？
+				float m_jumpUpTimer = 0.0f;						//!< ジャンプの上昇中のタイマー
 
 				// 軸入力値
 				float m_inputMoveF = 0.0f;			//!< 前、後移動の軸入力値
