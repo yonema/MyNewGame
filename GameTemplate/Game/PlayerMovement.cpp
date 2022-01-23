@@ -184,7 +184,10 @@ namespace nsNinjaAttract
 
 				// スイングトリガーがtrueで、かつ、空中だったら
 				if (m_playerRef->GetState() == nsPlayerConstData::enWalkAndRun &&
-					m_playerRef->GetInputData().actionSwing && IsAir())
+					m_playerRef->GetInputData().actionSwing && 
+					IsAir() &&
+					m_moveVec.y <= nsPlayerConstData::nsSwingActionConstData::kCanStartSwingFallSpeed
+					)
 				{
 					// スイング状態へ遷移
 					m_playerRef->ChangeSwingState();

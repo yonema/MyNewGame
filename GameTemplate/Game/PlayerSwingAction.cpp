@@ -253,7 +253,7 @@ namespace nsNinjaAttract
 				findData.forwardLimitOrigin = m_playerRef->GetPosition();
 
 				// 複数の座標から、スイングターゲットを探す
-				for (int i = 0; i < kFindSwintTargetNum; i++)
+				for (int i = 0; i < kFindSwingTargetNum; i++)
 				{
 					// スイングターゲットを探す座標へのベクトル
 					Vector3 toFindSwingTargetVec = kToFindSwingTargetVecs[i];
@@ -580,7 +580,7 @@ namespace nsNinjaAttract
 				{
 					// 下降中か？、かつ
 					// アニメーションが空中アイドル状態か？
-					if (m_playerMovementRef->GetMoveVec().y < 0.0f &&
+					if (m_playerMovementRef->GetMoveVec().y < kCanStartSwingFallSpeed &&
 						m_playerRef->GetPlayerModelAnimation().GetAnimationState() ==
 						nsModelAnimationConstData::enAnim_airIdle)
 					{
