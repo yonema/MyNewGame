@@ -13,8 +13,24 @@ namespace nsNinjaAttract
 		*/
 		namespace nsAICharacterConstData
 		{
+			/**
+			 * @brief 車の種類
+			*/
+			enum EnCarType
+			{
+				enCT_silver,
+				enCT_red,
+				enCT_blue,
+				enCarTypeNum
+			};
+
 			// 車のモデルデータのファイルパス
-			constexpr const char* const kCarModelFilePath = "Assets/modelData/car/sedan_car.tkm";
+			constexpr const char* const kCarModelFilePath[enCarTypeNum] =
+			{
+				"Assets/modelData/car/sedan_car.tkm",
+				"Assets/modelData/car/sedan_car_red.tkm",
+				"Assets/modelData/car/sedan_car_blue.tkm"
+			};
 
 			//!< 爆発のエフェクトのファイルパス
 			constexpr const char16_t* const kExplotionEffectFilePath = u"Assets/effect/explosion.efk";

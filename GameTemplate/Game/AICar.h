@@ -222,6 +222,8 @@ namespace nsNinjaAttract
 				const Vector3& targetPoint
 			);
 
+		private:	// staticなデータメンバ
+			static int m_carTotalNumber;	//!< 車の総数
 
 		private:	// データメンバ
 			nsGraphic::nsModel::CModelRender* m_modelRender = nullptr;	//!< モデルレンダラー

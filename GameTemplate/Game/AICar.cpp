@@ -15,6 +15,8 @@ namespace nsNinjaAttract
 	*/
 	namespace nsAICharacter
 	{
+		int CAICar::m_carTotalNumber = 0;
+
 		// AIキャラクターの定数データを使用可能にする
 		using namespace nsAICharacterConstData;
 
@@ -37,8 +39,12 @@ namespace nsNinjaAttract
 		*/
 		bool CAICar::Start()
 		{
+			// 車の種類の番号。若い番号から順に作られる。
+			const int carTypeNum = m_carTotalNumber % enCarTypeNum;
+			m_carTotalNumber++;
+
 			// モデルの初期化
-			m_modelRender->Init(kCarModelFilePath);
+			m_modelRender->Init(kCarModelFilePath[carTypeNum]);
 
 			// 車の移動速度を設定
 			m_moveSpeed = kCarSpeed;
