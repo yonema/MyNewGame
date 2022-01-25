@@ -50,6 +50,13 @@ namespace nsNinjaAttract
 			// プレイヤーが敵を捕まえる処理クラスの初期化
 			m_playerCatchEnemy->Init(this);
 
+
+			if (m_isTitleMode != true)
+			{
+				m_playerMove->AddMoveVec({ 0.0f,2500.0f,500.0f });
+				ChangeState(enStartFall);
+			}
+
 			return true;
 		}
 

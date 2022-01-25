@@ -20,6 +20,7 @@ namespace nsNinjaAttract
 			*/
 			enum EnPlayerState
 			{
+				enStartFall,
 				enWalkAndRun,			//!< 歩きと走り
 				enSwing,				//!< スイング
 				enWallRun,				//!< 壁走り
@@ -475,6 +476,7 @@ namespace nsNinjaAttract
 					enAnim_run,		//!< 走る
 					enAnim_jumpUp,	//!< ジャンプ
 					enAnim_airIdle,	//!< 空中アイドル
+					enAnim_landing,	//!< 着地
 					enAnim_swingStart,	//!< スイングスタート
 					enAnim_swinging,	//!< スインギング
 					enAnim_swingRaiseLeg,	//!< 足を上げるスイング
@@ -495,6 +497,7 @@ namespace nsNinjaAttract
 					"Assets/animData/kunoichi/run.tka",
 					"Assets/animData/kunoichi/jumpUp.tka",
 					"Assets/animData/kunoichi/airIdle.tka",
+					"Assets/animData/kunoichi/landing2.tka",
 					"Assets/animData/kunoichi/swingStart.tka",
 					"Assets/animData/kunoichi/swinging.tka",
 					"Assets/animData/kunoichi/swingRaiseLeg.tka",
@@ -505,6 +508,7 @@ namespace nsNinjaAttract
 				};
 
 				constexpr float kDefaultAnimInterpolateTime = 0.2f;	//!< デフォルトのアニメーション補完時間
+				constexpr float kDefaultAnimSpeed = 1.0f;			//!< デフォルトのアニメーションスピード
 
 				//!< スイング中のアニメーションステート
 				enum EnSwingAnimState

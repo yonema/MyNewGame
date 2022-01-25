@@ -2,6 +2,7 @@
 #include "MainMap.h"
 #include "MapConstDatah.h"
 #include "Player.h"
+#include "PlayerConstData.h"
 #include "GameMainState.h"
 #include "BGM.h"
 #include "BackGround.h"
@@ -93,12 +94,13 @@ namespace nsNinjaAttract
 		*/
 		void CMainMap::Update()
 		{
-			if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd())
+			m_startFallTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+			if (m_startFallTimer >= 5.0f)
 			{
 				// プレイヤーを入力可能にする
 				m_player->SetIsInputtable(true);
 			}
-
 
 			return;
 		}
@@ -124,6 +126,7 @@ namespace nsNinjaAttract
 					// ゲーム中のプレイヤーのレベル上の名前
 					if (objData.EqualObjectName(kPlayerLevelNameInGame))
 					{
+						objData.position.y = 2500.0f;
 						// ゲーム中のプレイヤーの座標と回転を設定
 						m_player->SetPosition(objData.position);
 						m_player->SetRotation(objData.rotation);

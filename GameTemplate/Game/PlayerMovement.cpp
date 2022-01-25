@@ -193,6 +193,12 @@ namespace nsNinjaAttract
 					m_playerRef->ChangeSwingState();
 				}
 
+				if (m_playerRef->IsInputtable() == true &&
+					m_playerRef->GetState() == nsPlayerConstData::enStartFall)
+				{
+					m_playerRef->ChangeWalkAndRunState();
+				}
+
 				return;
 			}
 
@@ -205,6 +211,14 @@ namespace nsNinjaAttract
 				// ステートで処理を振り分ける
 				switch (m_playerRef->GetState())
 				{
+				case nsPlayerConstData::enStartFall:
+					if (IsAir() != true && m_playerRef->GetPosition().y <= 200.0f)
+					{
+						ResetMoveVecX();
+						ResetMoveVecY();
+						ResetMoveVecZ();
+					}
+					break;
 				// 歩きと走り
 				case nsPlayerConstData::enWalkAndRun:
 					// 歩きと走りを実行

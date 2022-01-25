@@ -56,7 +56,7 @@ namespace nsNinjaAttract
 				m_playerRef = &player;
 				// 加算移動ベクトルの参照をセット
 				m_playerMovementRef = playerMovement;
-
+				m_maxSpeed = 4000.0f;
 				return;
 			}
 
@@ -223,6 +223,10 @@ namespace nsNinjaAttract
 			*/
 			void CPlayerWalkAndRun::WalkOrRun()
 			{
+				if (m_playerMovementRef->IsAir())
+				{
+					return;
+				}
 				// ダッシュ入力がされていない
 				if (m_playerRef->GetInputData().actionDush != true)
 				{

@@ -109,9 +109,39 @@ namespace nsNinjaAttract
 
 			/**
 			 * @brief スイング中のアニメーションステートを更新
+			 * @param 早期リターンを行うか？
 			*/
-			void UpdateSwingAnimationState();
+			bool UpdateSwingAnimationState();
 
+			/**
+			 * @brief コマンド入力が失敗した時のアニメーションステートを更新
+			 * @return 早期リターンを行うか？
+			*/
+			bool UpdateCommandFailed();
+
+			/**
+			 * @brief 敵の上に乗ってるときのアニメーションステートを更新
+			 * @return 早期リターンを行うか？
+			*/
+			bool UpdateOnEnemyAnimationState();
+
+			/**
+			 * @brief 最初の落下のアニメーションの更新
+			 * @return 早期リターンを行うか？
+			*/
+			bool UpdateStartFall();
+
+			/**
+			 * @brief ジャンプと空中でのアニメーションの更新
+			 * @return 早期リターンを行うか？
+			*/
+			bool UpdateJumpAndAir();
+
+			/**
+			 * @brief アイドル状態と歩きと走りのアニメーションの更新
+			 * @return 早期リターンを行うか？
+			*/
+			bool UpdateIdleWalkAndRun();
 
 
 		private:	// データメンバ
@@ -128,6 +158,8 @@ namespace nsNinjaAttract
 			//!< アニメーション補完時間
 			float m_AnimInterpolateTime = 
 				nsPlayerConstData::nsModelAnimationConstData::kDefaultAnimInterpolateTime;
+			//!< アニメーションスピード
+			float m_aninSpeed = nsPlayerConstData::nsModelAnimationConstData::kDefaultAnimSpeed;
 
 			bool m_walkFlag = false;
 			bool m_runFlag = false;
