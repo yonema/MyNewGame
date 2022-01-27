@@ -63,7 +63,7 @@ namespace nsNinjaAttract
 			////////////////
 
 			// 制御点の数
-			const int controlPointNum = m_controlPoints.size();
+			const int controlPointNum = static_cast<int>(m_controlPoints.size());
 
 			if (controlPointNum <= 1)
 			{
@@ -89,13 +89,13 @@ namespace nsNinjaAttract
 				}
 
 				// (1-t)^3 -> (1-t)^2 -> (1-t)^1 -> (1-t)^0
-				float b = pow(rT, (controlPointNum - 1) - i);
+				float b = static_cast<float>(pow(rT, (controlPointNum - 1) - i));
 				// t^0 -> t^1 -> t^2 -> t^3
-				float c = pow(t, i);
+				float c = static_cast<float>(pow(t, i));
 
 				// P1 -> P2 -> P3 -> P4
 				// に掛け合わせる
-				p += m_controlPoints[i] * a * b * c;
+				p += m_controlPoints[i] * static_cast<float>(a) * b * c;
 			}
 
 			*pointOut = p;

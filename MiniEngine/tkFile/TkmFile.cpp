@@ -315,7 +315,7 @@ void TkmFile::BuildTangentAndBiNormal()
 
 		// 合計4スレッドを使ってスムージングを行う。
 		const int NUM_THREAD = 4;
-		int numVertexPerThread = smoothVertex.size();
+		int numVertexPerThread = static_cast<int>(smoothVertex.size());
 		// スムージング関数。
 		auto smoothFunc = [&](int startIndex, int endIndex)
 		{
@@ -338,7 +338,7 @@ void TkmFile::BuildTangentAndBiNormal()
 		};
 
 		// 一個のスレッドあたりに処理を行う頂点数を計算する。
-		int perVertexInOneThread = smoothVertex.size() / NUM_THREAD;
+		int perVertexInOneThread = static_cast<int>(smoothVertex.size()) / NUM_THREAD;
 		using namespace std;
 		using ThreadPtr = unique_ptr < thread >;
 		auto smoothingThreadArray = make_unique< ThreadPtr[] >(NUM_THREAD);
