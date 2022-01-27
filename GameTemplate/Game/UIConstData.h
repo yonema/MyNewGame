@@ -228,6 +228,17 @@ namespace nsNinjaAttract
 				enMissionResultTypeNum
 			};
 
+			/**
+			 * @brief ミッションのステート
+			*/
+			enum EnMissionState
+			{
+				enMS_none,
+				enMS_showMission,
+				enMS_hideMission,
+				enMS_clearOneMission,
+			};
+
 			//!< ミッションのレベル2Dのファイルパス
 			constexpr const char* const kMissionLevel2DFilePath = "Assets/level2DData/mission.casl";
 			constexpr const char* const kMissionLevelObjName = "mission";	//!< ミッションのレベルオブジェクトネーム
@@ -263,6 +274,26 @@ namespace nsNinjaAttract
 			constexpr int kMissionResultTextSpriteWidth = static_cast<int>(512.0f * 1.0f);
 			//!< ミッショリザルトのテキストのスプライトの高さ
 			constexpr int kMissionResultTextSpriteHeight = static_cast<int>(512.0f * 1.0f);
+
+			static const Vector3 kMissionPosition = { -425.0f,50.0f,0.0f };	//!< ミッションの座標
+			//!< ミッションの開始座標
+			static const Vector3 kMissionStartPosition = { kMissionPosition.x - 25.0f, kMissionPosition.y - 25.0f ,0.0f };
+
+			constexpr float kStartShowMissionTime = 0.3f;
+			constexpr float kShowMissionTime = kStartShowMissionTime + 4.0f;
+
+			constexpr float kHideMissionTime = 0.3f;
+
+			constexpr float kWaitStartClearOneMissionTime = 0.2f;
+			constexpr float kInCheckMarkTime = kWaitStartClearOneMissionTime + 0.5f;
+			constexpr float kScaleUpCheckMarkTime = kInCheckMarkTime + 0.2f;
+			constexpr float kScaleuDownCheckMarkTime = kScaleUpCheckMarkTime + 0.2f;
+
+			constexpr float kInCheckMarkStartScale = 4.0f;
+			constexpr float kInCheckMarkEndScale = 2.0f;
+			constexpr float kInCheckMarkEndAlphaValue = 0.5f;
+			constexpr float kScaleUpCheckMarkEndScale = 1.5;
+
 		}
 	}
 }
