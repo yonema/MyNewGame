@@ -35,7 +35,8 @@ namespace nsNinjaAttract
 		{
 			// ‚±‚±‰ü‘¢
 			//constexpr float kWorldSoundVolume = 1.0f;
-			constexpr float kWorldSoundVolume = 0.2f;
+			//constexpr float kWorldSoundVolume = 0.2f;
+			constexpr float kWorldSoundVolume = 0.0f;
 			nsSound::CSoundCue::SetBGMVolume(kWorldSoundVolume);
 			nsSound::CSoundCue::SetSEVolume(kWorldSoundVolume);
 

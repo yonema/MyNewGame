@@ -15,6 +15,11 @@ struct Level2DObjectData {
 	int height = 0;		//縦幅。
 	const char* name;	//名前。
 	const char* ddsFilePath;		//.ddsファイルのファイルパス。
+
+	// 変更
+	int numOfLyaer = 0;	//レイヤー番号
+	// 変更ここまで
+
 	/// <summary>
 	/// 引数で渡したオブジェクト名のオブジェクトを調べる。
 	/// </summary>

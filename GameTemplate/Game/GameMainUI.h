@@ -10,6 +10,7 @@ namespace nsNinjaAttract
 	namespace nsUI { 
 		class CMiniMap;
 		class CEnemyCatchUI;
+		class CMissionUI;
 	}
 
 	/**
@@ -79,7 +80,8 @@ namespace nsNinjaAttract
 			nsGraphic::nsFont::CFontRender* m_timerFR = nullptr;	//!< タイマーのフォントレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_goalSR = nullptr;	//!< ゴールのスプライトレンダラー
 			CMiniMap* m_miniMap = nullptr;							//!< ミニマップ表示クラス
-			CEnemyCatchUI* m_enemyCatchUI = nullptr;					//!< 敵を捕まえる処理関連のUIクラス
+			CEnemyCatchUI* m_enemyCatchUI = nullptr;				//!< 敵を捕まえる処理関連のUIクラス
+			CMissionUI* m_missionUI = nullptr;						//!< ミッションUIクラス
 
 		};
 	}

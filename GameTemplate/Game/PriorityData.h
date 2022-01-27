@@ -16,6 +16,7 @@ namespace nsNinjaAttract
 			enPrioritySecond = 10,	//!< “ñ”Ô–ÚB—Dæ10
 			enPriorityThird = 20,	//!< ŽO”Ô–ÚB—Dæ“x20
 			enPriorityFourth = 30,	//!< Žl”Ô–ÚB—Dæ“x30
+			enPriorityFifth = 40,	//!< ŒÜ”Ô–ÚB—Dæ“x40
 			enPriorityFinal,		//!< ÅŒã‚Ì—Dæ“x
 		};
 

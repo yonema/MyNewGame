@@ -38,6 +38,11 @@ void Level2D::Init(
 		objData.height = caslData->height;
 		objData.name = caslData->name.get();
 		objData.ddsFilePath = caslData->ddsFilePath.get();
+
+		// 変更
+		objData.numOfLyaer = caslData->numberLayer;
+		// 変更ここまで
+
 		auto isHook = false;
 		if (hookFunc != nullptr) {
 			//hook関数が指定されているのでhook関数を呼び出す。

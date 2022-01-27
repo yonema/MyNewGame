@@ -314,6 +314,7 @@
     <ClCompile Include="GeometryData.cpp" />
     <ClCompile Include="MainMap.cpp" />
     <ClCompile Include="MiniMap.cpp" />
+    <ClCompile Include="MissionUI.cpp" />
     <ClCompile Include="NaviMesh.cpp" />
     <ClCompile Include="SavedPlayerInputData.cpp" />
     <ClCompile Include="Path.cpp" />
@@ -475,6 +476,7 @@
     <ClInclude Include="GeometryData.h" />
     <ClInclude Include="MainMap.h" />
     <ClInclude Include="MiniMap.h" />
+    <ClInclude Include="MissionUI.h" />
     <ClInclude Include="NaviMesh.h" />
     <ClInclude Include="SavedPlayerInputData.h" />
     <ClInclude Include="Path.h" />

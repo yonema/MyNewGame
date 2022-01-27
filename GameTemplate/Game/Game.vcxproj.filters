@@ -584,6 +584,9 @@
     <ClCompile Include="SavedPlayerInputData.cpp">
       <Filter>MyCode\ExternalData</Filter>
     </ClCompile>
+    <ClCompile Include="MissionUI.cpp">
+      <Filter>MyCode\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -1110,6 +1113,9 @@
     </ClInclude>
     <ClInclude Include="SavedPlayerInputData.h">
       <Filter>MyCode\ExternalData</Filter>
+    </ClInclude>
+    <ClInclude Include="MissionUI.h">
+      <Filter>MyCode\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

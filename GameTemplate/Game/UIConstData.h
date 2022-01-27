@@ -198,5 +198,71 @@ namespace nsNinjaAttract
 			//!< ターゲットとの距離を示すフォントレンダラーの座標のバッファ
 			static const Vector2 kTargetLengthFontRenderPosBuff = { -30.0f, 10.0f };
 		}
+
+		/**
+		 * @brief ミッションのUIの定数データ
+		*/
+		namespace nsMissionUIConstData
+		{
+			/**
+			 * @brief ミッションの種類
+			*/
+			enum EnMissionType
+			{
+				enMT_carSilver,
+				enMT_carRed,
+				enMT_carBlue,
+				enMT_clearTime,
+				enMT_noCommandMiss,
+				enMissionTypeNum
+			};
+
+			/**
+			 * @brief ミッションのリザルトの種類
+			*/
+			enum EnMissionResultType
+			{
+				enMRT_clear,
+				enMRT_great,
+				enMRT_perfect,
+				enMissionResultTypeNum
+			};
+
+			//!< ミッションのレベル2Dのファイルパス
+			constexpr const char* const kMissionLevel2DFilePath = "Assets/level2DData/mission.casl";
+			constexpr const char* const kMissionLevelObjName = "mission";	//!< ミッションのレベルオブジェクトネーム
+			//!< チェックマークのレベルオブジェクトネーム
+			constexpr const char* const kCheckMarkLevelObjNames[enMissionTypeNum] =
+			{
+				"mission_checkMark_carSilver",
+				"mission_checkMark_carRed",
+				"mission_checkMark_carBlue",
+				"mission_checkMark_clearTime",
+				"mission_checkMark_noCommandMiss"
+			};
+
+			//!< ミッションのスプライトのファイルパス
+			constexpr const char* const kMissionSpriteFilePath = "Assets/Image/mission/mission.DDS";
+			//!< チェックマークのスプライトのファイルパス
+			constexpr const char* const kCheckMarkSpriteFilePath = "Assets/Image/mission/mission_checkMark.DDS";
+
+			//!< ミッションリザルトの枠のスプライトのファイルパス
+			constexpr const char* const kMissionResultFrameFilePath = "Assets/Image/mission/mission_result_frame.DDS";
+			//!< ミッショリザルトの枠のスプライトの幅
+			constexpr int kMissionResultFrameSpriteWidth = static_cast<int>(512.0f * 1.0f);
+			//!< ミッショリザルトの枠のスプライトの高さ
+			constexpr int kMissionResultFrameSpriteHeight = static_cast<int>(512.0f * 1.0f);
+			//!< ミッションリザルトのテキストのレベルオブジェクトネーム
+			constexpr const char* const kMissionResultTextSpriteFilepath[enMissionResultTypeNum] =
+			{
+				"Assets/Image/mission/mission_result_clear.DDS",
+				"Assets/Image/mission/mission_result_great.DDS",
+				"Assets/Image/mission/mission_result_perfect.DDS"
+			};
+			//!< ミッショリザルトのテキストのスプライトの幅
+			constexpr int kMissionResultTextSpriteWidth = static_cast<int>(512.0f * 1.0f);
+			//!< ミッショリザルトのテキストのスプライトの高さ
+			constexpr int kMissionResultTextSpriteHeight = static_cast<int>(512.0f * 1.0f);
+		}
 	}
 }

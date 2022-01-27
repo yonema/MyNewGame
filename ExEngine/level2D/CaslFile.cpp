@@ -50,6 +50,11 @@ void CaslFile::Load(const char* filePath)
 		fread(caslData.get()->fileName.get(), fileNameCount, 1, fp);
 		ReadOnlyOneCharacter(fp);
 
+
+		// 改造
+		// ここに謎の0.0fのデータがあるので、パディングを入れる。
+		float pad = ReadDecimal(fp);
+
 		//座標を取得。
 		caslData.get()->position.x = ReadDecimal(fp);
 		caslData.get()->position.y = ReadDecimal(fp);

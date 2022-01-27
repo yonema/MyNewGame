@@ -20,7 +20,7 @@ namespace nsNinjaAttract
 		CFade::CFade()
 		{
 			// フェードのスプライトレンダラーのオブジェクトを生成する
-			m_fadeSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFourth);
+			m_fadeSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFinal);
 		}
 
 		/**

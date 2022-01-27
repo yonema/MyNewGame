@@ -5,6 +5,7 @@
 #include "SpriteRender.h"
 #include "MiniMap.h"
 #include "EnemyCatchUI.h"
+#include "MissionUI.h"
 
 namespace nsNinjaAttract
 {
@@ -28,10 +29,11 @@ namespace nsNinjaAttract
 			// ゴールのスプライトの初期化
 			InitGoalSprite();
 
-			// ここ改造
 			m_miniMap = NewGO<CMiniMap>(nsCommonData::enPriorityFirst);
 
 			m_enemyCatchUI = NewGO<CEnemyCatchUI>(nsCommonData::enPriorityFirst);
+
+			m_missionUI = NewGO<CMissionUI>(nsCommonData::enPriorityFirst);
 
 			return true;
 		}
@@ -48,6 +50,8 @@ namespace nsNinjaAttract
 			DeleteGO(m_miniMap);
 
 			DeleteGO(m_enemyCatchUI);
+
+			DeleteGO(m_missionUI);
 
 			return;
 		}
