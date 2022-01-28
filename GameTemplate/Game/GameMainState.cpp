@@ -99,5 +99,24 @@ namespace nsNinjaAttract
 
 			return;
 		}
+
+		/**
+		 * @brief ミッションを一つクリアする
+		 * @param[in] missionType クリアするミッションのタイプ
+		*/
+		void CGameMainState::ClearOneMission(const nsUI::nsMissionUIConstData::EnMissionType missionType)
+		{
+			if (missionType < 0 || missionType >= nsUI::nsMissionUIConstData::enMissionTypeNum)
+			{
+				// 範囲外。早期リターン。
+				return;
+			}
+
+			// クリアしたフラグをたてる
+			m_missionClearFlag[missionType] = true;
+
+			return;
+		}
+
 	}
 }

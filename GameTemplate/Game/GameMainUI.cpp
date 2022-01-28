@@ -1,11 +1,11 @@
 #include "stdafx.h"
 #include "GameMainUI.h"
-#include "UIConstData.h"
 #include "FontRender.h"
 #include "SpriteRender.h"
 #include "MiniMap.h"
 #include "EnemyCatchUI.h"
 #include "MissionUI.h"
+#include "UIConstData.h"
 
 namespace nsNinjaAttract
 {

@@ -234,6 +234,7 @@ namespace nsNinjaAttract
 			enum EnMissionState
 			{
 				enMS_none,
+				enMS_checkClearFlag,
 				enMS_showMission,
 				enMS_hideMission,
 				enMS_clearOneMission,

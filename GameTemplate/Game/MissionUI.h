@@ -11,6 +11,7 @@ namespace nsNinjaAttract
 		namespace nsSprite { class CSpriteRender; }	// スプライトレンダラー
 		namespace nsFont { class CFontRender; }		// フォントレンダラー
 	}
+	namespace nsGameState { class CGameMainState; }
 
 
 	/**
@@ -77,6 +78,11 @@ namespace nsNinjaAttract
 			void InitFont();
 
 			/**
+			 * @brief クリアフラグをチェックする処理を更新
+			*/
+			void UpdateCheckClearFlag();
+
+			/**
 			 * @brief ミッションを表示する処理を更新
 			*/
 			void UpdataShowMission();
@@ -105,17 +111,18 @@ namespace nsNinjaAttract
 
 		private:	// データメンバ
 			Level2D* m_missionLevel = nullptr;	//!< ミッション用のレベル2Dクラス
-			std::vector<nsGraphic::nsSprite::CSpriteRender*> m_checkMarkSRs;	//!< チェックマークのスプライトレンダラー
+			//!< チェックマークのスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_checkMarkSRs[nsMissionUIConstData::enMissionTypeNum];
 			nsGraphic::nsSprite::CSpriteRender* m_missionWindowSR = nullptr;	//!< ミッションウィンドウのスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_missionResultFrameSR = nullptr;	//!< ミッションリザルトの枠のスプライトレンダラー
 			//!< ミッションリザルトのテキストのスプライトレンダラー
-			std::vector<nsGraphic::nsSprite::CSpriteRender*> m_missionResultTextSRs;
+			nsGraphic::nsSprite::CSpriteRender* m_missionResultTextSRs[nsMissionUIConstData::enMissionResultTypeNum] = {};
 
 			nsGraphic::nsFont::CFontRender* m_clearTimeFR = nullptr;	//!< クリアタイムのフォントレンダラー
 			nsGraphic::nsFont::CFontRender* m_numOfMissFR = nullptr;	//!< ミスの回数のフォントレンダラー
 
-			std::vector<Vector3> m_checkMarkOffsets;	//!< チェックマークのオフセット
-			std::vector<bool> m_checkMarkFlag;			//!< チェックマークのクリアフラグ
+			Vector3 m_checkMarkOffsets[nsMissionUIConstData::enMissionTypeNum];	//!< チェックマークのオフセット
+			bool m_checkMarkFlag[nsMissionUIConstData::enMissionTypeNum];			//!< チェックマークのクリアフラグ
 			float m_timer = 0.0f;	//!< タイマー
 
 			//!< ミッションステート
@@ -123,6 +130,9 @@ namespace nsNinjaAttract
 			//!< 現在のクリアしたミッションのタイプ
 			nsMissionUIConstData::EnMissionType m_currentClearMissionType = 
 				static_cast<nsMissionUIConstData::EnMissionType>(-1);
+
+			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステート
+
 		};
 
 	}

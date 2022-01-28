@@ -154,7 +154,7 @@ namespace nsNinjaAttract
 					static int num = 0;
 					if (num != 0)
 					{
-						return true;
+						//return true;
 					}
 					num++;
 #endif

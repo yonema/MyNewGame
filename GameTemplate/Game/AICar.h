@@ -242,6 +242,7 @@ namespace nsNinjaAttract
 			Effect* m_ninjyutuEFRef = nullptr;							//!< 忍術のエフェクトの参照
 			std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
+			int m_carNumber = -1;										//!< 車のナンバー
 
 			// サウンド
 			nsSound::CSoundCue* m_driveSC = nullptr;		//!< 運転中のサウンド

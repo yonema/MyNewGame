@@ -7,6 +7,7 @@
 #include "BezierCurve.h"
 #include "PlayerConstData.h"
 #include "SoundCue.h"
+#include "UIConstData.h"
 
 namespace nsNinjaAttract
 {
@@ -40,11 +41,11 @@ namespace nsNinjaAttract
 		bool CAICar::Start()
 		{
 			// 車の種類の番号。若い番号から順に作られる。
-			const int carTypeNum = m_carTotalNumber % enCarTypeNum;
+			m_carNumber = m_carTotalNumber % enCarTypeNum;
 			m_carTotalNumber++;
 
 			// モデルの初期化
-			m_modelRender->Init(kCarModelFilePath[carTypeNum]);
+			m_modelRender->Init(kCarModelFilePath[m_carNumber]);
 
 			// 車の移動速度を設定
 			m_moveSpeed = kCarSpeed;
@@ -287,6 +288,13 @@ namespace nsNinjaAttract
 
 			// サウンドを停止
 			StopSound();
+
+			// クリアしたミッションの種類
+			int clearMissionType = m_carNumber % (nsUI::nsMissionUIConstData::enMT_carBlue  + 1);
+			// ステートにミッションクリアを通知
+			nsGameState::CGameMainState::GetInstance()->ClearOneMission(
+				static_cast<nsUI::nsMissionUIConstData::EnMissionType>(clearMissionType)
+			);
 
 			// もう動いてほしくないので、falseを戻す。
 			return false;

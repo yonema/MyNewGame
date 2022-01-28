@@ -5,6 +5,7 @@
 #include "FontRender.h"
 #include "../../ExEngine/level2D/Level2D.h"
 #include "GameTime.h"
+#include "GameMainState.h"
 
 namespace nsNinjaAttract
 {
@@ -21,11 +22,19 @@ namespace nsNinjaAttract
 		*/
 		bool CMissionUI::Start()
 		{
+			// ゲームステートの参照を引っ張ってくる
+			m_gameState = FindGO<nsGameState::CGameMainState>(
+				nsCommonData::kGameObjectName[nsCommonData::enGN_MainGameState]
+				);
+
 			// スプライトの初期化
 			InitSprite();
 
 			// フォントの初期化
 			InitFont();
+
+			// クリアフラグをチェックするステートへ遷移
+			ChangeState(enMS_checkClearFlag);
 
 			return true;
 		}
@@ -96,6 +105,10 @@ namespace nsNinjaAttract
 					ClearOneMission(enMT_carBlue);
 				}
 				break;
+			case enMS_checkClearFlag:
+				// クリアフラグをチェックする処理を更新
+				UpdateCheckClearFlag();
+				break;
 			case enMS_showMission:
 				// ミッションを表示する処理を更新
 				UpdataShowMission();
@@ -117,11 +130,6 @@ namespace nsNinjaAttract
 		*/
 		void CMissionUI::InitSprite()
 		{
-			// ミッションの種類の数だけリサイズ
-			m_checkMarkSRs.resize(enMissionTypeNum);
-			m_checkMarkOffsets.resize(enMissionTypeNum);
-			m_checkMarkFlag.resize(enMissionTypeNum);
-
 			// レベル2Dのインスタンスを生成
 			m_missionLevel = new Level2D;
 
@@ -194,10 +202,9 @@ namespace nsNinjaAttract
 			);
 
 			// ミッションリザルトのテキストのスプライトの生成と初期化
-			m_missionResultTextSRs.reserve(enMissionResultTypeNum);
 			for (int mrt = 0; mrt < enMissionResultTypeNum; mrt++)
 			{
-				m_missionResultTextSRs.emplace_back(NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFourth));
+				m_missionResultTextSRs[mrt] = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFourth);
 				m_missionResultTextSRs[mrt]->Init(
 					kMissionResultTextSpriteFilepath[mrt],
 					kMissionResultTextSpriteWidth,
@@ -240,6 +247,32 @@ namespace nsNinjaAttract
 			return;
 		}
 
+
+		/**
+		 * @brief クリアフラグをチェックする処理を更新
+		*/
+		void CMissionUI::UpdateCheckClearFlag()
+		{
+			// ステートから、現在のミッションクリア情報を取ってくる。
+			const bool* clearFlag = m_gameState->GetClearFlag();
+
+			for (int missionType = 0; missionType < enMissionTypeNum; missionType++)
+			{
+				if (m_checkMarkFlag[missionType] == clearFlag[missionType])
+				{
+					// 差異がないフラグはスキップ
+					continue;
+				}
+
+				// 差異があるフラグは、新しくクリアしたミッションのため、クリア処理へ。
+				ClearOneMission(static_cast<EnMissionType>(missionType));
+
+				// クリアできるのは一度に一つまで
+				break;
+			}
+
+			return;
+		}
 
 		/**
 		 * @brief ミッションを表示する処理を更新
@@ -343,7 +376,7 @@ namespace nsNinjaAttract
 					m_checkMarkSRs[i]->SetPosition(kMissionStartPosition + m_checkMarkOffsets[i]);
 					m_checkMarkSRs[i]->SetAlphaValue(0.0f);
 				}
-				ChangeState(enMS_none);
+				ChangeState(enMS_checkClearFlag);
 				return;
 			}
 
@@ -442,6 +475,8 @@ namespace nsNinjaAttract
 			switch (m_missionState)
 			{
 			case enMS_none:
+				break;
+			case enMS_checkClearFlag:
 				break;
 			case enMS_showMission:
 				m_missionWindowSR->Activate();

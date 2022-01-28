@@ -1,5 +1,6 @@
 #pragma once
 #include "StopWatch.h"
+#include "UIConstData.h"
 
 namespace nsNinjaAttract
 {
@@ -124,6 +125,21 @@ namespace nsNinjaAttract
 				return &m_aiCarsRef;
 			}
 
+			/**
+			 * @brief ミッションを一つクリアする
+			 * @param[in] missionType クリアするミッションのタイプ
+			*/
+			void ClearOneMission(const nsUI::nsMissionUIConstData::EnMissionType missionType);
+
+			/**
+			 * @brief クリアフラグを得る。要素の数はnsMissionUIConstData::enMissionTypeNum。
+			 * @return クリアフラグ
+			*/
+			const bool* GetClearFlag() const
+			{
+				return m_missionClearFlag;
+			}
+
 		public:		// staticなメンバ関数とデータメンバ
 
 			static CGameMainState* m_instance;	//!< インスタンス
@@ -155,6 +171,9 @@ namespace nsNinjaAttract
 			bool m_isGoal = false;		//!< ゴールしているか？
 			const nsPlayer::CPlayer* m_playerRef = nullptr;	//!< プレイヤーのconst参照
 			std::vector<nsAICharacter::CAICar*> m_aiCarsRef;	//!< 車達の参照
+
+			//!< ミッションのクリアフラグ
+			bool m_missionClearFlag[nsUI::nsMissionUIConstData::enMissionTypeNum] = {};
 		};
 
 		/**
