@@ -554,7 +554,7 @@ namespace nsNinjaAttract
 		{
 			int clearCount = 0;
 			const int clearTime = static_cast<int>(nsGameState::CGameMainState::GetInstance()->GetGameTime());
-			if (clearTime <= 60)
+			if (clearTime <= 120)
 			{
 				m_checkMarkFlag[enMT_clearTime] = true;
 				clearCount++;
