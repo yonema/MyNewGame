@@ -113,7 +113,7 @@ namespace nsNinjaAttract
 			{
 				// ƒS[ƒ‹‚Ì‚µ‚«‚¢’lˆÈ‰º
 				// ƒS[ƒ‹
-				nsGameState::GameMainState()->Goal();
+				//nsGameState::GameMainState()->Goal();
 			}
 
 			return;

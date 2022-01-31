@@ -222,6 +222,25 @@ namespace nsNinjaAttract
 				const Vector3& targetPoint
 			);
 
+		public:		// staticなメンバ関数
+
+			/**
+			 * @brief 車の総数を得る
+			 * @return 車の総数
+			*/
+			static int GetCarTotalNumber()
+			{
+				return m_carTotalNumber;
+			}
+
+			/**
+			 * @brief 車の総数をリセットする
+			*/
+			static void ResetCarTortalNumber()
+			{
+				m_carTotalNumber = 0;
+			}
+
 		private:	// staticなデータメンバ
 			static int m_carTotalNumber;	//!< 車の総数
 

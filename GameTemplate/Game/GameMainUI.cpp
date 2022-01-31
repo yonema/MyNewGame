@@ -110,7 +110,7 @@ namespace nsNinjaAttract
 			m_timerFR = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFirst);
 			// パラメータを設定
 			m_timerFR->SetParam(
-				kTimerFontTextHead,			// テキスト
+				kTimerFontTextHead,		// テキスト
 				kTimerFontPosition,		// 座標
 				kTimerFontColor			// カラー
 			);
@@ -137,7 +137,15 @@ namespace nsNinjaAttract
 			return;
 		}
 
+		/**
+		 * @brief ミッションを表示する
+		*/
+		void CGameMainUI::ShowMission()
+		{
+			m_missionUI->ShowMission();
 
+			return;
+		}
 
 	}
 }

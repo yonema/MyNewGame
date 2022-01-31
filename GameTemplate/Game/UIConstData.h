@@ -238,6 +238,17 @@ namespace nsNinjaAttract
 				enMS_showMission,
 				enMS_hideMission,
 				enMS_clearOneMission,
+				enMS_result,
+			};
+
+			/**
+			 * @brief ミッションのリザルトのステート
+			*/
+			enum EnMissionResultState
+			{
+				enMRS_showMission,
+				enMRS_subMission,
+				enMRS_showResult
 			};
 
 			//!< ミッションのレベル2Dのファイルパス
@@ -280,6 +291,12 @@ namespace nsNinjaAttract
 			//!< ミッションの開始座標
 			static const Vector3 kMissionStartPosition = { kMissionPosition.x - 25.0f, kMissionPosition.y - 25.0f ,0.0f };
 
+			//!< リザルトのミッションの座標
+			static const Vector3 kMissionResultPosition = { 0.0f, 50.0f, 0.0f };
+			//!< リザルトのミッションの開始座標
+			static const Vector3 kMissionResultStartPosition = 
+			{ kMissionResultPosition.x - 25.0f, kMissionResultPosition.y - 25.0f ,0.0f };
+
 			constexpr float kStartShowMissionTime = 0.3f;
 			constexpr float kShowMissionTime = kStartShowMissionTime + 4.0f;
 
@@ -290,8 +307,8 @@ namespace nsNinjaAttract
 			constexpr float kScaleUpCheckMarkTime = kInCheckMarkTime + 0.2f;
 			constexpr float kScaleuDownCheckMarkTime = kScaleUpCheckMarkTime + 0.2f;
 
-			constexpr float kInCheckMarkStartScale = 4.0f;
-			constexpr float kInCheckMarkEndScale = 2.0f;
+			constexpr float kInCheckMarkStartScale = 5.0f;
+			constexpr float kInCheckMarkEndScale = 3.0f;
 			constexpr float kInCheckMarkEndAlphaValue = 0.5f;
 			constexpr float kScaleUpCheckMarkEndScale = 1.5;
 

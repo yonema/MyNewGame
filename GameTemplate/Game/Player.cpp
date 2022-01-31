@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
+#include "GameMainState.h"
+#include "GameMainStateConstData.h"
 
 namespace nsNinjaAttract
 {
@@ -84,19 +86,10 @@ namespace nsNinjaAttract
 		{
 			nsDebug::DrawTextPanel(L"[CPlayer::Update()]");
 
-			switch (m_playerState)
-			{
-			case enWalkAndRun:
-				nsDebug::DrawTextPanel(L"PlayerState:WalkAndRun");
-				break;
-
-			case enSwing:
-				nsDebug::DrawTextPanel(L"PlayerState:Swing");
-
-				break;
-			}
-
 			nsDebug::DrawTextPanel(m_position, L"pos");
+
+			// ステートの更新
+			UpdateState();
 
 			// 入力処理を実行
 			m_playerInput->ExecuteUpdate();
@@ -190,6 +183,33 @@ namespace nsNinjaAttract
 		}
 
 		/**
+		 * @brief ステートの更新
+		*/
+		void CPlayer::UpdateState()
+		{
+			if (nsGameState::CGameMainState::GetInstance()->GetGameMainStateState() == 
+				nsGameState::nsGameMainStateConstData::enGS_clearDirecting)
+			{
+				ChangeState(enClearDirecting);
+			}
+
+			if (nsGameState::CGameMainState::GetInstance()->GetGameMainStateState() ==
+				nsGameState::nsGameMainStateConstData::enGS_lastJump)
+			{
+				ChangeState(enLastJump);
+			}
+
+
+			if (IsInputtable() == true &&
+				GetState() == enStartFall)
+			{
+				ChangeWalkAndRunState();
+			}
+
+			return;
+		}
+
+		/**
 		 * @brief ステート遷移
 		 * @param newState[in] 新しいステート
 		*/
@@ -228,6 +248,23 @@ namespace nsNinjaAttract
 			case enWallRun:
 				break;
 			case enOnEnemy:
+				break;
+			case enClearDirecting:
+				SetIsInputtable(false);
+				m_playerCamera->SetIsControl(false);
+				m_playerMove->ResetMoveVecX();
+				m_playerMove->ResetMoveVecY();
+				m_playerMove->ResetMoveVecZ();
+				// 歩きと走りのクラスの移動パラメータを合わせる
+				m_playerMove->MuchWalkAndRunMoveParam();
+				static const Vector3 pos = { 0.0f,20.0f,0.0f };
+				static const Vector3 camPos = {100.0f, 50.0f, -200.0f};
+				m_playerMove->SetDirectPosition(pos);
+				Quaternion qRot;
+				qRot.SetRotationDegY(180.0f);
+				SetRotation(qRot);
+				g_camera3D->SetPosition(camPos);
+				g_camera3D->SetTarget(camPos + Vector3::Front * 100.0f);
 				break;
 			}
 

@@ -80,7 +80,7 @@ namespace nsNinjaAttract
 			nsBGM::CBGM* m_bgm = nullptr;				//!< BGMクラス
 			nsBackGround::CBackGround* m_backGround = nullptr;	//!< バックグラウンドクラス
 			nsAI::CAIField* m_aiField = nullptr;	//!< AIのフィールドクラス
-			float m_startFallTimer = 0.0f;	//!< 最初に落ちてくるタイマー
+			float m_directingTimer = 0.0f;	//!< 演出用タイマー
 		};
 
 	}

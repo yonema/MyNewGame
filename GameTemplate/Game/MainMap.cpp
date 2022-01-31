@@ -11,6 +11,8 @@
 #include "AICar.h"
 #include "RenderingEngine.h"
 #include "Fade.h"
+#include "GameMainStateConstData.h"
+#include "TitleMap.h"
 
 namespace nsNinjaAttract
 {
@@ -83,7 +85,11 @@ namespace nsNinjaAttract
 				}
 			);
 
-			delete m_backGround;
+			if (m_backGround)
+			{
+				// 背景ステージクラスの参照をまだ所有していたら、破棄する。
+				delete m_backGround;
+			}
 			delete m_aiField;
 
 			return;
@@ -94,12 +100,82 @@ namespace nsNinjaAttract
 		*/
 		void CMainMap::Update()
 		{
-			m_startFallTimer += nsTimer::GameTime().GetFrameDeltaTime();
-
-			if (m_startFallTimer >= 5.0f)
+			switch (m_gameState->GetGameMainStateState())
 			{
+			case nsGameState::nsGameMainStateConstData::enGS_startDirecting:
+				m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				if (m_directingTimer >= 4.0f)
+				{
+					// プレイヤーを入力可能にする
+					m_player->SetIsInputtable(true);
+					m_gameState->ShowMission();
+					m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_inGame);
+				}
+				break;
+			case nsGameState::nsGameMainStateConstData::enGS_inGame:
+				if (m_player->GetState() != nsPlayer::nsPlayerConstData::enOnEnemy)
+				{
+					if (g_pad[0]->IsTrigger(enButtonStart))
+					{
+						m_gameState->ShowMission();
+					}
+				}
+
+				m_directingTimer = 0.0f;
+				break;
+			case nsGameState::nsGameMainStateConstData::enGS_beforeClearDirecting:
+				break;
+			case nsGameState::nsGameMainStateConstData::enGS_startFadeOutToClearDirecting:
+				nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeOut(0.5f);
+				m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_fadeOutToClearDirecting);
+				break;
+			case nsGameState::nsGameMainStateConstData::enGS_fadeOutToClearDirecting:
+				if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd())
+				{
+					m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_clearDirecting);
+					nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeIn(0.5f);
+				}
+				break;
+			case nsGameState::nsGameMainStateConstData::enGS_clearDirecting:
+				break;
+			case nsGameState::nsGameMainStateConstData::enGS_result:
+				break;
+			case nsGameState::nsGameMainStateConstData::enGS_lastJump:
 				// プレイヤーを入力可能にする
 				m_player->SetIsInputtable(true);
+
+				if (g_pad[0]->IsTrigger(enButtonA))
+				{
+					m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_goTitle);
+				}
+				break;
+			case nsGameState::nsGameMainStateConstData::enGS_goTitle:
+				m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				if (m_directingTimer > 1.5f && m_directingTimer <= 1.7f)
+				{
+					if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd() == true)
+					{
+						nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeOut(0.5f);
+					}
+				}
+				if (m_directingTimer < 2.5f)
+				{
+					return;
+				}
+				// タイトルマップを生成
+				CTitleMap* titleMap = NewGO<CTitleMap>(
+					nsCommonData::enPriorityFirst,
+					nsCommonData::kGameObjectName[nsCommonData::enGN_TitleMap]
+					);
+				// 背景ステージクラスの参照を譲渡する
+				titleMap->SetBackGround(m_backGround);
+				// 参照を捨てる
+				m_backGround = nullptr;
+				// 自信を破棄する。
+				DeleteGO(this);
+				break;
 			}
 
 			return;
@@ -143,6 +219,13 @@ namespace nsNinjaAttract
 		*/
 		void CMainMap::InitCar()
 		{
+#ifdef _DEBUG
+			int carNumForDebug = 0;
+#endif
+
+			// 車の総数をリセットする
+			nsAICharacter::CAICar::ResetCarTortalNumber();
+
 			// 車用のレベルを生成
 			m_carLevel = std::make_unique<nsLevel3D::CLevel3D>();
 			// レベルをロード。マップチップのインスタンスは生成しない。
@@ -151,12 +234,11 @@ namespace nsNinjaAttract
 				[&](nsLevel3D::SLevelObjectData& objData)
 				{
 #ifdef _DEBUG
-					static int num = 0;
-					if (num != 0)
+					if (carNumForDebug != 0)
 					{
-						//return true;
+						return true;
 					}
-					num++;
+					carNumForDebug++;
 #endif
 
 					// 車を生成

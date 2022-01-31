@@ -1117,6 +1117,9 @@
     <ClInclude Include="MissionUI.h">
       <Filter>MyCode\UI</Filter>
     </ClInclude>
+    <ClInclude Include="GameMainStateConstData.h">
+      <Filter>MyCode\GameState</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\shader\sprite.fx">

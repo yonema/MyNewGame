@@ -108,6 +108,12 @@ namespace nsNinjaAttract
 			void UpdateAnimationState();
 
 			/**
+			 * @brief クリア演出のアニメーション
+			 * @param 早期リターンを行うか？
+			*/
+			bool UpdateClearDirecting();
+
+			/**
 			 * @brief スイング中のアニメーションステートを更新
 			 * @param 早期リターンを行うか？
 			*/
@@ -156,10 +162,10 @@ namespace nsNinjaAttract
 			nsPlayerConstData::nsModelAnimationConstData::EnAnimationClips m_animState =
 				nsPlayerConstData::nsModelAnimationConstData::enAnim_idle;
 			//!< アニメーション補完時間
-			float m_AnimInterpolateTime = 
+			float m_animInterpolateTime = 
 				nsPlayerConstData::nsModelAnimationConstData::kDefaultAnimInterpolateTime;
 			//!< アニメーションスピード
-			float m_aninSpeed = nsPlayerConstData::nsModelAnimationConstData::kDefaultAnimSpeed;
+			float m_animSpeed = nsPlayerConstData::nsModelAnimationConstData::kDefaultAnimSpeed;
 
 			bool m_walkFlag = false;
 			bool m_runFlag = false;

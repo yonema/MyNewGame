@@ -1,4 +1,5 @@
 #pragma once
+#include "GameMainStateConstData.h"
 #include "StopWatch.h"
 #include "UIConstData.h"
 
@@ -88,20 +89,6 @@ namespace nsNinjaAttract
 			}
 
 			/**
-			 * @brief ゴールした
-			*/
-			void Goal();
-
-			/**
-			 * @brief ゴールしたか？を得る
-			 * @return ゴールしたか？
-			*/
-			bool IsGoal()const
-			{
-				return m_isGoal;
-			}
-
-			/**
 			 * @brief プレイヤーの参照を得る
 			 * @return プレイヤーの参照
 			*/
@@ -140,6 +127,43 @@ namespace nsNinjaAttract
 				return m_missionClearFlag;
 			}
 
+			/**
+			 * @brief ステートを遷移
+			 * @param[in] newState 新しいステート
+			*/
+			void ChangeState(const nsGameMainStateConstData::EnGameMainStateState newState);
+
+			/**
+			 * @brief ゲームメインステートのステートを得る
+			 * @return ゲームメインステートのステート
+			*/
+			nsGameMainStateConstData::EnGameMainStateState GetGameMainStateState() const
+			{
+				return m_gameMainStateState;
+			}
+
+			/**
+			 * @brief コマンド入力のミスをカウント
+			*/
+			void CountMissCommand()
+			{
+				m_numOfCommandMiss++;
+			}
+
+			/**
+			 * @brief コマンドミスの回数を得る
+			 * @return コマンドミスの回数
+			*/
+			int GetNumOfCommandMiss() const
+			{
+				return m_numOfCommandMiss;
+			}
+
+			/**
+			 * @brief ミッションを表示する
+			*/
+			void ShowMission();
+
 		public:		// staticなメンバ関数とデータメンバ
 
 			static CGameMainState* m_instance;	//!< インスタンス
@@ -162,18 +186,24 @@ namespace nsNinjaAttract
 
 		private:	// データメンバ
 
+			//!< ゲームメインステートのステート
+			nsGameMainStateConstData::EnGameMainStateState m_gameMainStateState =
+				nsGameMainStateConstData::enGS_startDirecting;
 			float m_gameTimer = 0.0f;	//!< ゲームのタイマー
 			bool m_isTimeGame = false;	//!< ゲームのタイムを計るか？
 			nsTimer::CStopWatch m_stopWatch;	//!< ストップウォッチ
 
 			nsUI::CGameMainUI* m_gameMainUI = nullptr;	//!< ゲームメインのUIクラス
 
-			bool m_isGoal = false;		//!< ゴールしているか？
 			const nsPlayer::CPlayer* m_playerRef = nullptr;	//!< プレイヤーのconst参照
 			std::vector<nsAICharacter::CAICar*> m_aiCarsRef;	//!< 車達の参照
 
 			//!< ミッションのクリアフラグ
 			bool m_missionClearFlag[nsUI::nsMissionUIConstData::enMissionTypeNum] = {};
+			int m_clearCounter = 0;		//!< クリアカウンター
+			float m_directingTimer = 0.0f;	//!< 演出用のタイマー
+			int m_numOfCommandMiss = 0;	//!< コマンド入力をミスした回数
+			
 		};
 
 		/**

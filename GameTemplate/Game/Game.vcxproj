@@ -472,6 +472,7 @@
     <ClInclude Include="Cell.h" />
     <ClInclude Include="EnemyCatchUI.h" />
     <ClInclude Include="Fade.h" />
+    <ClInclude Include="GameMainStateConstData.h" />
     <ClInclude Include="GameObjectNameData.h" />
     <ClInclude Include="GeometryData.h" />
     <ClInclude Include="MainMap.h" />

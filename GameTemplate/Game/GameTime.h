@@ -45,7 +45,7 @@ namespace nsNinjaAttract
 			{
 				//固定FPSにする。可変は要検討。
 				//return 1.0f / 30.0f;
-				return m_frameDeltaTime;
+				return m_frameDeltaTime * m_updateSpeed;
 			}
 
 			void PushFrameDeltaTime(float deltaTime)
@@ -71,6 +71,23 @@ namespace nsNinjaAttract
 			/// <param name="elapsedTime">経過時間</param>
 			void DrawFPS(RenderContext& rc, float elapsedTime);
 
+			/**
+			 * @brief 更新速度を設定する
+			 * @param[in] updateSpeed 更新速度
+			*/
+			void SetUpdateSpeed(const float updateSpeed)
+			{
+				m_updateSpeed = updateSpeed;
+			}
+
+			/**
+			 * @brief 更新速度を得る
+			 * @return 更新速度
+			*/
+			float GetUpdateSPeed() const
+			{
+				return m_updateSpeed;
+			}
 
 		private:
 			std::list<float> m_frameDeltaTimeQue;
@@ -79,6 +96,7 @@ namespace nsNinjaAttract
 			float m_fps = 0.0f;			//表示するFPS
 			Font m_font;				//フォント
 
+			float m_updateSpeed = 1.0f;	// 更新速度
 		};
 
 		/// <summary>

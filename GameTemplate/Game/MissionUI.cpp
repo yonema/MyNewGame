@@ -6,6 +6,7 @@
 #include "../../ExEngine/level2D/Level2D.h"
 #include "GameTime.h"
 #include "GameMainState.h"
+#include "GameMainStateConstData.h"
 
 namespace nsNinjaAttract
 {
@@ -75,6 +76,7 @@ namespace nsNinjaAttract
 		void CMissionUI::ClearOneMission(const nsMissionUIConstData::EnMissionType missionType)
 		{
 			m_currentClearMissionType = missionType;
+
 			ChangeState(enMS_clearOneMission);
 
 			return;
@@ -85,25 +87,14 @@ namespace nsNinjaAttract
 		*/
 		void CMissionUI::Update()
 		{
+			if (nsGameState::CGameMainState::GetInstance()->GetGameMainStateState() ==
+				nsGameState::nsGameMainStateConstData::enGS_result)
+			{
+				ChangeState(enMS_result);
+			}
 			switch (m_missionState)
 			{
 			case enMS_none:
-				if (g_pad[0]->IsTrigger(enButtonA))
-				{
-					ShowMission();
-				}
-				else if (g_pad[0]->IsTrigger(enButtonB))
-				{
-					ClearOneMission(enMT_carSilver);
-				}
-				else if (g_pad[0]->IsTrigger(enButtonY))
-				{
-					ClearOneMission(enMT_carRed);
-				}
-				else if (g_pad[0]->IsTrigger(enButtonX))
-				{
-					ClearOneMission(enMT_carBlue);
-				}
 				break;
 			case enMS_checkClearFlag:
 				// クリアフラグをチェックする処理を更新
@@ -111,15 +102,21 @@ namespace nsNinjaAttract
 				break;
 			case enMS_showMission:
 				// ミッションを表示する処理を更新
-				UpdataShowMission();
+				UpdataShowMission(kMissionStartPosition, kMissionPosition);
 				break;
 			case enMS_hideMission:
 				// ミッションを非表示にする処理を更新
 				UpdateHideMission();
 				break;
 			case enMS_clearOneMission:
+				// ミッションを表示する処理を更新
+				UpdataShowMission(kMissionStartPosition, kMissionPosition);
 				// ミッションを一つクリアした時の処理の更新
 				UpdateClearOneMission();
+				break;
+			case enMS_result:
+				// リザルトの時の処理の更新
+				UpdateResult();
 				break;
 			}
 			return;
@@ -200,6 +197,8 @@ namespace nsNinjaAttract
 				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
 				AlphaBlendMode_Trans
 			);
+			m_missionResultFrameSR->SetAlphaValue(0.0f);
+			m_missionResultFrameSR->SetPosition(kMissionResultPosition);
 
 			// ミッションリザルトのテキストのスプライトの生成と初期化
 			for (int mrt = 0; mrt < enMissionResultTypeNum; mrt++)
@@ -212,7 +211,7 @@ namespace nsNinjaAttract
 					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
 					AlphaBlendMode_Trans
 				);
-
+				m_missionResultTextSRs[mrt]->SetPosition(kMissionResultPosition);
 			}
 
 			// 全てのスプライトを非表示
@@ -233,14 +232,24 @@ namespace nsNinjaAttract
 		*/
 		void CMissionUI::InitFont()
 		{
-			m_clearTimeFR = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFinal);
-			m_clearTimeFR->SetText(L"01:00");
-			m_clearTimeFR->SetPosition({ 100.0f,-100.0f });
+			m_clearTimeFR = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFifth);
+			m_clearTimeFR->SetParam(
+				L"01:00",
+				{ 100.0f,-20.0f },
+				Vector4::White,
+				0.0,
+				0.5f
+			);
 			m_clearTimeFR->Deactivate();
 
-			m_numOfMissFR = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFinal);
-			m_numOfMissFR->SetText(L"0");
-			m_numOfMissFR->SetPosition({ 100.0f,-120.0f });
+			m_numOfMissFR = NewGO<nsGraphic::nsFont::CFontRender>(nsCommonData::enPriorityFifth);
+			m_numOfMissFR->SetParam(
+				L"0",
+				{ 100.0f,-55.0f },
+				Vector4::White,
+				0.0,
+				0.5f
+			);
 			m_numOfMissFR->Deactivate();
 
 
@@ -276,8 +285,10 @@ namespace nsNinjaAttract
 
 		/**
 		 * @brief ミッションを表示する処理を更新
+		 * @param[in] startPos 表示アニメーションの開始座標
+		 * @param[in] endPos 表示アニメーションの終了座標
 		*/
-		void CMissionUI::UpdataShowMission()
+		void CMissionUI::UpdataShowMission(const Vector3& startPos, const Vector3& endPos)
 		{
 			// タイマーを進める
 			m_timer += nsTimer::GameTime().GetFrameDeltaTime();
@@ -286,7 +297,7 @@ namespace nsNinjaAttract
 			{
 				const float rate = m_timer / kStartShowMissionTime;
 				Vector3 pos = Vector3::Zero;
-				pos.Lerp(rate, kMissionStartPosition, kMissionPosition);
+				pos.Lerp(rate, startPos, endPos);
 
 				m_missionWindowSR->SetPosition(pos);
 				m_missionWindowSR->SetAlphaValue(rate);
@@ -301,12 +312,14 @@ namespace nsNinjaAttract
 					m_checkMarkSRs[i]->SetPosition(pos + m_checkMarkOffsets[i]);
 					m_checkMarkSRs[i]->SetAlphaValue(rate);
 				}
+				m_missionResultFrameSR->SetPosition(pos);
+				m_missionResultFrameSR->SetAlphaValue(rate);
 
 				return;
 			}
 			else if (m_timer <= kShowMissionTime)
 			{
-				m_missionWindowSR->SetPosition(kMissionPosition);
+				m_missionWindowSR->SetPosition(endPos);
 				m_missionWindowSR->SetAlphaValue(1.0f);
 				for (int i = 0; i < enMissionTypeNum; i++)
 				{
@@ -315,9 +328,11 @@ namespace nsNinjaAttract
 						// クリアしてないミッションは更新しない
 						continue;
 					}
-					m_checkMarkSRs[i]->SetPosition(kMissionPosition + m_checkMarkOffsets[i]);
+					m_checkMarkSRs[i]->SetPosition(endPos + m_checkMarkOffsets[i]);
 					m_checkMarkSRs[i]->SetAlphaValue(1.0f);
 				}
+				m_missionResultFrameSR->SetPosition(endPos);
+				m_missionResultFrameSR->SetAlphaValue(1.0f);
 				return;
 			}
 			else
@@ -358,6 +373,8 @@ namespace nsNinjaAttract
 					m_checkMarkSRs[i]->SetPosition(pos + m_checkMarkOffsets[i]);
 					m_checkMarkSRs[i]->SetAlphaValue(alphaValue);
 				}
+				m_missionResultFrameSR->SetPosition(pos);
+				m_missionResultFrameSR->SetAlphaValue(alphaValue);
 				return;
 			}
 			else
@@ -376,6 +393,8 @@ namespace nsNinjaAttract
 					m_checkMarkSRs[i]->SetPosition(kMissionStartPosition + m_checkMarkOffsets[i]);
 					m_checkMarkSRs[i]->SetAlphaValue(0.0f);
 				}
+				m_missionResultFrameSR->SetPosition(kMissionStartPosition);
+				m_missionResultFrameSR->SetAlphaValue(0.0f);
 				ChangeState(enMS_checkClearFlag);
 				return;
 			}
@@ -388,8 +407,6 @@ namespace nsNinjaAttract
 		*/
 		void CMissionUI::UpdateClearOneMission()
 		{
-
-			UpdataShowMission();
 
 			if (m_timer <= kWaitStartClearOneMissionTime)
 			{
@@ -431,6 +448,147 @@ namespace nsNinjaAttract
 				m_checkMarkSRs[m_currentClearMissionType]->SetScale(1.0f);
 				return;
 			}
+
+			return;
+		}
+
+		/**
+		 * @brief リザルトの時の処理の更新
+		*/
+		void CMissionUI::UpdateResult()
+		{
+			float buff = 0.0f;
+			switch (m_missionResultState)
+			{
+			case enMRS_showMission:
+				UpdataShowMission(kMissionResultStartPosition, kMissionResultPosition);
+
+				if (m_timer >= 1.0f)
+				{
+					m_missionResultState = enMRS_subMission;
+					m_timer = 0.0f;
+					// サブミッションをクリアしたかどうかを調べる
+					CheckClearSubMission();
+				}
+				break;
+			case enMRS_subMission:
+				m_timer += nsTimer::GameTime().GetFrameDeltaTime();
+				buff = m_timer;
+				for (int i = enMT_clearTime; i < enMissionTypeNum; i++)
+				{
+					if (m_timer <= 0.5f * (i - enMT_clearTime))
+					{
+						continue;
+					}
+
+					if (i == enMT_clearTime)
+					{
+						m_clearTimeFR->Activate();
+						m_clearTimeTimer += nsTimer::GameTime().GetFrameDeltaTime();
+						m_timer = m_clearTimeTimer;
+					}
+					else
+					{
+						m_numOfMissFR->Activate();
+						m_numOfMissTimer += nsTimer::GameTime().GetFrameDeltaTime();
+						m_timer = m_numOfMissTimer;
+					}
+
+					if (m_checkMarkFlag[i] == true)
+					{
+						m_currentClearMissionType = static_cast<EnMissionType>(i);
+						UpdateClearOneMission();
+
+					}
+					else
+					{
+
+					}
+
+				}
+				m_timer = buff;
+				if (m_timer >= 2.0f)
+				{
+					m_missionResultState = enMRS_showResult;
+					m_timer = 0.0f;
+				}
+				break;
+
+			case enMRS_showResult:
+				m_timer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				if (m_timer <= kStartShowMissionTime)
+				{
+					const float rate = m_timer / kStartShowMissionTime;
+					Vector3 pos = Vector3::Zero;
+					pos.Lerp(rate, kMissionResultStartPosition, kMissionResultPosition);
+
+					for (auto& mrtSR : m_missionResultTextSRs)
+					{
+						mrtSR->SetPosition(pos);
+						mrtSR->SetAlphaValue(rate);
+					}
+
+					return;
+				}
+				else
+				{
+					for (auto& mrtSR : m_missionResultTextSRs)
+					{
+						mrtSR->SetPosition(kMissionResultPosition);
+						mrtSR->SetAlphaValue(1.0f);
+					}
+					return;
+				}
+
+				break;
+			}
+
+			return;
+		}
+
+		/**
+		 * @brief サブミッションをクリアしたかどうかを調べる
+		*/
+		void CMissionUI::CheckClearSubMission()
+		{
+			int clearCount = 0;
+			const int clearTime = static_cast<int>(nsGameState::CGameMainState::GetInstance()->GetGameTime());
+			if (clearTime <= 60)
+			{
+				m_checkMarkFlag[enMT_clearTime] = true;
+				clearCount++;
+			}
+			else
+			{
+				m_clearTimeFR->SetColor(Vector4::Red);
+			}
+
+			{
+				const int min = clearTime / 60;
+				const int sec = clearTime - (60 * min);
+				wchar_t text[16];
+				swprintf_s(text, L"%02d:%02d", min, sec);
+				m_clearTimeFR->SetText(text);
+			}
+
+			const int numOfCommandMiss = nsGameState::CGameMainState::GetInstance()->GetNumOfCommandMiss();
+			if (numOfCommandMiss <= 0)
+			{
+				m_checkMarkFlag[enMT_noCommandMiss] = true;
+				clearCount++;
+			}
+			else
+			{
+				m_numOfMissFR->SetColor(Vector4::Red);
+			}
+			{
+				wchar_t text[16];
+				swprintf_s(text, L"%5d", numOfCommandMiss);
+				m_numOfMissFR->SetText(text);
+			}
+
+			m_missionResultTextSRs[clearCount]->Activate();
 
 			return;
 		}
@@ -486,6 +644,15 @@ namespace nsNinjaAttract
 			case enMS_clearOneMission:
 				m_missionWindowSR->Activate();
 				m_checkMarkSRs[m_currentClearMissionType]->Activate();
+				break;
+			case enMS_result:
+				m_missionWindowSR->Activate();
+				m_missionResultFrameSR->Activate();
+				for (int i = enMT_clearTime; i < enMissionTypeNum; i++)
+				{
+					m_checkMarkSRs[i]->SetPosition(kMissionResultPosition + m_checkMarkOffsets[i]);
+					m_checkMarkSRs[i]->Activate();
+				}
 				break;
 			}
 

@@ -84,8 +84,10 @@ namespace nsNinjaAttract
 
 			/**
 			 * @brief ミッションを表示する処理を更新
+			 * @param[in] startPos 表示アニメーションの開始座標
+			 * @param[in] endPos 表示アニメーションの終了座標
 			*/
-			void UpdataShowMission();
+			void UpdataShowMission(const Vector3& startPos, const Vector3& endPos);
 
 			/**
 			 * @brief ミッションを非表示にする処理を更新
@@ -96,6 +98,16 @@ namespace nsNinjaAttract
 			 * @brief ミッションを一つクリアした時の処理の更新
 			*/
 			void UpdateClearOneMission();
+
+			/**
+			 * @brief リザルトの時の処理の更新
+			*/
+			void UpdateResult();
+
+			/**
+			 * @brief サブミッションをクリアしたかどうかを調べる
+			*/
+			void CheckClearSubMission();
 
 			/**
 			 * @brief ミッションのスプライトレンダラー全てにクエリを行う
@@ -120,9 +132,11 @@ namespace nsNinjaAttract
 
 			nsGraphic::nsFont::CFontRender* m_clearTimeFR = nullptr;	//!< クリアタイムのフォントレンダラー
 			nsGraphic::nsFont::CFontRender* m_numOfMissFR = nullptr;	//!< ミスの回数のフォントレンダラー
+			float m_clearTimeTimer = 0.0f;								//!< クリアタイムのタイマー
+			float m_numOfMissTimer = 0.0f;								//!< ミスの回数のタイマー
 
 			Vector3 m_checkMarkOffsets[nsMissionUIConstData::enMissionTypeNum];	//!< チェックマークのオフセット
-			bool m_checkMarkFlag[nsMissionUIConstData::enMissionTypeNum];			//!< チェックマークのクリアフラグ
+			bool m_checkMarkFlag[nsMissionUIConstData::enMissionTypeNum];		//!< チェックマークのクリアフラグ
 			float m_timer = 0.0f;	//!< タイマー
 
 			//!< ミッションステート
@@ -130,6 +144,9 @@ namespace nsNinjaAttract
 			//!< 現在のクリアしたミッションのタイプ
 			nsMissionUIConstData::EnMissionType m_currentClearMissionType = 
 				static_cast<nsMissionUIConstData::EnMissionType>(-1);
+			//!< ミッションのリザルトのステート
+			nsMissionUIConstData::EnMissionResultState m_missionResultState =
+				nsMissionUIConstData::enMRS_showMission;
 
 			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステート
 

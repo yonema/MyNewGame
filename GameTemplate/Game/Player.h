@@ -314,6 +314,11 @@ namespace nsNinjaAttract
 		private:	// privateなメンバ関数
 
 			/**
+			 * @brief ステートの更新
+			*/
+			void UpdateState();
+
+			/**
 			 * @brief ステート遷移
 			 * @param newState[in] 新しいステート
 			*/

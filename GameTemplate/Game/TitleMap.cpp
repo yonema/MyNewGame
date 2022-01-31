@@ -58,8 +58,12 @@ namespace nsNinjaAttract
 			// スプライトの初期化
 			InitSprite();
 
-			// 背景ステージの生成
-			m_backGround = new nsBackGround::CBackGround();
+			if (m_backGround == nullptr)
+			{
+				// 背景ステージが設定されていなければ、
+				// 背景ステージを生成する。
+				m_backGround = new nsBackGround::CBackGround;
+			}
 			// タイトル画面
 			m_backGround->SetIsTitle(true);
 

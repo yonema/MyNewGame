@@ -210,6 +210,11 @@ namespace nsNinjaAttract
 			*/
 			void CPlayerWalkAndRun::UpdateInputAxisParam()
 			{
+				if (m_playerRef->GetState() == nsPlayerConstData::enLastJump)
+				{
+					return;
+				}
+
 				// 前、後移動の軸入力
 				m_inputMoveF = m_playerRef->GetInputData().axisMoveForward;
 				// 右、左移動の軸入力

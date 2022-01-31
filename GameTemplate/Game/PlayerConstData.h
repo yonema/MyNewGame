@@ -20,11 +20,13 @@ namespace nsNinjaAttract
 			*/
 			enum EnPlayerState
 			{
-				enStartFall,
+				enStartFall,			//!< 開始演出の降下中
 				enWalkAndRun,			//!< 歩きと走り
 				enSwing,				//!< スイング
 				enWallRun,				//!< 壁走り
 				enOnEnemy,				//!< 敵の上に乗っている
+				enClearDirecting,		//!< クリア演出
+				enLastJump,				//!< 最後のジャンプ
 			};
 
 
@@ -483,6 +485,8 @@ namespace nsNinjaAttract
 					enAnim_swingRoll,	//!< スイングロール
 					enAnim_goOnEnemy,	//!< 敵の上に向かう
 					enAnim_goOnEnemy2,	//!< 敵の上に向かう
+					enAnim_backFlip,	//!< 空中回転
+					enAnim_ninjaPose,	//!< 忍者ポーズ
 					enAnim_num		//!< アニメーションクリップの数
 				};
 
@@ -504,6 +508,8 @@ namespace nsNinjaAttract
 					"Assets/animData/kunoichi/swingRoll.tka",
 					"Assets/animData/kunoichi/goOnEnemy.tka",
 					"Assets/animData/kunoichi/goOnEnemy2.tka",
+					"Assets/animData/kunoichi/backFlip2.tka",
+					"Assets/animData/kunoichi/ninjaPose.tka",
 
 				};
 

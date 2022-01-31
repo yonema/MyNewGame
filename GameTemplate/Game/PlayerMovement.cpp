@@ -193,12 +193,6 @@ namespace nsNinjaAttract
 					m_playerRef->ChangeSwingState();
 				}
 
-				if (m_playerRef->IsInputtable() == true &&
-					m_playerRef->GetState() == nsPlayerConstData::enStartFall)
-				{
-					m_playerRef->ChangeWalkAndRunState();
-				}
-
 				return;
 			}
 
@@ -241,6 +235,13 @@ namespace nsNinjaAttract
 				case nsPlayerConstData::enOnEnemy:
 					// “G‚Ìã‚Éæ‚éˆ—‚ğÀs
 					m_playerOnEnemy.Execute();
+					break;
+				case nsPlayerConstData::enLastJump:
+					m_playerWalkAndRun.Execute();
+					if (m_moveVec.y < -0.1f)
+					{
+						ResetMoveVecY();
+					}
 					break;
 				}
 

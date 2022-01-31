@@ -51,6 +51,15 @@ namespace nsNinjaAttract
 
 		public:		// メンバ関数
 
+			/**
+			 * @brief 背景ステージクラスを設定する
+			 * @param[in,out] backGround 背景ステージクラス
+			*/
+			void SetBackGround(nsBackGround::CBackGround* backGround)
+			{
+				m_backGround = backGround;
+			}
+
 		private:	// privateなメンバ関数
 
 			/**

@@ -3,6 +3,7 @@
 #include "GameMainUI.h"
 #include "GameTime.h"
 #include "Player.h"
+#include "AICar.h"
 
 namespace nsNinjaAttract
 {
@@ -11,6 +12,7 @@ namespace nsNinjaAttract
 	*/
 	namespace nsGameState
 	{
+		using namespace nsGameMainStateConstData;
 		CGameMainState* CGameMainState::m_instance = nullptr;
 
 
@@ -29,7 +31,7 @@ namespace nsNinjaAttract
 		}
 
 		/**
-		 * @brief 更新処理
+		 * @brief 消去される時に呼ばれる処理
 		*/
 		void CGameMainState::OnDestroy()
 		{
@@ -40,26 +42,52 @@ namespace nsNinjaAttract
 		}
 
 		/**
-		 * @brief 消去される時に呼ばれる処理
+		 * @brief 更新処理
 		*/
 		void CGameMainState::Update()
 		{
-			// ゲームのタイムを計測する
-			TimeGame();
+			switch (m_gameMainStateState)
+			{
+			case enGS_startDirecting:
+				break;
+			case enGS_inGame:
+				// ゲームのタイムを計測する
+				TimeGame();
+				break;
+			case enGS_beforeClearDirecting:
+				m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+				if (m_directingTimer >= kStartClearDirectingTime)
+				{
+					ChangeState(enGS_startFadeOutToClearDirecting);
+				}
+				break;
+			case enGS_startFadeOutToClearDirecting:
+				break;
+			case enGS_fadeOutToClearDirecting:
+				break;
+			case enGS_clearDirecting:
+				m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				if (m_directingTimer >= 2.0f)
+				{
+					ChangeState(enGS_result);
+				}
+				break;
+			case enGS_result:
+				m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				if (m_directingTimer >= 2.0f)
+				{
+					ChangeState(enGS_lastJump);
+				}
+				break;
+			case enGS_lastJump:
+				break;
+			case enGS_goTitle:
+				break;
+			}
 
 			return;
-		}
-
-		/**
-		 * @brief ゴールした
-		*/
-		void CGameMainState::Goal()
-		{
-			m_isGoal = true;
-			// タイマーの計測を終了する
-			StopTimingGame();
-			// UIにゴールを伝える
-			m_gameMainUI->Goal();
 		}
 
 
@@ -115,7 +143,59 @@ namespace nsNinjaAttract
 			// クリアしたフラグをたてる
 			m_missionClearFlag[missionType] = true;
 
+			// クリアカウンターを加算する
+			m_clearCounter++;
+
+			if (m_clearCounter >= nsAICharacter::CAICar::GetCarTotalNumber())
+			{
+				// メインミッションを完了
+				ChangeState(enGS_beforeClearDirecting);
+			}
+
 			return;
+		}
+
+		/**
+		 * @brief ミッションを表示する
+		*/
+		void CGameMainState::ShowMission()
+		{
+			m_gameMainUI->ShowMission();
+			return;
+		}
+
+
+		/**
+		 * @brief ステートを遷移
+		 * @param[in] newState 新しいステート
+		*/
+		void CGameMainState::ChangeState(const nsGameMainStateConstData::EnGameMainStateState newState)
+		{
+			if (m_gameMainStateState == newState)
+			{
+				return;
+			}
+
+			m_gameMainStateState = newState;
+
+			m_directingTimer = 0.0f;
+			switch (m_gameMainStateState)
+			{
+			case enGS_startDirecting:
+				break;
+			case enGS_inGame:
+				// ゲームのタイムの計測開始
+				StartTimingGame();
+				break;
+			case enGS_beforeClearDirecting:
+				break;
+			case enGS_clearDirecting:
+				// ゲームのタイムの計測終了
+				StopTimingGame();
+				break;
+			case enGS_goTitle:
+				break;
+			}
 		}
 
 	}

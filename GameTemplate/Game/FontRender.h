@@ -96,6 +96,15 @@ namespace nsNinjaAttract
 				}
 
 				/**
+				 * @brief カラーを設定
+				 * @param[in] color カラー
+				*/
+				void SetColor(const Vector4& color)
+				{
+					m_color = color;
+				}
+
+				/**
 				 * @brief フォントのシャドウの設定
 				 * @param isDrawShadow シャドウを描画するか？
 				 * @param shadowOffset シャドウのピクセルのオフセット

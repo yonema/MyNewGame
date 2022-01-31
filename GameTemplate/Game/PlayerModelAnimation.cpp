@@ -2,6 +2,8 @@
 #include "PlayerModelAnimation.h"
 #include "Player.h"
 #include "ModelRender.h"
+#include "GameMainState.h"
+#include "GameMainStateConstData.h"
 
 namespace nsNinjaAttract
 {
@@ -84,6 +86,7 @@ namespace nsNinjaAttract
 				case enAnim_run:
 				case enAnim_airIdle:
 				case enAnim_swinging:
+				case enAnim_ninjaPose:
 					m_animationClips[i].SetLoopFlag(true);
 					break;
 				// ループしないアニメーション
@@ -162,11 +165,11 @@ namespace nsNinjaAttract
 			UpdateAnimationState();
 
 			// アニメーションのスピードを設定
-			m_playerModel->SetAnimationSpeed(m_aninSpeed);
+			m_playerModel->SetAnimationSpeed(m_animSpeed);
 
 			// アニメーション再生
 			// 前フレームと同じアニメーションをPlayした場合、なにもしない
-			m_playerModel->PlayAnimation(m_animState, m_AnimInterpolateTime);
+			m_playerModel->PlayAnimation(m_animState, m_animInterpolateTime);
 
 			return;
 		}
@@ -177,9 +180,15 @@ namespace nsNinjaAttract
 		void CPlayerModelAnimation::UpdateAnimationState()
 		{
 			// デフォルトのアニメーション補完時間にする
-			m_AnimInterpolateTime = kDefaultAnimInterpolateTime;
+			m_animInterpolateTime = kDefaultAnimInterpolateTime;
 			// デフォルトのアニメーションスピードにする
-			m_aninSpeed = kDefaultAnimSpeed;
+			m_animSpeed = kDefaultAnimSpeed;
+
+			// クリア演出のアニメーション
+			if (UpdateClearDirecting())
+			{
+				return;
+			}
 
 			// スイング中のアニメーションステートを更新
 			if (UpdateSwingAnimationState())
@@ -221,6 +230,53 @@ namespace nsNinjaAttract
 			return;
 		}
 
+
+		/**
+		 * @brief クリア演出のアニメーション
+		 * @param 早期リターンを行うか？
+		*/
+		bool CPlayerModelAnimation::UpdateClearDirecting()
+		{
+			if (nsGameState::CGameMainState::GetInstance()->GetGameMainStateState() <
+				nsGameState::nsGameMainStateConstData::enGS_clearDirecting)
+			{
+				// ゲームステートがクリア演出ではない
+				// 早期リターンを行わない
+				return false;
+			}
+
+			if (UpdateJumpAndAir())
+			{
+				return true;
+			}
+
+			// ゲームステートがクリア演出
+
+			if (m_animState != enAnim_ninjaPose && m_playerModel->IsAnimationPlaying() == true)
+			{
+				// アニメーションが忍者ポーズではない、かつ、
+				// アニメーションの再生が終了していない
+
+				// 空中回転のアニメーションを再生
+				m_animState = enAnim_backFlip;
+				m_animSpeed = 1.25f;
+
+				// 早期リターンを行うようにする
+				return true;
+			}
+			else
+			{
+				// 忍者ポーズのアニメーションを再生
+				m_animState = enAnim_ninjaPose;
+
+				// 早期リターンを行うようにする
+				return true;
+			}
+
+			// 早期リターンを行うようにする
+			return true;
+		}
+
 		/**
 		 * @brief スイング中のアニメーションステートを更新
 		 * @param 早期リターンを行うか？
@@ -257,7 +313,7 @@ namespace nsNinjaAttract
 			case enSwingAnim_swingRaiseLeg:
 				// 足を上げるスイングのアニメーションを再生
 				m_animState = enAnim_swingRaiseLeg;
-				m_aninSpeed = 1.5f;
+				m_animSpeed = 1.5f;
 				break;
 			case enSwingAnim_swingRoll:
 				if (m_playerModel->IsAnimationPlaying() != true && m_animState == enAnim_swingRoll)
@@ -269,8 +325,8 @@ namespace nsNinjaAttract
 				}
 				// スイングロールのアニメーションを再生
 				m_animState = enAnim_swingRoll;
-				m_AnimInterpolateTime = 0.0f;
-				m_aninSpeed = 2.0f;
+				m_animInterpolateTime = 0.0f;
+				m_animSpeed = 2.0f;
 				break;
 			case enSwingAnim_airAfterSwing:
 				// 空中のアイドル状態のアニメーションを再生
@@ -296,7 +352,7 @@ namespace nsNinjaAttract
 
 				// ノックダウンのアニメーションの開始
 				m_animState = enAnim_knockDown;
-				m_AnimInterpolateTime = 0.5f;
+				m_animInterpolateTime = 0.5f;
 			}
 
 			if (m_animState != enAnim_knockDown && m_animState != enAnim_standUp)
@@ -323,7 +379,7 @@ namespace nsNinjaAttract
 
 					// 起き上がり中のアニメーションを再生
 					m_animState = enAnim_standUp;
-					m_AnimInterpolateTime = 1.0f;
+					m_animInterpolateTime = 1.0f;
 					return true;
 				}
 				else
@@ -332,7 +388,7 @@ namespace nsNinjaAttract
 
 					// アイドル状態のアニメーションを再生
 					m_animState = enAnim_idle;
-					m_AnimInterpolateTime = 0.5f;
+					m_animInterpolateTime = 0.5f;
 				}
 
 			}
@@ -371,7 +427,7 @@ namespace nsNinjaAttract
 
 					// 敵の上に向かうアニメーション2を再生
 					m_animState = enAnim_goOnEnemy2;
-					m_aninSpeed = 2.0f;
+					m_animSpeed = 2.0f;
 				}
 				else if (m_animState != enAnim_goOnEnemy2)
 				{
@@ -379,8 +435,8 @@ namespace nsNinjaAttract
 
 					// 敵の上に向かうアニメーションを再生
 					m_animState = enAnim_goOnEnemy;
-					m_aninSpeed = 2.0f;
-					m_AnimInterpolateTime = 0.5f;
+					m_animSpeed = 2.0f;
+					m_animInterpolateTime = 0.5f;
 				}
 
 				// 早期リターンを行うようにする
@@ -414,7 +470,7 @@ namespace nsNinjaAttract
 
 				// アイドル状態のアニメーションを再生
 				m_animState = enAnim_idle;
-				m_AnimInterpolateTime = 0.8f;
+				m_animInterpolateTime = 0.8f;
 			}
 			else if (m_animState != enAnim_idle)
 			{
@@ -422,7 +478,7 @@ namespace nsNinjaAttract
 
 				// 着地のアニメーションを再生
 				m_animState = enAnim_landing;
-				m_AnimInterpolateTime = 0.2f;
+				m_animInterpolateTime = 0.2f;
 			}
 
 			// 早期リターンを行うようにする
@@ -457,8 +513,8 @@ namespace nsNinjaAttract
 
 					// ジャンプの上昇中のアニメーションを再生
 					m_animState = enAnim_jumpUp;
-					m_AnimInterpolateTime = 0.2f;
-					m_aninSpeed = 2.0f;
+					m_animInterpolateTime = 0.2f;
+					m_animSpeed = 2.0f;
 
 				}
 				else
@@ -510,7 +566,7 @@ namespace nsNinjaAttract
 				// 走りのアニメーションを再生
 				m_animState = enAnim_run;
 				// 速度に応じて、1.0f～1.5fの速さでアニメーションを再生
-				m_aninSpeed = 1.0f + 0.5f * playerVelocity / nsPlayerConstData::nsWalkAndRunConstData::kRunMaxSpeed;
+				m_animSpeed = 1.0f + 0.5f * playerVelocity / nsPlayerConstData::nsWalkAndRunConstData::kRunMaxSpeed;
 
 				// 早期リターンを行うようにする
 				return true;

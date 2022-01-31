@@ -501,6 +501,8 @@ public:
 	static const Vector4 Gray;
 	static const Vector4 Zero;
 	static const Vector4 One;
+
+	static const Vector4 Red;
 public:
 	/// <summary>
 	/// XMVECTOR‚Ö‚ÌˆÃ–Ù‚ÌŒ^•ÏŠ·B

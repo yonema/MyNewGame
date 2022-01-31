@@ -64,6 +64,11 @@ namespace nsNinjaAttract
 			*/
 			void Goal();
 
+			/**
+			 * @brief ミッションを表示する
+			*/
+			void ShowMission();
+
 		private:	// privateなメンバ関数
 
 			/**

@@ -89,8 +89,6 @@ namespace nsNinjaAttract
 		*/
 		void CMyEngine::ExecuteGameLoop()
 		{
-
-
 			// tkEngine‚ÌƒtƒŒ[ƒ€‚ÌÅ‰‚Ìˆ—
 			m_tkEngine->BeginFrame();
 

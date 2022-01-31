@@ -6,6 +6,7 @@
 #include "SpriteRender.h"
 #include "PlayerCommandInput.h"
 #include "SoundCue.h"
+#include "GameMainState.h"
 
 namespace nsNinjaAttract
 {
@@ -1075,6 +1076,8 @@ namespace nsNinjaAttract
 				break;
 
 			case enCE_FailureCommand:
+				// コマンドミスの回数をカウントする
+				nsGameState::CGameMainState::GetInstance()->CountMissCommand();
 				// スプライトたちをすべて非表示にする
 				for (auto& qteButtonSR : m_QTEButtonSRs)
 				{
