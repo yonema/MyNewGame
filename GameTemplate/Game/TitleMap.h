@@ -130,18 +130,18 @@ namespace nsNinjaAttract
 
 		private:	// データメンバ
 			std::unique_ptr<nsLevel3D::CLevel3D> m_playerLevel;	//!< プレイヤー用レベル
-			nsPlayer::CPlayer* m_player = nullptr;		//!< プレイヤークラス
+			nsPlayer::CPlayer* m_player = nullptr;				//!< プレイヤークラス
 			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステートクラス
 			nsBackGround::CBackGround* m_backGround = nullptr;	//!< バックグラウンドクラス
 
-			nsSound::CSoundCue* m_bgmSC = nullptr;		//!< タイトル中のBGM
-			nsSound::CSoundCue* m_decisionSC = nullptr;	//!< 決定音
+			nsSound::CSoundCue* m_bgmSC = nullptr;				//!< タイトル中のBGM
+			nsSound::CSoundCue* m_decisionSC = nullptr;			//!< 決定音
 
 			nsGraphic::nsSprite::CSpriteRender* m_titleSR = nullptr;		//!< タイトルのスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_titleStartSR = nullptr;	//!< スタートのスプライトレンダラー
 
 			nsMapConstData::EnTitleState m_state = nsMapConstData::enTS_beforeFadeIn;	//!< ステート
-			float m_timer = 0.0f;	//!< タイマー
+			float m_timer = 0.0f;														//!< タイマー
 
 		};
 	}

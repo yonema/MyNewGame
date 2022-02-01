@@ -72,16 +72,41 @@ namespace nsNinjaAttract
 			*/
 			void InitCar();
 
+			/**
+			 * @brief 開始演出の更新
+			*/
+			void UpdateStartDirecting();
+
+			/**
+			 * @brief ゲーム中の更新
+			*/
+			void UpdateInGame();
+
+			/**
+			 * @brief クリア演出の前のフェードアウトの更新
+			*/
+			void UpdateFadeOutToClearDirecting();
+
+			/**
+			 * @brief 最後のジャンプの更新
+			*/
+			void UpdateLastJump();
+
+			/**
+			 * @brief タイトルへ遷移の更新
+			*/
+			void UpdateGoTitle();
+
 		private:	// データメンバ
 			std::unique_ptr<nsLevel3D::CLevel3D> m_playerLevel;	//!< プレイヤー用レベル
 			std::unique_ptr<nsLevel3D::CLevel3D> m_carLevel;	//!< 車用レベル
-			nsPlayer::CPlayer* m_player = nullptr;		//!< プレイヤークラス
+			nsPlayer::CPlayer* m_player = nullptr;				//!< プレイヤークラス
 			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステートクラス
-			nsBGM::CBGM* m_bgm = nullptr;				//!< BGMクラス
+			nsBGM::CBGM* m_bgm = nullptr;						//!< BGMクラス
 			nsBackGround::CBackGround* m_backGround = nullptr;	//!< バックグラウンドクラス
-			nsAI::CAIField* m_aiField = nullptr;	//!< AIのフィールドクラス
-			float m_directingTimer = 0.0f;	//!< 演出用タイマー
-			nsSound::CSoundCue* m_decisionSC = nullptr;	//!< 決定音のサウンド
+			nsAI::CAIField* m_aiField = nullptr;				//!< AIのフィールドクラス
+			float m_directingTimer = 0.0f;						//!< 演出用タイマー
+			nsSound::CSoundCue* m_decisionSC = nullptr;			//!< 決定音のサウンド
 		};
 
 	}

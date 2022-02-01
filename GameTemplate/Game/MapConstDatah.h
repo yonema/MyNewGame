@@ -145,6 +145,14 @@ namespace nsNinjaAttract
 			constexpr float kTitleInTime = 1.0f;		//!< タイトルインのタイム
 			constexpr float kTitleIdleLoopTime = 5.0f;	//!< タイトルアイドルのループタイム
 			constexpr float kTitleOutTime = 1.0f;		//!< タイトルアウトのタイム
+
+			constexpr float kStartDirectingTime = 4.0f;				//!< 開始演出のタイム
+			constexpr float kFadeOutToClearDirectingTime = 0.5f;	//!< クリア演出の前のフェードアウトのタイム
+			constexpr float kFadeInToClearDirectingTime = 0.5f;		//!< クリア演出の前のフェードインのタイム
+			constexpr float kFadeOutGoTitleMinActiveTime = 1.5f;	//!< タイトルへ遷移するためのフェードアウトの最小有効タイム
+			constexpr float kFadeOutGoTitleMaxActiveTime = 1.7f;	//!< タイトルへ遷移するためのフェードアウトの最大有効タイム
+			constexpr float kFadeOutGoTitleTime = 0.5f;				//!< タイトルへ遷移するためのフェードアウトのタイム
+			constexpr float kGoTitleDirectingTime = 2.5f;			//< タイトルへ行くための演出のタイム
 		}
 	}
 }

@@ -107,89 +107,45 @@ namespace nsNinjaAttract
 		*/
 		void CMainMap::Update()
 		{
+			// ゲームステートに応じて処理を振り分ける
 			switch (m_gameState->GetGameMainStateState())
 			{
 			case nsGameState::nsGameMainStateConstData::enGS_startDirecting:
-				m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+				// 開始演出の更新
+				UpdateStartDirecting();
 
-				if (m_directingTimer >= 4.0f)
-				{
-					// プレイヤーを入力可能にする
-					m_player->SetIsInputtable(true);
-					m_gameState->ShowMission();
-					m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_inGame);
-				}
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_inGame:
-				if (m_player->GetState() != nsPlayer::nsPlayerConstData::enOnEnemy)
-				{
-					if (g_pad[0]->IsTrigger(enButtonStart))
-					{
-						m_gameState->ShowMission();
-					}
-				}
+				// ゲーム中の更新
+				UpdateInGame();
 
-				m_directingTimer = 0.0f;
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_beforeClearDirecting:
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_startFadeOutToClearDirecting:
-				nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeOut(0.5f);
+				// クリア演出の前に、フェードアウトを行う。
+				nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeOut(kFadeOutToClearDirectingTime);
+				// ゲームステートをクリア演出の前のフェードアウト中に遷移
 				m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_fadeOutToClearDirecting);
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_fadeOutToClearDirecting:
-				if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd())
-				{
-					m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_clearDirecting);
-					nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeIn(0.5f);
-					m_bgm->PlayResultSound();
-				}
+				// クリア演出の前のフェードアウトの更新
+				UpdateFadeOutToClearDirecting();
+
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_clearDirecting:
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_result:
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_lastJump:
-				// プレイヤーを入力可能にする
-				m_player->SetIsInputtable(true);
+				// 最後のジャンプの更新
+				UpdateLastJump();
 
-				if (g_pad[0]->IsTrigger(enButtonA))
-				{
-					m_decisionSC->Play(false);
-					m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_goTitle);
-				}
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_goTitle:
-				m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+				// タイトルへ遷移の更新
+				UpdateGoTitle();
 
-				if (m_directingTimer > 1.5f && m_directingTimer <= 1.7f)
-				{
-					if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd() == true)
-					{
-						nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeOut(0.5f);
-					}
-				}
-				if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd() != true)
-				{
-					const float volume = nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->GetFadeRate();
-					m_bgm->SetResultSoundVolume(volume);
-				}
-				if (m_directingTimer < 2.5f)
-				{
-					m_bgm->SetResultSoundVolume(0.0f);
-					return;
-				}
-				// タイトルマップを生成
-				CTitleMap* titleMap = NewGO<CTitleMap>(
-					nsCommonData::enPriorityFirst,
-					nsCommonData::kGameObjectName[nsCommonData::enGN_TitleMap]
-					);
-				// 背景ステージクラスの参照を譲渡する
-				titleMap->SetBackGround(m_backGround);
-				// 参照を捨てる
-				m_backGround = nullptr;
-				// 自信を破棄する。
-				DeleteGO(this);
 				break;
 			}
 
@@ -274,6 +230,148 @@ namespace nsNinjaAttract
 				}
 			);
 
+			return;
+		}
+
+		/**
+		 * @brief 開始演出の更新
+		*/
+		void CMainMap::UpdateStartDirecting()
+		{
+			// 演出用のタイマーを進める
+			m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+			if (m_directingTimer >= kStartDirectingTime)
+			{
+				// タイマーが開始演出のタイムを超えたら
+
+				// タイマーをリセット
+				m_directingTimer = 0.0f;
+				// プレイヤーを入力可能にする
+				m_player->SetIsInputtable(true);
+				// ミッションを表示する
+				m_gameState->ShowMission();
+				// ゲームステートをゲーム中に遷移
+				m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_inGame);
+			}
+
+			return;
+		}
+
+		/**
+		 * @brief ゲーム中の更新
+		*/
+		void CMainMap::UpdateInGame()
+		{
+			if (m_player->GetState() == nsPlayer::nsPlayerConstData::enOnEnemy)
+			{
+				// プレイヤーのステートが、敵の上にいる状態のとき、何もしない。早期リターン。
+				return;
+			}
+
+			// プレイヤーのステートが、敵の上にいる状態ではないとき
+
+
+			if (g_pad[0]->IsTrigger(enButtonStart))
+			{
+				// startボタンを押したら、ミッションを表示
+				m_gameState->ShowMission();
+			}
+
+			return;
+		}
+
+
+		/**
+		 * @brief クリア演出の前のフェードアウトの更新
+		*/
+		void CMainMap::UpdateFadeOutToClearDirecting()
+		{
+			if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd())
+			{
+				// フェードアウトが終了したら
+
+				// フェードインを行う
+				nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeIn(kFadeInToClearDirectingTime);
+				// ゲームステートをクリア演出へ遷移
+				m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_clearDirecting);
+
+				// リザルトのサウンドを再生する
+				m_bgm->PlayResultSound();
+			}
+
+			return;
+		}
+
+		/**
+		 * @brief 最後のジャンプの更新
+		*/
+		void CMainMap::UpdateLastJump()
+		{
+			// プレイヤーを入力可能にする
+			m_player->SetIsInputtable(true);
+
+			if (g_pad[0]->IsTrigger(enButtonA))
+			{
+				// Aボタンが押されたら
+
+				// 決定音をワンショット再生
+				m_decisionSC->Play(false);
+				// ゲームステートをタイトルへ移動に遷移
+				m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_goTitle);
+			}
+			return;
+		}
+
+		/**
+		 * @brief タイトルへ遷移の更新
+		*/
+		void CMainMap::UpdateGoTitle()
+		{
+			// 演出用のタイマーを進める
+			m_directingTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+			if (m_directingTimer > kFadeOutGoTitleMinActiveTime && m_directingTimer <= kFadeOutGoTitleMaxActiveTime)
+			{
+				// タイマーがタイトルへ遷移するためのフェードアウトの有効タイム
+				if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd() == true)
+				{
+					// フェード中ではなかったら、フェードアウト開始
+					nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeOut(kFadeOutGoTitleTime);
+				}
+			}
+
+			if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd() != true)
+			{
+				// フェード中なら
+
+				// フェードの進行率に応じて、リザルトのBGMの音量を下げていく
+				const float volume = nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->GetFadeRate();
+				m_bgm->SetResultSoundVolume(volume);
+			}
+
+			if (m_directingTimer < kGoTitleDirectingTime)
+			{
+				// タイマーがタイトルへ行くための演出タイムより小さい。
+				// まだタイトルへ行かない。早期リターン。
+				return;
+			}
+
+			// bgmを音量を完全に消す
+			m_bgm->SetResultSoundVolume(0.0f);
+
+			// タイトルマップを生成
+			CTitleMap* titleMap = NewGO<CTitleMap>(
+				nsCommonData::enPriorityFirst,
+				nsCommonData::kGameObjectName[nsCommonData::enGN_TitleMap]
+				);
+			// 背景ステージクラスの参照を譲渡する
+			titleMap->SetBackGround(m_backGround);
+
+			// 参照を捨てる
+			m_backGround = nullptr;
+			// 自信を破棄する。
+			DeleteGO(this);
 			return;
 		}
 	}
