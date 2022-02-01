@@ -206,8 +206,12 @@ namespace nsNinjaAttract
 				switch (m_playerRef->GetState())
 				{
 				case nsPlayerConstData::enStartFall:
-					if (IsAir() != true && m_playerRef->GetPosition().y <= 200.0f)
+					// 開始演出
+					if (IsAir() != true && m_playerRef->GetPosition().y <= kStartFallHeight)
 					{
+						// 一定以下の高さに居て、空中にいない時、動きを止める。
+						// 開始した瞬間は空中に居ても、IsAirがfalseなため、高さ制限を付ける。
+						// 開始演出時は、抵抗がないため、手動で動きを止める。
 						ResetMoveVecX();
 						ResetMoveVecY();
 						ResetMoveVecZ();
@@ -240,15 +244,17 @@ namespace nsNinjaAttract
 					m_playerWalkAndRun.Execute();
 					if (m_moveVec.y < -0.1f)
 					{
+						// 上昇はするけど、下降はしないようにする。
 						ResetMoveVecY();
 					}
 					break;
 				}
 
+				// 重力をかける
 				ApplyGravity();
 
+				// キャラクターコントローラーを使用して、移動させる。
 				MoveWithCharacterController();
-
 
 				return;
 			}
@@ -289,11 +295,15 @@ namespace nsNinjaAttract
 			{
 				if (IsAir())
 				{
+					// 空中にいるとき、着地音フラグがオンになる。
 					m_landingSoundFlag = true;
 				}
 				else if (m_landingSoundFlag)
 				{
+					// 空中にいないとき、かつ、着地音フラグがオンの時。
+					// 着地音フラグをオフにする
 					m_landingSoundFlag = false;
+					// 着地音をワンショット再生する
 					m_landingSC->Play(false);
 				}
 

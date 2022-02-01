@@ -212,6 +212,9 @@ namespace nsNinjaAttract
 			{
 				if (m_playerRef->GetState() == nsPlayerConstData::enLastJump)
 				{
+					// ステートが最後のジャンプの時は、軸入力を受け付けない。
+					// ジャンプだけ可能にするため。
+					// 早期リターン。
 					return;
 				}
 

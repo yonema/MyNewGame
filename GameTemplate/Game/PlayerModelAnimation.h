@@ -167,11 +167,6 @@ namespace nsNinjaAttract
 			//!< アニメーションスピード
 			float m_animSpeed = nsPlayerConstData::nsModelAnimationConstData::kDefaultAnimSpeed;
 
-			bool m_walkFlag = false;
-			bool m_runFlag = false;
-			bool m_jumpFlag = false;
-			bool m_swingFlag = false;
-
 			//!< スイング中のアニメーションステート
 			nsPlayerConstData::nsModelAnimationConstData::EnSwingAnimState m_swingAnimSate =
 				nsPlayerConstData::nsModelAnimationConstData::enSwingAnim_swing;

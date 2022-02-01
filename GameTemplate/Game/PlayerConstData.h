@@ -39,6 +39,7 @@ namespace nsNinjaAttract
 				constexpr float kMaxFallSpeed = 2000.0f;		//!< 最高落下速度
 				constexpr float kModelRotRate = 0.3f;	//!< モデルの回転の補間率
 				constexpr float kMoveVecMin = 0.001f;	//!< 移動ベクトルの最小値
+				constexpr float kStartFallHeight = 200.0f;	//!< 開始演出に使う高さ
 
 				//!< 着地のサウンドファイルパス
 				constexpr const wchar_t* const kLandingSoundFilePath = L"Assets/sound/character/normalMove/landing.wav";
