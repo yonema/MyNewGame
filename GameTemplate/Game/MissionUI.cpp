@@ -605,7 +605,8 @@ namespace nsNinjaAttract
 				}
 				m_missionAllClearTextSR->SetScale(1.0f);
 				m_missionAllClearTextSR->SetAlphaValue(1.0f);
-				BlinkClearAllMissionFrame();
+				// 全てのミッションをクリアした時にフレームのスプライトを点滅させる
+				BlinkSprite(m_missionAllClearFrameSR, &m_blinkTimer, kMissionAllClearFrameBlinkTime);
 			}
 			else
 			{
@@ -620,13 +621,15 @@ namespace nsNinjaAttract
 		*/
 		void CMissionUI::UpdateResult()
 		{
-			BlinkClearAllMissionFrame();
+			// 全てのミッションをクリアした時にフレームのスプライトを点滅させる
+			BlinkSprite(m_missionAllClearFrameSR, &m_blinkTimer, kMissionAllClearFrameBlinkTime);
 
 			float buff = 0.0f;
 			switch (m_missionResultState)
 			{
 			case enMRS_showMission:
 				UpdateShowMission(kMissionResultStartPosition, kMissionResultPosition);
+				// ミッション表示途中では、フレームは表示させない。
 				m_missionAllClearFrameSR->SetAlphaValue(0.0f);
 				if (m_timer >= 1.0f)
 				{
@@ -714,8 +717,47 @@ namespace nsNinjaAttract
 						mrtSR->SetAlphaValue(1.0f);
 						mrtSR->SetScale(1.0f);
 					}
+
+					if (m_toEndSR->IsActive() != true)
+					{
+						m_toEndSR->Activate();
+					}
+
+					// 終わりへと行くスプライトの点滅の点滅処理
+					BlinkSprite(m_toEndSR, &m_toEndBlinkTimer, kToEndBlinkTime);
+
+					if (nsGameState::GameMainState()->GetGameMainStateState() ==
+						nsGameState::nsGameMainStateConstData::enGS_goTitle)
+					{
+						// ゲームステートがタイトルへ行く状態へ遷移したら
+
+						// リザルトのステートをフェードアウトへと遷移
+						m_missionResultState = enMRS_fadeOutToEnd;
+						// タイマーをリセット
+						m_toEndBlinkTimer = 0.0f;
+					}
+					
+
 					return;
 				}
+
+				break;
+			case enMRS_fadeOutToEnd:
+				m_toEndBlinkTimer += nsTimer::GameTime().GetFrameDeltaTime();
+
+				if (m_toEndBlinkTimer > kToEndFadeOutTime)
+				{
+					// タイマーが上限より進んでいる
+					// スプライトを完全に透明にする
+					m_toEndSR->SetAlphaValue(0.0f);
+					return;
+				}
+
+				// タイマーの進み率
+				const float scale = m_toEndBlinkTimer / kToEndFadeOutTime;
+				// アルファ値。だんだんと透明にしていく。
+				const float alphaValue = 1.0f - scale;
+				m_toEndSR->SetAlphaValue(alphaValue);
 
 				break;
 			}
@@ -797,6 +839,57 @@ namespace nsNinjaAttract
 				m_blinkTimer -= kMissionAllClearFrameBlinkTime;
 				m_missionAllClearFrameSR->SetAlphaValue(0.0f);
 
+			}
+
+			return;
+		}
+
+		/**
+		 * @brief スプライトを点滅させる
+		 * @param[in,out] sprite 点滅させるスプライト
+		 * @param[in,out] timer タイマー
+		 * @param[in] blinkTime 点滅間隔タイム
+		*/
+		void CMissionUI::BlinkSprite(nsGraphic::nsSprite::CSpriteRender* sprite, float* timer, const float blinkTime)
+		{
+			if (sprite->IsActive() != true)
+			{
+				// 有効ではないなら、点滅処理を行わない。早期リターン。
+				return;
+			}
+
+			// タイマーを進める
+			*timer += nsTimer::GameTime().GetFrameDeltaTime();
+
+			// 点滅間隔タイムの半分のタイム
+			const float halfTime = blinkTime * 0.5f;
+
+			if (*timer <= halfTime)
+			{
+				// タイマーが点滅間隔の半分のタイム以下のとき
+
+				// アルファ値。だんだんと不透明にしていく。
+				const float alphaValue = *timer / halfTime;
+				sprite->SetAlphaValue(alphaValue);
+				return;
+			}
+			else if (*timer <= blinkTime)
+			{
+				// タイマーが点滅間隔の半分より大きく、点滅間隔のタイム以下のとき
+
+				// アルファ値。だんだんと透明にしていく。
+				const float alphaValue = 1.0f - (*timer - halfTime) / halfTime;
+				sprite->SetAlphaValue(alphaValue);
+				return;
+			}
+			else
+			{
+				// タイマーが点滅間隔のタイムより大きいとき
+
+				// タイマーとアルファ値をリセットする
+				*timer -= blinkTime;
+				sprite->SetAlphaValue(0.0f);
+				return;
 			}
 
 			return;

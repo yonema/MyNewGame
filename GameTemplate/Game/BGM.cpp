@@ -85,9 +85,17 @@ namespace nsNinjaAttract
 		*/
 		void CBGM::PlayResultSound()
 		{
+			// リザルトのサウンドをワンショット再生
 			m_resultSC->Play(false);
+			// リザルトのサウンドの音量を設定
+			m_resultSC->SetVolume(kResultSoundVolume);
+
+			// リザルトサウンド中にする
 			m_isResultSound = true;
+
+			// リザルトサウンド中のBGMをループ再生再生
 			m_bgmSC[enBT_Normal]->Play(true);
+			// リザアルトサウンド中のBGMの音量を設定
 			m_bgmSC[enBT_Normal]->SetVolume(kBGMSoundVolume[m_currentBGMType] * kResultBGMVolume);
 
 			return;

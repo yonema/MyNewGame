@@ -108,7 +108,7 @@ namespace nsNinjaAttract
 			m_playerCatchEnemy->ExecuteUpdate();
 
 			// レンダリングエンジンにプレイヤーの座標を伝える
-			nsMyEngine::CRenderingEngine::GetInstance()->SetPlayerPosition(m_position);
+			nsMyEngine::CRenderingEngine::GetInstance()->SetPlayerPosition(g_camera3D->GetPosition());
 
 			return;
 		}

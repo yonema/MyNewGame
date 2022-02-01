@@ -38,6 +38,7 @@ namespace nsNinjaAttract
 				5.0f,2.0f,1.0f
 			};
 
+			constexpr float kResultSoundVolume = 0.5f;	//!< リザルトサウンドの音量
 			constexpr float kResultBGMVolume = 0.22f;	//!< リザルト中のBGMの音量
 		}
 	}

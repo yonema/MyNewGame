@@ -9,6 +9,9 @@ static const float PI = 3.1415926f;         // π
 //#define TILE_HEIGHT 16
 static const int INFINITY = 40.0f;
 
+// 定義してあればEVSMを行う。DrawShadowMap.fxにも存在している。
+#define EVSM
+
 ///////////////////////////////////////
 // 構造体。
 ///////////////////////////////////////
@@ -127,10 +130,12 @@ float CalcShadowRate(int ligNo, float3 worldPos)
 
         // 旧バージョン
         // ライトカメラの遠平面より遠かったら、影を落とさない
-        //if (zInLVP >= 1.0f)
-        //{
-        //    return shadow;
-        //}
+#ifndef EVSM
+        if (zInLVP >= 1.0f)
+        {
+            return shadow;
+        }
+#endif
 
         shadowMapUV *= float2(0.5f, -0.5f);
         shadowMapUV += 0.5f;
@@ -145,11 +150,13 @@ float CalcShadowRate(int ligNo, float3 worldPos)
                 break;
 
             // EVSM
+#ifdef EVSM
             zInLVP -= 0.001f;
             float pos = exp(INFINITY * zInLVP);
             shadow = Chebyshev(shadowValue.xy, pos);
 
             break;
+#endif
 
             // 旧バージョン
 
@@ -180,10 +187,12 @@ float CalcPlayerShadowRate(int ligNo, float3 worldPos)
 
     // 旧バージョン
     // ライトカメラの遠平面より遠かったら、影を落とさない
-    //if (zInLVP >= 1.0f)
-    //{
-    //    return shadow;
-    //}
+#ifndef EVSM
+    if (zInLVP >= 1.0f)
+    {
+        return shadow;
+    }
+#endif
 
     shadowMapUV *= float2(0.5f, -0.5f);
     shadowMapUV += 0.5f;
@@ -197,10 +206,12 @@ float CalcPlayerShadowRate(int ligNo, float3 worldPos)
             return shadow;
 
         // EVSM
+#ifdef EVSM
         zInLVP -= 0.001f;
         float pos = exp(INFINITY * zInLVP);
         shadow = Chebyshev(shadowValue.xy, pos);
         return shadow;
+#endif
 
         // 旧バージョン
         // まずこのピクセルが遮蔽されているか調べる
@@ -212,7 +223,7 @@ float CalcPlayerShadowRate(int ligNo, float3 worldPos)
             // ライトカメラ（光源）からの距離に応じて影を指数関数的に薄くしていく。
             shadow *= (1.0f - pow(zInLVP,2.0f));
             // ライトカメラ（光源）からの距離に応じて影を線形に薄くしていく。
-            //shadow *= (1.0f - zInLVP);
+            shadow *= (1.0f - zInLVP);
         }
 
     }

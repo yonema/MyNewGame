@@ -80,9 +80,12 @@ namespace nsNinjaAttract
 		*/
 		void CSoundCue::MultiOneShotPlay()
 		{
-			// サウンドを生成
+			// サウンドを生成と初期化
 			CSoundSource* ss = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
 			ss->Init(m_filePath);
+			// 音量を設定
+			float vol = m_volume * GetTypeVolume();
+			ss->SetVolume(vol);
 			// 再生
 			ss->Play(false);
 			return;

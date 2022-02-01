@@ -199,6 +199,9 @@ namespace nsNinjaAttract
 			{
 				// エリアの近平面、遠平面の上下左右の面への距離をそれぞれ求める
 
+				Vector3 cameraPos = g_camera3D->GetPosition()/* -
+					*nsMyEngine::CRenderingEngine::GetInstance()->GetPlayerPositionRef()*/;
+
 				// エリアの近平面の中心からの上面、下面までの距離を求める
 				float nearY = tanf(g_camera3D->GetViewAngle() * 0.5f) * nearDepth;
 				// エリアの近平面の中心からの右面、左面までの距離を求める
@@ -208,9 +211,9 @@ namespace nsNinjaAttract
 				// エリアの遠平面の中心からの右面、左面までの距離を求める
 				float farX = farY * g_camera3D->GetAspect();
 				// エリアの近平面の中心座標を求める
-				Vector3 nearPos = g_camera3D->GetPosition() + cameraForward * nearDepth;
+				Vector3 nearPos = cameraPos + cameraForward * nearDepth;
 				// エリアの遠平面の中心座標を求める
-				Vector3 farPos = g_camera3D->GetPosition() + cameraForward * farDepth;
+				Vector3 farPos = cameraPos + cameraForward * farDepth;
 
 				// 8頂点の座標を求める
 

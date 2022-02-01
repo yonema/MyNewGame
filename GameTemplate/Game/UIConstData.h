@@ -250,7 +250,8 @@ namespace nsNinjaAttract
 			{
 				enMRS_showMission,
 				enMRS_subMission,
-				enMRS_showResult
+				enMRS_showResult,
+				enMRS_fadeOutToEnd
 			};
 
 			//!< ミッションのレベル2Dのファイルパス
@@ -281,13 +282,15 @@ namespace nsNinjaAttract
 			//!< 終わりへと行くスプライトのファイルパス
 			constexpr const char* const kToEndSpriteFilePath = "Assets/Image/mission/toEnd.DDS";
 			//!< 終わりへと行くスプライトの幅
-			constexpr int kToEndSpriteWidth = static_cast<int>(128.0f * 1.0f);
+			constexpr int kToEndSpriteWidth = static_cast<int>(128.0f * 2.0f);
 			//!< 終わりへと行くスプライトの高さ
-			constexpr int kToEndSpriteHeight = static_cast<int>(128.0f * 1.0f);
+			constexpr int kToEndSpriteHeight = static_cast<int>(128.0f * 2.0f);
 			//!< 終わりへと行くスプライトの座標
-			static const Vector3 kToEndSpritePosition = { 200.0f,-170.0f,0.0f };
-			//!< 終わりへと行くスプライトのタイム
+			static const Vector3 kToEndSpritePosition = { 220.0f,-220.0f,0.0f };
+			//!< 終わりへと行くスプライトの点滅間隔タイム
 			constexpr float kToEndBlinkTime = 3.0f;
+			//!< //!< 終わりへと行くスプライトのフェードアウトタイム
+			constexpr float kToEndFadeOutTime = 0.5f;
 
 			//!< ミッションリザルトの枠のスプライトのファイルパス
 			constexpr const char* const kMissionResultFrameFilePath = "Assets/Image/mission/mission_result_frame.DDS";

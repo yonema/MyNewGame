@@ -125,7 +125,13 @@ namespace nsNinjaAttract
 			*/
 			void BlinkClearAllMissionFrame();
 
-			//void BlinkSprite(nsGraphic::nsSprite::CSpriteRender* sprite, float* timer, const float time)
+			/**
+			 * @brief スプライトを点滅させる
+			 * @param[in,out] sprite 点滅させるスプライト
+			 * @param[in,out] timer タイマー
+			 * @param[in] blinkTime 点滅間隔タイム
+			*/
+			void BlinkSprite(nsGraphic::nsSprite::CSpriteRender * sprite, float* timer, const float blinkTime);
 
 			/**
 			 * @brief ミッションのスプライトレンダラー全てにクエリを行う

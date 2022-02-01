@@ -3,6 +3,8 @@
  */
 
 #include "ModelVSCommon.h"
+ // 定義してあればEVSMを行う。PBRLighting.hにも存在している。
+#define EVSM
 
 cbuffer ShadowModelCb : register (b1)
 {
@@ -67,11 +69,14 @@ SPSIn VSMainSkinInstancing(SVSIn vsIn, uint instanceID : SV_InstanceID)
 float4 PSMain(SPSIn psIn) : SV_Target0
 {
     // 旧バージョン
-    // float depth = psIn.pos.z;
-    // return float4(depth, depth * depth, 0.0f, 1.0f);
+#ifndef EVSM
+     float depth = psIn.pos.z;
+     return float4(depth, depth * depth, 0.0f, 1.0f);
+#else
 
     // EVSM
     float depth = psIn.pos.z;
     float pos = exp(INFINITY * depth);
     return float4(pos, pos * pos, 0.0f, 1.0f);
+#endif
 }
