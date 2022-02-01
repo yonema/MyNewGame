@@ -4,6 +4,10 @@
 
 #include "ModelVSCommon.h"
 
+cbuffer ShadowModelCb : register (b1)
+{
+    float3 playerPos;
+}
 
 // ピクセルシェーダーへの入力
 struct SPSIn
@@ -24,6 +28,7 @@ SPSIn VSMainCore(SVSIn vsIn, float4x4 mWorldLocal)
     SPSIn psIn;
 
     psIn.pos = mul(mWorldLocal, vsIn.pos);
+    //psIn.pos.xyz -= playerPos;
     float3 worldPos = psIn.pos;
     psIn.pos = mul(mView, psIn.pos);
     psIn.pos = mul(mProj, psIn.pos);

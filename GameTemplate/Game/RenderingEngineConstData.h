@@ -40,6 +40,7 @@ namespace nsNinjaAttract
 			struct SDefferdLightingCB
 			{
 				Matrix mViewProjInv;	//!< ビュープロジェクション行列の逆行列
+				Vector3 playerPos = Vector3::Zero;	//!< プレイヤーの座標
 			};
 
 			/**

@@ -18,12 +18,14 @@ namespace nsNinjaAttract
 			};
 
 			//!< BGMのサウンドのファイルパス
-			constexpr const wchar_t* const kBGMSoundFilePaht[enBGMTypeNum] =
+			constexpr const wchar_t* const kBGMSoundFilePath[enBGMTypeNum] =
 			{
 				L"Assets/sound/bgm/normalBGM.wav",
 				L"Assets/sound/bgm/swingBGM.wav",
 				L"Assets/sound/bgm/qteBGM.wav"
 			};
+			//!< リザルトのサウンドのファイルパス
+			constexpr const wchar_t* const kResultSoundFilePath = L"Assets/sound/mission/result.wav";
 
 			constexpr float kBGMSoundVolume[enBGMTypeNum] =
 			{
@@ -35,6 +37,8 @@ namespace nsNinjaAttract
 			{
 				5.0f,2.0f,1.0f
 			};
+
+			constexpr float kResultBGMVolume = 0.22f;	//!< リザルト中のBGMの音量
 		}
 	}
 }

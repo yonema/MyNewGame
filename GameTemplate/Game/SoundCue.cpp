@@ -57,8 +57,6 @@ namespace nsNinjaAttract
 		*/
 		void CSoundCue::Play(const bool isLoop)
 		{
-
-
 			// ループ再生かワンショット再生かで処理を振り分ける
 			if (isLoop)
 			{
@@ -74,6 +72,19 @@ namespace nsNinjaAttract
 			// 再生中にする
 			m_isPlaying = true;
 
+			return;
+		}
+
+		/**
+		 * @brief 複数同時再生可能なワンショット再生
+		*/
+		void CSoundCue::MultiOneShotPlay()
+		{
+			// サウンドを生成
+			CSoundSource* ss = NewGO<CSoundSource>(nsCommonData::enPriorityFirst);
+			ss->Init(m_filePath);
+			// 再生
+			ss->Play(false);
 			return;
 		}
 

@@ -46,6 +46,17 @@ namespace nsNinjaAttract
 			*/
 			void Init(const nsPlayer::CPlayer& player);
 
+			/**
+			 * @brief リザルトのサウンドの再生
+			*/
+			void PlayResultSound();
+
+			/**
+			 * @brief リザルトのサウンドの音量を設定
+			 * @param[in] volume 音量
+			*/
+			void SetResultSoundVolume(const float volume);
+
 		private:	// privateなメンバ関数
 
 			/**
@@ -75,6 +86,7 @@ namespace nsNinjaAttract
 
 			//!< スイング中のBGMのサウンド
 			nsSound::CSoundCue* m_bgmSC[nsBGMConstData::enBGMTypeNum] = {};
+			nsSound::CSoundCue* m_resultSC = nullptr;	//!< リザルトのサウンド
 
 			//!< 現在のBGMの種類
 			nsBGMConstData::EnBGMType m_currentBGMType = nsBGMConstData::enBT_Normal;
@@ -86,6 +98,8 @@ namespace nsNinjaAttract
 
 			float m_crossFadeTimer = 0.0f;				//!< クロスフェードに使用するタイマー
 			float m_crossFadeTime = 0.0f;				//!< クロスフェードのタイム
+
+			bool m_isResultSound = false;				//!< リザルトサウンド中か？
 		};
 
 	}

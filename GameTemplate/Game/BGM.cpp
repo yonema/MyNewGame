@@ -20,7 +20,7 @@ namespace nsNinjaAttract
 			{
 				// 各BGMを生成して初期化
 				m_bgmSC[i] = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
-				m_bgmSC[i]->Init(kBGMSoundFilePaht[i], nsSound::CSoundCue::enBGM);
+				m_bgmSC[i]->Init(kBGMSoundFilePath[i], nsSound::CSoundCue::enBGM);
 				// 音量を0にして再生しておく
 				m_bgmSC[i]->SetVolume(0.0f);
 				m_bgmSC[i]->Play(true);
@@ -30,6 +30,9 @@ namespace nsNinjaAttract
 			m_currentBGMType = enBT_Normal;
 			m_bgmState = enBT_Normal;
 			m_bgmSC[m_currentBGMType]->SetVolume(kBGMSoundVolume[m_currentBGMType]);
+
+			m_resultSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_resultSC->Init(kResultSoundFilePath, nsSound::CSoundCue::enSE);
 
 			return true;
 		}
@@ -43,7 +46,7 @@ namespace nsNinjaAttract
 			{
 				DeleteGO(m_bgmSC[i]);
 			}
-
+			DeleteGO(m_resultSC);
 			return;
 		}
 
@@ -52,6 +55,11 @@ namespace nsNinjaAttract
 		*/
 		void CBGM::Update()
 		{
+			if (m_isResultSound)
+			{
+				// リザルトサウンド中は、更新しない。早期リターン。
+				return;
+			}
 			// BGMのステートを更新する
 			UpdateBGMState();
 
@@ -68,6 +76,30 @@ namespace nsNinjaAttract
 		void CBGM::Init(const nsPlayer::CPlayer& player)
 		{
 			m_playerRef = &player;
+
+			return;
+		}
+
+		/**
+		 * @brief リザルトのサウンドの再生
+		*/
+		void CBGM::PlayResultSound()
+		{
+			m_resultSC->Play(false);
+			m_isResultSound = true;
+			m_bgmSC[enBT_Normal]->Play(true);
+			m_bgmSC[enBT_Normal]->SetVolume(kBGMSoundVolume[m_currentBGMType] * kResultBGMVolume);
+
+			return;
+		}
+
+		/**
+		 * @brief リザルトのサウンドの音量を設定
+		 * @param[in] volume 音量
+		*/
+		void CBGM::SetResultSoundVolume(const float volume)
+		{
+			m_bgmSC[enBT_Normal]->SetVolume(kBGMSoundVolume[m_currentBGMType] * kResultBGMVolume * volume);
 
 			return;
 		}

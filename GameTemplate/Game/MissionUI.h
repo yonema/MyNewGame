@@ -12,6 +12,7 @@ namespace nsNinjaAttract
 		namespace nsFont { class CFontRender; }		// フォントレンダラー
 	}
 	namespace nsGameState { class CGameMainState; }
+	namespace nsSound { class CSoundCue; }
 
 
 	/**
@@ -78,6 +79,11 @@ namespace nsNinjaAttract
 			void InitFont();
 
 			/**
+			 * @brief サウンドの初期化
+			*/
+			void InitSound();
+
+			/**
 			 * @brief クリアフラグをチェックする処理を更新
 			*/
 			void UpdateCheckClearFlag();
@@ -87,7 +93,7 @@ namespace nsNinjaAttract
 			 * @param[in] startPos 表示アニメーションの開始座標
 			 * @param[in] endPos 表示アニメーションの終了座標
 			*/
-			void UpdataShowMission(const Vector3& startPos, const Vector3& endPos);
+			void UpdateShowMission(const Vector3& startPos, const Vector3& endPos);
 
 			/**
 			 * @brief ミッションを非表示にする処理を更新
@@ -100,6 +106,11 @@ namespace nsNinjaAttract
 			void UpdateClearOneMission();
 
 			/**
+			 * @brief 全てのミッションをクリアした時の処理の更新
+			*/
+			void UpdateClearAllMission();
+
+			/**
 			 * @brief リザルトの時の処理の更新
 			*/
 			void UpdateResult();
@@ -108,6 +119,13 @@ namespace nsNinjaAttract
 			 * @brief サブミッションをクリアしたかどうかを調べる
 			*/
 			void CheckClearSubMission();
+
+			/**
+			 * @brief 全てのミッションをクリアした時のフレームの点滅処理
+			*/
+			void BlinkClearAllMissionFrame();
+
+			//void BlinkSprite(nsGraphic::nsSprite::CSpriteRender* sprite, float* timer, const float time)
 
 			/**
 			 * @brief ミッションのスプライトレンダラー全てにクエリを行う
@@ -125,10 +143,24 @@ namespace nsNinjaAttract
 			Level2D* m_missionLevel = nullptr;	//!< ミッション用のレベル2Dクラス
 			//!< チェックマークのスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_checkMarkSRs[nsMissionUIConstData::enMissionTypeNum];
-			nsGraphic::nsSprite::CSpriteRender* m_missionWindowSR = nullptr;	//!< ミッションウィンドウのスプライトレンダラー
-			nsGraphic::nsSprite::CSpriteRender* m_missionResultFrameSR = nullptr;	//!< ミッションリザルトの枠のスプライトレンダラー
+			//!< ミッションウィンドウのスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_missionWindowSR = nullptr;
+			//!< ミッションリザルトの枠のスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_missionResultFrameSR = nullptr;
 			//!< ミッションリザルトのテキストのスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_missionResultTextSRs[nsMissionUIConstData::enMissionResultTypeNum] = {};
+			//!< ミッションをすべてクリアした時のテキストのスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_missionAllClearTextSR = nullptr;
+			//!< ミッションをすべてクリアした時のフレームのスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_missionAllClearFrameSR = nullptr;
+			//!< 終わりへと行くスプライトレンダラー
+			nsGraphic::nsSprite::CSpriteRender* m_toEndSR = nullptr;
+			float m_toEndBlinkTimer = 0.0f;		//!< 終わりへと行くスプライトの点滅用タイマー
+
+			//!< ミッションをすべてクリアした時のスプライトのオフセット
+			Vector3 m_missionAllClearTextSpriteOffset = Vector3::Zero;
+			Vector3 m_missionAllClearFrameSpriteOffset = Vector3::Zero;
+			float m_blinkTimer = 0.0f;	//!< 点滅用タイマー
 
 			nsGraphic::nsFont::CFontRender* m_clearTimeFR = nullptr;	//!< クリアタイムのフォントレンダラー
 			nsGraphic::nsFont::CFontRender* m_numOfMissFR = nullptr;	//!< ミスの回数のフォントレンダラー
@@ -149,6 +181,13 @@ namespace nsNinjaAttract
 				nsMissionUIConstData::enMRS_showMission;
 
 			nsGameState::CGameMainState* m_gameState = nullptr;	//!< ゲームステート
+
+			nsSound::CSoundCue* m_opneMission = nullptr;		//!< ミッションを表示するときのサウンド
+			nsSound::CSoundCue* m_closeMission = nullptr;		//!< ミッションを非表示にするときにサウンド
+			nsSound::CSoundCue* m_clearOneMission = nullptr;	//!< ミッションを一つクリアした時にサウンド
+			nsSound::CSoundCue* m_clearAllMission = nullptr;	//!< ミッションをすべてクリアした時のサウンド
+			nsSound::CSoundCue* m_showResult = nullptr;			//!< リザルトを表示する時のサウンド
+			nsSound::CSoundCue* m_resultPerfect = nullptr;		//!< リザルトがパーフェクトだったときのサウンド
 
 		};
 

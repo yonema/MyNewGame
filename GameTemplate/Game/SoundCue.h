@@ -55,6 +55,11 @@ namespace nsNinjaAttract
 			void Play(const bool isLoop);
 
 			/**
+			 * @brief 複数同時再生可能なワンショット再生
+			*/
+			void MultiOneShotPlay();
+
+			/**
 			 * @brief ボリュームを設定。1.0fが通常のボリューム。
 			 * @attention 負の値を入れると、その絶対値が反映される
 			 * @param volume ボリューム

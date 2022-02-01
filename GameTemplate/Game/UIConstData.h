@@ -237,7 +237,9 @@ namespace nsNinjaAttract
 				enMS_checkClearFlag,
 				enMS_showMission,
 				enMS_hideMission,
+				enMS_beforedClearOneMission,
 				enMS_clearOneMission,
+				enMS_clearAllMission,
 				enMS_result,
 			};
 
@@ -254,6 +256,10 @@ namespace nsNinjaAttract
 			//!< ミッションのレベル2Dのファイルパス
 			constexpr const char* const kMissionLevel2DFilePath = "Assets/level2DData/mission.casl";
 			constexpr const char* const kMissionLevelObjName = "mission";	//!< ミッションのレベルオブジェクトネーム
+			//!< ミッションを全てクリアした時のテキストのレベルオブジェクトネーム
+			constexpr const char* const kMissionAllClearTextLevelObjName = "mission_AllClear_Text";
+			//!< ミッションを全てクリアした時のフレームのレベルオブジェクトネーム
+			constexpr const char* const kMissionAllClearFrameLevelObjName = "mission_AllClear_Frame";
 			//!< チェックマークのレベルオブジェクトネーム
 			constexpr const char* const kCheckMarkLevelObjNames[enMissionTypeNum] =
 			{
@@ -266,8 +272,22 @@ namespace nsNinjaAttract
 
 			//!< ミッションのスプライトのファイルパス
 			constexpr const char* const kMissionSpriteFilePath = "Assets/Image/mission/mission.DDS";
+			//!< ミッションを全てクリアした時のテキストのスプライトのファイルパス
+			constexpr const char* const kMissionAllClearTextSpriteFilePath = "Assets/Image/mission/missionAllClearText.DDS";
+			//!< ミッションを全てクリアした時のフレームのスプライトのファイルパス
+			constexpr const char* const kMissionAllClearFrameSpriteFilePath = "Assets/Image/mission/missionAllClearFrame.DDS";
 			//!< チェックマークのスプライトのファイルパス
 			constexpr const char* const kCheckMarkSpriteFilePath = "Assets/Image/mission/mission_checkMark.DDS";
+			//!< 終わりへと行くスプライトのファイルパス
+			constexpr const char* const kToEndSpriteFilePath = "Assets/Image/mission/toEnd.DDS";
+			//!< 終わりへと行くスプライトの幅
+			constexpr int kToEndSpriteWidth = static_cast<int>(128.0f * 1.0f);
+			//!< 終わりへと行くスプライトの高さ
+			constexpr int kToEndSpriteHeight = static_cast<int>(128.0f * 1.0f);
+			//!< 終わりへと行くスプライトの座標
+			static const Vector3 kToEndSpritePosition = { 200.0f,-170.0f,0.0f };
+			//!< 終わりへと行くスプライトのタイム
+			constexpr float kToEndBlinkTime = 3.0f;
 
 			//!< ミッションリザルトの枠のスプライトのファイルパス
 			constexpr const char* const kMissionResultFrameFilePath = "Assets/Image/mission/mission_result_frame.DDS";
@@ -283,13 +303,23 @@ namespace nsNinjaAttract
 				"Assets/Image/mission/mission_result_perfect.DDS"
 			};
 			//!< ミッショリザルトのテキストのスプライトの幅
-			constexpr int kMissionResultTextSpriteWidth = static_cast<int>(512.0f * 1.0f);
+			constexpr int kMissionResultTextSpriteWidth = static_cast<int>(128.0f * 1.25f);
 			//!< ミッショリザルトのテキストのスプライトの高さ
-			constexpr int kMissionResultTextSpriteHeight = static_cast<int>(512.0f * 1.0f);
+			constexpr int kMissionResultTextSpriteHeight = static_cast<int>(128.0f * 1.25f);
 
 			static const Vector3 kMissionPosition = { -425.0f,50.0f,0.0f };	//!< ミッションの座標
 			//!< ミッションの開始座標
 			static const Vector3 kMissionStartPosition = { kMissionPosition.x - 25.0f, kMissionPosition.y - 25.0f ,0.0f };
+
+			//!< ミッショリザルトのテキストの座標
+			static const Vector3 kMissionResultTextPosition = { 0.0f,-140.0f,0.0f };
+			//!< ミッショリザルトのテキストの開始の拡大率
+			constexpr float kMissionResultTextStartSclae = 4.0f;
+			//!< ミッショリザルトのテキストの終了の拡大率
+			constexpr float kMissionResultTextEndSclae = 2.0f;
+			//!< ミッショリザルトのテキストのタイム
+			constexpr float kMissionResultTextTime = 0.4f;
+
 
 			//!< リザルトのミッションの座標
 			static const Vector3 kMissionResultPosition = { 0.0f, 50.0f, 0.0f };
@@ -297,12 +327,14 @@ namespace nsNinjaAttract
 			static const Vector3 kMissionResultStartPosition = 
 			{ kMissionResultPosition.x - 25.0f, kMissionResultPosition.y - 25.0f ,0.0f };
 
+			constexpr float kBeforeShowMission = 1.0f;
+
 			constexpr float kStartShowMissionTime = 0.3f;
 			constexpr float kShowMissionTime = kStartShowMissionTime + 4.0f;
 
 			constexpr float kHideMissionTime = 0.3f;
 
-			constexpr float kWaitStartClearOneMissionTime = 0.2f;
+			constexpr float kWaitStartClearOneMissionTime = 0.5f;
 			constexpr float kInCheckMarkTime = kWaitStartClearOneMissionTime + 0.5f;
 			constexpr float kScaleUpCheckMarkTime = kInCheckMarkTime + 0.2f;
 			constexpr float kScaleuDownCheckMarkTime = kScaleUpCheckMarkTime + 0.2f;
@@ -311,6 +343,26 @@ namespace nsNinjaAttract
 			constexpr float kInCheckMarkEndScale = 3.0f;
 			constexpr float kInCheckMarkEndAlphaValue = 0.5f;
 			constexpr float kScaleUpCheckMarkEndScale = 1.5;
+
+			constexpr float kInMissionAllClearTextSpriteTime = 0.5f;
+			constexpr float kMissionAllClearTextSpriteTime = kInMissionAllClearTextSpriteTime + 2.0f;
+
+			constexpr float kInMissionAllClearStartScale = 4.0f;
+			constexpr float kInMissionAllClearEndScale = 1.0f;
+			constexpr float kMissionAllClearFrameBlinkTime = 0.5f;
+
+			//!< ミッションを表示するときのサウンドのファイルパス
+			constexpr const wchar_t* const kOpenMissionSoundFilePath = L"Assets/sound/mission/missionWindow_open2.wav";
+			//!< ミッションを非表示するときのサウンドのファイルパス
+			constexpr const wchar_t* const kCloseMissionSoundFilePath = L"Assets/sound/mission/missionWindow_close.wav";
+			//!< ミッションを一つクリアしたときのサウンドのファイルパス
+			constexpr const wchar_t* const kClearOneMissionSoundFilePath = L"Assets/sound/mission/mission_clear2.wav";
+			//!< ミッションを全てクリアしたときのサウンドのファイルパス
+			constexpr const wchar_t* const kClearAllMissionSoundFilePath = L"Assets/sound/mission/mission_allClear.wav";
+			//!< リザルトを表示するときのサウンドのファイルパス
+			constexpr const wchar_t* const kShowResultSoundFilePath = L"Assets/sound/mission/showResult.wav";
+			//!< リザルトがパーフェクトだったときのサウンドのファイルパス
+			constexpr const wchar_t* const kResultPerfectSoundFilePath = L"Assets/sound/mission/perfect.wav";
 
 		}
 	}

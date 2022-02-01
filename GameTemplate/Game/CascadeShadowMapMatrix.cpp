@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "CascadeShadowMapMatrix.h"
-
+#include "RenderingEngine.h"
 
 namespace nsNinjaAttract
 {
@@ -132,7 +132,8 @@ namespace nsNinjaAttract
 				// ライトのターゲット
 				//const Vector3 lightTarget = kLightTargetPos;
 				//Vector3 lightTarget = g_camera3D->GetTarget();
-				Vector3 lightTarget = (sceneMaxPosition + sceneMinPosition) * 0.5f;
+				Vector3 lightTarget = (sceneMaxPosition + sceneMinPosition) * 0.5f/* - 
+					*nsMyEngine::CRenderingEngine::GetInstance()->GetPlayerPositionRef()*/;
 				//// 高さは固定
 				lightTarget.y = 0.0f;
 				// ライトのポジション

@@ -7,6 +7,7 @@
 #include "GameTime.h"
 #include "GameMainState.h"
 #include "GameMainStateConstData.h"
+#include "SoundCue.h"
 
 namespace nsNinjaAttract
 {
@@ -34,6 +35,9 @@ namespace nsNinjaAttract
 			// フォントの初期化
 			InitFont();
 
+			// サウンドの初期化
+			InitSound();
+
 			// クリアフラグをチェックするステートへ遷移
 			ChangeState(enMS_checkClearFlag);
 
@@ -53,9 +57,17 @@ namespace nsNinjaAttract
 				}
 			);
 
-			// フォントんの破棄
+			// フォントの破棄
 			DeleteGO(m_clearTimeFR);
 			DeleteGO(m_numOfMissFR);
+
+			// サウンドの破棄
+			DeleteGO(m_opneMission);
+			DeleteGO(m_closeMission);
+			DeleteGO(m_clearOneMission);
+			DeleteGO(m_clearAllMission);
+			DeleteGO(m_showResult);
+			DeleteGO(m_resultPerfect);
 
 			return;
 		}
@@ -77,7 +89,7 @@ namespace nsNinjaAttract
 		{
 			m_currentClearMissionType = missionType;
 
-			ChangeState(enMS_clearOneMission);
+			ChangeState(enMS_beforedClearOneMission);
 
 			return;
 		}
@@ -102,17 +114,28 @@ namespace nsNinjaAttract
 				break;
 			case enMS_showMission:
 				// ミッションを表示する処理を更新
-				UpdataShowMission(kMissionStartPosition, kMissionPosition);
+				UpdateShowMission(kMissionStartPosition, kMissionPosition);
 				break;
 			case enMS_hideMission:
 				// ミッションを非表示にする処理を更新
 				UpdateHideMission();
 				break;
+			case enMS_beforedClearOneMission:
+				m_timer += nsTimer::GameTime().GetFrameDeltaTime();
+				if (m_timer >= kBeforeShowMission)
+				{
+					ChangeState(enMS_clearOneMission);
+				}
+				break;
 			case enMS_clearOneMission:
 				// ミッションを表示する処理を更新
-				UpdataShowMission(kMissionStartPosition, kMissionPosition);
+				UpdateShowMission(kMissionStartPosition, kMissionPosition);
 				// ミッションを一つクリアした時の処理の更新
 				UpdateClearOneMission();
+				break;
+			case enMS_clearAllMission:
+				// 全てのミッションをクリアした時の処理の更新
+				UpdateClearAllMission();
 				break;
 			case enMS_result:
 				// リザルトの時の処理の更新
@@ -149,6 +172,41 @@ namespace nsNinjaAttract
 						// 座標を設定
 						m_missionWindowSR->SetPosition(objData.position + kMissionStartPosition);
 
+						return true;
+					}
+					else if (objData.EqualObjectName(kMissionAllClearTextLevelObjName))
+					{
+						// ミッションをすべてクリアした時のテキストのスプライトの生成と初期化
+						m_missionAllClearTextSR =
+							NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird + objData.numOfLyaer);
+						m_missionAllClearTextSR->Init(
+							kMissionAllClearTextSpriteFilePath,
+							objData.width,
+							objData.height,
+							nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+							AlphaBlendMode_Trans
+						);
+						m_missionAllClearTextSpriteOffset = objData.position;
+						// 座標を設定
+						m_missionAllClearTextSR->SetPosition(objData.position + kMissionStartPosition);
+
+						return true;
+					}
+					else if (objData.EqualObjectName(kMissionAllClearFrameLevelObjName))
+					{
+						// ミッションをすべてクリアした時のフレームのスプライトの生成と初期化
+						m_missionAllClearFrameSR =
+							NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird + objData.numOfLyaer);
+						m_missionAllClearFrameSR->Init(
+							kMissionAllClearFrameSpriteFilePath,
+							objData.width,
+							objData.height,
+							nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+							AlphaBlendMode_Trans
+						);
+						m_missionAllClearFrameSpriteOffset = objData.position;
+						// 座標を設定
+						m_missionAllClearFrameSR->SetPosition(objData.position + kMissionStartPosition);
 						return true;
 					}
 
@@ -211,8 +269,19 @@ namespace nsNinjaAttract
 					nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
 					AlphaBlendMode_Trans
 				);
-				m_missionResultTextSRs[mrt]->SetPosition(kMissionResultPosition);
+				m_missionResultTextSRs[mrt]->SetPosition(kMissionResultTextPosition);
 			}
+
+			m_toEndSR = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityThird);
+			m_toEndSR->Init(
+				kToEndSpriteFilePath,
+				kToEndSpriteWidth,
+				kToEndSpriteHeight,
+				nsGraphic::nsSprite::nsSpriteConstData::kDefaultPivot,
+				AlphaBlendMode_Trans
+			);
+			m_toEndSR->SetPosition(kToEndSpritePosition);
+
 
 			// 全てのスプライトを非表示
 			QueryAllMissionSRs(
@@ -256,6 +325,31 @@ namespace nsNinjaAttract
 			return;
 		}
 
+		/**
+		 * @brief サウンドの初期化
+		*/
+		void CMissionUI::InitSound()
+		{
+			m_opneMission = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_opneMission->Init(kOpenMissionSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_closeMission = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_closeMission->Init(kCloseMissionSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_clearOneMission = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_clearOneMission->Init(kClearOneMissionSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_clearAllMission = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_clearAllMission->Init(kClearAllMissionSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_showResult = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_showResult->Init(kShowResultSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_resultPerfect = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_resultPerfect->Init(kResultPerfectSoundFilePath, nsSound::CSoundCue::enSE);
+
+			return;
+		}
 
 		/**
 		 * @brief クリアフラグをチェックする処理を更新
@@ -288,7 +382,7 @@ namespace nsNinjaAttract
 		 * @param[in] startPos 表示アニメーションの開始座標
 		 * @param[in] endPos 表示アニメーションの終了座標
 		*/
-		void CMissionUI::UpdataShowMission(const Vector3& startPos, const Vector3& endPos)
+		void CMissionUI::UpdateShowMission(const Vector3& startPos, const Vector3& endPos)
 		{
 			// タイマーを進める
 			m_timer += nsTimer::GameTime().GetFrameDeltaTime();
@@ -301,7 +395,6 @@ namespace nsNinjaAttract
 
 				m_missionWindowSR->SetPosition(pos);
 				m_missionWindowSR->SetAlphaValue(rate);
-
 				for (int i = 0; i < enMissionTypeNum ; i++)
 				{
 					if (m_checkMarkFlag[i] != true)
@@ -314,6 +407,16 @@ namespace nsNinjaAttract
 				}
 				m_missionResultFrameSR->SetPosition(pos);
 				m_missionResultFrameSR->SetAlphaValue(rate);
+				m_missionAllClearTextSR->SetPosition(pos + m_missionAllClearTextSpriteOffset);
+				m_missionAllClearTextSR->SetAlphaValue(rate);
+				m_missionAllClearFrameSR->SetPosition(pos + m_missionAllClearFrameSpriteOffset);
+				m_missionAllClearFrameSR->SetAlphaValue(rate);
+
+				if (rate <= 0.25f && m_opneMission->IsPlaying() != true)
+				{
+					// ミッションを表示するときのサウンドを再生
+					m_opneMission->Play(false);
+				}
 
 				return;
 			}
@@ -333,6 +436,10 @@ namespace nsNinjaAttract
 				}
 				m_missionResultFrameSR->SetPosition(endPos);
 				m_missionResultFrameSR->SetAlphaValue(1.0f);
+				m_missionAllClearTextSR->SetPosition(endPos + m_missionAllClearTextSpriteOffset);
+				m_missionAllClearTextSR->SetAlphaValue(1.0f);
+				m_missionAllClearFrameSR->SetPosition(endPos + m_missionAllClearFrameSpriteOffset);
+				m_missionAllClearFrameSR->SetAlphaValue(1.0f);
 				return;
 			}
 			else
@@ -349,6 +456,12 @@ namespace nsNinjaAttract
 		*/
 		void CMissionUI::UpdateHideMission()
 		{
+			if (m_timer <= 0.0f + FLT_EPSILON)
+			{
+				// ミッションを非表示するときのサウンドを再生
+				m_closeMission->Play(false);
+			}
+
 			// タイマーを進める
 			m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 
@@ -375,6 +488,10 @@ namespace nsNinjaAttract
 				}
 				m_missionResultFrameSR->SetPosition(pos);
 				m_missionResultFrameSR->SetAlphaValue(alphaValue);
+				m_missionAllClearTextSR->SetPosition(pos + m_missionAllClearTextSpriteOffset);
+				m_missionAllClearTextSR->SetAlphaValue(alphaValue);
+				m_missionAllClearFrameSR->SetPosition(pos + m_missionAllClearFrameSpriteOffset);
+				m_missionAllClearFrameSR->SetAlphaValue(alphaValue);
 				return;
 			}
 			else
@@ -395,6 +512,10 @@ namespace nsNinjaAttract
 				}
 				m_missionResultFrameSR->SetPosition(kMissionStartPosition);
 				m_missionResultFrameSR->SetAlphaValue(0.0f);
+				m_missionAllClearTextSR->SetPosition(kMissionStartPosition + m_missionAllClearTextSpriteOffset);
+				m_missionAllClearTextSR->SetAlphaValue(0.0f);
+				m_missionAllClearFrameSR->SetPosition(kMissionStartPosition + m_missionAllClearFrameSpriteOffset);
+				m_missionAllClearFrameSR->SetAlphaValue(0.0f);
 				ChangeState(enMS_checkClearFlag);
 				return;
 			}
@@ -407,7 +528,6 @@ namespace nsNinjaAttract
 		*/
 		void CMissionUI::UpdateClearOneMission()
 		{
-
 			if (m_timer <= kWaitStartClearOneMissionTime)
 			{
 				if (m_timer <= 0.0f + FLT_EPSILON)
@@ -418,6 +538,10 @@ namespace nsNinjaAttract
 			}
 			else if (m_timer <= kInCheckMarkTime)
 			{
+				if (m_checkMarkSRs[m_currentClearMissionType]->GetAlphaValue() <= 0.0f + FLT_EPSILON)
+				{
+					m_clearOneMission->MultiOneShotPlay();
+				}
 				const float rate = (m_timer - kWaitStartClearOneMissionTime) / 
 					(kInCheckMarkTime - kWaitStartClearOneMissionTime);
 				const float scale = Math::Lerp<float>(rate, kInCheckMarkStartScale, kInCheckMarkEndScale);
@@ -446,7 +570,46 @@ namespace nsNinjaAttract
 			else if (m_timer <= kShowMissionTime)
 			{
 				m_checkMarkSRs[m_currentClearMissionType]->SetScale(1.0f);
+				if (nsGameState::CGameMainState::GetInstance()->GetGameMainStateState() ==
+					nsGameState::nsGameMainStateConstData::enGS_beforeClearDirecting)
+				{
+					m_checkMarkFlag[m_currentClearMissionType] = true;
+					ChangeState(enMS_clearAllMission);
+				}
 				return;
+			}
+
+			return;
+		}
+
+		/**
+		 * @brief 全てのミッションをクリアした時の処理の更新
+		*/
+		void CMissionUI::UpdateClearAllMission()
+		{
+			m_timer += nsTimer::GameTime().GetFrameDeltaTime();
+
+			if (m_timer < kInMissionAllClearTextSpriteTime)
+			{
+				const float rate = m_timer / kInMissionAllClearTextSpriteTime;
+				const float scale = Math::Lerp<float>(rate, kInMissionAllClearStartScale, kInMissionAllClearEndScale);
+				const float alphaValue = rate;
+				m_missionAllClearTextSR->SetScale(scale);
+				m_missionAllClearTextSR->SetAlphaValue(alphaValue);
+			}
+			else if (m_timer <= kMissionAllClearTextSpriteTime)
+			{
+				if (std::fabsf(m_missionAllClearTextSR->GetAlphaValue() - 1.0f) > FLT_EPSILON)
+				{
+					m_clearAllMission->Play(false);
+				}
+				m_missionAllClearTextSR->SetScale(1.0f);
+				m_missionAllClearTextSR->SetAlphaValue(1.0f);
+				BlinkClearAllMissionFrame();
+			}
+			else
+			{
+				ChangeState(enMS_hideMission);
 			}
 
 			return;
@@ -457,12 +620,14 @@ namespace nsNinjaAttract
 		*/
 		void CMissionUI::UpdateResult()
 		{
+			BlinkClearAllMissionFrame();
+
 			float buff = 0.0f;
 			switch (m_missionResultState)
 			{
 			case enMRS_showMission:
-				UpdataShowMission(kMissionResultStartPosition, kMissionResultPosition);
-
+				UpdateShowMission(kMissionResultStartPosition, kMissionResultPosition);
+				m_missionAllClearFrameSR->SetAlphaValue(0.0f);
 				if (m_timer >= 1.0f)
 				{
 					m_missionResultState = enMRS_subMission;
@@ -517,16 +682,15 @@ namespace nsNinjaAttract
 			case enMRS_showResult:
 				m_timer += nsTimer::GameTime().GetFrameDeltaTime();
 
-				if (m_timer <= kStartShowMissionTime)
+				if (m_timer < kMissionResultTextTime)
 				{
 					const float rate = m_timer / kStartShowMissionTime;
-					Vector3 pos = Vector3::Zero;
-					pos.Lerp(rate, kMissionResultStartPosition, kMissionResultPosition);
+					const float scale = Math::Lerp<float>(rate, kMissionResultTextStartSclae, kMissionResultTextEndSclae);
 
 					for (auto& mrtSR : m_missionResultTextSRs)
 					{
-						mrtSR->SetPosition(pos);
 						mrtSR->SetAlphaValue(rate);
+						mrtSR->SetScale(scale);
 					}
 
 					return;
@@ -535,8 +699,20 @@ namespace nsNinjaAttract
 				{
 					for (auto& mrtSR : m_missionResultTextSRs)
 					{
-						mrtSR->SetPosition(kMissionResultPosition);
+						if (mrtSR->IsActive() != true)
+						{
+							continue;
+						}
+						if (std::fabsf(mrtSR->GetAlphaValue() - 1.0f) > FLT_EPSILON)
+						{
+							m_showResult->Play(false);
+							if (mrtSR == m_missionResultTextSRs[enMRT_perfect])
+							{
+								m_resultPerfect->Play(false);
+							}
+						}						
 						mrtSR->SetAlphaValue(1.0f);
+						mrtSR->SetScale(1.0f);
 					}
 					return;
 				}
@@ -593,6 +769,40 @@ namespace nsNinjaAttract
 			return;
 		}
 
+
+		/**
+		 * @brief 全てのミッションをクリアした時のフレームの点滅処理
+		*/
+		void CMissionUI::BlinkClearAllMissionFrame()
+		{
+			if (m_missionAllClearFrameSR->IsActive() != true)
+			{
+				return;
+			}
+			m_blinkTimer += nsTimer::GameTime().GetFrameDeltaTime();
+			constexpr float halfTime = kMissionAllClearFrameBlinkTime * 0.5f;
+
+			if (m_blinkTimer <= halfTime)
+			{
+				const float alphaValue = m_blinkTimer / halfTime;
+				m_missionAllClearFrameSR->SetAlphaValue(alphaValue);
+			}
+			else if (m_blinkTimer <= kMissionAllClearFrameBlinkTime)
+			{
+				const float alphaValue = 1.0f - (m_blinkTimer - halfTime) / halfTime;
+				m_missionAllClearFrameSR->SetAlphaValue(alphaValue);
+			}
+			else
+			{
+				m_blinkTimer -= kMissionAllClearFrameBlinkTime;
+				m_missionAllClearFrameSR->SetAlphaValue(0.0f);
+
+			}
+
+			return;
+		}
+
+
 		/**
 		 * @brief ミッションのスプライトレンダラー全てにクエリを行う
 		 * @param[in] func 実行する関数
@@ -611,6 +821,9 @@ namespace nsNinjaAttract
 			{
 				func(mrtSR);
 			}
+			func(m_missionAllClearTextSR);
+			func(m_missionAllClearFrameSR);
+			func(m_toEndSR);
 
 			return;
 		}
@@ -644,6 +857,12 @@ namespace nsNinjaAttract
 			case enMS_clearOneMission:
 				m_missionWindowSR->Activate();
 				m_checkMarkSRs[m_currentClearMissionType]->Activate();
+				break;
+			case enMS_clearAllMission:
+				m_missionAllClearTextSR->Activate();
+				m_missionAllClearTextSR->SetAlphaValue(0.0f);
+				m_missionAllClearFrameSR->Activate();
+				m_missionAllClearFrameSR->SetAlphaValue(0.0f);
 				break;
 			case enMS_result:
 				m_missionWindowSR->Activate();

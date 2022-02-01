@@ -188,6 +188,15 @@ public:
 	{
 		m_constantBufferCPU.mulColor.w = alphaValue;
 	}
+	
+	/**
+	 * @brief スプライトのアルファ値を得る
+	 * @return アルファ値
+	*/
+	float GetAlphaValue() const
+	{
+		return m_constantBufferCPU.mulColor.w;
+	}
 
 	/**
 	 * @brief アルベドカラーを制御するか？を設定

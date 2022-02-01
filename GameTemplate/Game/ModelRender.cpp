@@ -700,6 +700,11 @@ namespace nsNinjaAttract
 					shadowModelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
 				}
 
+				shadowModelInitData.m_expandConstantBuffer[0] = 
+					nsMyEngine::CRenderingEngine::GetInstance()->GetPlayerPositionRef();
+				shadowModelInitData.m_expandConstantBufferSize[0] = 
+					sizeof(*nsMyEngine::CRenderingEngine::GetInstance()->GetPlayerPositionRef());
+
 				// シャドウマップ描画用のモデルを生成して初期化する
 				for (auto& shadowModels : m_shadowModels)
 				{

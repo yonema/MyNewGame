@@ -28,7 +28,7 @@ namespace nsNinjaAttract
 				enGS_goTitle
 			};
 
-			constexpr float kStartClearDirectingTime = 5.0f;
+			constexpr float kStartClearDirectingTime = 5.5f;
 		}
 	}
 }

@@ -13,6 +13,7 @@
 #include "Fade.h"
 #include "GameMainStateConstData.h"
 #include "TitleMap.h"
+#include "SoundCue.h"
 
 namespace nsNinjaAttract
 {
@@ -60,6 +61,10 @@ namespace nsNinjaAttract
 			m_bgm = NewGO<nsBGM::CBGM>(nsCommonData::enPriorityFirst);
 			m_bgm->Init(*m_player);
 
+			// 決定音のサウンドの生成と初期化
+			m_decisionSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_decisionSC->Init(kDecisionSoundFilePath, nsSound::CSoundCue::enSE);
+
 			// フェードインを開始
 			nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeIn();
 
@@ -84,6 +89,8 @@ namespace nsNinjaAttract
 					return true;
 				}
 			);
+
+			DeleteGO(m_decisionSC);
 
 			if (m_backGround)
 			{
@@ -135,6 +142,7 @@ namespace nsNinjaAttract
 				{
 					m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_clearDirecting);
 					nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeIn(0.5f);
+					m_bgm->PlayResultSound();
 				}
 				break;
 			case nsGameState::nsGameMainStateConstData::enGS_clearDirecting:
@@ -147,6 +155,7 @@ namespace nsNinjaAttract
 
 				if (g_pad[0]->IsTrigger(enButtonA))
 				{
+					m_decisionSC->Play(false);
 					m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_goTitle);
 				}
 				break;
@@ -160,8 +169,14 @@ namespace nsNinjaAttract
 						nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeOut(0.5f);
 					}
 				}
+				if (nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->IsFadeEnd() != true)
+				{
+					const float volume = nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->GetFadeRate();
+					m_bgm->SetResultSoundVolume(volume);
+				}
 				if (m_directingTimer < 2.5f)
 				{
+					m_bgm->SetResultSoundVolume(0.0f);
 					return;
 				}
 				// タイトルマップを生成

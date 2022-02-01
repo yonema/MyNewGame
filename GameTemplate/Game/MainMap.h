@@ -9,7 +9,7 @@ namespace nsNinjaAttract
 	namespace nsBackGround { class CBackGround; }	// バックグラウンドクラス
 	namespace nsAI { class CAIField; }				// AIフィールドクラス
 	namespace nsLevel3D { class CLevel3D; }			// 3Dレベルクラス
-
+	namespace nsSound { class CSoundCue; }			// サウンド
 
 	/**
 	 * @brief マップ（レベル）用ネームスペース
@@ -81,6 +81,7 @@ namespace nsNinjaAttract
 			nsBackGround::CBackGround* m_backGround = nullptr;	//!< バックグラウンドクラス
 			nsAI::CAIField* m_aiField = nullptr;	//!< AIのフィールドクラス
 			float m_directingTimer = 0.0f;	//!< 演出用タイマー
+			nsSound::CSoundCue* m_decisionSC = nullptr;	//!< 決定音のサウンド
 		};
 
 	}

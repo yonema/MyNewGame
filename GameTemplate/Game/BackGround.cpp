@@ -71,13 +71,14 @@ namespace nsNinjaAttract
 		{
 			// ここでリターンしたら、建物と小物を全く生成しない。
 			//return true;
-
+			static const Vector3 buff = { 10000.0f,0.0f,-50000.0f };
 			// 建物用の3Dレベルの初期化
 			// マップチップのインスタンスは生成しない
 			m_buildingLevel3D->Init(
 				kLevelFilePath[enLevelPlateAndBuildings],
 				[&](nsLevel3D::SLevelObjectData& objData)
 				{
+					//objData.position += buff;
 					// 建物の生成
 					if (objData.ForwardMatchName(nsBuilding::nsBuildingConstData::kBuildingForwardName) != true)
 					{

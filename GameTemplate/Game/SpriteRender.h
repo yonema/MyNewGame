@@ -205,6 +205,15 @@ namespace nsNinjaAttract
 				}
 
 				/**
+				 * @brief スプライトのアルファ値を得る
+				 * @return アルファ値
+				*/
+				float GetAlphaValue() const
+				{
+					return m_sprite.GetAlphaValue();
+				}
+
+				/**
 				 * @brief アルベドカラーを制御するか？を設定
 				 * @param[in] isContolAlbedo アルベドカラーを制御するか？
 				*/

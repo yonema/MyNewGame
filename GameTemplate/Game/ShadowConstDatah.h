@@ -38,7 +38,7 @@ namespace nsNinjaAttract
 				//!< カスケードシャドウの最大深度
 				constexpr float kCascadeMaxDepth = 50000.0f;
 				//!< デフォルトのカスケードシャドウのエリア率
-				constexpr float kDefaultCascadeAreaRateArray[enShadowMapArea_num] = { 0.3f,0.5f, 1.0f };
+				constexpr float kDefaultCascadeAreaRateArray[enShadowMapArea_num] = { 0.05f,0.1f, 0.3f };
 				//constexpr float kDefaultCascadeAreaRateArray[enShadowMapArea_num] = { 0.01f,0.3f, 1.0f };
 
 				//!< デフォルトのクリアカラー

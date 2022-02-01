@@ -264,6 +264,24 @@ namespace nsNinjaAttract
 			void PreDelete();
 
 			/**
+			 * @brief プレイヤーの座標を設定
+			 * @param[in] pos 座標
+			*/
+			void SetPlayerPosition(const Vector3& pos)
+			{
+				m_defferdLightingCB.playerPos = pos;
+			}
+
+			/**
+			 * @brief プレイヤーの座標の参照を得る
+			 * @return プレイヤーの座標の参照
+			*/
+			Vector3* GetPlayerPositionRef()
+			{
+				return &m_defferdLightingCB.playerPos;
+			}
+
+			/**
 			 * @brief レンダリングエンジンを実行
 			 * @param[in] stopWatch ストップウォッチ
 			*/

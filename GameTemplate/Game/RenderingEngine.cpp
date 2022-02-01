@@ -426,7 +426,16 @@ namespace nsNinjaAttract
 			// ディファードライティングに必要なデータを更新する
 
 			// ビュープロジェクション行列の逆行列更新
+			//Vector3 buffPos = g_camera3D->GetPosition();
+			//Vector3 buffTarget = g_camera3D->GetTarget();
+			//g_camera3D->SetPosition(buffPos - m_defferdLightingCB.playerPos);
+			//g_camera3D->SetTarget(buffTarget - m_defferdLightingCB.playerPos);
+			//g_camera3D->Update();
 			m_defferdLightingCB.mViewProjInv.Inverse(g_camera3D->GetViewProjectionMatrix());
+			//g_camera3D->SetPosition(buffPos);
+			//g_camera3D->SetTarget(buffTarget);
+			//g_camera3D->Update();
+
 
 			// ライトビュープロジェクション行列を更新
 			for (int ligNo = 0; ligNo < nsLight::nsLightConstData::kMaxDirectionalLightNum; ligNo++)

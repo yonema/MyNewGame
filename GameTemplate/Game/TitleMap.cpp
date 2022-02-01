@@ -142,7 +142,7 @@ namespace nsNinjaAttract
 			// BGM‚ÌƒTƒEƒ“ƒh‚Ì‰Šú‰»
 			m_bgmSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_bgmSC->Init(
-				nsBGM::nsBGMConstData::kBGMSoundFilePaht[nsBGM::nsBGMConstData::enBT_Swing],
+				nsBGM::nsBGMConstData::kBGMSoundFilePath[nsBGM::nsBGMConstData::enBT_Swing],
 				nsSound::CSoundCue::enBGM
 			);
 

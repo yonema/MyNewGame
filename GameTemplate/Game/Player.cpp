@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "GameMainState.h"
 #include "GameMainStateConstData.h"
+#include "RenderingEngine.h"
 
 namespace nsNinjaAttract
 {
@@ -105,6 +106,9 @@ namespace nsNinjaAttract
 
 			// プレイヤーが敵を捕まえる処理クラスを実行
 			m_playerCatchEnemy->ExecuteUpdate();
+
+			// レンダリングエンジンにプレイヤーの座標を伝える
+			nsMyEngine::CRenderingEngine::GetInstance()->SetPlayerPosition(m_position);
 
 			return;
 		}
