@@ -86,8 +86,6 @@ namespace nsNinjaAttract
 		*/
 		void CPlayerCamera::ExecuteUpdate()
 		{
-
-
 			if (m_isOnEnemyCamera)
 			{
 				// 敵の上に乗っている時のカメラの処理
@@ -102,22 +100,17 @@ namespace nsNinjaAttract
 				AutoTurnToPlayerDestination();
 			}
 
-			static bool isMoveCamera = true;
-			if (g_pad[0]->IsTrigger(enButtonStart)) {
-				isMoveCamera = !isMoveCamera;
-			}
-			if (isMoveCamera) {
-				// カメラの視点
-				Vector3 cameraPos = Vector3::Back;
-				// カメラの注視点
-				Vector3 camereTargetPos = Vector3::Zero;
+			// カメラの視点
+			Vector3 cameraPos = Vector3::Back;
+			// カメラの注視点
+			Vector3 camereTargetPos = Vector3::Zero;
 
-				// カメラの視点と注視点を計算する
-				CalcCameraPositionAndTargetPos(&cameraPos, &camereTargetPos);
+			// カメラの視点と注視点を計算する
+			CalcCameraPositionAndTargetPos(&cameraPos, &camereTargetPos);
 
-				// バネカメラを更新する
-				UpdateSpringCamera(cameraPos, camereTargetPos);
-			}
+			// バネカメラを更新する
+			UpdateSpringCamera(cameraPos, camereTargetPos);
+
 
 			return;
 		}
