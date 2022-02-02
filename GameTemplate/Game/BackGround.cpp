@@ -29,6 +29,7 @@ namespace nsNinjaAttract
 			// スカイキューブの生成と初期化
 			m_skyCube = NewGO<nsNature::CSkyCube>(nsCommonData::enPriorityFirst);
 			m_skyCube->Init(nsNature::nsSkyCubeConstData::enSkyCubeType_day);
+			m_skyCube->SetPosition(nsLevel3D::CLevel3D::m_kLevelObjectOffset);
 
 			// 建物の生成
 			m_buildings = NewGO<nsBuilding::CBuildings>(nsCommonData::enPriorityFirst);

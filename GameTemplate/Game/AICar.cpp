@@ -46,6 +46,11 @@ namespace nsNinjaAttract
 
 			// ƒ‚ƒfƒ‹‚Ì‰Šú‰»
 			m_modelRender->Init(kCarModelFilePath[m_carNumber]);
+			// LOD‚Ìİ’è
+			m_modelRender->InitLODModel(kCarModelLODFilePath[m_carNumber]);
+			m_modelRender->SetIsEnableLOD(true);
+			m_modelRender->SetDistanceLOD(500.0f);
+
 
 			// Ô‚ÌˆÚ“®‘¬“x‚ğİ’è
 			m_moveSpeed = kCarSpeed;

@@ -251,12 +251,20 @@ namespace nsNinjaAttract
 		{
 			Matrix projMatrix;
 			projMatrix.MakeProjectionMatrix(
-				g_camera3D->GetViewAngle() * 1.5f,
+				g_camera3D->GetViewAngle() * 1.0f,
 				g_camera3D->GetAspect(),
 				g_camera3D->GetNear(),
 				g_camera3D->GetFar()
 			);
 			m_viewProjMatrixForViewCulling.Multiply(g_camera3D->GetViewMatrix(), projMatrix);
+			//Camera cam;
+			//cam.SetViewAngle(g_camera3D->GetViewAngle());
+			//cam.SetNear(g_camera3D->GetNear());
+			//cam.SetFar(g_camera3D->GetFar());
+			//cam.SetPosition(Vector3::Zero);
+			//cam.SetTarget(Vector3::Front * 100.0f);
+			//cam.Update();
+			//m_viewProjMatrixForViewCulling.Multiply(cam.GetViewMatrix(), projMatrix);
 
 			return;
 		}

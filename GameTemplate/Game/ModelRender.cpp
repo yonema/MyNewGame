@@ -667,6 +667,14 @@ namespace nsNinjaAttract
 						nullptr
 					);
 
+					// 影モデルのLOD用のインスタンシング用の設定
+					m_shadowWorldMatrixArrayBufferLOD = std::make_unique<Matrix[]>(m_maxInstance);
+					m_shadowWorldMatrixArraySBLOD.Init(
+						sizeof(Matrix),
+						m_maxInstance,
+						nullptr
+					);
+
 					m_modelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySBLOD;
 				}
 
@@ -707,7 +715,7 @@ namespace nsNinjaAttract
 				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
 				if (m_isEnableInstancingDraw)
 				{
-					shadowModelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySB;
+					shadowModelInitData.m_expandShaderResoruceView[0] = &m_shadowWorldMatrixArraySB;
 				}
 
 				shadowModelInitData.m_expandConstantBuffer[0] = 
@@ -741,7 +749,7 @@ namespace nsNinjaAttract
 						shadowModelInitData.m_lodTkmFilePath = m_modelInitData.m_lodTkmFilePath;				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
 						if (m_isEnableInstancingDraw)
 						{
-							shadowModelInitData.m_expandShaderResoruceView[0] = &m_worldMatrixArraySBLOD;
+							shadowModelInitData.m_expandShaderResoruceView[0] = &m_shadowWorldMatrixArraySBLOD;
 						}
 						lodShadowModel = std::make_unique<Model>();
 						lodShadowModel->Init(shadowModelInitData);
@@ -772,6 +780,17 @@ namespace nsNinjaAttract
 						m_maxInstance,
 						nullptr
 					);
+
+					// 影用のデータを構築
+					// 影用のワールド行列の配列のメモリを確保
+					m_shadowWorldMatrixArrayBuffer = std::make_unique<Matrix[]>(m_maxInstance);
+					// 影用のワールド行列をGPUに転送するためのストラクチャードバッファを確保
+					m_shadowWorldMatrixArraySB.Init(
+						sizeof(Matrix),
+						m_maxInstance,
+						nullptr
+					);
+
 					m_isEnableInstancingDraw = true;
 				}
 			}
@@ -833,13 +852,17 @@ namespace nsNinjaAttract
 							return;
 
 						// シャドウマップに描画するモデルを描画
-						m_shadowModels[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix, m_fixNumInstanceOnFrame);
+						m_shadowModels[ligNo][shadowMapNo]->Draw(
+							rc, Matrix::Identity, lvpMatrix, m_shadowFixNumInstanceOnFrame
+						);
 
 						if (m_isEnableLOD)
 						{
 							// LODが有効なら
 							// LOD用のモデルを描画
-							m_lodShadowModel[ligNo][shadowMapNo]->Draw(rc, Matrix::Identity, lvpMatrix, m_fixNumInstanceOnFrameLOD);
+							m_lodShadowModel[ligNo][shadowMapNo]->Draw(
+								rc, Matrix::Identity, lvpMatrix, m_shadowFixNumInstanceOnFrameLOD
+							);
 						}
 					}
 				}
@@ -900,15 +923,14 @@ namespace nsNinjaAttract
 				// インスタンスの確定数をリセット
 				m_fixNumInstanceOnFrame = 0;
 				m_fixNumInstanceOnFrameLOD = 0;
+				m_shadowFixNumInstanceOnFrame = 0;
+				m_shadowFixNumInstanceOnFrameLOD = 0;
 
 				// ビューフラスタムに含まれているインスタンスのみ描画する。
 				for (int instanceId = 0; instanceId < m_numInstance; instanceId++)
 				{
-					if (m_geometryDatas[instanceId]->IsInViewFrustum() != true)
-					{
-						// ビューフラスタムに含まれていない。
-						//continue;
-					}
+					// ビューフラスタムに含まれているか？
+					bool isInViewFrustum = m_geometryDatas[instanceId]->IsInViewFrustum();
 
 					// ビューフラスタムに含まれている。
 
@@ -916,14 +938,29 @@ namespace nsNinjaAttract
 					if (m_isEnableLOD != true || m_geometryDatas[instanceId]->GetDistanceFromCamera() < m_distanceLOD)
 					{
 						// 普通のモデル用
-						m_worldMatrixArrayBuffer[m_fixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
-						m_fixNumInstanceOnFrame++;
+						if (isInViewFrustum)
+						{	
+							// ビューフラスタムに含まれているものだけ描画する。
+							m_worldMatrixArrayBuffer[m_fixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
+							m_fixNumInstanceOnFrame++;
+						}
+						// 影はビューフラスタムに含まれていなくても、描画する。
+						m_shadowWorldMatrixArrayBuffer[m_shadowFixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
+						m_shadowFixNumInstanceOnFrame++;
+
 					}
 					else
 					{
 						// LOD用のモデル用
-						m_worldMatrixArrayBufferLOD[m_fixNumInstanceOnFrameLOD] = m_worldMatrixArray[instanceId];
-						m_fixNumInstanceOnFrameLOD++;
+						if (isInViewFrustum)
+						{
+							// ビューフラスタムに含まれているものだけ描画する。
+							m_worldMatrixArrayBufferLOD[m_fixNumInstanceOnFrameLOD] = m_worldMatrixArray[instanceId];
+							m_fixNumInstanceOnFrameLOD++;
+						}
+						// 影はビューフラスタムに含まれていなくても、描画する。
+						m_shadowWorldMatrixArrayBufferLOD[m_shadowFixNumInstanceOnFrame] = m_worldMatrixArray[instanceId];
+						m_shadowFixNumInstanceOnFrameLOD++;
 					}
 				}
 
@@ -935,6 +972,7 @@ namespace nsNinjaAttract
 
 				// ストラクチャードバッファを更新
 				m_worldMatrixArraySB.Update(m_worldMatrixArrayBuffer.get());
+				m_shadowWorldMatrixArraySB.Update(m_shadowWorldMatrixArrayBuffer.get());
 				// モデルを描画
 				m_model->Draw(rc, m_fixNumInstanceOnFrame);
 
@@ -943,6 +981,7 @@ namespace nsNinjaAttract
 					// LODが有効なら
 					// ストラクチャードバッファを更新
 					m_worldMatrixArraySBLOD.Update(m_worldMatrixArrayBufferLOD.get());
+					m_shadowWorldMatrixArraySBLOD.Update(m_shadowWorldMatrixArrayBufferLOD.get());
 					// モデルを描画
 					m_lodModel->Draw(rc, m_fixNumInstanceOnFrameLOD);
 				}

@@ -493,11 +493,17 @@ namespace nsNinjaAttract
 				int	m_maxInstance = 1;						//!< 最大インスタンス数。
 				int	m_fixNumInstanceOnFrame = 0;			//!< このフレームに描画するインスタンスの数の確定数。
 				int	m_fixNumInstanceOnFrameLOD = 0;			//!< LOD用のこのフレームに描画するインスタンスの数の確定数。
+				int	m_shadowFixNumInstanceOnFrame = 0;		//!< 影用のこのフレームに描画するインスタンスの数の確定数。
+				int	m_shadowFixNumInstanceOnFrameLOD = 0;	//!< 影用のLOD用のこのフレームに描画するインスタンスの数の確定数。
 				std::unique_ptr<Matrix[]> m_worldMatrixArray;	//!< ワールド行列の配列。
 				std::unique_ptr<Matrix[]> m_worldMatrixArrayBuffer;	//!< カリング後のワールド行列の配列。
 				std::unique_ptr<Matrix[]> m_worldMatrixArrayBufferLOD;	//!< LOD用のカリング後のワールド行列の配列。
+				std::unique_ptr<Matrix[]> m_shadowWorldMatrixArrayBuffer;	//!< 影モデル用カリング後のワールド行列の配列。
+				std::unique_ptr<Matrix[]> m_shadowWorldMatrixArrayBufferLOD;	//!< 影モデル用LOD用のカリング後のワールド行列の配列。
 				StructuredBuffer m_worldMatrixArraySB;		//!< ワールド行列の配列のストラクチャードバッファ。
 				StructuredBuffer m_worldMatrixArraySBLOD;	//!< LOD用のールド行列の配列のストラクチャードバッファ。
+				StructuredBuffer m_shadowWorldMatrixArraySB;	//!< 影モデル用ワールド行列の配列のストラクチャードバッファ。
+				StructuredBuffer m_shadowWorldMatrixArraySBLOD;	//!< 影モデル用LOD用のールド行列の配列のストラクチャードバッファ。
 
 				std::vector<GeometryDataPtr> m_geometryDatas;	//!< ジオメトリ情報のコンテナ
 				float m_distanceLOD = nsModelConstData::kDefaultDistanceLOD;	//!< LODの距離

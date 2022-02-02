@@ -32,6 +32,14 @@ namespace nsNinjaAttract
 				"Assets/modelData/car/sedan_car_blue.tkm"
 			};
 
+			// 車のLOD用のモデルデータのファイルパス
+			constexpr const char* const kCarModelLODFilePath[enCarTypeNum] =
+			{
+				"Assets/modelData/car/sedan_car_LOD.tkm",
+				"Assets/modelData/car/sedan_car_red_LOD.tkm",
+				"Assets/modelData/car/sedan_car_blue_LOD.tkm"
+			};
+
 			//!< 爆発のエフェクトのファイルパス
 			constexpr const char16_t* const kExplotionEffectFilePath = u"Assets/effect/explosion.efk";
 			// 爆発のエフェクトが出る座標の、高さのバッファ
