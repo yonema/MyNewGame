@@ -132,7 +132,7 @@ namespace nsNinjaAttract
 				// ライトのターゲット
 				//const Vector3 lightTarget = kLightTargetPos;
 				//Vector3 lightTarget = g_camera3D->GetTarget();
-				Vector3 lightTarget = (sceneMaxPosition + sceneMinPosition) * 0.5f/* - 
+				Vector3 lightTarget = g_camera3D->GetPosition();/* -
 					*nsMyEngine::CRenderingEngine::GetInstance()->GetPlayerPositionRef()*/;
 				//// 高さは固定
 				lightTarget.y = 0.0f;

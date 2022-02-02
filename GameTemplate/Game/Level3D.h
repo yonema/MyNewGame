@@ -150,6 +150,8 @@ namespace nsNinjaAttract
 			static const int m_kMaxPathSize = 256;			//!< ファイルパスの最大サイズ
 			static const wchar_t* m_kDefaultDirectoryPath;	//!< デフォルトのディレクトリのパス
 			static const wchar_t* m_kDirectoryPathTail;		//!< ディレクトリのパスの末尾
+		public:		// publicな定数
+			static const Vector3 m_kLevelObjectOffset;		//!< レベルオブジェクトのオフセット
 		private:	// データメンバ
 			using BonePtr = std::unique_ptr<Bone>;		//!< ボーンPtr
 			std::vector<BonePtr> m_bonelist;			//!< ボーンのリスト

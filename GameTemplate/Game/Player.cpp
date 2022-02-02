@@ -3,6 +3,7 @@
 #include "GameMainState.h"
 #include "GameMainStateConstData.h"
 #include "RenderingEngine.h"
+#include "Level3D.h"
 
 namespace nsNinjaAttract
 {
@@ -261,8 +262,10 @@ namespace nsNinjaAttract
 				m_playerMove->ResetMoveVecZ();
 				// 歩きと走りのクラスの移動パラメータを合わせる
 				m_playerMove->MuchWalkAndRunMoveParam();
-				static const Vector3 pos = { 0.0f,20.0f,0.0f };
-				static const Vector3 camPos = {100.0f, 50.0f, -200.0f};
+				Vector3 pos = { 0.0f,20.0f,0.0f };
+				pos -= nsLevel3D::CLevel3D::m_kLevelObjectOffset;
+				Vector3 camPos = {100.0f, 50.0f, -200.0f - 0.0f};
+				camPos -= nsLevel3D::CLevel3D::m_kLevelObjectOffset;
 				m_playerMove->SetDirectPosition(pos);
 				Quaternion qRot;
 				qRot.SetRotationDegY(180.0f);

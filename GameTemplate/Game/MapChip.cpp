@@ -107,6 +107,9 @@ namespace nsNinjaAttract
 				m_modelRender->IniTranslucent(*m_filePath.get());
 			}
 
+			// シャドウキャスターか？を設定
+			m_modelRender->SetIsShadowCaster(m_shadowCaster);
+
 			// LOD用のモデルが指定されているか？
 			if (m_lodModelFilePath)
 			{

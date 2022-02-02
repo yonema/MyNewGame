@@ -115,15 +115,20 @@ namespace nsNinjaAttract
 			 * @param[in] numAnimationClip アニメーションクリップの数
 			 * @param[in] インスタンスの最大数
 			 * @param[in] modelUpAxis モデルのUP軸
+			 * @param[in] shadowCullFront 影モデルをフロントカリングにするか？
 			*/
 			void CModelRender::Init(
 				const char* filePath,
 				AnimationClip* animationClips,
 				const int numAnimationClip,
 				const int maxInstance,
-				const EnModelUpAxis modelUpAxis
+				const EnModelUpAxis modelUpAxis,
+				const bool shadowCullFront
 			)
 			{
+				// 影モデルをフロントカリングにするか？を設定
+				m_isShadowCullFront = shadowCullFront;
+
 				// モデルの初期化データの共通部分の設定
 				SetCommonModelInitData(filePath, maxInstance, modelUpAxis);
 
@@ -693,6 +698,11 @@ namespace nsNinjaAttract
 				shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32G32_FLOAT;
 				// LODのモデルではない
 				shadowModelInitData.m_lodNum = 0;
+				if (m_isShadowCullFront)
+				{
+					// 影モデルをフロントカリングにする
+					shadowModelInitData.m_cullMode = D3D12_CULL_MODE_FRONT;
+				}
 
 				// インスタンシング描画を行う場合は、インスタンシング描画用のデータを設定
 				if (m_isEnableInstancingDraw)
@@ -897,7 +907,7 @@ namespace nsNinjaAttract
 					if (m_geometryDatas[instanceId]->IsInViewFrustum() != true)
 					{
 						// ビューフラスタムに含まれていない。
-						continue;
+						//continue;
 					}
 
 					// ビューフラスタムに含まれている。

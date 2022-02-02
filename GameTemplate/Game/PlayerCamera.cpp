@@ -2,6 +2,7 @@
 #include "PlayerCamera.h"
 #include "Player.h"
 #include "AICar.h"
+#include "Level3D.h"
 
 namespace nsNinjaAttract
 {
@@ -50,7 +51,9 @@ namespace nsNinjaAttract
 				SetIsControl(false);
 				m_toCameraVec = kDefaultToCameraVec;
 				m_toCameraVec.z *= -1.0f;
-				g_camera3D->SetPosition({ -17788.7656f,9081.0f,61081.4609f});
+				Vector3 pos = { -17788.7656f,9081.0f,61081.4609f };
+				pos -= nsLevel3D::CLevel3D::m_kLevelObjectOffset;
+				g_camera3D->SetPosition(pos);
 				g_camera3D->SetTarget(g_camera3D->GetPosition() + Vector3::Back * 50.0f);
 			}
 

@@ -72,13 +72,15 @@ namespace nsNinjaAttract
 				 * @param[in] numAnimationClip アニメーションクリップの数
 				 * @param[in] インスタンスの最大数
 				 * @param[in] modelUpAxis モデルのUP軸
+				 * @param[in] shadowCullFront 影モデルをフロントカリングにするか？
 				*/
 				void Init(
 					const char* filePath,
 					AnimationClip* animationClips = nullptr,
 					const int numAnimationClip = 0,
 					const int maxInstance = 1,
-					const EnModelUpAxis modelUpAxis = EnModelUpAxis::enModelUpAxisZ
+					const EnModelUpAxis modelUpAxis = EnModelUpAxis::enModelUpAxisZ,
+					const bool shadowCullFront = false
 					);
 
 				/**
@@ -504,6 +506,7 @@ namespace nsNinjaAttract
 				bool m_isInited = false;					//!< 初期化済みか？
 				bool m_isShadowCaster = false;				//!< シャドウキャスターか？
 				bool m_isEnableLOD = false;					//!< LODは有効か？
+				bool m_isShadowCullFront = false;			//!< 影モデルをフロントカリングにするか？
 			};
 
 		}

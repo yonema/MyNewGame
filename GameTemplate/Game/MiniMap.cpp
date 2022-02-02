@@ -8,6 +8,7 @@
 #include "RenderingEngine.h"
 #include "AICar.h"
 #include "GameTime.h"
+#include "Level3D.h"
 
 namespace nsNinjaAttract
 {
@@ -294,8 +295,11 @@ namespace nsNinjaAttract
 		{
 			// ステージの幅とプレイヤーの座標から、
 			// プレイヤーがステージのどの辺にいるのか、正規化した値を出す
-			float xRate = (m_playerPositionRef->x + kPlayerCenterBuffWidth) / kStageWidth;
-			float yRate = (m_playerPositionRef->z + kPlayerCenterBuffHeight) / kStageHeight;
+			
+			float xRate = ((m_playerPositionRef->x + nsLevel3D::CLevel3D::m_kLevelObjectOffset.x) + 
+				kPlayerCenterBuffWidth) / kStageWidth;
+			float yRate = ((m_playerPositionRef->z + nsLevel3D::CLevel3D::m_kLevelObjectOffset.z) +
+				kPlayerCenterBuffHeight) / kStageHeight;
 
 			// プレイヤーの位置をマップの中心にするため、マップの基点をプレイヤーの位置に合わせる
 			m_miniMapSR->SetPivot({ xRate, yRate });

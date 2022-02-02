@@ -14,6 +14,8 @@ namespace nsNinjaAttract
 		// ディレクトリのパスの末尾
 		const wchar_t* CLevel3D::m_kDirectoryPathTail = L"/%s.tkm";
 
+		const Vector3 CLevel3D::m_kLevelObjectOffset = { 0.0f,0.0f, 35000.0f };
+
 		/**
 		 * @brief コンストラクタ
 		*/
@@ -63,6 +65,9 @@ namespace nsNinjaAttract
 					float fix = levelObjData.position.y;
 					levelObjData.position.y = levelObjData.position.z;
 					levelObjData.position.z = fix;
+
+					// 座標をずらす
+					levelObjData.position -= m_kLevelObjectOffset;
 
 					fix = levelObjData.rotation.y;
 					levelObjData.rotation.y = -levelObjData.rotation.z;

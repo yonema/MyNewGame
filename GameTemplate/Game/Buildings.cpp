@@ -163,7 +163,14 @@ namespace nsNinjaAttract
 			m_modelRenderMap[buildingType]->SetScale(m_buildingDataMap[buildingType][0]->scale);
 
 			// モデルレンダラーを初期化
-			m_modelRenderMap[buildingType]->Init(kBuildingModelFilePath[buildingType]);
+			m_modelRenderMap[buildingType]->Init(
+				kBuildingModelFilePath[buildingType],
+				nullptr,
+				0,
+				1,
+				EnModelUpAxis::enModelUpAxisZ,
+				false
+				);
 
 			// スイングターゲットのインスタンスを生成
 			m_buildingDataMap[buildingType][0]->swingTarget = 
@@ -207,7 +214,9 @@ namespace nsNinjaAttract
 				kBuildingModelFilePath[buildingType],
 				nullptr,
 				0,
-				numInstance
+				numInstance,
+				EnModelUpAxis::enModelUpAxisZ,
+				false
 			);
 
 			// このタイプの建物のすべてのデータから情報を構築する
