@@ -2,6 +2,8 @@
 #include "Sprite.h"
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
+#include "../GameTemplate/Game/MyEngine.h"
+#include "../GameTemplate/Game/RenderingEngine.h"
 
 /**
  * @brief コンストラクタ
@@ -34,9 +36,25 @@ SpriteInitData::SpriteInitData()
 			//ddsファイルのパスが指定されてるのなら、ddsファイルからテクスチャを作成する。
 			int texNo = 0;
 			while (initData.m_ddsFilePath[texNo] && texNo < MAX_TEXTURE) {
-				wchar_t wddsFilePath[1024];
-				mbstowcs(wddsFilePath, initData.m_ddsFilePath[texNo], 1023);
-				m_textures[texNo].InitFromDDSFile(wddsFilePath);
+
+				// 変更。
+
+				// テクスチャバンクからリソースを探して取ってくる
+				m_textures[texNo] = nsNinjaAttract::nsMyEngine::
+					CRenderingEngine::GetInstance()->GetTextureFileFromBank(initData.m_ddsFilePath[texNo]);
+
+				if (m_textures[texNo] == nullptr)
+				{
+					// リソースがなかったら新しく生成する
+					wchar_t wddsFilePath[1024];
+					mbstowcs(wddsFilePath, initData.m_ddsFilePath[texNo], 1023);
+					m_textures[texNo] = new Texture();
+					m_textures[texNo]->InitFromDDSFile(wddsFilePath);
+					// リソースを登録する
+					nsNinjaAttract::nsMyEngine::
+						CRenderingEngine::GetInstance()->RegistTextureFileToBank(initData.m_ddsFilePath[texNo], m_textures[texNo]);
+				}
+
 				texNo++;
 			}
 			m_numTexture = texNo;
@@ -78,7 +96,7 @@ SpriteInitData::SpriteInitData()
 		}
 		else {
 			for (int texNo = 0; texNo < m_numTexture; texNo++) {
-				m_descriptorHeap.RegistShaderResource(texNo, m_textures[texNo]);
+				m_descriptorHeap.RegistShaderResource(texNo, *m_textures[texNo]);
 			}
 		}
 		if (initData.m_expandShaderResoruceView != nullptr) {

@@ -238,18 +238,18 @@ namespace nsNinjaAttract
 		void CPlayerCatchEnemy::InitQTEButtonSprite()
 		{
 			// いや、まだリソースバンク作ってなかったわ。
-			//for (int i = 0; i < enQTEButtonTypeNum; i++)
-			//{
-			//	// ゲーム中の読み込みを速くするため、最初に読み込んですぐに破棄する。
-			//	// リソースバンクに登録される。
-			//	nsGraphic::nsSprite::CSpriteRender* sr = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFirst);
-			//	sr->Init(
-			//		kQTEButtonSpriteFilePath[i],
-			//		0.0f, 0.0f
-			//	);
-			//	sr->Deactivate();
-			//	DeleteGO(sr);
-			//}
+			for (int i = 0; i < enQTEButtonTypeNum; i++)
+			{
+				// ゲーム中の読み込みを速くするため、最初に読み込んですぐに破棄する。
+				// リソースバンクに登録される。
+				nsGraphic::nsSprite::CSpriteRender* sr = NewGO<nsGraphic::nsSprite::CSpriteRender>(nsCommonData::enPriorityFirst);
+				sr->Init(
+					kQTEButtonSpriteFilePath[i],
+					0.0f, 0.0f
+				);
+				sr->Deactivate();
+				DeleteGO(sr);
+			}
 
 
 			// QTEに使うボタンの枠のスプライトの生成と初期化

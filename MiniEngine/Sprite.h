@@ -132,7 +132,7 @@ private:
 	IndexBuffer m_indexBuffer;			//インデックスバッファ。
 	VertexBuffer m_vertexBuffer;		//頂点バッファ。
 	int m_numTexture = 0;				//テクスチャの枚数。
-	Texture m_textures[MAX_TEXTURE];	//テクスチャ。
+	Texture* m_textures[MAX_TEXTURE];	//テクスチャ。
 	Texture* m_textureExternal[MAX_TEXTURE] = {nullptr};	//外部から指定されたテクスチャ
 	Vector3 m_position ;				//座標。
 	Vector2 m_size;						//サイズ。
