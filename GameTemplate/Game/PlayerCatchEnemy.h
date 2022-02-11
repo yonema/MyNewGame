@@ -196,6 +196,7 @@ namespace nsNinjaAttract
 
 			float m_onEnemyTimer = 0.0f;	//!< 敵の上に乗っている間のタイマー
 			float m_ninnjyutuEFTimer = 0.0f;	//!< 忍術のエフェクトタイマー
+			bool m_isStandUp = false;			//!< 起き上がり中？
 
 			//!< 敵の上に乗っている時のタイマーバーのスプライトレンダラー
 			nsGraphic::nsSprite::CSpriteRender* m_onEnemyTimerBar = nullptr;

@@ -118,6 +118,18 @@ namespace nsNinjaAttract
 					ChangeState(enCE_GoOnEnemy);
 				}
 
+				if (m_isStandUp && 
+					m_playerRef->GetPlayerModelAnimation().GetAnimationState() == 
+					nsPlayerConstData::nsModelAnimationConstData::enAnim_idle)
+				{
+					// 起き上がり中かつ、アニメーションがアイドル状態まで行ったら
+
+					// 起き上がり中を解除
+					m_isStandUp = false;
+					// 入力を可能にする
+					m_playerRef->SetIsInputtable(true);
+				}
+
 				if (m_playerRef->GetInputData().actionSearchEnemy == true)
 				{
 					// 敵を探知するアクションが入っていたら、
@@ -1084,6 +1096,12 @@ namespace nsNinjaAttract
 					qteButtonSR->Deactivate();
 				}
 				DeactivateQTESprite();
+
+				// 一定時間入力不可にする
+				m_playerRef->SetIsInputtable(false);
+				// 起き上がり中にする
+				m_isStandUp = true;
+
 				break;
 
 			case enCE_End:

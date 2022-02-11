@@ -121,6 +121,7 @@ namespace nsNinjaAttract
 				);
 			// シャドウキャスターを有効にする
 			m_playerModel->SetIsPlayerShadowCaster(true);
+			//m_playerModel->SetIsShadowCaster(true);
 
 			return;
 		}

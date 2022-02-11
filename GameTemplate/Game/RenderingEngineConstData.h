@@ -13,7 +13,7 @@ namespace nsNinjaAttract
 		*/
 		namespace nsRenderingEngineConstData
 		{
-			constexpr int m_kRenderObjectsCapacityNum = 256;	//!< 描画オブジェクトのキャパシティ
+			constexpr int m_kRenderObjectsCapacityNum = 2560;	//!< 描画オブジェクトのキャパシティ
 
 			//!< スプライトのfxファイルパス
 			constexpr const char* const m_kSpriteFxFilePath = "Assets/shader/sprite.fx";

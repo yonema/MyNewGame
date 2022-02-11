@@ -128,7 +128,6 @@ float CalcShadowRate(int ligNo, float3 worldPos)
         float2 shadowMapUV = posInLVP.xy / posInLVP.w;
         float zInLVP = posInLVP.z / posInLVP.w;
 
-        // 旧バージョン
         // ライトカメラの遠平面より遠かったら、影を落とさない
 
         if (zInLVP >= 1.0f)
@@ -185,14 +184,11 @@ float CalcPlayerShadowRate(int ligNo, float3 worldPos)
     float2 shadowMapUV = posInLVP.xy / posInLVP.w;
     float zInLVP = posInLVP.z / posInLVP.w;
 
-    // 旧バージョン
     // ライトカメラの遠平面より遠かったら、影を落とさない
-#ifndef EVSM
     if (zInLVP >= 1.0f)
     {
         return shadow;
     }
-#endif
 
     shadowMapUV *= float2(0.5f, -0.5f);
     shadowMapUV += 0.5f;

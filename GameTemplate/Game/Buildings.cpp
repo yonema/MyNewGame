@@ -122,32 +122,34 @@ namespace nsNinjaAttract
 				}
 
 				m_modelRenderMap[bType]->SetIsShadowCaster(true);
-			}
+
 
 
 #ifdef no
 #ifdef MY_DEBUG
+				
+				// 計算されたスイングターゲットの座標コンテナを取得
+				const std::vector<Vector3>& swingTargetPositions = 
+					m_buildingDataMap[bType][0]->swingTarget->GetSwingTargetPositions();
 
-			// 計算されたスイングターゲットの座標コンテナを取得
-			const std::vector<Vector3>& swingTargetPositions = m_swingTarget.GetSwingTargetPositions();
+				// スイングターゲットの座標番号
+				int stPosNo = 0;
+				// スイングターゲットの座標の数だけキャパシティを確保
+				m_debugModels.reserve(swingTargetPositions.size());
+				// 全ての座標を調べる
+				for (auto& stPos : swingTargetPositions)
+				{
+					nsGraphic::nsModel::CModelRender* debugModel =
+						NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
+					debugModel->SetPosition(swingTargetPositions[stPosNo++]);
+					debugModel->SetScale(Vector3::One * 3.0f);
+					debugModel->Init("Assets/modelData/debugModel/light.tkm");
+					m_debugModels.emplace_back(debugModel);
 
-			// スイングターゲットの座標番号
-			int stPosNo = 0;
-			// スイングターゲットの座標の数だけキャパシティを確保
-			m_debugModels.reserve(swingTargetPositions.size());
-			// 全ての座標を調べる
-			for (auto& stPos : swingTargetPositions)
-			{
-				nsGraphic::nsModel::CModelRender* debugModel = 
-					NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
-				debugModel->SetPosition(swingTargetPositions[stPosNo++]);
-				debugModel->Init("Assets/modelData/debugModel/testBox.tkm");
-				m_debugModels.emplace_back(debugModel);
-
+				}
+#endif
+#endif
 			}
-#endif
-#endif
-
 			return;
 		}
 

@@ -51,7 +51,7 @@ void CaslFile::Load(const char* filePath)
 		ReadOnlyOneCharacter(fp);
 
 
-		// 改造
+		// 変更。改造
 		// ここに謎の0.0fのデータがあるので、パディングを入れる。
 		float pad = ReadDecimal(fp);
 

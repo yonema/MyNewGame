@@ -95,7 +95,9 @@ namespace nsNinjaAttract
 							// デバックビルド用。ロードが重いため、1種類の建物しかロードしない。
 							return true;
 						}
+
 #endif
+
 						if (objData.EqualObjectName(
 							nsBuilding::nsBuildingConstData::kBuildingNames[i]) != true
 							)
@@ -120,7 +122,6 @@ namespace nsNinjaAttract
 					return true;
 				}
 			);
-
 
 			// 小物をレベルから生成
 			for (int propsType = 0; propsType < enPropsTypeNum; propsType++)
