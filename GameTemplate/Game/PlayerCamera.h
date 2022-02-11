@@ -125,6 +125,15 @@ namespace nsNinjaAttract
 			*/
 			void SetIsControl(const bool isControl);
 
+			/**
+			 * @brief カメラの自動回転フラグを設定する
+			 * @param[in] autoTurnCameraFlag カメラの自動回転フラグ
+			*/
+			void SetAutoTurnCameraFlag(const bool autoTurnCameraFlag)
+			{
+				m_autoTurnCameraFlag = autoTurnCameraFlag;
+			}
+
 
 		private:	// privateなメンバ関数
 
@@ -172,6 +181,7 @@ namespace nsNinjaAttract
 			float m_cameraPositionOffsetUp = 0.0f;
 			float m_toCameraDistance = 0.0f;
 			bool m_isOnEnemyCamera = false;				//!< 敵の上に乗っているときのカメラか？
+			bool m_autoTurnCameraFlag = false;			//!< カメラの自動回転のフラグ
 
 			Camera m_dummyCamera;
 			// 改造ここから

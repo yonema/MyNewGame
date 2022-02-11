@@ -525,6 +525,12 @@ namespace nsNinjaAttract
 				{
 					// 奥側なら、上に上がるほど減速する
 					m_swingSpeed = 2.0f * m_g * l * (anyCos - highestCos);
+					if (anyCos <= 0.01f)
+					{
+						// 一定以上、上に行くとスイング状態を強制解除
+						// ステートをスイング後の空中状態に遷移する
+						ChangeState(enIsAirAfterSwing);
+					}
 				}
 				m_swingSpeed = std::sqrtf(m_swingSpeed);
 
@@ -723,6 +729,8 @@ namespace nsNinjaAttract
 					IsAirAfterSwingEvent();
 					break;
 				case enEnd:
+					// カメラの自動回転フラグをオフにする
+					m_playerCameraRef->SetAutoTurnCameraFlag(false);
 					break;
 				}
 
@@ -745,6 +753,9 @@ namespace nsNinjaAttract
 				);
 				// カメラの値を線形変化させるタイマーをリセットする
 				m_cameraChangeLinearlyTimer = 0.0f;
+
+				// カメラの自動回転フラグをオンにする
+				m_playerCameraRef->SetAutoTurnCameraFlag(true);
 
 				return;
 			}
@@ -815,6 +826,8 @@ namespace nsNinjaAttract
 					);
 				}
 
+				// カメラの自動回転フラグをオフにする
+				m_playerCameraRef->SetAutoTurnCameraFlag(false);
 
 				// スイング中にスイングをやめたか？
 				if (m_afterSwing)

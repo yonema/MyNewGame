@@ -220,7 +220,7 @@ namespace nsNinjaAttract
 			m_autoTurnStartTimerResetTimer = 0.0f;
 
 			// 自動でカメラが回転し始めるタイマーが、一定時間進んでいないか？
-			if (m_autoTurnStartTimer < kAutoTurnStartTime)
+			if (m_autoTurnStartTimer < kAutoTurnStartTime/* && m_autoTurnCameraFlag != true*/)
 			{
 				// 進んでいない。タイマーを進める。
 				m_autoTurnStartTimer += m_playerRef->GetDeltaTime();
