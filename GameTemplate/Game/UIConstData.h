@@ -306,7 +306,7 @@ namespace nsNinjaAttract
 				"Assets/Image/mission/mission_result_perfect.DDS"
 			};
 			//!< ミッショリザルトのテキストのスプライトの幅
-			constexpr int kMissionResultTextSpriteWidth = static_cast<int>(128.0f * 1.25f);
+			constexpr int kMissionResultTextSpriteWidth = static_cast<int>(256.0f * 1.25f);
 			//!< ミッショリザルトのテキストのスプライトの高さ
 			constexpr int kMissionResultTextSpriteHeight = static_cast<int>(128.0f * 1.25f);
 
