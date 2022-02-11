@@ -206,6 +206,10 @@ float CalcPlayerShadowRate(int ligNo, float3 worldPos)
         zInLVP -= 0.001f;
         float pos = exp(INFINITY * zInLVP);
         shadow = Chebyshev(shadowValue.xy, pos);
+
+        // ライトカメラ（光源）からの距離に応じて影を指数関数的に薄くしていく。
+        shadow *= (1.0f - pow(zInLVP, 2.0f));
+
         return shadow;
 #endif
 
@@ -219,7 +223,7 @@ float CalcPlayerShadowRate(int ligNo, float3 worldPos)
             // ライトカメラ（光源）からの距離に応じて影を指数関数的に薄くしていく。
             shadow *= (1.0f - pow(zInLVP,2.0f));
             // ライトカメラ（光源）からの距離に応じて影を線形に薄くしていく。
-            shadow *= (1.0f - zInLVP);
+            //shadow *= (1.0f - zInLVP);
         }
 
     }
