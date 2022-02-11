@@ -106,6 +106,32 @@ namespace nsNinjaAttract
 			return;
 		}
 
+		/**
+		 * @brief UIを隠す
+		*/
+		void CMiniMap::HideUI()
+		{
+			m_miniMapSR->Deactivate();
+			m_miniMapFrameSR->Deactivate();
+			m_miniMapBackSR->Deactivate();
+			m_playerIconSR->Deactivate();
+
+			for (auto& carIcon : m_carIconSRs)
+			{
+				carIcon->Deactivate();
+			}
+
+			for (auto& carMiniIcon : m_carMiniIconSRs)
+			{
+				carMiniIcon->Deactivate();
+			}
+
+			for (auto& carMiniIconOut : m_carMiniIconOutSRs)
+			{
+				carMiniIconOut->Deactivate();
+			}
+			return;
+		}
 
 		/**
 		 * @brief ミニマップのスプライトの初期化

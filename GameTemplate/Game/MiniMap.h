@@ -58,6 +58,11 @@ namespace nsNinjaAttract
 			void Update() override final;
 
 		public:		// ƒƒ“ƒoŠÖ”
+
+			/**
+			 * @brief UI‚ğ‰B‚·
+			*/
+			void HideUI();
 			
 		private:	// private‚Èƒƒ“ƒoŠÖ”
 

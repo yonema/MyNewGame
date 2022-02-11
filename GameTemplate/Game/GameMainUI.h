@@ -69,6 +69,11 @@ namespace nsNinjaAttract
 			*/
 			void ShowMission();
 
+			/**
+			 * @brief UI‚ğ‰B‚·
+			*/
+			void HideUI();
+
 		private:	// private‚Èƒƒ“ƒoŠÖ”
 
 			/**

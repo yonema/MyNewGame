@@ -188,10 +188,12 @@ namespace nsNinjaAttract
 				StartTimingGame();
 				break;
 			case enGS_beforeClearDirecting:
-				break;
-			case enGS_clearDirecting:
 				// ゲームのタイムの計測終了
 				StopTimingGame();
+				break;
+			case enGS_clearDirecting:
+				// UIを隠す
+				m_gameMainUI->HideUI();
 				break;
 			case enGS_goTitle:
 				break;

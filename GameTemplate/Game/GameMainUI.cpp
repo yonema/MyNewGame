@@ -147,5 +147,14 @@ namespace nsNinjaAttract
 			return;
 		}
 
+		/**
+		 * @brief UI‚ğ‰B‚·
+		*/
+		void CGameMainUI::HideUI()
+		{
+			m_miniMap->HideUI();
+
+			return;
+		}
 	}
 }
