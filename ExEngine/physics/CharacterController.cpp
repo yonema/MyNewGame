@@ -307,7 +307,14 @@ const Vector3& CharacterController::Execute(Vector3& moveSpeed, float deltaTime 
 				moveSpeed.y = 0.0f;
 				m_isJump = false;
 				m_isOnGround = true;
-				nextPosition.y = callback.hitPos.y;
+				if (addPos.y > 0.0f) 
+				{
+					nextPosition.y = callback.hitPos.y - m_height;
+				}
+				else
+				{
+					nextPosition.y = callback.hitPos.y;
+				}
 			}
 			else {
 				//ínñ è„Ç…Ç¢Ç»Ç¢ÅB

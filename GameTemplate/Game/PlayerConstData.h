@@ -13,7 +13,7 @@ namespace nsNinjaAttract
 		namespace nsPlayerConstData
 		{
 			constexpr float kCapsuleRadius = 50.0f;		//!< カプセルコライダーの半径
-			constexpr float kDapsuleHeight = 100.0f;	//!< カプセルコライダーの高さ
+			constexpr float kCapsuleHeight = 100.0f;	//!< カプセルコライダーの高さ
 
 			/**
 			 * @brief プレイヤーのステート
@@ -562,6 +562,8 @@ namespace nsNinjaAttract
 			{
 				constexpr float kCameraMaxSpeed = 10000.0f;	//!< カメラの最大速度
 				constexpr float kCameraRadius = 5.0f;		//!< カメラのコリジョンの半径
+				//!< カメラのコリジョン解決用ターゲットのオフセット
+				static const Vector3 kCameraCollisionSolverTargetOffset{ 0.0f,50.0f,0.0f };
 
 				constexpr float kTargetOffsetUp = 120.0f;		//!< 注視点の上下のオフセット
 				constexpr float kNearTargetOffsetUp = 180.0f;	//!< 注視点の上下のオフセット

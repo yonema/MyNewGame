@@ -179,7 +179,7 @@ namespace nsNinjaAttract
 				m_cameraCollisionSolver.Execute(
 					result,
 					m_camera->GetPosition(),
-					m_camera->GetTarget()
+					m_collisionSolverTarget
 				);
 				m_camera->SetPosition(result);
 			}

@@ -41,7 +41,7 @@ namespace nsNinjaAttract
 			// プレイヤー移動クラスの初期化
 			m_playerMove->Init(
 				kCapsuleRadius,
-				kDapsuleHeight,
+				kCapsuleHeight,
 				this,
 				m_playerCamera.get(),
 				m_playerModelAnimation.get()

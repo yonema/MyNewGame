@@ -201,6 +201,15 @@ namespace nsNinjaAttract
 				m_camera = camera;
 			}
 
+			/**
+			 * @brief コリジョン解決用ターゲットを設定
+			 * @param csTarget コリジョン解決用ターゲット
+			*/
+			void SetCollisionSolverTarget(const Vector3& csTarget)
+			{
+				m_collisionSolverTarget = csTarget;
+			}
+
 		private:	// privateなメンバ関数
 
 			/**
@@ -230,6 +239,8 @@ namespace nsNinjaAttract
 			bool m_isEnableCollisionSolver = false;			//!< コリジョン処理が有効？
 			bool m_isRefresh = true;						//!< リフレッシュが必要？
 			CCameraCollisionSolver m_cameraCollisionSolver;	//!< カメラコリジョン解決クラス
+
+			Vector3 m_collisionSolverTarget = Vector3::Zero;	//!< コリジョン解決用のターゲット
 		};
 	}
 }
