@@ -91,6 +91,7 @@ namespace nsNinjaAttract
 			//!< LODの切り替えの距離。デフォルトでは負の数。
 			//! 負の数ならモデルレンダラーにLODの切り替えの距離を指定しない
 			float m_distanceLOD = -1.0f;
+			const char* m_collisionModelFilePaht = nullptr;		//!< コリジョン用モデルのファイルパス
 		};
 
 	}

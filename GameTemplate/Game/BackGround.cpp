@@ -128,7 +128,7 @@ namespace nsNinjaAttract
 			{
 #ifdef _DEBUG
 				// デバックビルド用。ロードが重いため、小物は生成しない。
-				break;;
+				break;
 #endif
 				// 小物用のレベルを初期化
 				m_propsLevel3D[propsType]->Init(
@@ -161,7 +161,8 @@ namespace nsNinjaAttract
 						case enPropsStreetTreeBranch:
 							objData.isTranslucent = true;
 							objData.priority = nsCommonData::enPrioritySecond;
-
+							objData.collisionModelFilePath = 
+								"Assets/modelData/levelSource/StreetTree_collision.tkm";
 							return false;
 							break;
 
@@ -170,6 +171,8 @@ namespace nsNinjaAttract
 							return true;
 							break;
 						}
+
+						return true;
 					}
 				);
 

@@ -31,6 +31,9 @@ namespace nsNinjaAttract
 				m_lodModelFilePath = std::make_unique<const char*>(objData.lodModelFilePath);
 			}
 
+			// コリジョン用のモデルのファイルパスを指定
+			m_collisionModelFilePaht = objData.collisionModelFilePath;
+
 			// シャドウキャスターか？を取得
 			m_shadowCaster = objData.shadowCaster;
 
@@ -126,7 +129,21 @@ namespace nsNinjaAttract
 
 			auto p = std::make_unique<PhysicsStaticObject>();
 			//静的物理オブジェクトを作成。
-			p->CreateFromModel(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix(), m_userIndex);
+			if (m_collisionModelFilePaht)
+			{
+				nsGraphic::nsModel::CModelRender* collisionModel =
+					NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
+				collisionModel->SetPosition(m_mapChipDataVector[0]->position);
+				collisionModel->SetRotation(m_mapChipDataVector[0]->rotation);
+				collisionModel->SetScale(m_mapChipDataVector[0]->scale);
+				collisionModel->Init(m_collisionModelFilePaht);
+				p->CreateFromModel(collisionModel->GetModel(), collisionModel->GetModel().GetWorldMatrix(), m_userIndex);
+				DeleteGO(collisionModel);
+			}
+			else
+			{
+				p->CreateFromModel(m_modelRender->GetModel(), m_modelRender->GetModel().GetWorldMatrix(), m_userIndex);
+			}
 			m_physicsStaticObjectPtrVector.emplace_back(std::move(p));
 
 			return;
@@ -179,7 +196,21 @@ namespace nsNinjaAttract
 				);
 				auto p = std::make_unique<PhysicsStaticObject>();
 				//静的物理オブジェクトを作成。
-				p->CreateFromModel(m_modelRender->GetModel(), worldMatrix, m_userIndex);
+				if (m_collisionModelFilePaht)
+				{
+					nsGraphic::nsModel::CModelRender* collisionModel =
+						NewGO<nsGraphic::nsModel::CModelRender>(nsCommonData::enPriorityFirst);
+					collisionModel->SetPosition(mapChipData->position);
+					collisionModel->SetRotation(mapChipData->rotation);
+					collisionModel->SetScale(mapChipData->scale);
+					collisionModel->Init(m_collisionModelFilePaht);
+					p->CreateFromModel(collisionModel->GetModel(), collisionModel->GetModel().GetWorldMatrix(), m_userIndex);
+					DeleteGO(collisionModel);
+				}
+				else
+				{
+					p->CreateFromModel(m_modelRender->GetModel(), worldMatrix, m_userIndex);
+				}
 				m_physicsStaticObjectPtrVector.emplace_back(std::move(p));
 			}
 

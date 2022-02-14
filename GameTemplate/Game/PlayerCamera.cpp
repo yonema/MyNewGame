@@ -376,7 +376,7 @@ namespace nsNinjaAttract
 			m_springCamera.SetTarget(targetPos);
 
 			// バネカメラのコリジョン解決用ターゲットを設定
-			m_springCamera.SetCollisionSolverTarget(m_playerRef->GetPosition() + kCameraCollisionSolverTargetOffset;
+			m_springCamera.SetCollisionSolverTarget(m_playerRef->GetPosition() + kCameraCollisionSolverTargetOffset);
 
 			// バネカメラを更新
 			m_springCamera.Update();

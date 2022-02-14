@@ -20,6 +20,8 @@ namespace nsNinjaAttract
 			Vector3 scale;			//!< 拡大率。
 			const wchar_t* name;	//!< 名前。
 			int number;
+
+			// 追加。ここから。
 			bool isTranslucent = false;	//!< 半透明か？
 			int priority = nsCommonData::enPriorityFirst;	//!< 優先度
 			int numMapChipReserve = 1;	//!< マップチップの予約数
@@ -30,6 +32,8 @@ namespace nsNinjaAttract
 			//!< LODの切り替えの距離。デフォルトでは負の数。
 			//! 負の数ならモデルレンダラーにLODの切り替えの距離を指定しない
 			float distanceLOD = -1.0f;
+			const char* collisionModelFilePath = nullptr;	//!< コリジョン用モデルのファイルパス
+			// 追加。ここまで。
 
 			/// <summary>
 			/// 引数で渡したオブジェクト名のオブジェクトか調べる。
