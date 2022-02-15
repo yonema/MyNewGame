@@ -101,6 +101,18 @@ namespace nsNinjaAttract
 				458
 			};
 
+			//!< ブロッキングボリュームの座標
+			static const Vector3 kBlockingVolumePosition[4]
+			{
+				{0.0f,0.0f,-3300.0f},
+				{35500.0f,0.0,32200.0f},
+				{0.0f,0.0f,67700.0f},
+				{-35000.0f,0.0,32200.0f},
+			};
+
+			//!< ブロッキングボリュームの拡大率
+			static const Vector3 kBlockingVolumeScale = { 70000.0f + 1000.0f,20000.0f,1000.0f };
+
 			//!< タイトル中のプレイヤーのレベル上の名前
 			constexpr const char* const kPlayerLevelNameInTitle = "player_inTitle";
 			//!< ゲーム中のプレイヤーのレベル上の名前

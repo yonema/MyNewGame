@@ -11,6 +11,7 @@ enum EnCollisionAttr{
 	enCollisionAttr_Character,
 	enCollisionAttr_User,		//以下にユーザー定義のコリジョン属性を設定する。
 	enCollisionAttr_Props,
+	enCollisionAttr_DoesNotCollideCamera,
 
 	enCollisionAttr_None = -1
 };

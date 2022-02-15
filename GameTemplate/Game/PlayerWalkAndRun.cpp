@@ -405,7 +405,7 @@ namespace nsNinjaAttract
 				// ジャンプボタンが押されている、かつ、
 				// ジャンプの上昇中ではない、かつ、
 				// 地面についている
-				if (m_playerRef->GetInputData().actionJump && !m_isJumpUp/* && m_charaCon.IsOnGround()*/)
+				if (m_playerRef->GetInputData().actionJump && !m_isJumpUp && m_playerMovementRef->IsAir() != true)
 				{
 					m_isJumpUp = true;
 					m_jumpUpTimer = 0.0f;
@@ -455,7 +455,7 @@ namespace nsNinjaAttract
 			{
 				// ジャンプ
 				// ジャンプボタンが押されている、かつ、地面についている
-				if (m_playerRef->GetInputData().actionJump/* && m_charaCon.IsOnGround()*/)
+				if (m_playerRef->GetInputData().actionJump && m_playerMovementRef->IsAir() != true)
 				{
 					//m_jumpSC->Play(false);
 				}

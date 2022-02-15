@@ -587,6 +587,9 @@
     <ClCompile Include="MissionUI.cpp">
       <Filter>MyCode\UI</Filter>
     </ClCompile>
+    <ClCompile Include="BlockingVolume.cpp">
+      <Filter>MyCode\Geometry</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\MiniEngine\GraphicsEngine.h">
@@ -1119,6 +1122,9 @@
     </ClInclude>
     <ClInclude Include="GameMainStateConstData.h">
       <Filter>MyCode\GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="BlockingVolume.h">
+      <Filter>MyCode\Geometry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

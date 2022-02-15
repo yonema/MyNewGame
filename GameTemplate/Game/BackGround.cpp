@@ -3,7 +3,7 @@
 #include "Level3D.h"
 #include "SkyCube.h"
 #include "Buildings.h"
-
+#include "BlockingVolume.h"
 
 namespace nsNinjaAttract
 {
@@ -40,6 +40,9 @@ namespace nsNinjaAttract
 			// ロードしたレベルデータをもとに建物を初期化
 			m_buildings->Init();
 
+			// ブロッキングボリュームを初期化
+			InitBlockingVolume();
+			
 
 			return;
 		}
@@ -179,6 +182,35 @@ namespace nsNinjaAttract
 				// 次の小物へ
 			}
 
+
+			return;
+		}
+
+		/**
+		 * @brief ブロッキングボリュームを初期化
+		*/
+		void CBackGround::InitBlockingVolume()
+		{
+			// ブロッキングボリュームの回転
+			Quaternion qRot = Quaternion::Identity;
+
+			// 四隅に配置
+			for (int i = 0; i < 4; i++)
+			{
+				// ブロッキングボリュームの生成
+				m_blockingVolume[i] = std::make_unique<nsGeometry::CBlockingVolume>();
+				// 初期化
+				m_blockingVolume[i]->Init(
+					kBlockingVolumePosition[i] - nsLevel3D::CLevel3D::m_kLevelObjectOffset,
+					qRot,
+					kBlockingVolumeScale
+				);
+
+				// 次は90度回転して配置する
+				Quaternion MultiplyRot;
+				MultiplyRot.SetRotationDegY(90.0f);
+				qRot.Multiply(MultiplyRot);
+			}
 
 			return;
 		}

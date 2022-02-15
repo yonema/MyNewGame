@@ -302,6 +302,7 @@
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="BezierCurve.cpp" />
     <ClCompile Include="BGM.cpp" />
+    <ClCompile Include="BlockingVolume.cpp" />
     <ClCompile Include="Bloom.cpp" />
     <ClCompile Include="BSP.cpp" />
     <ClCompile Include="Buildings.cpp" />
@@ -463,6 +464,7 @@
     <ClInclude Include="BezierCurve.h" />
     <ClInclude Include="BGM.h" />
     <ClInclude Include="BGMConstData.h" />
+    <ClInclude Include="BlockingVolume.h" />
     <ClInclude Include="Bloom.h" />
     <ClInclude Include="BSP.h" />
     <ClInclude Include="Buildings.h" />

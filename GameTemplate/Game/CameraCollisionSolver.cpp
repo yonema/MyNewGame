@@ -28,6 +28,7 @@ namespace nsNinjaAttract
 				if (convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Character
 					|| convexResult.m_hitCollisionObject->getInternalType() == btCollisionObject::CO_GHOST_OBJECT
 					|| convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_Props
+					|| convexResult.m_hitCollisionObject->getUserIndex() == enCollisionAttr_DoesNotCollideCamera
 					) 
 				{
 					return 1.0f;

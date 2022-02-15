@@ -8,7 +8,7 @@ namespace nsNinjaAttract
 	namespace nsLevel3D { class CLevel3D; }			// 3Dレベルクラス
 	namespace nsNature { class CSkyCube; }			// スカイクラス
 	namespace nsBuilding { class CBuildings; }		// 建物クラス
-
+	namespace nsGeometry { class CBlockingVolume; }	// ブロッキングボリュームクラス
 
 	/**
 	 * @brief 背景ステージ用のネームスペース
@@ -45,13 +45,18 @@ namespace nsNinjaAttract
 			*/
 			void LoadLevel3D();
 
+			/**
+			 * @brief ブロッキングボリュームを初期化
+			*/
+			void InitBlockingVolume();
+
 		private:	// データメンバ
 			std::unique_ptr<nsLevel3D::CLevel3D> m_buildingLevel3D;	//!< 建物用3Dレベルクラス
 			//!< 小物用3Dレベルクラス
 			std::unique_ptr <nsLevel3D::CLevel3D> m_propsLevel3D[nsMaps::nsMapConstData::enPropsTypeNum];
 			nsNature::CSkyCube* m_skyCube = nullptr;		//!< スカイキューブ
 			nsBuilding::CBuildings* m_buildings = nullptr;	//!< 建物クラス
-
+			std::unique_ptr<nsGeometry::CBlockingVolume> m_blockingVolume[4] = {};	//!< 四隅のブロッキングボリューム
 		};
 	}
 }
