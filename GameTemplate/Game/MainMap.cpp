@@ -64,6 +64,10 @@ namespace nsNinjaAttract
 			// 決定音のサウンドの生成と初期化
 			m_decisionSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_decisionSC->Init(kDecisionSoundFilePath, nsSound::CSoundCue::enSE);
+			// 開始ボイスのサウンドの生成と初期化
+			m_startVoiceSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_startVoiceSC->Init(kStartVoiceSoundFilePath, nsSound::CSoundCue::enSE);
+			m_startVoiceSC->SetVolume(kStartVoiceSoundVolume);
 
 			// フェードインを開始
 			nsMyEngine::CRenderingEngine::GetInstance()->GetFade()->StartFadeIn();
@@ -91,6 +95,7 @@ namespace nsNinjaAttract
 			);
 
 			DeleteGO(m_decisionSC);
+			DeleteGO(m_startVoiceSC);
 
 			if (m_backGround)
 			{
@@ -253,6 +258,7 @@ namespace nsNinjaAttract
 				m_gameState->ShowMission();
 				// ゲームステートをゲーム中に遷移
 				m_gameState->ChangeState(nsGameState::nsGameMainStateConstData::enGS_inGame);
+				m_startVoiceSC->Play(false);
 			}
 
 			return;

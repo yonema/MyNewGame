@@ -32,6 +32,13 @@ namespace nsNinjaAttract
 				// サウンドの初期化
 				InitSound();
 
+				// 非決定的な乱数生成器でシード生成機を生成
+				std::random_device rnd;
+				// メルセンヌツイスターの32ビット版、引数は初期シード
+				m_mt = std::make_unique<std::mt19937>(rnd());
+				// 範囲の一様乱数
+				m_rand = std::make_unique<std::uniform_int_distribution<>>(0, nsWalkAndRunConstData::kJumpVoiceTypeNum - 1);
+
 				return;
 			}
 
@@ -45,6 +52,10 @@ namespace nsNinjaAttract
 				DeleteGO(m_chainReleaseSC);
 				DeleteGO(m_swingLeaveSC);
 				DeleteGO(m_swingRollLeaveSC);
+				for (int i = 0; i < nsWalkAndRunConstData::kJumpVoiceTypeNum; i++)
+				{
+					DeleteGO(m_swingVoiceSC[i]);
+				}
 
 				return;
 			}
@@ -195,6 +206,16 @@ namespace nsNinjaAttract
 				m_swingRollLeaveSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_swingRollLeaveSC->Init(kSwingRollLeaveSoundFilePath, nsSound::CSoundCue::enSE);
 				m_swingRollLeaveSC->SetVolume(kSwingRollLeaveSoundVolume);
+
+				for (int i = 0; i < nsWalkAndRunConstData::kJumpVoiceTypeNum; i++)
+				{
+					m_swingVoiceSC[i] = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+					m_swingVoiceSC[i]->Init(
+						nsWalkAndRunConstData::kJumpVoiceSoundFilePath[i],
+						nsSound::CSoundCue::enSE
+					);
+					m_swingVoiceSC[i]->SetVolume(nsWalkAndRunConstData::kJumpVoiceSoundVolume);
+				}
 
 				return;
 			}
@@ -852,6 +873,11 @@ namespace nsNinjaAttract
 					}
 
 					// 鎖を離すのサウンドを流す
+					if (m_playerRef->IsTitleMode() != true)
+					{
+						// タイトルではボイスなし
+						m_swingVoiceSC[(*m_rand)(*m_mt)]->Play(false);
+					}
 					m_chainReleaseSC->Play(false);
 
 				}

@@ -39,6 +39,14 @@ namespace nsNinjaAttract
 			// コマンド入力クラスを生成する
 			m_commandInput = std::make_unique<CPlayerCommandInput>();
 
+			// 非決定的な乱数生成器でシード生成機を生成
+			std::random_device rnd;
+			// メルセンヌツイスターの32ビット版、引数は初期シード
+			m_mt = std::make_unique<std::mt19937>(rnd());
+			// 範囲の一様乱数
+			m_fireVoiceRand = std::make_unique<std::uniform_int_distribution<>>(0, kFireVoiceSoundTypeNum - 1);
+			m_failureVoiceRand = std::make_unique<std::uniform_int_distribution<>>(0, kFailureVoiceSoundTypeNum - 1);
+
 			return;
 		}
 
@@ -75,6 +83,15 @@ namespace nsNinjaAttract
 			DeleteGO(m_fireStartSC);
 			DeleteGO(m_fireReleaseSC);
 			DeleteGO(m_sonarSC);
+
+			for (int i = 0; i < kFireVoiceSoundTypeNum; i++)
+			{
+				DeleteGO(m_fireVoiceSC[i]);
+			}
+			for (int i = 0; i < kFailureVoiceSoundTypeNum; i++)
+			{
+				DeleteGO(m_failureVoiceSC[i]);
+			}
 
 			return;
 		}
@@ -378,6 +395,19 @@ namespace nsNinjaAttract
 			m_sonarSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_sonarSC->Init(kSonarSoundFilePath, nsSound::CSoundCue::enSE);
 			m_sonarSC->SetVolume(kSonarSoundVolume);
+
+			for (int i = 0; i < kFireVoiceSoundTypeNum; i++)
+			{
+				m_fireVoiceSC[i] = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_fireVoiceSC[i]->Init(kFireVoiceSoundFilePath[i], nsSound::CSoundCue::enSE);
+				m_fireVoiceSC[i]->SetVolume(kFireVoiceSoundVolume);
+			}
+			for (int i = 0; i < kFailureVoiceSoundTypeNum; i++)
+			{
+				m_failureVoiceSC[i] = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_failureVoiceSC[i]->Init(KFailureVoiceSoundFilePath[i], nsSound::CSoundCue::enSE);
+				m_failureVoiceSC[i]->SetVolume(kFailureVoiceSoundVolume);
+			}
 
 			return;
 		}
@@ -757,6 +787,7 @@ namespace nsNinjaAttract
 				if (m_fireReleaseSC->IsPlaying() != true)
 				{
 					m_fireReleaseSC->Play(false);
+					m_fireVoiceSC[(*m_fireVoiceRand)(*m_mt)]->Play(false);
 				}
 			}
 
@@ -1101,6 +1132,8 @@ namespace nsNinjaAttract
 				m_playerRef->SetIsInputtable(false);
 				// 起き上がり中にする
 				m_isStandUp = true;
+
+				m_failureVoiceSC[(*m_failureVoiceRand)(*m_mt)]->Play(false);
 
 				break;
 

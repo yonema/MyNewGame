@@ -65,12 +65,22 @@ namespace nsNinjaAttract
 				constexpr float kJumpChargeTime = 0.2f;	//!< ジャンプの溜めの時間
 				constexpr float kJumpUpTime = kJumpChargeTime + 0.15f;	//!< ジャンプの上昇中の時間
 
+				// ジャンプボイスの種類の数
+				constexpr int kJumpVoiceTypeNum = 2;
+
 				//!< 歩きのサウンドファイルパス
 				constexpr const wchar_t* const kWalkSoundFilePath = L"Assets/sound/character/normalMove/walk.wav";
 				//!< 走りのサウンドファイルパス
 				constexpr const wchar_t* const kRunSoundFilePath = L"Assets/sound/character/normalMove/run.wav";
 				//!< ジャンプのサウンドファイルパス
 				constexpr const wchar_t* const kJumpSoundFilePath = L"Assets/sound/character/normalMove/jump.wav";
+				//!< ジャンプボイスのサウンドファイルパス
+				constexpr const wchar_t* const kJumpVoiceSoundFilePath[kJumpVoiceTypeNum]
+				{
+					L"Assets/sound/character/voice/jump_swing1.wav",
+					L"Assets/sound/character/voice/jump_swing2.wav"
+				};
+				
 			
 				//!< 歩きのサウンドの音量
 				constexpr float kWalkSoundVolume = 2.0f;
@@ -78,6 +88,8 @@ namespace nsNinjaAttract
 				constexpr float kRunSoundVolume = 2.0f;
 				//!< ジャンプのサウンドの音量
 				constexpr float kJumpSoundVolume = 1.0f;
+				//!< ジャンプボイスのサウンドの音量
+				constexpr float kJumpVoiceSoundVolume = 3.0f;
 			}
 
 			/**
@@ -428,6 +440,28 @@ namespace nsNinjaAttract
 				//!< ソナーのサウンドのファイルパス
 				constexpr const wchar_t* const kSonarSoundFilePath = L"Assets/sound/character/other/sonar.wav";
 				constexpr float kSonarSoundVolume = 1.0f;	//!< ソナーのサウンドの音量
+
+				//!< 火遁のボイスのサウンドの種類の数
+				constexpr int kFireVoiceSoundTypeNum = 2;
+				// 火遁のボイスのサウンドのファイルパス
+				constexpr const wchar_t* const kFireVoiceSoundFilePath[kFireVoiceSoundTypeNum] =
+				{
+					L"Assets/sound/character/voice/fire1.wav",
+					L"Assets/sound/character/voice/fire2.wav"
+				};
+				// 火遁のボイスのサウンドの音量
+				constexpr float kFireVoiceSoundVolume = 5.0f;
+
+				// 失敗時のボイスのサウンドの種類の数
+				constexpr int kFailureVoiceSoundTypeNum = 2;
+				// 失敗時のボイスのサウンドのファイスパス
+				constexpr const wchar_t* const KFailureVoiceSoundFilePath[kFailureVoiceSoundTypeNum] =
+				{
+					L"Assets/sound/character/voice/failure1.wav",
+					L"Assets/sound/character/voice/failure2.wav"
+				};
+				// 失敗時のボイスのサウンドの音量
+				constexpr float kFailureVoiceSoundVolume = 2.0f;
 			}
 
 			/**

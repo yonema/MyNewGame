@@ -238,6 +238,18 @@ namespace nsNinjaAttract
 			nsSound::CSoundCue* m_fireStartSC = nullptr;		//!< 火遁の最初のサウンド
 			nsSound::CSoundCue* m_fireReleaseSC = nullptr;		//!< 火遁を放つサウンド
 			nsSound::CSoundCue* m_sonarSC = nullptr;			//!< ソナーのサウンド
+			//！< 火遁のボイスのサウンド
+			nsSound::CSoundCue*
+				m_fireVoiceSC[nsPlayerConstData::nsCatchEnemyConstData::kFireVoiceSoundTypeNum] = {};
+			//！< 失敗時のボイスのサウンド
+			nsSound::CSoundCue*
+				m_failureVoiceSC[nsPlayerConstData::nsCatchEnemyConstData::kFailureVoiceSoundTypeNum] = {};
+
+			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
+			//!< 火遁のボイス時の範囲付きの一様乱数
+			std::unique_ptr<std::uniform_int_distribution<>> m_fireVoiceRand;
+			//!< 失敗ボイス時の範囲付きの一様乱数
+			std::unique_ptr<std::uniform_int_distribution<>> m_failureVoiceRand;
 
 
 		};

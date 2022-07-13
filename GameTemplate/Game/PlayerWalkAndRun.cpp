@@ -2,7 +2,6 @@
 #include "PlayerWalkAndRun.h"
 #include "Player.h"
 #include "PlayerMovement.h"
-#include "PlayerConstData.h"
 #include "SoundCue.h"
 
 namespace nsNinjaAttract
@@ -28,6 +27,13 @@ namespace nsNinjaAttract
 				// サウンドの初期化
 				InitSound();
 
+				// 非決定的な乱数生成器でシード生成機を生成
+				std::random_device rnd;
+				// メルセンヌツイスターの32ビット版、引数は初期シード
+				m_mt = std::make_unique<std::mt19937>(rnd());
+				// 範囲の一様乱数
+				m_rand = std::make_unique<std::uniform_int_distribution<>>(0, kJumpVoiceTypeNum -1);
+
 				return;
 			}
 			/**
@@ -38,6 +44,10 @@ namespace nsNinjaAttract
 				DeleteGO(m_walkSC);
 				DeleteGO(m_runSC);
 				DeleteGO(m_jumpSC);
+				for (int i = 0; i < kJumpVoiceTypeNum; i++)
+				{
+					DeleteGO(m_jumpVoiceSC[i]);
+				}
 
 				return;
 			}
@@ -138,6 +148,13 @@ namespace nsNinjaAttract
 				m_jumpSC = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 				m_jumpSC->Init(kJumpSoundFilePath, nsSound::CSoundCue::enSE);
 				m_jumpSC->SetVolume(kJumpSoundVolume);
+
+				for (int i = 0; i < kJumpVoiceTypeNum; i++)
+				{
+					m_jumpVoiceSC[i] = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+					m_jumpVoiceSC[i]->Init(kJumpVoiceSoundFilePath[i], nsSound::CSoundCue::enSE);
+					m_jumpVoiceSC[i]->SetVolume(kJumpVoiceSoundVolume);
+				}
 
 				return;
 			}
@@ -409,6 +426,13 @@ namespace nsNinjaAttract
 				{
 					m_isJumpUp = true;
 					m_jumpUpTimer = 0.0f;
+					if (m_playerRef->IsTitleMode() != true &&
+						m_playerRef->GetState() != nsPlayerConstData::enLastJump)
+					{
+						// タイトルまたは、最後のジャンプ時はボイスなし
+						m_jumpVoiceSC[(*m_rand)(*m_mt)]->Play(false);
+					}
+
 				}
 
 				if (m_isJumpUp)
@@ -428,7 +452,7 @@ namespace nsNinjaAttract
 					{
 						// ジャンプの上昇し始める最初だけ行う処理
 						// ジャンプのSEを再生
-						m_jumpSC->Play(false);
+						m_jumpSC->Play(false);						
 						// ジャンプ力が0からスタートだと、遅すぎるし、加速の仕方がいびつだから、
 						// ある程度、最初に力を加えておく。
 						m_playerMovementRef->AddMoveVec({ 0.0f, kInitialJumpForce * m_playerRef->GetDeltaTime(),0.0f });

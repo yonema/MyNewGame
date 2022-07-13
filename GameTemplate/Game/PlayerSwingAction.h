@@ -186,6 +186,12 @@ namespace nsNinjaAttract
 				nsSound::CSoundCue* m_chainReleaseSC = nullptr;		//!< 鎖を離すのサウンド
 				nsSound::CSoundCue* m_swingLeaveSC = nullptr;		//!< スイング状態から離れるのサウンド
 				nsSound::CSoundCue* m_swingRollLeaveSC = nullptr;	//!< スイングロール状態から離れるのサウンド
+				//!< スイングのボイスのサウンド
+				nsSound::CSoundCue*
+					m_swingVoiceSC[nsPlayerConstData::nsWalkAndRunConstData::kJumpVoiceTypeNum] = {};
+
+				std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
+				std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 
 			};
 		}

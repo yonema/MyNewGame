@@ -194,6 +194,14 @@ namespace nsNinjaAttract
 			nsSound::CSoundCue* m_clearAllMission = nullptr;	//!< ミッションをすべてクリアした時のサウンド
 			nsSound::CSoundCue* m_showResult = nullptr;			//!< リザルトを表示する時のサウンド
 			nsSound::CSoundCue* m_resultPerfect = nullptr;		//!< リザルトがパーフェクトだったときのサウンド
+			nsSound::CSoundCue* m_clearAllMissionVoice = nullptr;	//!< ミッションを全てクリアした時のボイスのサウンド
+			nsSound::CSoundCue* m_resultVoice = nullptr;		//!< リザルト表示時のボイスのサウンド
+			nsSound::CSoundCue* m_resultPerfectVoice = nullptr;	//!< リザルト表示時にパーフェクトだったときのボイスのサウンド
+			//!< ミッションを1つクリアした時のボイス
+			nsSound::CSoundCue*
+				m_clearOneMissionVoice[nsMissionUIConstData::kClearOneMissionVoiceTypeNum] = {};
+			std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
+			std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 
 		};
 

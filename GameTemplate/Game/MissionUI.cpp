@@ -41,6 +41,13 @@ namespace nsNinjaAttract
 			// クリアフラグをチェックするステートへ遷移
 			ChangeState(enMS_checkClearFlag);
 
+			// 非決定的な乱数生成器でシード生成機を生成
+			std::random_device rnd;
+			// メルセンヌツイスターの32ビット版、引数は初期シード
+			m_mt = std::make_unique<std::mt19937>(rnd());
+			// 範囲の一様乱数
+			m_rand = std::make_unique<std::uniform_int_distribution<>>(0, kClearOneMissionVoiceTypeNum - 1);
+
 			return true;
 		}
 
@@ -68,6 +75,13 @@ namespace nsNinjaAttract
 			DeleteGO(m_clearAllMission);
 			DeleteGO(m_showResult);
 			DeleteGO(m_resultPerfect);
+			DeleteGO(m_clearAllMissionVoice);
+			DeleteGO(m_resultVoice);
+			DeleteGO(m_resultPerfectVoice);
+			for (int i = 0; i < kClearOneMissionVoiceTypeNum; i++)
+			{
+				DeleteGO(m_clearOneMissionVoice[i]);
+			}
 
 			return;
 		}
@@ -347,6 +361,25 @@ namespace nsNinjaAttract
 
 			m_resultPerfect = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
 			m_resultPerfect->Init(kResultPerfectSoundFilePath, nsSound::CSoundCue::enSE);
+
+			m_clearAllMissionVoice = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_clearAllMissionVoice->Init(kClearAllMissionVoiceSoundFilePath, nsSound::CSoundCue::enSE);
+			m_clearAllMissionVoice->SetVolume(kClearAllMissionVoiceSoundVolume);
+
+			m_resultVoice = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_resultVoice->Init(kResultVoiceSoundFilePath, nsSound::CSoundCue::enSE);
+			m_resultVoice->SetVolume(kResultVoiceSoundVolume);
+
+			m_resultPerfectVoice = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+			m_resultPerfectVoice->Init(kResultPerfectVoiceSoundFilePath, nsSound::CSoundCue::enSE);
+			m_resultPerfectVoice->SetVolume(kResultVoiceSoundVolume);
+
+			for (int i = 0; i < kClearOneMissionVoiceTypeNum; i++)
+			{
+				m_clearOneMissionVoice[i] = NewGO<nsSound::CSoundCue>(nsCommonData::enPriorityFirst);
+				m_clearOneMissionVoice[i]->Init(kClearOneMissionVoiceSoundFilePath[i], nsSound::CSoundCue::enSE);
+				m_clearOneMissionVoice[i]->SetVolume(kClearOneMissionVoiceSoundVolume);
+			}
 
 			return;
 		}
@@ -698,7 +731,7 @@ namespace nsNinjaAttract
 
 					return;
 				}
-				else
+				else if (m_timer < kMissionResultVoiceTime)
 				{
 					for (auto& mrtSR : m_missionResultTextSRs)
 					{
@@ -712,15 +745,34 @@ namespace nsNinjaAttract
 							if (mrtSR == m_missionResultTextSRs[enMRT_perfect])
 							{
 								m_resultPerfect->Play(false);
+
 							}
-						}						
+						}
 						mrtSR->SetAlphaValue(1.0f);
 						mrtSR->SetScale(1.0f);
 					}
+				}
+				else
+				{
 
 					if (m_toEndSR->IsActive() != true)
 					{
 						m_toEndSR->Activate();
+						for (auto& mrtSR : m_missionResultTextSRs)
+						{
+							if (mrtSR->IsActive() != true)
+							{
+								continue;
+							}
+							if (mrtSR == m_missionResultTextSRs[enMRT_perfect])
+							{
+								m_resultPerfectVoice->Play(false);
+							}
+							else
+							{
+								m_resultVoice->Play(false);
+							}
+						}
 					}
 
 					// 終わりへと行くスプライトの点滅の点滅処理
@@ -950,12 +1002,15 @@ namespace nsNinjaAttract
 			case enMS_clearOneMission:
 				m_missionWindowSR->Activate();
 				m_checkMarkSRs[m_currentClearMissionType]->Activate();
+				m_clearOneMissionVoice[(*m_rand)(*m_mt)]->Play(false);
 				break;
 			case enMS_clearAllMission:
 				m_missionAllClearTextSR->Activate();
 				m_missionAllClearTextSR->SetAlphaValue(0.0f);
 				m_missionAllClearFrameSR->Activate();
 				m_missionAllClearFrameSR->SetAlphaValue(0.0f);
+				m_clearAllMissionVoice->Play(false);
+
 				break;
 			case enMS_result:
 				m_missionWindowSR->Activate();

@@ -1,5 +1,6 @@
 #pragma once
 #include "Noncopyable.h"
+#include "PlayerConstData.h"
 
 namespace nsNinjaAttract
 {
@@ -156,6 +157,12 @@ namespace nsNinjaAttract
 				nsSound::CSoundCue* m_walkSC = nullptr;		//!< 歩きのサウンド
 				nsSound::CSoundCue* m_runSC = nullptr;		//!< 走りのサウンド
 				nsSound::CSoundCue* m_jumpSC = nullptr;		//!< ジャンプのサウンド
+				//!< ジャンプ時のボイスのサウンド
+				nsSound::CSoundCue* 
+					m_jumpVoiceSC[nsPlayerConstData::nsWalkAndRunConstData::kJumpVoiceTypeNum] = {};
+
+				std::unique_ptr<std::mt19937> m_mt;							//!< メルセンヌツイスターの32ビット版
+				std::unique_ptr<std::uniform_int_distribution<>> m_rand;	//!< 範囲付きの一様乱数
 
 			};
 

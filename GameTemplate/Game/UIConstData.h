@@ -322,6 +322,8 @@ namespace nsNinjaAttract
 			constexpr float kMissionResultTextEndSclae = 2.0f;
 			//!< ミッショリザルトのテキストのタイム
 			constexpr float kMissionResultTextTime = 0.4f;
+			//!< ミッショリザルトのボイスのタイム
+			constexpr float kMissionResultVoiceTime = 0.4f + kMissionResultTextTime;
 
 
 			//!< リザルトのミッションの座標
@@ -366,6 +368,28 @@ namespace nsNinjaAttract
 			constexpr const wchar_t* const kShowResultSoundFilePath = L"Assets/sound/mission/showResult.wav";
 			//!< リザルトがパーフェクトだったときのサウンドのファイルパス
 			constexpr const wchar_t* const kResultPerfectSoundFilePath = L"Assets/sound/mission/perfect.wav";
+			//!< ミッションを全てクリアした時のボイスのサウンドのファイルパス
+			constexpr const wchar_t* const kClearAllMissionVoiceSoundFilePath = L"Assets/sound/character/voice/endMission.wav";
+			//!< ミッションを全てクリアした時のボイスのサウンドの音量
+			constexpr float kClearAllMissionVoiceSoundVolume = 4.0f;
+			//!< リザルト表示時のボイスのサウンドのファイルパス
+			constexpr const wchar_t* const kResultVoiceSoundFilePath = L"Assets/sound/character/voice/result.wav";
+			//!< リザルト表示時にパーフェクトだったときのボイスのサウンドのファイルパス
+			constexpr const wchar_t* const kResultPerfectVoiceSoundFilePath = L"Assets/sound/character/voice/resultPerfect.wav";
+			//!< リザルト表示時のボイスのサウンドの音量
+			constexpr float kResultVoiceSoundVolume = 4.0f;
+
+			//!< ミッションを1つクリアした時のボイスの種類の数
+			constexpr int kClearOneMissionVoiceTypeNum = 2;
+			//!< ミッションを1つクリアした時のボイスのサウンドのファイルパス
+			constexpr const wchar_t* const kClearOneMissionVoiceSoundFilePath[kClearOneMissionVoiceTypeNum] =
+			{
+				L"Assets/sound/character/voice/clearOneMission1.wav",
+				L"Assets/sound/character/voice/clearOneMission2.wav",
+			};
+			//!< ミッションを1つクリアした時のボイスのサウンドの音量
+			constexpr float kClearOneMissionVoiceSoundVolume = 3.0f;
+
 
 		}
 	}

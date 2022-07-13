@@ -120,6 +120,10 @@ namespace nsNinjaAttract
 
 			//!< 決定音のサウンドのファイルパス
 			constexpr const wchar_t* const kDecisionSoundFilePath = L"Assets/sound/decision.wav";
+			//!< 開始ボイスのサウンドのファイルパス
+			constexpr const wchar_t* const kStartVoiceSoundFilePath = L"Assets/sound/character/voice/startMission.wav";
+			//!< 開始ボイスのサウンドの音量
+			constexpr float kStartVoiceSoundVolume = 3.0f;
 
 			//!< タイトルのスプライトのファイスパス
 			constexpr const char* const kTitleSpriteFilePath = "Assets/Image/title/title.DDS";

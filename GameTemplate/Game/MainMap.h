@@ -107,6 +107,7 @@ namespace nsNinjaAttract
 			nsAI::CAIField* m_aiField = nullptr;				//!< AIのフィールドクラス
 			float m_directingTimer = 0.0f;						//!< 演出用タイマー
 			nsSound::CSoundCue* m_decisionSC = nullptr;			//!< 決定音のサウンド
+			nsSound::CSoundCue* m_startVoiceSC = nullptr;		//!< 開始ボイスのサウンド
 		};
 
 	}
